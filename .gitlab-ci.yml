@@ -1,0 +1,7 @@
+before_script:
+  - npm i
+
+run-test:
+  script:
+    - npm run lint
+    - npm run test

@@ -1,0 +1,9 @@
+# Folders
+node_modules/
+coverage/
+images
+logs/
+
+# Files
+server.log
+.env
