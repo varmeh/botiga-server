@@ -28,7 +28,6 @@
 				"complexity": 0,
 				"max-lines-per-function": 0,
 				"max-statements": 0,
-				"max-len": 0,
 				"no-magic-numbers": 0,
 				"max-nested-callbacks": 0,
 				"import/first": 0,
@@ -102,7 +101,6 @@
 			"^([_]*[a-zA-Z0-9]|[_A-Z])*$",
 			{ "properties": true, "ignoreDestructuring": false }
 		],
-		"max-len": [2, 100],
 		"max-lines-per-function": [
 			2,
 			{ "max": 70, "skipBlankLines": true, "skipComments": true, "IIFEs": true }
