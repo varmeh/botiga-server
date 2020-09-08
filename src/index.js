@@ -4,7 +4,7 @@ import app from './app'
 
 const startServer = async () => {
 	try {
-		await mongo.init()
+		await mongo.connect()
 		const port = process.env.PORT || 3000
 		app.listen(port, () => {
 			winston.debug(`Server on http://localhost:${port}`)

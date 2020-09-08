@@ -26,17 +26,16 @@ const options = {
 // no auth string for local dev host
 const authString = DB_AUTH_ENABLED === 'true' ? `${DB_USER}:${DB_PWD}@` : ''
 
-winston.info('@2@@ ', { DB_AUTH_ENABLED, authString })
-
 export const mongo = {
 	connection: null,
-	async init() {
+	async connect() {
 		try {
-			if (this.connection === null) {
-				this.connection = await mongoose.createConnection(
+			if (mongo.connection === null) {
+				mongo.connection = await mongoose.createConnection(
 					`mongodb://${authString}${DB_HOST}:${DB_PORT}/${DB_NAME}?readPreference=primary&ssl=${DB_SSL}`,
 					options
 				)
+				winston.info('Mongodb connected')
 			}
 		} catch (error) {
 			winston.error('@mongodb error', {
