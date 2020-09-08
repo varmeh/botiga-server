@@ -26,30 +26,25 @@ const options = {
 // no auth string for local dev host
 const authString = DB_AUTH_ENABLED === 'true' ? `${DB_USER}:${DB_PWD}@` : ''
 
-export const mongo = {
-	connection: null,
-	async connect() {
-		try {
-			if (mongo.connection === null) {
-				mongo.connection = await mongoose.createConnection(
-					`mongodb://${authString}${DB_HOST}:${DB_PORT}/${DB_NAME}?readPreference=primary&ssl=${DB_SSL}`,
-					options
-				)
-				winston.info('Mongodb connected')
-			}
-		} catch (error) {
-			winston.error('@mongodb error', {
-				msg: 'initial connection error',
-				error
-			})
-			throw Error('Mongodb Connection Failed')
-		}
-
-		this.connection.on('error', error => {
-			winston.error('@mongodb error', {
-				msg: 'after initial connection error',
-				error
-			})
+export const mongooseConnect = async () => {
+	try {
+		await mongoose.connect(
+			`mongodb://${authString}${DB_HOST}:${DB_PORT}/${DB_NAME}?readPreference=primary&ssl=${DB_SSL}`,
+			options
+		)
+		winston.info('Mongodb connected')
+	} catch (error) {
+		winston.debug('@mongodb error', {
+			msg: 'initial connection error',
+			error
 		})
+		throw Error('Mongodb Connection Failed')
 	}
+
+	mongoose.connection.on('error', error => {
+		winston.error('@mongodb error', {
+			msg: 'after initial connection error',
+			error
+		})
+	})
 }

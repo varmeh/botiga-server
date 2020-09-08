@@ -1,10 +1,10 @@
 import {} from 'dotenv/config'
-import { mongo, winston } from './util'
+import { mongooseConnect, winston } from './util'
 import app from './app'
 
 const startServer = async () => {
 	try {
-		await mongo.connect()
+		await mongooseConnect()
 		const port = process.env.PORT || 3000
 		app.listen(port, () => {
 			winston.debug(`Server on http://localhost:${port}`)
