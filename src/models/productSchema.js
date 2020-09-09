@@ -1,29 +1,39 @@
 import { Schema } from 'mongoose'
 import { nanoid } from 'nanoid'
-import { categorySchema } from './categorySchema'
 
 export const productSchema = new Schema({
 	id: {
 		type: String,
-		default: () => nanoid(10)
+		default: () => nanoid(10),
+		immutable: true
 	},
 	name: {
 		type: String,
+		trim: true,
 		required: true
 	},
-	description: String,
+	description: {
+		type: String,
+		trim: true,
+		maxlength: 140
+	},
 	price: {
 		type: Number,
+		min: 0.0,
 		required: true
 	},
 	size: {
 		type: String,
-		required: true
+		trim: true,
+		required: true,
+		maxlength: 32
 	},
 	available: {
 		type: Boolean,
 		default: true
 	},
-	category: categorySchema,
-	imageUrl: String
+	imageUrl: {
+		type: String,
+		trim: true
+	}
 })
