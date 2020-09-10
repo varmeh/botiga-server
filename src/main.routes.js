@@ -1,4 +1,4 @@
-import { sellerRouter, servicesRouter, userRouter } from './api'
+import { sellerRouter, servicesRouter, userRouter, adminRouter } from './api'
 
 /* Remember order matters when registering routes */
 export default app => {
@@ -6,6 +6,7 @@ export default app => {
 	app.use(`${baseUrl}/seller`, sellerRouter)
 	app.use(`${baseUrl}/services`, servicesRouter)
 	app.use(`${baseUrl}/user`, userRouter)
+	app.use(`${baseUrl}/admin`, adminRouter)
 
 	app.get(`${baseUrl}/live`, (_req, res) => {
 		res.json({ message: 'server live' })
