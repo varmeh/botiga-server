@@ -2,15 +2,22 @@ import CreateHttpError, { BadRequest } from 'http-errors'
 import {
 	dbFindCities,
 	dbFindAreasByCity,
-	dbFindApartmentsByCityAndArea
+	dbFindApartmentsByCityAndArea,
+	dbFindApartmentsByLocation
 } from './services.dao'
 
-export const getApartmentsByLocation = (req, res) => {
+export const getApartmentsByLocation = async (req, res, next) => {
 	const { lat, long } = req.query
 	if (!lat || !long) {
 		throw new BadRequest('Missing Query Params - lat, long')
 	}
-	res.json()
+	try {
+		const data = await dbFindApartmentsByLocation(lat, long)
+		res.json(data)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
 }
 
 // Returns the list of cities with Botiga Presence

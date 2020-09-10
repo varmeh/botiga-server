@@ -7,3 +7,9 @@
 ```
 db.apartments.createIndex({name: 1}, {unique: true})
 ```
+
+-   Add geospatial index
+
+```
+db.apartments.createIndex({location: "2dsphere"})
+```
