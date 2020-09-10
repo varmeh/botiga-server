@@ -96,7 +96,7 @@
 		],
 		"id-match": [
 			2,
-			"^([_]*[a-zA-Z0-9]|[_A-Z])*$",
+			"^([_$]*[a-zA-Z0-9]|[_A-Z])*$",
 			{ "properties": true, "ignoreDestructuring": false }
 		],
 		"max-lines-per-function": [
