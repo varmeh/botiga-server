@@ -1,13 +1,8 @@
 import { Schema } from 'mongoose'
-import { nanoid } from 'nanoid'
 import { productSchema } from './productSchema'
 
+// Each subdocument has an _id by default
 export const productsCategorySchema = new Schema({
-	id: {
-		type: String,
-		default: () => nanoid(10),
-		immutable: true
-	},
 	name: {
 		type: String,
 		required: true,

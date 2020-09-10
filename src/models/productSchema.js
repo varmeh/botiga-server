@@ -1,12 +1,6 @@
 import { Schema } from 'mongoose'
-import { nanoid } from 'nanoid'
 
 export const productSchema = new Schema({
-	id: {
-		type: String,
-		default: () => nanoid(10),
-		immutable: true
-	},
 	name: {
 		type: String,
 		trim: true,
