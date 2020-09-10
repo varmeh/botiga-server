@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 import { productsCategorySchema } from './productsCategorySchema'
-import { liveApartmentSchema } from './liveApartmentSchema'
+import { apartmentManagementSchema } from './apartmentManagementSchema'
 
 const sellerSchema = new Schema(
 	{
@@ -53,7 +53,7 @@ const sellerSchema = new Schema(
 			}
 		},
 		products: [productsCategorySchema],
-		apartments: [liveApartmentSchema]
+		apartments: [apartmentManagementSchema]
 	},
 	{ timestamps: true }
 )

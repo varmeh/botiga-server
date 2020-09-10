@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose'
 
-export const liveApartmentSchema = new Schema({
+export const apartmentManagementSchema = new Schema({
 	apartmentId: {
 		type: Schema.Types.ObjectId,
 		required: true,
