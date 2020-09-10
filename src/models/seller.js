@@ -26,7 +26,7 @@ const sellerSchema = new Schema(
 			}
 		},
 		companyInfo: {
-			motto: String,
+			tagline: String,
 			imageUrl: String
 		},
 		contactInfo: {
