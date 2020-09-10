@@ -21,3 +21,13 @@ export const dbFindAreasByCity = async city => {
 		return Promise.reject(new InternalServerError())
 	}
 }
+
+export const dbFindApartmentsByCityAndArea = async (city, area) => {
+	try {
+		const data = await Apartment.find({ city, area }, { name: 1 }).sort()
+		return data
+	} catch (error) {
+		winston.debug('@error dbFindApartmentsByCityAndArea', { error })
+		return Promise.reject(new InternalServerError())
+	}
+}

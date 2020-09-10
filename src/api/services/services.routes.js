@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import {
 	getApartmentsByLocation,
-	getApartmentsByCity,
+	getApartmentsByCityAndArea,
 	getCities,
 	getAreasForCity
 } from './services.controller'
@@ -10,7 +10,7 @@ const router = Router()
 
 router.get('/apartments/location', getApartmentsByLocation)
 
-router.get('/apartments', getApartmentsByCity)
+router.get('/apartments', getApartmentsByCityAndArea)
 
 router.get('/cities', getCities)
 
