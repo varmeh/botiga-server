@@ -22,3 +22,26 @@ export const findCategory = async sellerId => {
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
+
+export const removeCategory = async (sellerId, categoryId) => {
+	try {
+		const seller = await Seller.findById(sellerId)
+		const category = seller.categories.id(categoryId)
+
+		if (!category) {
+			return Promise.reject(new CreateHttpError[404]())
+		}
+
+		// Deletion allowed only when category has no products
+		if (category.products.length > 0) {
+			return Promise.reject(
+				new CreateHttpError[405]('category have products - removal not allowed')
+			)
+		}
+		category.remove()
+		return await seller.save()
+	} catch (error) {
+		winston.debug('@error removeCategory', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}

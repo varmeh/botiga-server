@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 import { token } from '../../util'
-import { createCategory, findCategory } from './seller.dao'
+import { createCategory, findCategory, removeCategory } from './seller.dao'
 
 export const postCategory = async (req, res, next) => {
 	try {
@@ -18,6 +18,17 @@ export const getCategory = async (req, res, next) => {
 		const categories = await findCategory(token.get(req))
 
 		res.json({ categories })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const deleteCategory = async (req, res, next) => {
+	try {
+		await removeCategory(token.get(req), req.body.categoryId)
+
+		res.status(204).json()
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
