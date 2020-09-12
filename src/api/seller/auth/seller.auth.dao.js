@@ -35,14 +35,11 @@ export const dbCreateSeller = async ({
 	}
 }
 
-export const dbFindSellerByNumber = async (number, projection = {}) => {
+export const dbFindSellerByNumber = async number => {
 	try {
-		return await Seller.findOne(
-			{
-				'contact.phone': number
-			},
-			projection
-		)
+		return await Seller.findOne({
+			'contact.phone': number
+		})
 	} catch (error) {
 		winston.debug('@error dbFindSellerByNumber', { error })
 		return Promise.reject(new CreateHttpError[500]())

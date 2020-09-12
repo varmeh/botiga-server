@@ -34,12 +34,7 @@ export const postSellerLoginWithPin = async (req, res, next) => {
 	const { phone, pin } = req.body
 
 	try {
-		const seller = await dbFindSellerByNumber(phone, {
-			owner: 1,
-			brand: 1,
-			contact: 1,
-			pin: 1
-		})
+		const seller = await dbFindSellerByNumber(phone)
 		if (!seller) {
 			throw new CreateHttpError[404]('Seller Not Found')
 		}
@@ -47,9 +42,19 @@ export const postSellerLoginWithPin = async (req, res, next) => {
 
 		if (match) {
 			// remove seller pin before sending seller information to frontend
-			const val = seller.toJSON()
-			delete val.pin
-			res.json(val)
+			const {
+				owner: { firstName, lastName, gender },
+				brand,
+				contact: { phone, whatsapp }
+			} = seller
+			res.json({
+				firstName,
+				lastName,
+				gender,
+				brandName: brand.name,
+				phone,
+				whatsapp
+			})
 		} else {
 			throw new CreateHttpError[401]('Invalid Credentials')
 		}
