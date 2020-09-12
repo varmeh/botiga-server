@@ -4,9 +4,15 @@ import authRouter from './auth/seller.auth.routes'
 
 import {
 	postCategoryValidator,
-	deleteCategoryValidator
+	deleteCategoryValidator,
+	patchCategoryValidator
 } from './seller.validator'
-import { postCategory, getCategory, deleteCategory } from './seller.controller'
+import {
+	postCategory,
+	getCategory,
+	deleteCategory,
+	patchCategory
+} from './seller.controller'
 
 const router = Router()
 
@@ -21,7 +27,13 @@ router.post(
 	validationMiddleware,
 	postCategory
 )
-router.patch('/category')
+router.patch(
+	'/category',
+	token.authenticationMiddleware,
+	patchCategoryValidator,
+	validationMiddleware,
+	patchCategory
+)
 router.delete(
 	'/category',
 	token.authenticationMiddleware,

@@ -45,3 +45,22 @@ export const removeCategory = async (sellerId, categoryId) => {
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
+
+export const updateCategory = async (sellerId, categoryName, categoryId) => {
+	try {
+		const seller = await Seller.findById(sellerId)
+		const category = seller.categories.id(categoryId)
+
+		if (!category) {
+			return Promise.reject(new CreateHttpError[404]())
+		}
+
+		// Update category name
+		category.name = categoryName
+		const updatedSeller = await seller.save()
+		return updatedSeller.categories.id(categoryId)
+	} catch (error) {
+		winston.debug('@error updateCategory', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}

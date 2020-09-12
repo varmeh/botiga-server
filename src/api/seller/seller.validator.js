@@ -5,3 +5,8 @@ export const postCategoryValidator = [
 ]
 
 export const deleteCategoryValidator = [emptyValidator('categoryId')]
+
+export const patchCategoryValidator = [
+	...postCategoryValidator,
+	...deleteCategoryValidator
+]
