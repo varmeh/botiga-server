@@ -4,6 +4,7 @@ import { Seller } from '../../../models'
 
 export const dbCreateSeller = async ({
 	companyName,
+	businessCategory,
 	firstName,
 	lastName,
 	gender,
@@ -14,6 +15,7 @@ export const dbCreateSeller = async ({
 	try {
 		const seller = new Seller({
 			companyName,
+			businessCategory,
 			owner: { firstName, lastName, gender },
 			brand: { name: brandName },
 			pin: hashedPin,

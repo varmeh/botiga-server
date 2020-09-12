@@ -6,6 +6,7 @@ import { dbCreateSeller, dbFindSellerByNumber } from './seller.auth.dao'
 export const postSellerSignup = async (req, res, next) => {
 	const {
 		companyName,
+		businessCategory,
 		firstName,
 		lastName,
 		gender,
@@ -18,6 +19,7 @@ export const postSellerSignup = async (req, res, next) => {
 		const hashedPin = await password.hash(pin)
 		const seller = await dbCreateSeller({
 			companyName,
+			businessCategory,
 			firstName,
 			lastName,
 			gender,
