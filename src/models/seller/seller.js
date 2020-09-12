@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { productsCategorySchema } from './productsCategorySchema'
+import { categorySchema } from './categorySchema'
 import { apartmentManagementSchema } from './apartmentManagementSchema'
 
 const sellerSchema = new Schema(
@@ -52,7 +52,7 @@ const sellerSchema = new Schema(
 				pincode: { type: String, match: [/^\d{6}/] }
 			}
 		},
-		products: [productsCategorySchema],
+		categories: [categorySchema],
 		apartments: [apartmentManagementSchema]
 	},
 	{ timestamps: true }

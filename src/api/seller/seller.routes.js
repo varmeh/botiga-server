@@ -1,17 +1,23 @@
 import { Router } from 'express'
-import { validationMiddleware } from '../../util'
+import { validationMiddleware, token } from '../../util'
 import authRouter from './auth/seller.auth.routes'
 
 import { categoryValidator } from './seller.validator'
-import { postCategory } from './seller.controller'
+import { postCategory, getCategory } from './seller.controller'
 
 const router = Router()
 
 router.use('/', authRouter)
 
 /* Category Routes */
-router.get('/category')
-router.post('/category', categoryValidator, validationMiddleware, postCategory)
+router.get('/category', token.authenticationMiddleware, getCategory)
+router.post(
+	'/category',
+	token.authenticationMiddleware,
+	categoryValidator,
+	validationMiddleware,
+	postCategory
+)
 router.patch('/category')
 router.delete('/category')
 

@@ -5,10 +5,20 @@ import { Seller } from '../../models'
 export const createCategory = async (sellerId, categoryName) => {
 	try {
 		const seller = await Seller.findById(sellerId)
-		seller.products.push({ name: categoryName })
+		seller.categories.push({ name: categoryName })
 		return seller.save()
 	} catch (error) {
 		winston.debug('@error createCategory', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const findCategory = async sellerId => {
+	try {
+		const { categories } = await Seller.findById(sellerId)
+		return categories
+	} catch (error) {
+		winston.debug('@error findCategory', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

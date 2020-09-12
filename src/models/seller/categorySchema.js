@@ -2,7 +2,7 @@ import { Schema } from 'mongoose'
 import { productSchema } from './productSchema'
 
 // Each subdocument has an _id by default
-export const productsCategorySchema = new Schema({
+export const categorySchema = new Schema({
 	name: {
 		type: String,
 		required: true,
@@ -12,6 +12,6 @@ export const productsCategorySchema = new Schema({
 	products: [productSchema]
 })
 
-productsCategorySchema.virtual('productCount').get(function () {
+categorySchema.virtual('productCount').get(function () {
 	return this.products.length
 })
