@@ -1,3 +1,3 @@
 export * from './user'
-export * from './seller/seller'
+export * from './seller'
 export * from './apartment'

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { validationErrorHandler } from '../../../util'
+import { validationMiddleware } from '../../../util'
 import { pinSigninValidator, signupValidator } from './seller.auth.validator'
 import {
 	postSellerSignup,
@@ -8,17 +8,12 @@ import {
 
 const router = Router()
 
-router.post(
-	'/signup',
-	signupValidator,
-	validationErrorHandler,
-	postSellerSignup
-)
+router.post('/signup', signupValidator, validationMiddleware, postSellerSignup)
 
 router.post(
 	'/signin/pin',
 	pinSigninValidator,
-	validationErrorHandler,
+	validationMiddleware,
 	postSellerLoginWithPin
 )
 

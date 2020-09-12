@@ -5,7 +5,7 @@ import { apartmentManagementSchema } from './apartmentManagementSchema'
 const sellerSchema = new Schema(
 	{
 		companyName: { type: String, required: true },
-		businessType: String,
+		businessCategory: String,
 		owner: {
 			firstName: {
 				type: String,

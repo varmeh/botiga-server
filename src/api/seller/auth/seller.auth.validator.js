@@ -1,16 +1,21 @@
-// import { body } from 'express-validator'
-import { isEmptyValidator, pinValidator, phoneValidator } from '../../../util'
+import {
+	emptyValidator,
+	alphaValitor,
+	pinValidator,
+	phoneValidator
+} from '../../../util'
 
 export const pinSigninValidator = [phoneValidator('phone'), pinValidator('pin')]
 
 export const signupValidator = [
-	isEmptyValidator('companyName'),
-	isEmptyValidator('firstName'),
-	isEmptyValidator('lastName'),
-	isEmptyValidator('gender')
+	emptyValidator('companyName'),
+	alphaValitor('businessCategory'),
+	emptyValidator('firstName'),
+	emptyValidator('lastName'),
+	emptyValidator('gender')
 		.matches(/^(male|female)$/, 'i')
 		.withMessage('should be either male or female'),
-	isEmptyValidator('brandName'),
+	emptyValidator('brandName'),
 	phoneValidator('phone'),
 	pinValidator('pin')
 ]

@@ -3,8 +3,9 @@ import CreateHttpError from 'http-errors'
 import { winston } from './winston.logger'
 
 const authHttpHeader = 'Authorization'
+const secsInDay = 24 * 60 * 60
 const jwtExpirySeconds =
-	process.env.NODE_ENV === 'production' ? 12 * 60 : 30 * 60 // 12 mins for Prod, 30 mins for dev
+	process.env.NODE_ENV === 'production' ? 10 * secsInDay : 30 * secsInDay // 10 days for Prod, 30 days for dev
 
 const generateToken = id =>
 	jwt.sign({ id }, process.env.JWT_SECRET, {

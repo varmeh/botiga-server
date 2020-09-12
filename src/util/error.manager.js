@@ -25,7 +25,7 @@ class ValidationError extends Error {
 }
 
 /* Validation Error Handler */
-export const validationErrorHandler = (req, _res, next) => {
+export const validationMiddleware = (req, _res, next) => {
 	const errors = validationResult(req)
 	if (!errors.isEmpty()) {
 		// We have validation error
