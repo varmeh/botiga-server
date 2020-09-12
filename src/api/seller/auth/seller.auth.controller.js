@@ -6,7 +6,9 @@ import { dbCreateSeller, dbFindSellerByNumber } from './seller.auth.dao'
 export const postSellerSignup = async (req, res, next) => {
 	const {
 		companyName,
-		owner: { firstName, lastName, gender },
+		firstName,
+		lastName,
+		gender,
 		brandName,
 		phone,
 		pin
