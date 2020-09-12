@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 
-import { password } from '../../../util'
+import { password, token } from '../../../util'
 import { dbCreateSeller, dbFindSellerByNumber } from './seller.auth.dao'
 
 export const postSellerSignup = async (req, res, next) => {
@@ -23,7 +23,11 @@ export const postSellerSignup = async (req, res, next) => {
 			phone,
 			hashedPin
 		})
-		res.json(seller)
+
+		// Add jwt token
+		token.set(res, seller._id)
+
+		res.status(201).json({ id: seller._id })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
@@ -47,6 +51,10 @@ export const postSellerLoginWithPin = async (req, res, next) => {
 				brand,
 				contact: { phone, whatsapp }
 			} = seller
+
+			// Add jwt token
+			token.set(res, seller._id)
+
 			res.json({
 				firstName,
 				lastName,

@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'
-import { BadRequest, Unauthorized } from 'http-errors'
+import CreateHttpError from 'http-errors'
 import { winston } from './winston.logger'
 
-const appToken = 'access-token'
+const authHttpHeader = 'Authorization'
 const jwtExpirySeconds =
 	process.env.NODE_ENV === 'production' ? 12 * 60 : 30 * 60 // 12 mins for Prod, 30 mins for dev
 
@@ -14,53 +14,41 @@ const generateToken = id =>
 
 const extractPayload = token => {
 	try {
-		return jwt.verify(token, process.env.JWT_SECRET)
+		const { id } = jwt.verify(token, process.env.JWT_SECRET)
+		return id // Could return null if NO id exists in extracted payload
 	} catch (error) {
 		if (error instanceof jwt.JsonWebTokenError) {
 			// if the error thrown is because the JWT is unauthorized, return a 401 error
-			throw new Unauthorized('Uauthorized - Invalid Tokens')
+			throw new CreateHttpError[401]('Uauthorized - Invalid Token')
 		}
 		// otherwise, return a bad request error
-		throw new BadRequest('Bad Request - Invalid Tokens')
+		throw new CreateHttpError[400]('Bad Request - Invalid Token')
 	}
 }
 
-const getIdFromToken = token => {
-	const payload = extractPayload(token) // Throws error for stale token
-	if (payload && payload.id) {
-		return payload.id
-	}
-	return null
-}
+/* Methods to add & retrieve authorization tokens */
+const set = (res, id) => res.set(authHttpHeader, generateToken(id))
 
-export const getAppToken = req => getIdFromToken(req.get(appToken))
+const get = req => extractPayload(req.get(authHttpHeader))
 
-export const createTokens = (res, appTokenValue) => {
-	const token = {}
-	token[appToken] = generateToken(appTokenValue)
-	res.set(token)
-}
-
-export const authenticateTokens = (req, _res, next) => {
-	if (!req.get(appToken)) {
-		winston.error('Auth Token Missing', {
-			tokenStatus: {
-				accessToken: !!req.get(appToken)
-			}
-		})
-		throw new BadRequest('Bad Request - Token Missing')
+/* Middlewares to authenticate & refresh tokens */
+const authenticationMiddleware = (req, _res, next) => {
+	if (!req.get(authHttpHeader)) {
+		winston.error('Auth Token Missing')
+		throw new CreateHttpError[400]('Bad Request - Token Missing')
 	} else {
 		// Extract payload throws errors for stale tokens
-		extractPayload(req.get(appToken))
+		extractPayload(req.get(authHttpHeader))
 	}
 	next()
 }
 
-export const refreshTokens = (req, res, next) => {
-	const token = {}
-	token[appToken] = generateToken(getAppToken(req))
+const refreshMiddleware = (req, res, next) => {
+	const id = extractPayload(req.get(authHttpHeader))
 
 	// Set refreshed tokens on response object
-	res.set(token)
+	set(res, id)
 	next()
 }
+
+export default { get, set, authenticationMiddleware, refreshMiddleware }

@@ -23,7 +23,7 @@ app.use(rTracer.expressMiddleware())
 app.use(helmet())
 app.use(
 	cors({
-		exposedHeaders: ['access-token', 'icm-token']
+		exposedHeaders: ['Authorization']
 	})
 )
 app.use('/*', express.json())

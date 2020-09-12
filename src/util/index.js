@@ -1,6 +1,6 @@
 export * from './error.manager'
 export * from './database.manager'
-export * from './token.manager'
+export { default as token } from './token.manager'
 export * from './winston.logger'
 export * from './logger'
 export * from './mailer'
