@@ -1,4 +1,4 @@
-import { InternalServerError } from 'http-errors'
+import CreateHttpError from 'http-errors'
 import { winston } from '../../util'
 import { Apartment } from '../../models'
 
@@ -8,7 +8,7 @@ export const dbFindCities = async () => {
 		return data
 	} catch (error) {
 		winston.debug('@error dbFindCities', { error })
-		return Promise.reject(new InternalServerError())
+		return Promise.reject(new CreateHttpError[500]())
 	}
 }
 
@@ -18,7 +18,7 @@ export const dbFindAreasByCity = async city => {
 		return data
 	} catch (error) {
 		winston.debug('@error dbFindAreasByCity', { error })
-		return Promise.reject(new InternalServerError())
+		return Promise.reject(new CreateHttpError[500]())
 	}
 }
 
@@ -31,7 +31,7 @@ export const dbFindApartmentsByCityAndArea = async (city, area) => {
 		return data
 	} catch (error) {
 		winston.debug('@error dbFindApartmentsByCityAndArea', { error })
-		return Promise.reject(new InternalServerError())
+		return Promise.reject(new CreateHttpError[500]())
 	}
 }
 
@@ -52,6 +52,6 @@ export const dbFindApartmentsByLocation = async (lat, long) => {
 		return data
 	} catch (error) {
 		winston.debug('@error dbFindApartmentsByLocation', { error })
-		return Promise.reject(new InternalServerError())
+		return Promise.reject(new CreateHttpError[500]())
 	}
 }

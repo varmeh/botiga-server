@@ -4,8 +4,8 @@ import { apartmentManagementSchema } from './apartmentManagementSchema'
 
 const sellerSchema = new Schema(
 	{
-		name: { type: String, required: true },
-		businessType: [String],
+		companyName: { type: String, required: true },
+		businessType: String,
 		owner: {
 			firstName: {
 				type: String,
@@ -20,36 +20,36 @@ const sellerSchema = new Schema(
 			gender: {
 				type: String,
 				required: true,
-				enum: ['m', 'f'],
-				default: 'm',
-				maxlength: 1
+				enum: ['male', 'female']
 			}
 		},
-		companyInfo: {
+		brand: {
+			name: { type: String, required: true },
 			tagline: String,
 			imageUrl: String
 		},
-		contactInfo: {
-			email: { type: String, required: true },
-			loginNumber: {
+		pin: { type: String, required: true },
+		contact: {
+			email: String,
+			phone: {
 				type: String,
 				unique: true,
-				required: [true, 'Login Number is mandatory'],
+				required: [true, 'phone number is mandatory'],
 				immutable: true,
 				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 			},
-			whatsappNumber: {
+			whatsapp: {
 				type: String,
 				required: [true, 'Whatsapp Number is mandatory'],
 				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number']
 			},
 			address: {
-				address1: { type: String, required: true },
+				address1: String,
 				address2: String,
-				area: { type: String, required: true },
-				city: { type: String, required: true },
-				state: { type: String, required: true },
-				pincode: { type: String, required: true, match: [/^\d{6}/] }
+				area: String,
+				city: String,
+				state: String,
+				pincode: { type: String, match: [/^\d{6}/] }
 			}
 		},
 		products: [productsCategorySchema],

@@ -1,8 +1,8 @@
 ## Mongodb Scripts
 
-### Apartment Collections
+### Apartments Collection
 
--   Add `unique` index to _name_ field of apartments collection
+-   Add `unique` index to _name_ field
 
 ```
 db.apartments.createIndex({name: 1}, {unique: true})
@@ -12,4 +12,12 @@ db.apartments.createIndex({name: 1}, {unique: true})
 
 ```
 db.apartments.createIndex({location: "2dsphere"})
+```
+
+### Sellers Collection
+
+-   Add `unique` index to _contact.phone_ field
+
+```
+db.sellers.createIndex({"contact.phone": 1}, {unique: true})
 ```

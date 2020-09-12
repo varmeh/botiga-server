@@ -1,4 +1,4 @@
-import { InternalServerError } from 'http-errors'
+import CreateHttpError from 'http-errors'
 import { winston } from '../../util'
 import { Apartment } from '../../models'
 
@@ -22,6 +22,6 @@ export const dbCreateApartment = async ({
 		return await apartment.save()
 	} catch (error) {
 		winston.debug('@error dbCreateApartment', { error })
-		return Promise.reject(new InternalServerError())
+		return Promise.reject(new CreateHttpError[500]())
 	}
 }
