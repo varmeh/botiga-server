@@ -4,10 +4,10 @@ import cors from 'cors'
 import helmet from 'helmet'
 
 import {
-	errorLogger,
-	requestLogger,
-	responseLogger,
-	sendErrorResponse
+	logErrorMiddleware,
+	logRequestMiddleware,
+	logResponseMiddleware,
+	errorResponseMiddleware
 } from './util'
 
 import configureRoutes from './main.routes'
@@ -29,14 +29,14 @@ app.use(
 app.use('/*', express.json())
 
 /* Configure Logger */
-app.use(requestLogger)
-app.use(responseLogger)
+app.use(logRequestMiddleware)
+app.use(logResponseMiddleware)
 
 /* Add routes */
 configureRoutes(app)
 
 /* Central Error Handling - Should be done before starting listener */
-app.use(errorLogger)
-app.use(sendErrorResponse)
+app.use(logErrorMiddleware)
+app.use(errorResponseMiddleware)
 
 export default app

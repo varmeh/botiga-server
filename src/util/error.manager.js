@@ -2,7 +2,7 @@ import { validationResult } from 'express-validator'
 import { winston } from './winston.logger'
 
 /* Send Error Response to client */
-export const sendErrorResponse = (error, _req, res, _next) => {
+export const errorResponseMiddleware = (error, _req, res, _next) => {
 	const { status, message, errors } = error
 	res.status(status).json({ message, errors })
 }

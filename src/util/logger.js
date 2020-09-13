@@ -3,7 +3,7 @@ import { winston } from './winston.logger'
 /**
  * This logger logs all responses going out of express logging utility
  */
-export const requestLogger = (req, _res, next) => {
+export const logRequestMiddleware = (req, _res, next) => {
 	const {
 		originalUrl,
 		method,
@@ -41,7 +41,7 @@ export const requestLogger = (req, _res, next) => {
 /**
  * This logger logs all error reported to central error handler
  */
-export const errorLogger = (error, req, _res, next) => {
+export const logErrorMiddleware = (error, req, _res, next) => {
 	const { originalUrl, method, hostname, ip, protocol } = req
 	winston.error('@logger error', {
 		url: originalUrl,
@@ -58,7 +58,7 @@ export const errorLogger = (error, req, _res, next) => {
 /**
  * This logger logs all responses going out of express logging utility
  */
-export const responseLogger = (req, res, next) => {
+export const logResponseMiddleware = (req, res, next) => {
 	const requestStart = Date.now()
 
 	res.on('finish', () => {
