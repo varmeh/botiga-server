@@ -2,14 +2,14 @@ import {
 	addressValidator,
 	pinValidator,
 	decimalValidator,
-	territoryValidator
+	alphaSpaceValidator
 } from '../../util'
 
 export const apartmentValidator = [
 	addressValidator('name'),
-	territoryValidator('city'),
-	territoryValidator('area'),
-	territoryValidator('state'),
+	alphaSpaceValidator('city'),
+	alphaSpaceValidator('area'),
+	alphaSpaceValidator('state'),
 	pinValidator('pincode'),
 	decimalValidator('location.lat'),
 	decimalValidator('location.long')

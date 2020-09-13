@@ -115,19 +115,38 @@ export const removeProduct = async (sellerId, categoryId) => {
 	}
 }
 
-export const updateProduct = async (sellerId, categoryName, categoryId) => {
+export const updateProduct = async ({
+	sellerId,
+	categoryId,
+	productId,
+	name,
+	description,
+	price,
+	size,
+	imageUrl
+}) => {
 	try {
 		const seller = await Seller.findById(sellerId)
 		const category = seller.categories.id(categoryId)
 
 		if (!category) {
-			return Promise.reject(new CreateHttpError[404]())
+			return Promise.reject(new CreateHttpError[404]('Incorrect category id'))
 		}
 
-		// Update category name
-		category.name = categoryName
+		// Update Product Information
+		const product = category.products.id(productId)
+
+		if (!product) {
+			return Promise.reject(new CreateHttpError[404]('Incorrect product id'))
+		}
+		product.name = name
+		product.description = description
+		product.price = price
+		product.size = size
+		product.imageUrl = imageUrl
+
 		const updatedSeller = await seller.save()
-		return updatedSeller.categories.id(categoryId)
+		return updatedSeller.categories.id(categoryId).products.id(productId)
 	} catch (error) {
 		winston.debug('@error updateProduct', { error })
 		return Promise.reject(new CreateHttpError[500]())

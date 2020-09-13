@@ -1,6 +1,7 @@
 import {
 	emptyValidator,
 	alphaValidator,
+	alphaSpaceValidator,
 	alphaNumericValidator,
 	decimalValidator,
 	numberValidator
@@ -17,7 +18,7 @@ export const patchCategoryValidator = [
 
 export const postProductValidator = [
 	alphaNumericValidator('categoryId'),
-	alphaNumericValidator('name'),
+	alphaSpaceValidator('name'),
 	decimalValidator('price'),
 	numberValidator('size.quantity'),
 	emptyValidator('size.unit')
@@ -25,4 +26,9 @@ export const postProductValidator = [
 		.withMessage(
 			'should be either of following - gms, kg, ml, lt, piece & pieces'
 		)
+]
+
+export const patchProductValidator = [
+	alphaNumericValidator('productId'),
+	...postProductValidator
 ]

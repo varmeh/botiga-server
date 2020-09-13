@@ -6,7 +6,8 @@ import {
 	postCategoryValidator,
 	deleteCategoryValidator,
 	patchCategoryValidator,
-	postProductValidator
+	postProductValidator,
+	patchProductValidator
 } from './seller.validator'
 import {
 	postCategory,
@@ -59,7 +60,7 @@ router.post(
 router.patch(
 	'/products',
 	token.authenticationMiddleware,
-	// patchProductValidator,
+	patchProductValidator,
 	validationMiddleware,
 	patchProduct
 )

@@ -5,7 +5,8 @@ import {
 	removeCategory,
 	updateCategory,
 	createProduct,
-	findProducts
+	findProducts,
+	updateProduct
 } from './seller.dao'
 
 /****************************************************************
@@ -109,11 +110,28 @@ export const deleteProduct = async (req, res, next) => {
 }
 
 export const patchProduct = async (req, res, next) => {
-	const { name, categoryId } = req.body
+	const {
+		categoryId,
+		productId,
+		name,
+		description,
+		price,
+		size,
+		imageUrl
+	} = req.body
 	try {
-		const category = await updateCategory(token.get(req), name, categoryId)
+		const updatedProduct = await updateProduct({
+			sellerId: token.get(req),
+			categoryId,
+			productId,
+			name,
+			description,
+			price,
+			size,
+			imageUrl
+		})
 
-		res.json({ id: category._id, newCategoryName: category.name })
+		res.json(updatedProduct)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

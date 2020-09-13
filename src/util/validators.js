@@ -5,7 +5,7 @@ const validationMessages = {
 	addressRegex:
 		'should have following characters - alphabets, numbers, comma, spaces, dot and hypen',
 	numeric: 'should have numbers only',
-	territory: 'should have alphabets & space only',
+	alphaSpace: 'should have alphabets & space only',
 	alphaOnly: 'should have alphabets only',
 	alphaNumeric: 'should have alphabets & numbers only',
 	decimal: 'should be a decimal',
@@ -51,7 +51,7 @@ export const addressValidator = field =>
 		.matches(/^[a-zA-Z0-9\s,.-]*$/, 'i')
 		.withMessage(validationMessages.addressRegex)
 
-export const territoryValidator = field =>
+export const alphaSpaceValidator = field =>
 	emptyValidator(field)
 		.matches(/^[a-zA-Z\s]*$/, 'i')
-		.withMessage(validationMessages.territory)
+		.withMessage(validationMessages.alphaSpace)
