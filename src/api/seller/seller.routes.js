@@ -10,7 +10,7 @@ import {
 } from './seller.validator'
 import {
 	postCategory,
-	getCategory,
+	getCategories,
 	deleteCategory,
 	patchCategory,
 	postProduct,
@@ -24,23 +24,23 @@ const router = Router()
 router.use('/', authRouter)
 
 /* Category Routes */
-router.get('/category', token.authenticationMiddleware, getCategory)
+router.get('/categories', token.authenticationMiddleware, getCategories)
 router.post(
-	'/category',
+	'/categories',
 	token.authenticationMiddleware,
 	postCategoryValidator,
 	validationMiddleware,
 	postCategory
 )
 router.patch(
-	'/category',
+	'/categories',
 	token.authenticationMiddleware,
 	patchCategoryValidator,
 	validationMiddleware,
 	patchCategory
 )
 router.delete(
-	'/category',
+	'/categories',
 	token.authenticationMiddleware,
 	deleteCategoryValidator,
 	validationMiddleware,
@@ -50,21 +50,21 @@ router.delete(
 /* Products Routes */
 router.get('/products', token.authenticationMiddleware, getProducts)
 router.post(
-	'/product',
+	'/products',
 	token.authenticationMiddleware,
 	postProductValidator,
 	validationMiddleware,
 	postProduct
 )
 router.patch(
-	'/product',
+	'/products',
 	token.authenticationMiddleware,
 	// patchProductValidator,
 	validationMiddleware,
 	patchProduct
 )
 router.delete(
-	'/product',
+	'/products',
 	token.authenticationMiddleware,
 	// deleteProductValidator,
 	validationMiddleware,

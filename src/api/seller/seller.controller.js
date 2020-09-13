@@ -2,10 +2,10 @@ import CreateHttpError from 'http-errors'
 import { token } from '../../util'
 import {
 	createCategory,
-	findCategory,
 	removeCategory,
 	updateCategory,
-	createProduct
+	createProduct,
+	findProducts
 } from './seller.dao'
 
 /****************************************************************
@@ -22,9 +22,9 @@ export const postCategory = async (req, res, next) => {
 	}
 }
 
-export const getCategory = async (req, res, next) => {
+export const getCategories = async (req, res, next) => {
 	try {
-		const categories = await findCategory(token.get(req))
+		const categories = await findProducts(token.get(req))
 
 		res.json(categories.map(({ _id, name }) => ({ id: _id, name })))
 	} catch (error) {
@@ -88,9 +88,9 @@ export const postProduct = async (req, res, next) => {
 
 export const getProducts = async (req, res, next) => {
 	try {
-		const categories = await findCategory(token.get(req))
+		const productsCategories = await findProducts(token.get(req))
 
-		res.json({ categories })
+		res.json(productsCategories)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

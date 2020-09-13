@@ -16,16 +16,6 @@ export const createCategory = async (sellerId, categoryName) => {
 	}
 }
 
-export const findCategory = async sellerId => {
-	try {
-		const { categories } = await Seller.findById(sellerId)
-		return categories
-	} catch (error) {
-		winston.debug('@error findCategory', { error })
-		return Promise.reject(new CreateHttpError[500]())
-	}
-}
-
 export const removeCategory = async (sellerId, categoryId) => {
 	try {
 		const seller = await Seller.findById(sellerId)
@@ -92,7 +82,7 @@ export const createProduct = async (
 	}
 }
 
-export const findProduct = async sellerId => {
+export const findProducts = async sellerId => {
 	try {
 		const { categories } = await Seller.findById(sellerId)
 		return categories
