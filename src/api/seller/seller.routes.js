@@ -5,13 +5,18 @@ import authRouter from './auth/seller.auth.routes'
 import {
 	postCategoryValidator,
 	deleteCategoryValidator,
-	patchCategoryValidator
+	patchCategoryValidator,
+	postProductValidator
 } from './seller.validator'
 import {
 	postCategory,
 	getCategory,
 	deleteCategory,
-	patchCategory
+	patchCategory,
+	postProduct,
+	getProducts,
+	deleteProduct,
+	patchProduct
 } from './seller.controller'
 
 const router = Router()
@@ -40,6 +45,30 @@ router.delete(
 	deleteCategoryValidator,
 	validationMiddleware,
 	deleteCategory
+)
+
+/* Products Routes */
+router.get('/products', token.authenticationMiddleware, getProducts)
+router.post(
+	'/product',
+	token.authenticationMiddleware,
+	postProductValidator,
+	validationMiddleware,
+	postProduct
+)
+router.patch(
+	'/product',
+	token.authenticationMiddleware,
+	// patchProductValidator,
+	validationMiddleware,
+	patchProduct
+)
+router.delete(
+	'/product',
+	token.authenticationMiddleware,
+	// deleteProductValidator,
+	validationMiddleware,
+	deleteProduct
 )
 
 export default router

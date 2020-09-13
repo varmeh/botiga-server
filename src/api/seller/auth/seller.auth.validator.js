@@ -1,6 +1,6 @@
 import {
 	emptyValidator,
-	alphaValitor,
+	alphaValidator,
 	pinValidator,
 	phoneValidator
 } from '../../../util'
@@ -9,7 +9,7 @@ export const pinSigninValidator = [phoneValidator('phone'), pinValidator('pin')]
 
 export const signupValidator = [
 	emptyValidator('companyName'),
-	alphaValitor('businessCategory'),
+	alphaValidator('businessCategory'),
 	emptyValidator('firstName'),
 	emptyValidator('lastName'),
 	emptyValidator('gender')

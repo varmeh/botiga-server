@@ -9,7 +9,7 @@ export const productSchema = new Schema({
 	description: {
 		type: String,
 		trim: true,
-		maxlength: 140
+		maxlength: 80
 	},
 	price: {
 		type: Number,
@@ -17,10 +17,17 @@ export const productSchema = new Schema({
 		required: true
 	},
 	size: {
-		type: String,
-		trim: true,
-		required: true,
-		maxlength: 32
+		quantity: {
+			type: String,
+			trim: true,
+			required: true,
+			maxlength: 32
+		},
+		unit: {
+			type: String,
+			enum: ['gms', 'kg', 'ml', 'lt', 'piece', 'pieces'],
+			required: true
+		}
 	},
 	available: {
 		type: Boolean,

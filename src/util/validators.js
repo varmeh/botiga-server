@@ -7,6 +7,7 @@ const validationMessages = {
 	numeric: 'should have numbers only',
 	territory: 'should have alphabets & space only',
 	alphaOnly: 'should have alphabets only',
+	alphaNumeric: 'should have alphabets & numbers only',
 	decimal: 'should be a decimal',
 	pinLength: 'should have a length of 6 characters',
 	phoneLength: 'should have a length of 10 characters'
@@ -15,13 +16,19 @@ const validationMessages = {
 export const emptyValidator = field =>
 	body(field).trim().notEmpty().withMessage(validationMessages.empty).bail()
 
-export const alphaValitor = field =>
+export const alphaValidator = field =>
 	emptyValidator(field).isAlpha().withMessage(validationMessages.alphaOnly)
 
-export const pinValidator = field =>
+export const alphaNumericValidator = field =>
 	emptyValidator(field)
-		.isInt()
-		.withMessage(validationMessages.numeric)
+		.isAlphanumeric()
+		.withMessage(validationMessages.alphaOnly)
+
+export const numberValidator = field =>
+	emptyValidator(field).isInt().withMessage(validationMessages.numeric)
+
+export const pinValidator = field =>
+	numberValidator(field)
 		.bail()
 		.isLength({ min: 6, max: 6 })
 		.withMessage(validationMessages.pinLength)
