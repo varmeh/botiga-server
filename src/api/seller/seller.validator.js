@@ -32,3 +32,8 @@ export const patchProductValidator = [
 	alphaNumericValidator('productId'),
 	...postProductValidator
 ]
+
+export const deleteProductValidator = [
+	emptyValidator('categoryId'),
+	emptyValidator('productId')
+]

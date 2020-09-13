@@ -6,7 +6,8 @@ import {
 	updateCategory,
 	createProduct,
 	findProducts,
-	updateProduct
+	updateProduct,
+	removeProduct
 } from './seller.dao'
 
 /****************************************************************
@@ -99,8 +100,9 @@ export const getProducts = async (req, res, next) => {
 }
 
 export const deleteProduct = async (req, res, next) => {
+	const { categoryId, productId } = req.body
 	try {
-		await removeCategory(token.get(req), req.body.categoryId)
+		await removeProduct(token.get(req), categoryId, productId)
 
 		res.status(204).json()
 	} catch (error) {

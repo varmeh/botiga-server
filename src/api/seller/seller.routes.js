@@ -7,7 +7,8 @@ import {
 	deleteCategoryValidator,
 	patchCategoryValidator,
 	postProductValidator,
-	patchProductValidator
+	patchProductValidator,
+	deleteProductValidator
 } from './seller.validator'
 import {
 	postCategory,
@@ -67,7 +68,7 @@ router.patch(
 router.delete(
 	'/products',
 	token.authenticationMiddleware,
-	// deleteProductValidator,
+	deleteProductValidator,
 	validationMiddleware,
 	deleteProduct
 )
