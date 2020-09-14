@@ -1,4 +1,4 @@
-import { body } from 'express-validator'
+import { body, param } from 'express-validator'
 
 const validationMessages = {
 	empty: 'should not be empty',
@@ -13,6 +13,11 @@ const validationMessages = {
 	phoneLength: 'should have a length of 10 characters'
 }
 
+/* Params Validators */
+export const paramEmptyValidator = field =>
+	param(field).trim().notEmpty().withMessage(validationMessages.empty).bail()
+
+/* Body Validators */
 export const emptyValidator = field =>
 	body(field).trim().notEmpty().withMessage(validationMessages.empty).bail()
 

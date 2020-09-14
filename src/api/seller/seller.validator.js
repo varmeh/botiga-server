@@ -4,7 +4,8 @@ import {
 	alphaSpaceValidator,
 	alphaNumericValidator,
 	decimalValidator,
-	numberValidator
+	numberValidator,
+	paramEmptyValidator
 } from '../../util'
 
 export const postCategoryValidator = [alphaValidator('name')]
@@ -26,6 +27,12 @@ export const postProductValidator = [
 		.withMessage(
 			'should be either of following - gms, kg, ml, lt, piece & pieces'
 		)
+]
+
+export const getImageUrlValidator = [
+	paramEmptyValidator('imageType')
+		.matches(/^(jpg|jpeg|png)$/, 'i')
+		.withMessage('Valid Image Format - png, jpg and jpeg')
 ]
 
 export const patchProductValidator = [

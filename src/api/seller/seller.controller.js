@@ -1,5 +1,6 @@
 import CreateHttpError from 'http-errors'
-import { token } from '../../util'
+import nanoid from 'nanoid'
+import { token, aws } from '../../util'
 import {
 	createCategory,
 	removeCategory,
@@ -9,6 +10,31 @@ import {
 	updateProduct,
 	removeProduct
 } from './seller.dao'
+
+export const getImageUrl = async (req, res, next) => {
+	const { imageType } = req.params
+	const fileName = `${token.get(req)}_${nanoid(6)}.${imageType}`
+	const bucket = process.env.AWS_BUCKET_NAME
+	try {
+		const data = await aws.s3
+			.getSignedUrl('putObject', {
+				Bucket: bucket,
+				Key: fileName,
+				Expires: 10 * 60,
+				ContentType: `image/${imageType}`,
+				ACL: 'public-read'
+			})
+			.promise()
+
+		res.status(201).json({
+			uploadUrl: data,
+			downloadUrl: `https://${bucket}.s3.amazonaws.com/${fileName}`
+		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
 
 /****************************************************************
  *	Category Controllers

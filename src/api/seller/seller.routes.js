@@ -7,6 +7,7 @@ import {
 	deleteCategoryValidator,
 	patchCategoryValidator,
 	postProductValidator,
+	getImageUrlValidator,
 	patchProductValidator,
 	deleteProductValidator
 } from './seller.validator'
@@ -18,7 +19,8 @@ import {
 	postProduct,
 	getProducts,
 	deleteProduct,
-	patchProduct
+	patchProduct,
+	getImageUrl
 } from './seller.controller'
 
 const router = Router()
@@ -71,6 +73,14 @@ router.delete(
 	deleteProductValidator,
 	validationMiddleware,
 	deleteProduct
+)
+
+router.get(
+	'/imageurls/:imageType',
+	token.authenticationMiddleware,
+	getImageUrlValidator,
+	validationMiddleware,
+	getImageUrl
 )
 
 export default router
