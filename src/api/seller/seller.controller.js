@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 import nanoid from 'nanoid'
-import { token, aws } from '../../util'
+import { token, aws, winston } from '../../util'
 import {
 	createCategory,
 	removeCategory,
@@ -148,7 +148,7 @@ export const patchProduct = async (req, res, next) => {
 		imageUrl
 	} = req.body
 	try {
-		const updatedProduct = await updateProduct({
+		const [updatedProduct, oldImageUrl] = await updateProduct({
 			sellerId: token.get(req),
 			categoryId,
 			productId,
@@ -158,6 +158,17 @@ export const patchProduct = async (req, res, next) => {
 			size,
 			imageUrl
 		})
+
+		if (updatedProduct.imageUrl !== oldImageUrl) {
+			// User have uploaded a new image
+			// Delete the old image from s3 bucket
+			const arr = oldImageUrl.split('/')
+			const data = await aws.s3.deleteObject({
+				Bucket: process.env.AWS_BUCKET_NAME,
+				Key: arr[arr.length - 1]
+			})
+			winston.debug('@aws delete image', { data })
+		}
 
 		res.json(updatedProduct)
 	} catch (error) {

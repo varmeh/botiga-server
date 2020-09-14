@@ -142,6 +142,8 @@ export const updateProduct = async ({
 	try {
 		const [seller, product] = findProductHelper(sellerId, categoryId, productId)
 
+		const oldImageUrl = product.imageUrl
+
 		// Update Product Information
 		product.name = name
 		product.description = description
@@ -150,7 +152,10 @@ export const updateProduct = async ({
 		product.imageUrl = imageUrl
 
 		const updatedSeller = await seller.save()
-		return updatedSeller.categories.id(categoryId).products.id(productId)
+		const updatedProduct = updatedSeller.categories
+			.id(categoryId)
+			.products.id(productId)
+		return [updatedProduct, oldImageUrl]
 	} catch (error) {
 		winston.debug('@error updateProduct', logDbError(error))
 		return promiseRejectServerError()
