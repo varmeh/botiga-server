@@ -25,7 +25,7 @@ import {
 
 const router = Router()
 
-router.use('/', authRouter)
+router.use('/auth', authRouter)
 
 /* Category Routes */
 router.get('/categories', token.authenticationMiddleware, getCategories)

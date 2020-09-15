@@ -75,3 +75,13 @@ export const postSellerLoginWithPin = async (req, res, next) => {
 		next(new CreateHttpError(status, message))
 	}
 }
+
+export const postSellerSignout = (_, res, next) => {
+	try {
+		// TODO: Invalidate token on signout
+		res.status(204).json()
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}

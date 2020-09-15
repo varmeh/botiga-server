@@ -1,9 +1,10 @@
 import { Router } from 'express'
-import { validationMiddleware } from '../../../util'
+import { validationMiddleware, token } from '../../../util'
 import { pinSigninValidator, signupValidator } from './seller.auth.validator'
 import {
 	postSellerSignup,
-	postSellerLoginWithPin
+	postSellerLoginWithPin,
+	postSellerSignout
 } from './seller.auth.controller'
 
 const router = Router()
@@ -16,5 +17,7 @@ router.post(
 	validationMiddleware,
 	postSellerLoginWithPin
 )
+
+router.post('/signout', token.authenticationMiddleware, postSellerSignout)
 
 export default router
