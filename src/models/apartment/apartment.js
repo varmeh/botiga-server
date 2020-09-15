@@ -1,11 +1,5 @@
 import { Schema, model } from 'mongoose'
-
-const sellerBasicInformationSchema = new Schema({
-	company: { type: String, required: true },
-	sellerId: { type: Schema.Types.ObjectId, ref: 'seller' },
-	businessSegments: [String],
-	live: { type: Boolean, default: true }
-})
+import { apartmentSellerSchema } from './apartmentSellerSchema'
 
 const apartmentSchema = new Schema(
 	{
@@ -38,7 +32,7 @@ const apartmentSchema = new Schema(
 				required: true
 			}
 		},
-		sellers: [sellerBasicInformationSchema]
+		sellers: [apartmentSellerSchema]
 	},
 	{ timestamps: true }
 )

@@ -1,43 +1,36 @@
 import { Schema } from 'mongoose'
 
-export const apartmentManagementSchema = new Schema({
-	apartmentId: {
-		type: Schema.Types.ObjectId,
-		required: true,
-		ref: 'apartment'
-	},
-	apartmentName: {
-		type: String,
-		required: true
-	},
-	live: {
-		type: Boolean,
-		default: false
-	},
-	managerInfo: {
+export const apartmentSellerSchema = new Schema({
+	sellerId: { type: Schema.Types.ObjectId, ref: 'seller' },
+	brandName: { type: String, required: true },
+	tagline: String,
+	brandImageUrl: String,
+	businessCategory: { type: String, required: true },
+	live: { type: Boolean, default: true },
+	manager: {
 		phoneNumber: {
 			type: String,
 			required: true,
 			match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 		},
-		whatsappNumber: {
+		whatsapp: {
 			type: String,
 			required: true,
 			match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number']
 		}
 	},
 	deliverySchedule: {
-		deliveryMethod: {
+		deliveryType: {
 			type: String,
 			required: true,
-			enum: ['fixedDelay', 'fixedDay'],
+			enum: ['fixedDelay', 'fixedDays'],
 			default: 'fixedDelay'
 		},
 		fixedDelayInDays: {
 			type: Number,
 			default: 1
 		},
-		fixedDay: {
+		fixedDays: {
 			type: Number,
 			min: 1, // represents a Sunday
 			max: 7 // represents a Saturday

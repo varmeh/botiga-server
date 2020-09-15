@@ -9,8 +9,10 @@ import {
 	postProductValidator,
 	getImageUrlValidator,
 	patchProductValidator,
-	deleteProductValidator
+	deleteProductValidator,
+	postApartmentValidator
 } from './seller.validator'
+
 import {
 	postCategory,
 	getCategories,
@@ -20,7 +22,9 @@ import {
 	getProducts,
 	deleteProduct,
 	patchProduct,
-	getImageUrl
+	getImageUrl,
+	getApartments,
+	postApartments
 } from './seller.controller'
 
 const router = Router()
@@ -81,6 +85,17 @@ router.get(
 	getImageUrlValidator,
 	validationMiddleware,
 	getImageUrl
+)
+
+/* Apartments Routes */
+router.get('/apartments', token.authenticationMiddleware, getApartments)
+
+router.post(
+	'/apartments',
+	token.authenticationMiddleware,
+	postApartmentValidator,
+	validationMiddleware,
+	postApartments
 )
 
 export default router

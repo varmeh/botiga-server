@@ -1,6 +1,26 @@
 import { Schema, model } from 'mongoose'
 import { categorySchema } from './categorySchema'
-import { apartmentManagementSchema } from './apartmentManagementSchema'
+
+export const sellerApartmentSchema = new Schema({
+	_id: {
+		// Same as apartmentId _id in apartment schema
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'apartment'
+	},
+	apartmentName: {
+		type: String,
+		required: true
+	},
+	apartmentArea: {
+		type: String,
+		required: true
+	},
+	live: {
+		type: Boolean,
+		default: false
+	}
+})
 
 const sellerSchema = new Schema(
 	{
@@ -53,7 +73,7 @@ const sellerSchema = new Schema(
 			}
 		},
 		categories: [categorySchema],
-		apartments: [apartmentManagementSchema]
+		apartments: [sellerApartmentSchema]
 	},
 	{ timestamps: true }
 )

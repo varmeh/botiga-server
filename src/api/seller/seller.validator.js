@@ -44,3 +44,5 @@ export const deleteProductValidator = [
 	emptyValidator('categoryId'),
 	emptyValidator('productId')
 ]
+
+export const postApartmentValidator = [alphaNumericValidator('apartmentId')]
