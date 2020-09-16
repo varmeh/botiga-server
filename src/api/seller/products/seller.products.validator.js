@@ -1,6 +1,5 @@
 import {
 	emptyValidator,
-	alphaValidator,
 	alphaSpaceValidator,
 	alphaNumericValidator,
 	decimalValidator,
@@ -10,16 +9,7 @@ import {
 	alphaSpaceOptionalValidator,
 	decimalOptionalValidator,
 	numberOptionalValidator
-} from '../../util'
-
-export const postCategoryValidator = [alphaValidator('name')]
-
-export const deleteCategoryValidator = [emptyValidator('categoryId')]
-
-export const patchCategoryValidator = [
-	...postCategoryValidator,
-	...deleteCategoryValidator
-]
+} from '../../../util'
 
 export const postProductValidator = [
 	alphaNumericValidator('categoryId'),
@@ -60,5 +50,3 @@ export const deleteProductValidator = [
 	emptyValidator('categoryId'),
 	emptyValidator('productId')
 ]
-
-export const postApartmentValidator = [alphaNumericValidator('apartmentId')]
