@@ -15,6 +15,14 @@ export const findApartments = async sellerId => {
 	}
 }
 
+/*
+ * This is a one time activity
+ * Once added to seller list, no updates are required ever in this information
+ * As the following information added here is immutable:
+ * 	- apartment _id
+ * 	- apartment name
+ *  - apartment area
+ */
 export const addApartment = async (sellerId, apartmentId) => {
 	try {
 		const seller = await Seller.findById(sellerId)

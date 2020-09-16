@@ -1,14 +1,14 @@
 import { Schema } from 'mongoose'
 
 export const apartmentSellerSchema = new Schema({
-	sellerId: { type: Schema.Types.ObjectId, ref: 'seller' },
+	_id: { type: Schema.Types.ObjectId, ref: 'seller' },
 	brandName: { type: String, required: true },
 	tagline: String,
 	brandImageUrl: String,
 	businessCategory: { type: String, required: true },
-	live: { type: Boolean, default: true },
+	live: { type: Boolean, default: false },
 	manager: {
-		phoneNumber: {
+		phone: {
 			type: String,
 			required: true,
 			match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
