@@ -1,23 +1,6 @@
-import { body, param } from 'express-validator'
+import { body } from 'express-validator'
+import { validationMessages } from './validationMessages'
 
-const validationMessages = {
-	empty: 'should not be empty',
-	addressRegex:
-		'should have following characters - alphabets, numbers, comma, spaces, dot and hypen',
-	numeric: 'should have numbers only',
-	alphaSpace: 'should have alphabets & space only',
-	alphaOnly: 'should have alphabets only',
-	alphaNumeric: 'should have alphabets & numbers only',
-	decimal: 'should be a decimal',
-	pinLength: 'should have a length of 6 characters',
-	phoneLength: 'should have a length of 10 characters'
-}
-
-/* Params Validators */
-export const paramEmptyValidator = field =>
-	param(field).trim().notEmpty().withMessage(validationMessages.empty).bail()
-
-/* Body Validators */
 export const emptyValidator = field =>
 	body(field).trim().notEmpty().withMessage(validationMessages.empty).bail()
 

@@ -5,7 +5,11 @@ import {
 	alphaNumericValidator,
 	decimalValidator,
 	numberValidator,
-	paramEmptyValidator
+	paramEmptyValidator,
+	emptyOptionalValidator,
+	alphaSpaceOptionalValidator,
+	decimalOptionalValidator,
+	numberOptionalValidator
 } from '../../util'
 
 export const postCategoryValidator = [alphaValidator('name')]
@@ -26,7 +30,9 @@ export const postProductValidator = [
 		.matches(/^(gms|kg|ml|lt|piece|pieces)$/, 'i')
 		.withMessage(
 			'should be either of following - gms, kg, ml, lt, piece & pieces'
-		)
+		),
+	alphaSpaceOptionalValidator('description'),
+	emptyOptionalValidator('imageUrl')
 ]
 
 export const getImageUrlValidator = [
@@ -37,7 +43,17 @@ export const getImageUrlValidator = [
 
 export const patchProductValidator = [
 	alphaNumericValidator('productId'),
-	...postProductValidator
+	alphaNumericValidator('categoryId'),
+	alphaSpaceOptionalValidator('name'),
+	decimalOptionalValidator('price'),
+	numberOptionalValidator('size.quantity'),
+	emptyOptionalValidator('size.unit')
+		.matches(/^(gms|kg|ml|lt|piece|pieces)$/, 'i')
+		.withMessage(
+			'should be either of following - gms, kg, ml, lt, piece & pieces'
+		),
+	alphaSpaceOptionalValidator('description'),
+	emptyOptionalValidator('imageUrl')
 ]
 
 export const deleteProductValidator = [
