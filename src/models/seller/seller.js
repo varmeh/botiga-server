@@ -24,7 +24,7 @@ export const sellerApartmentSchema = new Schema({
 
 const sellerSchema = new Schema(
 	{
-		companyName: { type: String, required: true },
+		companyName: { type: String, required: true, immutable: true },
 		businessCategory: { type: String, required: true },
 		owner: {
 			firstName: {

@@ -1,4 +1,5 @@
 import CreateHttpError from 'http-errors'
+
 import { winston } from '../../../util'
 import { Seller, Apartment } from '../../../models'
 
@@ -16,14 +17,16 @@ export const findApartments = async sellerId => {
 }
 
 /*
- * This is a one time activity
- * Once added to seller list, no updates are required ever in this information
- * As the following information added here is immutable:
- * 	- apartment _id
- * 	- apartment name
- *  - apartment area
+ * Adding a new apartment to Seller service list needs updates in 2 models:
+ *	- Seller Model -> apartments array
+ * 	- Apartment Model -> sellers array
+ *
+ * So, this would be achieved using Mongodb Transaction
  */
-export const addApartment = async (sellerId, apartmentId) => {
+export const addApartment = async (
+	sellerId,
+	{ apartmentId, phone, whatsapp, deliveryType, day }
+) => {
 	try {
 		const seller = await Seller.findById(sellerId)
 
@@ -32,12 +35,35 @@ export const addApartment = async (sellerId, apartmentId) => {
 			return Promise.reject(new CreateHttpError[409]('Duplicate Apartment'))
 		}
 
-		// Fetch apartment information from Apartment model
 		const apartment = await Apartment.findById(apartmentId)
+		// Check if it's a valid apartment id
 		if (!apartment) {
 			return Promise.reject(new CreateHttpError[404]('Apartment Not Found'))
 		}
 
+		// Check if seller already exists in apartment sellers list
+		if (apartment.sellers.id(sellerId)) {
+			return Promise.reject(new CreateHttpError[409]('Duplicate Seller'))
+		}
+
+		// Add seller information to apartment list
+		const { businessCategory, brand } = seller
+		const { name, tagline, imageUrl } = brand
+
+		apartment.sellers.push({
+			_id: sellerId,
+			brandName: name,
+			tagline,
+			brandImageUrl: imageUrl,
+			businessCategory,
+			live: false,
+			contact: { phone, whatsapp },
+			delivery: { type: deliveryType, day }
+		})
+
+		await apartment.save()
+
+		// Add apartment information to seller list
 		seller.apartments.push({
 			_id: apartmentId,
 			apartmentName: apartment.name,
@@ -46,9 +72,10 @@ export const addApartment = async (sellerId, apartmentId) => {
 		})
 
 		const updatedSeller = await seller.save()
+
 		return updatedSeller.apartments.id(apartmentId)
 	} catch (error) {
-		winston.debug('@error findApartments', logDbError(error))
+		winston.debug('@error addApartment', logDbError(error))
 		return promiseRejectServerError()
 	}
 }

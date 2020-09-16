@@ -7,7 +7,7 @@ export const apartmentSellerSchema = new Schema({
 	brandImageUrl: String,
 	businessCategory: { type: String, required: true },
 	live: { type: Boolean, default: false },
-	manager: {
+	contact: {
 		phone: {
 			type: String,
 			required: true,
@@ -19,21 +19,17 @@ export const apartmentSellerSchema = new Schema({
 			match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number']
 		}
 	},
-	deliverySchedule: {
-		deliveryType: {
+	delivery: {
+		type: {
 			type: String,
 			required: true,
-			enum: ['fixedDelay', 'fixedDays'],
-			default: 'fixedDelay'
+			enum: ['delay', 'day']
 		},
-		fixedDelayInDays: {
+		// value depends on type. for
+		day: {
 			type: Number,
-			default: 1
-		},
-		fixedDays: {
-			type: Number,
-			min: 1, // represents a Sunday
-			max: 7 // represents a Saturday
+			min: 1,
+			max: 7
 		}
 	}
 })

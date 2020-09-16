@@ -14,9 +14,15 @@ export const getApartments = async (req, res, next) => {
 }
 
 export const postApartments = async (req, res, next) => {
-	const { apartmentId } = req.body
+	const { apartmentId, phone, whatsapp, deliveryType, day } = req.body
 	try {
-		const apartment = await addApartment(token.get(req), apartmentId)
+		const apartment = await addApartment(token.get(req), {
+			apartmentId,
+			phone,
+			whatsapp,
+			deliveryType,
+			day
+		})
 		res.json(apartment)
 	} catch (error) {
 		const { status, message } = error

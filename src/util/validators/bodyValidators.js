@@ -16,20 +16,16 @@ export const numberValidator = field =>
 	emptyValidator(field).isInt().withMessage(validationMessages.numeric)
 
 export const pinValidator = field =>
-	numberValidator(field)
+	emptyValidator(field)
 		.bail()
-		.isLength({ min: 6, max: 6 })
+		.matches(/^\d{6}$/)
 		.withMessage(validationMessages.pinLength)
 
 export const phoneValidator = field =>
 	emptyValidator(field)
-		.isInt()
-		.withMessage(validationMessages.numeric)
 		.bail()
-		.isInt()
-		.withMessage(validationMessages.numeric)
-		.isLength({ min: 10, max: 10 })
-		.withMessage(validationMessages.phoneLength)
+		.matches(/^9\d{9}$/)
+		.withMessage('should be a valid phone number')
 
 export const decimalValidator = field =>
 	emptyValidator(field).isDecimal().withMessage(validationMessages.decimal)
