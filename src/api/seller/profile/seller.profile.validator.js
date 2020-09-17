@@ -12,10 +12,10 @@ export const patchContactValidator = [
 		.withMessage('should be a valid email Id'),
 	phoneOptionalValidator('phone'),
 	phoneOptionalValidator('whatsapp'),
-	addressOptionalValidator('building'),
-	addressOptionalValidator('street'),
-	alphaSpaceOptionalValidator('city'),
-	alphaSpaceOptionalValidator('area'),
-	alphaSpaceOptionalValidator('state'),
-	pinOptionalValidator('pincode')
+	addressOptionalValidator('address.building'),
+	addressOptionalValidator('address.street'),
+	alphaSpaceOptionalValidator('address.city'),
+	alphaSpaceOptionalValidator('address.area'),
+	alphaSpaceOptionalValidator('address.state'),
+	pinOptionalValidator('address.pincode')
 ]

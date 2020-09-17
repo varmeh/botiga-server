@@ -2,6 +2,15 @@ import CreateHttpError from 'http-errors'
 import { winston } from '../../../util'
 import { Seller } from '../../../models'
 
+export const findSeller = async sellerId => {
+	try {
+		return await Seller.findById(sellerId)
+	} catch (error) {
+		winston.debug('@error findSeller', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
 export const updateContactInformation = async (
 	sellerId,
 	{ email, phone, whatsapp, building, street, city, area, state, pincode }
@@ -24,9 +33,10 @@ export const updateContactInformation = async (
 		address.state = !state ? address.state : state
 		address.pincode = !pincode ? address.pincode : pincode
 
-		return await seller.save().contact
+		const updatedSeller = await seller.save()
+		return updatedSeller.contact
 	} catch (error) {
-		winston.debug('@error dbFindSellerByNumber', { error })
+		winston.debug('@error updateContactInformation', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
