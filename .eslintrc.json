@@ -57,7 +57,7 @@
 		"comma-dangle": [2, "never"],
 		"comma-spacing": [2, { "before": false, "after": true }],
 		"block-scoped-var": 2,
-		"complexity": [2, { "max": 9 }],
+		"complexity": [2, { "max": 12 }],
 		"consistent-return": 2,
 		"default-case": 2,
 		"default-param-last": 2,

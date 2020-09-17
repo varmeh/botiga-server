@@ -64,8 +64,8 @@ const sellerSchema = new Schema(
 				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number']
 			},
 			address: {
-				address1: String,
-				address2: String,
+				building: String,
+				street: String,
 				area: String,
 				city: String,
 				state: String,

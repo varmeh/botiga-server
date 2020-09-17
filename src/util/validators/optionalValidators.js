@@ -21,3 +21,20 @@ export const decimalOptionalValidator = field =>
 
 export const numberOptionalValidator = field =>
 	emptyOptionalValidator(field).isInt().withMessage(validationMessages.numeric)
+
+export const phoneOptionalValidator = field =>
+	emptyOptionalValidator(field)
+		.bail()
+		.matches(/^9\d{9}$/)
+		.withMessage('should be a valid phone number')
+
+export const addressOptionalValidator = field =>
+	emptyOptionalValidator(field)
+		.matches(/^[a-zA-Z0-9\s,.-]*$/, 'i')
+		.withMessage(validationMessages.addressRegex)
+
+export const pinOptionalValidator = field =>
+	emptyOptionalValidator(field)
+		.bail()
+		.matches(/^\d{6}$/)
+		.withMessage(validationMessages.pinLength)
