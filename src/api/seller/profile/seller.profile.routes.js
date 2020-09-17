@@ -1,9 +1,14 @@
 import { Router } from 'express'
 import { validationMiddleware, token } from '../../../util'
-import { patchContactValidator } from './seller.profile.validator'
+import {
+	patchContactValidator,
+	patchBusinessValidator
+} from './seller.profile.validator'
 import {
 	getContactInformation,
-	patchContactInformation
+	patchContactInformation,
+	getBusinessInformation,
+	patchBusinessInformation
 } from './seller.profile.controller'
 
 const router = Router()
@@ -16,6 +21,16 @@ router.patch(
 	patchContactValidator,
 	validationMiddleware,
 	patchContactInformation
+)
+
+router.get('/business', token.authenticationMiddleware, getBusinessInformation)
+
+router.patch(
+	'/business',
+	token.authenticationMiddleware,
+	patchBusinessValidator,
+	validationMiddleware,
+	patchBusinessInformation
 )
 
 export default router

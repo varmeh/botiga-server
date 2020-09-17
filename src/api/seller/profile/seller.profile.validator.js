@@ -19,3 +19,11 @@ export const patchContactValidator = [
 	alphaSpaceOptionalValidator('address.state'),
 	pinOptionalValidator('address.pincode')
 ]
+
+export const patchBusinessValidator = [
+	emptyOptionalValidator('brandName'),
+	emptyOptionalValidator('tagline'),
+	emptyOptionalValidator('imageUrl').isURL({
+		protocols: ['https']
+	})
+]
