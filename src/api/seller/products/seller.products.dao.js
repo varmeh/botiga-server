@@ -91,24 +91,12 @@ export const updateProduct = async ({
 		const oldImageUrl = product.imageUrl
 
 		// Update Product Information
-		if (name) {
-			product.name = name
-		}
-		if (description) {
-			product.description = description
-		}
-		if (price) {
-			product.price = price
-		}
-		if (quantity) {
-			product.size.quantity = quantity
-		}
-		if (unit) {
-			product.size.unit = unit
-		}
-		if (imageUrl) {
-			product.imageUrl = imageUrl
-		}
+		product.name = !name ? product.name : name
+		product.description = !description ? product.description : description
+		product.price = !price ? product.price : price
+		product.size.quantity = !quantity ? product.size.quantity : quantity
+		product.size.unit = !unit ? product.size.unit : unit
+		product.imageUrl = !imageUrl ? product.imageUrl : imageUrl
 
 		const updatedSeller = await seller.save()
 		const updatedProduct = updatedSeller.categories
