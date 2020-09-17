@@ -2,7 +2,7 @@ import CreateHttpError from 'http-errors'
 import { winston } from '../../util'
 import { Apartment } from '../../models'
 
-export const dbCreateApartment = async ({
+export const createApartment = async ({
 	name,
 	area,
 	city,
@@ -21,7 +21,7 @@ export const dbCreateApartment = async ({
 		})
 		return await apartment.save()
 	} catch (error) {
-		winston.debug('@error dbCreateApartment', { error })
+		winston.debug('@error createApartment', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

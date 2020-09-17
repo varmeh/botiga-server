@@ -2,10 +2,10 @@ import CreateHttpError from 'http-errors'
 import { nanoid } from 'nanoid'
 import { token, aws } from '../../util'
 import {
-	dbFindCities,
-	dbFindAreasByCity,
-	dbFindApartmentsByCityAndArea,
-	dbFindApartmentsByLocation
+	findCities,
+	findAreaByCity,
+	findApartmentsByCityAndArea,
+	findApartmentsByLocation
 } from './services.dao'
 
 export const getApartmentsByLocation = async (req, res, next) => {
@@ -14,7 +14,7 @@ export const getApartmentsByLocation = async (req, res, next) => {
 		throw new CreateHttpError[400]('Missing Query Params - lat, long')
 	}
 	try {
-		const data = await dbFindApartmentsByLocation(lat, long)
+		const data = await findApartmentsByLocation(lat, long)
 		res.json(data)
 	} catch (error) {
 		const { status, message } = error
@@ -25,7 +25,7 @@ export const getApartmentsByLocation = async (req, res, next) => {
 // Returns the list of cities with Botiga Presence
 export const getCities = async (_, res, next) => {
 	try {
-		const cities = await dbFindCities()
+		const cities = await findCities()
 		res.json(cities)
 	} catch (error) {
 		const { status, message } = error
@@ -35,7 +35,7 @@ export const getCities = async (_, res, next) => {
 
 export const getAreasForCity = async (req, res, next) => {
 	try {
-		const areas = await dbFindAreasByCity(req.params.city)
+		const areas = await findAreaByCity(req.params.city)
 		res.json(areas)
 	} catch (error) {
 		const { status, message } = error
@@ -49,7 +49,7 @@ export const getApartmentsByCityAndArea = async (req, res, next) => {
 		throw new CreateHttpError[400]('Missing Query Params - city or area')
 	}
 	try {
-		const areas = await dbFindApartmentsByCityAndArea(city, area)
+		const areas = await findApartmentsByCityAndArea(city, area)
 		res.json(areas)
 	} catch (error) {
 		const { status, message } = error

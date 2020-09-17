@@ -2,27 +2,27 @@ import CreateHttpError from 'http-errors'
 import { winston } from '../../util'
 import { Apartment } from '../../models'
 
-export const dbFindCities = async () => {
+export const findCities = async () => {
 	try {
 		const data = await Apartment.distinct('city').sort()
 		return data
 	} catch (error) {
-		winston.debug('@error dbFindCities', { error })
+		winston.debug('@error findCities', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
 
-export const dbFindAreasByCity = async city => {
+export const findAreaByCity = async city => {
 	try {
 		const data = await Apartment.distinct('area', { city }).sort()
 		return data
 	} catch (error) {
-		winston.debug('@error dbFindAreasByCity', { error })
+		winston.debug('@error findAreaByCity', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
 
-export const dbFindApartmentsByCityAndArea = async (city, area) => {
+export const findApartmentsByCityAndArea = async (city, area) => {
 	try {
 		const data = await Apartment.find(
 			{ city, area },
@@ -30,12 +30,12 @@ export const dbFindApartmentsByCityAndArea = async (city, area) => {
 		).sort()
 		return data
 	} catch (error) {
-		winston.debug('@error dbFindApartmentsByCityAndArea', { error })
+		winston.debug('@error findApartmentsByCityAndArea', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
 
-export const dbFindApartmentsByLocation = async (lat, long) => {
+export const findApartmentsByLocation = async (lat, long) => {
 	try {
 		// this query shows all apartments with-in 700 mtrs of point
 		const data = await Apartment.find(
@@ -51,7 +51,7 @@ export const dbFindApartmentsByLocation = async (lat, long) => {
 		)
 		return data
 	} catch (error) {
-		winston.debug('@error dbFindApartmentsByLocation', { error })
+		winston.debug('@error findApartmentsByLocation', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
