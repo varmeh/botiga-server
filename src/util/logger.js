@@ -27,11 +27,13 @@ export const logRequestMiddleware = (req, _res, next) => {
 		remoteFamily
 	})
 
+	// Don't log body information for all auth calls - which holds crucial information like pin
+	const requestBodyData = originalUrl.includes('auth') ? 'Confidential' : body
 	winston.debug('@logger request details', {
 		url: originalUrl,
 		method,
 		req: {
-			body
+			body: requestBodyData
 		}
 	})
 
