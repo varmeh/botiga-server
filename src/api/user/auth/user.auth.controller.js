@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 
 import { password, token } from '../../../util'
-import { dbCreateSeller, dbFindSellerByNumber } from './user.auth.dao'
+import { createUser, findUserByNumber } from './user.auth.dao'
 
 export const postUserSignup = async (req, res, next) => {
 	const {
@@ -16,7 +16,7 @@ export const postUserSignup = async (req, res, next) => {
 
 	try {
 		const hashedPin = await password.hash(pin)
-		const seller = await dbCreateSeller({
+		const user = await createUser({
 			firstName,
 			lastName,
 			gender,
@@ -27,9 +27,9 @@ export const postUserSignup = async (req, res, next) => {
 		})
 
 		// Add jwt token
-		token.set(res, seller._id)
+		token.set(res, user._id)
 
-		res.status(201).json({ id: seller._id })
+		res.status(201).json(user)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
@@ -40,30 +40,33 @@ export const postUserSigninPin = async (req, res, next) => {
 	const { phone, pin } = req.body
 
 	try {
-		const seller = await dbFindSellerByNumber(phone)
-		if (!seller) {
-			throw new CreateHttpError[404]('Seller Not Found')
+		const user = await findUserByNumber(phone)
+		if (!user) {
+			throw new CreateHttpError[404]('User Not Found')
 		}
-		const match = await password.compare(pin, seller.pin)
+		const match = await password.compare(pin, user.signinPin)
 
 		if (match) {
-			// remove seller pin before sending seller information to frontend
+			// remove user pin before sending user information to frontend
 			const {
-				owner: { firstName, lastName, gender },
-				brand,
-				contact: { phone, whatsapp }
-			} = seller
+				firstName,
+				lastName,
+				gender,
+				phone,
+				apartmentId,
+				deliveryAddress
+			} = user
 
 			// Add jwt token
-			token.set(res, seller._id)
+			token.set(res, user._id)
 
 			res.json({
 				firstName,
 				lastName,
 				gender,
-				brandName: brand.name,
+				apartmentId,
 				phone,
-				whatsapp
+				deliveryAddress
 			})
 		} else {
 			throw new CreateHttpError[401]('Invalid Credentials')

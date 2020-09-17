@@ -20,7 +20,8 @@ const compare = async (pin, hashedPin) => {
 	} catch (error) {
 		winston.debug('@error.pin compare', {
 			msg: 'error during pin compare',
-			error
+			error,
+			errorMessage: error.message
 		})
 		return Promise.reject(new CreateHttpError[500]())
 	}
