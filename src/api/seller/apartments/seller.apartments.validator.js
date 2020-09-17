@@ -16,3 +16,8 @@ export const postApartmentValidator = [
 		.custom(val => val >= 1 && val <= 7)
 		.withMessage('day should be in range 1-7')
 ]
+
+export const patchApartmentValidator = [
+	alphaNumericValidator('apartmentId'),
+	emptyValidator('live').isBoolean().withMessage('either true or false')
+]

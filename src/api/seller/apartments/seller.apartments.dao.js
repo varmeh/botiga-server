@@ -79,3 +79,24 @@ export const addApartment = async (
 		return promiseRejectServerError()
 	}
 }
+
+export const updateApartmentLiveStatus = async (
+	sellerId,
+	{ apartmentId, live }
+) => {
+	try {
+		// If either seller or apartment does not exist, accessing their information will cause internal server error
+		const apartment = await Apartment.findById(apartmentId)
+		apartment.sellers.id(sellerId).live = live
+		await apartment.save()
+
+		const seller = await Seller.findById(sellerId)
+		seller.apartments.id(apartmentId).live = live
+		const updatedSeller = await seller.save()
+
+		return updatedSeller.apartments.id(apartmentId)
+	} catch (error) {
+		winston.debug('@error updateApartmentLiveStatus', logDbError(error))
+		return promiseRejectServerError()
+	}
+}
