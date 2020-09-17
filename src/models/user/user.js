@@ -15,26 +15,24 @@ const userSchema = new Schema(
 		gender: {
 			type: String,
 			required: true,
-			enum: ['m', 'f'],
-			default: 'm'
+			enum: ['male', 'female']
 		},
 		apartmentId: {
 			type: Schema.Types.ObjectId,
 			ref: 'apartment',
 			required: true
 		},
-		contactInfo: {
-			loginNumber: {
-				type: String,
-				unique: true,
-				required: [true, 'Login Number is mandatory'],
-				immutable: true,
-				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
-			},
-			email: String
+		phone: {
+			type: String,
+			unique: true,
+			required: [true, 'Login Number is mandatory'],
+			immutable: true,
+			match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 		},
+		signinPin: { type: String, required: true },
+		email: String,
 		deliveryAddress: {
-			houseNumber: { type: String, required: true },
+			house: { type: String, required: true },
 			aptName: { type: String, required: true },
 			area: { type: String, required: true },
 			city: { type: String, required: true },

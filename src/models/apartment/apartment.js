@@ -21,6 +21,7 @@ const apartmentSchema = new Schema(
 			type: String,
 			required: true
 		},
+		pincode: { type: String, match: [/^\d{6}/] },
 		location: {
 			type: {
 				type: String,
