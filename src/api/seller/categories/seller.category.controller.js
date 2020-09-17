@@ -9,6 +9,7 @@ import {
 
 export const postCategory = async (req, res, next) => {
 	try {
+		// TODO: sort category while adding it
 		const { categories } = await createCategory(token.get(req), req.body.name)
 
 		res.status(201).json({ category: categories[categories.length - 1] })
