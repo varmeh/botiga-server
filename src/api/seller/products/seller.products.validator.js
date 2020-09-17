@@ -42,6 +42,9 @@ export const patchProductValidator = [
 		.withMessage(
 			'should be either of following - gms, kg, ml, lt, piece & pieces'
 		),
+	emptyOptionalValidator('available')
+		.matches(/^(true|false)$/)
+		.withMessage('should be a either true or false'),
 	alphaSpaceOptionalValidator('description'),
 	emptyOptionalValidator('imageUrl')
 ]

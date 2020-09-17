@@ -64,6 +64,7 @@ export const patchProduct = async (req, res, next) => {
 		description,
 		price,
 		size,
+		available,
 		imageUrl
 	} = req.body
 	try {
@@ -75,6 +76,7 @@ export const patchProduct = async (req, res, next) => {
 			description,
 			price,
 			size,
+			available,
 			imageUrl
 		})
 

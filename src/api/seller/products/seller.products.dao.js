@@ -78,10 +78,12 @@ export const updateProduct = async ({
 	name,
 	description,
 	price,
-	size: { quantity, unit },
-	imageUrl
+	size = {},
+	imageUrl,
+	available
 }) => {
 	try {
+		const { quantity, unit } = size
 		const [seller, product] = await findProductHelper(
 			sellerId,
 			categoryId,
@@ -97,6 +99,7 @@ export const updateProduct = async ({
 		product.size.quantity = !quantity ? product.size.quantity : quantity
 		product.size.unit = !unit ? product.size.unit : unit
 		product.imageUrl = !imageUrl ? product.imageUrl : imageUrl
+		product.available = !available ? product.available : available
 
 		const updatedSeller = await seller.save()
 		const updatedProduct = updatedSeller.categories
