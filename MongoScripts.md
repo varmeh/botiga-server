@@ -8,7 +8,7 @@
 db.apartments.createIndex({name: 1}, {unique: true})
 ```
 
--   Add geospatial index
+-   Add geospatial index for User Location Queriesn
 
 ```
 db.apartments.createIndex({location: "2dsphere"})
@@ -29,3 +29,30 @@ db.sellers.createIndex({"contact.phone": 1}, {unique: true})
 ```
 db.users.createIndex({"phone": 1}, {unique: true})
 ```
+
+### Order Collection
+
+Here, indexes are required to cater to user & seller scenarios.
+
+#### User Scenario:
+
+-   `Scenario 1`: Find all orders placed by user.
+
+To cater this scenario, just add an index on `buyer.id`
+
+```
+db.orders.createIndex({"buyer.id": 1})
+```
+
+#### Seller Scenario:
+
+-   `Scenario 1`: Find all orders placed to seller by date
+
+    -   Group them into apartments
+    -   Generate following information:
+        -   Total Revenue Earned
+        -   Total Orders Placed
+        -   Total Revenue / community
+        -   Total Orders / community
+
+-   `Scenario 2`: Find all deliveries to be delivered by the date, grouped by community
