@@ -47,3 +47,14 @@ export const findSellerByNumber = async number => {
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
+
+export const updateSellerPin = async (sellerId, pin) => {
+	try {
+		const seller = await Seller.findById(sellerId)
+		seller.pin = pin
+		return await seller.save()
+	} catch (error) {
+		winston.debug('@error updateSellerPin', { error, msg: error.message })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}

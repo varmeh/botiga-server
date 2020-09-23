@@ -1,7 +1,11 @@
 import CreateHttpError from 'http-errors'
 
 import { password, token, otp } from '../../../util'
-import { createSeller, findSellerByNumber } from './seller.auth.dao'
+import {
+	createSeller,
+	findSellerByNumber,
+	updateSellerPin
+} from './seller.auth.dao'
 
 export const getOtp = async (req, res, next) => {
 	const { phone } = req.params
@@ -35,7 +39,7 @@ export const postVerifyOtp = async (req, res, next) => {
 		// Add jwt token
 		token.set(res, seller._id)
 
-		res.json({
+		return res.json({
 			firstName,
 			lastName,
 			gender,
@@ -126,6 +130,20 @@ export const postSellerSignout = (_, res, next) => {
 	try {
 		// TODO: Invalidate token on signout
 		res.status(204).json()
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchUserPin = async (req, res, next) => {
+	try {
+		const hashedPin = await password.hash(req.body.pin)
+
+		await updateSellerPin(token.get(req), hashedPin)
+		res.json({
+			message: 'pin updated'
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

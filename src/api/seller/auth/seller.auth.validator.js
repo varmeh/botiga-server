@@ -21,9 +21,14 @@ export const postOtpVerifyValidator = [
 	otpValidator('otpVal')
 ]
 
-export const pinSigninValidator = [phoneValidator('phone'), pinValidator('pin')]
+export const postPinSigninValidator = [
+	phoneValidator('phone'),
+	pinValidator('pin')
+]
 
-export const signupValidator = [
+export const patchPinValidator = pinValidator('pin')
+
+export const postSignupValidator = [
 	emptyValidator('companyName'),
 	alphaValidator('businessCategory'),
 	emptyValidator('firstName'),

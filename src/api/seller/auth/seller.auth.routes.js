@@ -3,15 +3,17 @@ import { validationMiddleware, token } from '../../../util'
 import {
 	getOtpValidator,
 	postOtpVerifyValidator,
-	pinSigninValidator,
-	signupValidator
+	postPinSigninValidator,
+	patchPinValidator,
+	postSignupValidator
 } from './seller.auth.validator'
 import {
 	getOtp,
 	postVerifyOtp,
 	postSellerSignup,
 	postSellerLoginWithPin,
-	postSellerSignout
+	postSellerSignout,
+	patchUserPin
 } from './seller.auth.controller'
 
 const router = Router()
@@ -24,13 +26,26 @@ router.post(
 	postVerifyOtp
 )
 
-router.post('/signup', signupValidator, validationMiddleware, postSellerSignup)
+router.post(
+	'/signup',
+	postSignupValidator,
+	validationMiddleware,
+	postSellerSignup
+)
 
 router.post(
 	'/signin/pin',
-	pinSigninValidator,
+	postPinSigninValidator,
 	validationMiddleware,
 	postSellerLoginWithPin
+)
+
+router.patch(
+	'/pin',
+	token.authenticationMiddleware,
+	patchPinValidator,
+	validationMiddleware,
+	patchUserPin
 )
 
 router.post('/signout', token.authenticationMiddleware, postSellerSignout)
