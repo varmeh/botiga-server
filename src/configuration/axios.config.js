@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { winston as logger } from '../util'
 
-axios.defaults.baseURL = process.env.ICM_URL
 axios.defaults.headers.common['Content-Type'] = 'application/json'
 
 logger.debug('@axios configuration', { config: axios.defaults })
@@ -78,8 +77,12 @@ axios.interceptors.response.use(
 
 			// As error.response is returned & it does not have a message key,
 			// So, add one to accomodate error.response
-			error.response.message = data.error.message
-			return Promise.reject(error.response)
+			return Promise.reject({
+				status,
+				statusText,
+				data,
+				message: error.message
+			})
 		} else if (error.request) {
 			// The request was made but no response was received
 			logAxiosResponseError(error, 'No response received for axios request')
