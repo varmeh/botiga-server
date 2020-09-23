@@ -1,7 +1,53 @@
 import CreateHttpError from 'http-errors'
 
-import { password, token } from '../../../util'
-import { dbCreateSeller, dbFindSellerByNumber } from './seller.auth.dao'
+import { password, token, otp } from '../../../util'
+import { createSeller, findSellerByNumber } from './seller.auth.dao'
+
+export const getOtp = async (req, res, next) => {
+	const { phone } = req.params
+	try {
+		const sessionId = await otp.send(phone, 'SignupTemplate')
+		res.json({ phone, sessionId })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postVerifyOtp = async (req, res, next) => {
+	const { phone, sessionId, otpVal } = req.body
+	try {
+		await otp.verify(sessionId, otpVal)
+
+		// Check if seller already exist
+		const seller = await findSellerByNumber(phone)
+		if (!seller) {
+			return res.json({ message: 'createSeller', phone })
+		}
+
+		// Else, signIn seller
+		const {
+			owner: { firstName, lastName, gender },
+			brand,
+			contact
+		} = seller
+
+		// Add jwt token
+		token.set(res, seller._id)
+
+		res.json({
+			firstName,
+			lastName,
+			gender,
+			brandName: brand.name,
+			phone: contact.phone,
+			whatsapp: contact.whatsapp
+		})
+	} catch (error) {
+		const { status, message } = error
+		return next(new CreateHttpError(status, message))
+	}
+}
 
 export const postSellerSignup = async (req, res, next) => {
 	const {
@@ -17,7 +63,7 @@ export const postSellerSignup = async (req, res, next) => {
 
 	try {
 		const hashedPin = await password.hash(pin)
-		const seller = await dbCreateSeller({
+		const seller = await createSeller({
 			companyName,
 			businessCategory,
 			firstName,
@@ -42,7 +88,7 @@ export const postSellerLoginWithPin = async (req, res, next) => {
 	const { phone, pin } = req.body
 
 	try {
-		const seller = await dbFindSellerByNumber(phone)
+		const seller = await findSellerByNumber(phone)
 		if (!seller) {
 			throw new CreateHttpError[404]('Seller Not Found')
 		}

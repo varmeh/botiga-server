@@ -2,7 +2,7 @@ import CreateHttpError from 'http-errors'
 import { winston } from '../../../util'
 import { Seller } from '../../../models'
 
-export const dbCreateSeller = async ({
+export const createSeller = async ({
 	companyName,
 	businessCategory,
 	firstName,
@@ -26,7 +26,7 @@ export const dbCreateSeller = async ({
 		})
 		return await seller.save()
 	} catch (error) {
-		winston.debug('@error dbCreateSeller', { error })
+		winston.debug('@error createSeller', { error })
 		if (error.code === 11000 && error.keyValue['contact.phone'] === phone) {
 			// Phone number already used.
 			return Promise.reject(
@@ -37,13 +37,13 @@ export const dbCreateSeller = async ({
 	}
 }
 
-export const dbFindSellerByNumber = async number => {
+export const findSellerByNumber = async number => {
 	try {
 		return await Seller.findOne({
 			'contact.phone': number
 		})
 	} catch (error) {
-		winston.debug('@error dbFindSellerByNumber', { error })
+		winston.debug('@error findSellerByNumber', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

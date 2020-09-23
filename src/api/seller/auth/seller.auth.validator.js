@@ -2,8 +2,24 @@ import {
 	emptyValidator,
 	alphaValidator,
 	pinValidator,
-	phoneValidator
+	phoneValidator,
+	paramEmptyValidator,
+	otpValidator
 } from '../../../util'
+
+export const getOtpValidator = paramEmptyValidator('phone')
+	.bail()
+	.matches(/^9\d{9}$/)
+	.withMessage('should be a valid phone number')
+
+export const postOtpVerifyValidator = [
+	emptyValidator('phone')
+		.bail()
+		.matches(/^9\d{9}$/)
+		.withMessage('should be a valid phone number'),
+	emptyValidator('sessionId'),
+	otpValidator('otpVal')
+]
 
 export const pinSigninValidator = [phoneValidator('phone'), pinValidator('pin')]
 
