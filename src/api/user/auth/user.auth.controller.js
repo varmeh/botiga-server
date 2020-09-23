@@ -1,7 +1,48 @@
 import CreateHttpError from 'http-errors'
 
-import { password, token } from '../../../util'
+import { password, token, otp } from '../../../util'
 import { createUser, findUserByNumber } from './user.auth.dao'
+
+export const getOtp = async (req, res, next) => {
+	const { phone } = req.params
+	try {
+		const sessionId = await otp.send(phone, 'SignupTemplate')
+		res.json({ phone, sessionId })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postVerifyOtp = async (req, res, next) => {
+	const { phone, sessionId, otpVal } = req.body
+	try {
+		await otp.verify(sessionId, otpVal)
+
+		// Check if user already exist
+		const user = await findUserByNumber(phone)
+		if (!user) {
+			return res.json({ message: 'createUser', phone })
+		}
+
+		const { firstName, lastName, gender, apartmentId, deliveryAddress } = user
+
+		// Add jwt token
+		token.set(res, user._id)
+
+		res.json({
+			firstName,
+			lastName,
+			gender,
+			apartmentId,
+			phone,
+			deliveryAddress
+		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
 
 export const postUserSignup = async (req, res, next) => {
 	const {

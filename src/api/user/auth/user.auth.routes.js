@@ -1,7 +1,14 @@
 import { Router } from 'express'
 import { validationMiddleware, token } from '../../../util'
-import { signinPinValidator, signupValidator } from './user.auth.validator'
 import {
+	getOtpValidator,
+	postOtpVerifyValidator,
+	postSigninPinValidator,
+	postSignupValidator
+} from './user.auth.validator'
+import {
+	getOtp,
+	postVerifyOtp,
 	postUserSignup,
 	postUserSigninPin,
 	postUserSignout
@@ -9,11 +16,24 @@ import {
 
 const router = Router()
 
-router.post('/signup', signupValidator, validationMiddleware, postUserSignup)
+router.get('/otp/:phone', getOtpValidator, validationMiddleware, getOtp)
+router.post(
+	'/otp/verify',
+	postOtpVerifyValidator,
+	validationMiddleware,
+	postVerifyOtp
+)
+
+router.post(
+	'/signup',
+	postSignupValidator,
+	validationMiddleware,
+	postUserSignup
+)
 
 router.post(
 	'/signin/pin',
-	signinPinValidator,
+	postSigninPinValidator,
 	validationMiddleware,
 	postUserSigninPin
 )

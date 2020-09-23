@@ -1,13 +1,32 @@
 import {
 	emptyValidator,
 	pinValidator,
+	otpValidator,
 	phoneValidator,
-	alphaNumericValidator
+	alphaNumericValidator,
+	paramEmptyValidator
 } from '../../../util'
 
-export const signinPinValidator = [phoneValidator('phone'), pinValidator('pin')]
+export const getOtpValidator = paramEmptyValidator('phone')
+	.bail()
+	.matches(/^9\d{9}$/)
+	.withMessage('should be a valid phone number')
 
-export const signupValidator = [
+export const postOtpVerifyValidator = [
+	emptyValidator('phone')
+		.bail()
+		.matches(/^9\d{9}$/)
+		.withMessage('should be a valid phone number'),
+	emptyValidator('sessionId'),
+	otpValidator('otpVal')
+]
+
+export const postSigninPinValidator = [
+	phoneValidator('phone'),
+	pinValidator('pin')
+]
+
+export const postSignupValidator = [
 	emptyValidator('firstName'),
 	emptyValidator('lastName'),
 	emptyValidator('gender')
