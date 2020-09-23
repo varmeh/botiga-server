@@ -1,7 +1,12 @@
 import CreateHttpError from 'http-errors'
 
 import { password, token, otp } from '../../../util'
-import { createUser, findUserByNumber, updateUser } from './user.auth.dao'
+import {
+	createUser,
+	findUserByNumber,
+	updateUser,
+	updateUserPin
+} from './user.auth.dao'
 
 export const getOtp = async (req, res, next) => {
 	const { phone } = req.params
@@ -144,6 +149,20 @@ export const patchUserProfile = async (req, res, next) => {
 			gender: user.gender,
 			apartmentId: user.apartmentId,
 			deliveryAddress: user.deliveryAddress
+		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchUserPin = async (req, res, next) => {
+	try {
+		const hashedPin = await password.hash(req.body.pin)
+
+		await updateUserPin(token.get(req), hashedPin)
+		res.json({
+			message: 'pin updated'
 		})
 	} catch (error) {
 		const { status, message } = error

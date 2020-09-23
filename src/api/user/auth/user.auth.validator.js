@@ -49,3 +49,5 @@ export const patchProfileValidator = [
 	emptyOptionalValidator('house'),
 	alphaNumericOptionalValidator('apartmentId')
 ]
+
+export const patchPinValidator = pinValidator('pin')

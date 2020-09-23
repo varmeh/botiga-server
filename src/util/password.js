@@ -16,7 +16,8 @@ const hash = async pin => {
 
 const compare = async (pin, hashedPin) => {
 	try {
-		return await brcrypt.compare(pin, hashedPin)
+		const match = await brcrypt.compare(pin, hashedPin)
+		return match
 	} catch (error) {
 		winston.debug('@error.pin compare', {
 			msg: 'error during pin compare',

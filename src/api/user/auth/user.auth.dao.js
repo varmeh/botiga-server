@@ -96,3 +96,14 @@ export const updateUser = async (
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
+
+export const updateUserPin = async (userId, pin) => {
+	try {
+		const user = await User.findById(userId)
+		user.signinPin = pin
+		return await user.save()
+	} catch (error) {
+		winston.debug('@error updateUserPin', { error, msg: error.message })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
