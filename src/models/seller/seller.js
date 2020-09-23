@@ -49,6 +49,7 @@ const sellerSchema = new Schema(
 			imageUrl: String
 		},
 		pin: { type: String, required: true },
+		pushToken: String,
 		contact: {
 			email: String,
 			phone: {

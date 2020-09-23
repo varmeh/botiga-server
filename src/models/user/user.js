@@ -30,6 +30,7 @@ const userSchema = new Schema(
 			match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 		},
 		signinPin: { type: String, required: true },
+		pushToken: String,
 		email: String,
 		deliveryAddress: {
 			house: { type: String, required: true },
