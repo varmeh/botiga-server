@@ -77,7 +77,7 @@ export const createWinstonLogger = (
 		env = process.env.NODE_ENV || 'dev',
 		logsFolder = process.env.LOGS_FOLDER || 'logs',
 		ddogApiKey = process.env.DD_API_KEY,
-		dataDogLogging = process.env.DD_LOGS_ENABLED || false
+		dataDogLogging = process.env.DD_LOGS_ENABLED === 'true'
 	} = {}
 ) => {
 	if (!service) {
