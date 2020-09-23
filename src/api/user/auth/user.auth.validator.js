@@ -4,7 +4,9 @@ import {
 	otpValidator,
 	phoneValidator,
 	alphaNumericValidator,
-	paramEmptyValidator
+	paramEmptyValidator,
+	emptyOptionalValidator,
+	alphaNumericOptionalValidator
 } from '../../../util'
 
 export const getOtpValidator = paramEmptyValidator('phone')
@@ -36,4 +38,14 @@ export const postSignupValidator = [
 	pinValidator('pin'),
 	emptyValidator('house'),
 	alphaNumericValidator('apartmentId')
+]
+
+export const patchProfileValidator = [
+	emptyOptionalValidator('firstName'),
+	emptyOptionalValidator('lastName'),
+	emptyOptionalValidator('gender')
+		.matches(/^(male|female)$/, 'i')
+		.withMessage('should be either male or female'),
+	emptyOptionalValidator('house'),
+	alphaNumericOptionalValidator('apartmentId')
 ]

@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 
 import { password, token, otp } from '../../../util'
-import { createUser, findUserByNumber } from './user.auth.dao'
+import { createUser, findUserByNumber, updateUser } from './user.auth.dao'
 
 export const getOtp = async (req, res, next) => {
 	const { phone } = req.params
@@ -30,7 +30,7 @@ export const postVerifyOtp = async (req, res, next) => {
 		// Add jwt token
 		token.set(res, user._id)
 
-		res.json({
+		return res.json({
 			firstName,
 			lastName,
 			gender,
@@ -40,7 +40,7 @@ export const postVerifyOtp = async (req, res, next) => {
 		})
 	} catch (error) {
 		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		return next(new CreateHttpError(status, message))
 	}
 }
 
@@ -122,6 +122,29 @@ export const postUserSignout = (_, res, next) => {
 	try {
 		// TODO: Invalidate token on signout
 		res.status(204).json()
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchUserProfile = async (req, res, next) => {
+	const { firstName, lastName, gender, house, apartmentId } = req.body
+	try {
+		const user = await updateUser(token.get(req), {
+			firstName,
+			lastName,
+			gender,
+			house,
+			apartmentId
+		})
+		res.json({
+			firstName: user.firstName,
+			lastName: user.lastName,
+			gender: user.gender,
+			apartmentId: user.apartmentId,
+			deliveryAddress: user.deliveryAddress
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

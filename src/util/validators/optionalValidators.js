@@ -38,3 +38,8 @@ export const pinOptionalValidator = field =>
 		.bail()
 		.matches(/^\d{6}$/)
 		.withMessage(validationMessages.pinLength)
+
+export const alphaNumericOptionalValidator = field =>
+	emptyOptionalValidator(field)
+		.isAlphanumeric()
+		.withMessage(validationMessages.alphaOnly)
