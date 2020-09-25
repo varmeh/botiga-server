@@ -1,23 +1,18 @@
 import { Router } from 'express'
 
 import { token, validationMiddleware } from '../../util'
+
 import authRouter from './auth/user.auth.routes'
+import orderRouter from './order/user.order.routes'
 
-import {
-	getSellerValidator,
-	getProductsValidator,
-	postOrderValidator
-} from './user.validator'
+import { getSellerValidator, getProductsValidator } from './user.validator'
 
-import {
-	getSellersInApartment,
-	getProductsOfSeller,
-	postOrder
-} from './user.controller'
+import { getSellersInApartment, getProductsOfSeller } from './user.controller'
 
 const router = Router()
 
 router.use('/auth', authRouter)
+router.use('/orders', orderRouter)
 
 router.get(
 	'/apartments/:apartmentId',
@@ -33,14 +28,6 @@ router.get(
 	getProductsValidator,
 	validationMiddleware,
 	getProductsOfSeller
-)
-
-router.post(
-	'/order',
-	token.authenticationMiddleware,
-	postOrderValidator,
-	validationMiddleware,
-	postOrder
 )
 
 export default router
