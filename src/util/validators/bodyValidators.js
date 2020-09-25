@@ -13,7 +13,11 @@ export const alphaNumericValidator = field =>
 		.withMessage(validationMessages.alphaOnly)
 
 export const numberValidator = field =>
-	emptyValidator(field).isInt().withMessage(validationMessages.numeric)
+	emptyValidator(field)
+		.isInt()
+		.withMessage(validationMessages.numeric)
+		.bail()
+		.toInt()
 
 export const pinValidator = field =>
 	emptyValidator(field)
@@ -34,7 +38,10 @@ export const phoneValidator = field =>
 		.withMessage('should be a valid phone number')
 
 export const decimalValidator = field =>
-	emptyValidator(field).isDecimal().withMessage(validationMessages.decimal)
+	emptyValidator(field)
+		.isDecimal()
+		.withMessage(validationMessages.decimal)
+		.toFloat()
 
 export const addressValidator = field =>
 	emptyValidator(field)
@@ -45,3 +52,17 @@ export const alphaSpaceValidator = field =>
 	emptyValidator(field)
 		.matches(/^[a-zA-Z\s]*$/, 'i')
 		.withMessage(validationMessages.alphaSpace)
+
+export const emailValidator = field =>
+	emptyValidator(field)
+		.isEmail()
+		.withMessage(validationMessages.email)
+		.normalizeEmail()
+
+export const arrayValidator = field =>
+	body(field)
+		.notEmpty()
+		.withMessage(validationMessages.empty)
+		.bail()
+		.isArray()
+		.withMessage(validationMessages.array)

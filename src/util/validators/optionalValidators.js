@@ -43,3 +43,6 @@ export const alphaNumericOptionalValidator = field =>
 	emptyOptionalValidator(field)
 		.isAlphanumeric()
 		.withMessage(validationMessages.alphaOnly)
+
+export const emailOptionalValidator = field =>
+	emptyOptionalValidator(field).isEmail().withMessage(validationMessages.email)

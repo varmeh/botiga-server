@@ -18,12 +18,8 @@ const orderSchema = new Schema(
 				required: true,
 				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 			},
-			whatsapp: {
-				type: String,
-				required: true,
-				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
-			},
-			email: String
+			email: String,
+			pushToken: String // used to send mobile notifications
 		},
 		seller: {
 			id: { type: Schema.Types.ObjectId, ref: 'seller' },
@@ -41,11 +37,6 @@ const orderSchema = new Schema(
 			email: String
 		},
 		order: {
-			id: {
-				type: String,
-				required: true,
-				trim: true
-			},
 			status: {
 				type: String,
 				enum: ['open', 'out', 'delayed', 'delivered', 'cancelled'],
@@ -64,7 +55,7 @@ const orderSchema = new Schema(
 				type: Date,
 				required: true
 			},
-			deliveryDate: Date,
+			actualDeliveryDate: Date,
 			products: [
 				{
 					name: {

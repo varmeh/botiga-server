@@ -3,13 +3,12 @@ import {
 	phoneOptionalValidator,
 	addressOptionalValidator,
 	alphaSpaceOptionalValidator,
-	pinOptionalValidator
+	pinOptionalValidator,
+	emailOptionalValidator
 } from '../../../util'
 
 export const patchContactValidator = [
-	emptyOptionalValidator('email')
-		.isEmail()
-		.withMessage('should be a valid email Id'),
+	emailOptionalValidator('email'),
 	phoneOptionalValidator('phone'),
 	phoneOptionalValidator('whatsapp'),
 	addressOptionalValidator('address.building'),

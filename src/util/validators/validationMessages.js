@@ -8,5 +8,7 @@ export const validationMessages = {
 	alphaNumeric: 'should have alphabets & numbers only',
 	decimal: 'should be a decimal',
 	pinLength: 'should have a length of 6 characters',
-	phoneLength: 'should have a length of 10 characters'
+	phoneLength: 'should have a length of 10 characters',
+	email: 'should be a valid email Id',
+	array: 'should be an array'
 }

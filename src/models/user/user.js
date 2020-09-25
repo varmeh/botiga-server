@@ -31,6 +31,7 @@ const userSchema = new Schema(
 		},
 		signinPin: { type: String, required: true },
 		email: String,
+		pushToken: String,
 		deliveryAddress: {
 			house: { type: String, required: true },
 			aptName: { type: String, required: true },
@@ -42,5 +43,10 @@ const userSchema = new Schema(
 	},
 	{ timestamps: true }
 )
+
+userSchema.virtual('name').get(function () {
+	const title = this.gender === 'male' ? 'Mr.' : 'Ms.'
+	return `${title} ${this.firstName} ${this.lastName}`
+})
 
 export const User = model('user', userSchema)
