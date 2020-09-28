@@ -4,10 +4,15 @@ import { token, validationMiddleware } from '../../../util'
 
 import {
 	postCancelOrderValidator,
-	patchOrderStatusValidator
+	patchDeliveryStatusValidator,
+	patchDeliveryDelayValidator
 } from './seller.order.validator'
 
-import { postCancelOrder, patchOrderStatus } from './seller.order.controller'
+import {
+	postCancelOrder,
+	patchDeliveryStatus,
+	patchDeliveryDelay
+} from './seller.order.controller'
 
 const router = Router()
 
@@ -20,11 +25,19 @@ router.post(
 )
 
 router.patch(
-	'/status',
+	'/delivery/status',
 	token.authenticationMiddleware,
-	patchOrderStatusValidator,
+	patchDeliveryStatusValidator,
 	validationMiddleware,
-	patchOrderStatus
+	patchDeliveryStatus
+)
+
+router.patch(
+	'/delivery/delayed',
+	token.authenticationMiddleware,
+	patchDeliveryDelayValidator,
+	validationMiddleware,
+	patchDeliveryDelay
 )
 
 export default router
