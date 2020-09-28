@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 import { token } from '../../../util'
 
-import { findOrderById } from './seller.order.dao'
+import { findOrderById, findDeliveriesByApartmentId } from './seller.order.dao'
 
 export const postCancelOrder = async (req, res, next) => {
 	const { orderId } = req.body
@@ -69,6 +69,23 @@ export const patchDeliveryDelay = async (req, res, next) => {
 		// TODO: notify user that change in order status
 
 		res.json({ message: `delivery date changed to ${newDate}`, id: order._id })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getDeliveryByApartment = async (req, res, next) => {
+	const { apartmentId } = req.params
+
+	try {
+		const orders = await findDeliveriesByApartmentId(
+			token.get(req),
+			apartmentId,
+			Date.now()
+		)
+
+		res.json(orders)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

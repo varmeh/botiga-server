@@ -2,8 +2,13 @@ import { Schema, model } from 'mongoose'
 
 const orderSchema = new Schema(
 	{
+		apartmentId: {
+			type: Schema.Types.ObjectId,
+			ref: 'apartment',
+			required: true
+		},
 		buyer: {
-			id: { type: Schema.Types.ObjectId, ref: 'user' },
+			id: { type: Schema.Types.ObjectId, ref: 'user', required: true },
 			name: { type: String, required: true },
 			deliveryAddress: {
 				house: { type: String, required: true },
@@ -34,7 +39,8 @@ const orderSchema = new Schema(
 				required: true,
 				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number']
 			},
-			email: String
+			email: String,
+			pushToken: String
 		},
 		order: {
 			status: {

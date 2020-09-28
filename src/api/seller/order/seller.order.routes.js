@@ -5,13 +5,15 @@ import { token, validationMiddleware } from '../../../util'
 import {
 	postCancelOrderValidator,
 	patchDeliveryStatusValidator,
-	patchDeliveryDelayValidator
+	patchDeliveryDelayValidator,
+	getDeliveryValidator
 } from './seller.order.validator'
 
 import {
 	postCancelOrder,
 	patchDeliveryStatus,
-	patchDeliveryDelay
+	patchDeliveryDelay,
+	getDeliveryByApartment
 } from './seller.order.controller'
 
 const router = Router()
@@ -40,4 +42,11 @@ router.patch(
 	patchDeliveryDelay
 )
 
+router.get(
+	'/delivery/:apartmentId',
+	token.authenticationMiddleware,
+	getDeliveryValidator,
+	validationMiddleware,
+	getDeliveryByApartment
+)
 export default router

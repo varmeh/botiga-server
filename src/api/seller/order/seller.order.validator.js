@@ -1,4 +1,8 @@
-import { emptyValidator, objectIdValidator } from '../../../util'
+import {
+	emptyValidator,
+	objectIdValidator,
+	paramObjectIdValidator
+} from '../../../util'
 
 export const postCancelOrderValidator = [objectIdValidator('orderId')]
 
@@ -16,3 +20,5 @@ export const patchDeliveryDelayValidator = [
 		.isDate()
 		.withMessage('should be a valid date')
 ]
+
+export const getDeliveryValidator = [paramObjectIdValidator('apartmentId')]
