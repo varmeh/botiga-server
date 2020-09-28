@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 import { winston } from '../../../util'
-import { Order, User } from '../../../models'
+import { Order, Seller, User } from '../../../models'
 
 export const createOrder = async ({
 	userId,
@@ -43,6 +43,20 @@ export const createOrder = async ({
 		return await order.save()
 	} catch (error) {
 		winston.debug('@error createOrder', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const findCategoryProducts = async sellerId => {
+	try {
+		const seller = await Seller.findById(sellerId)
+		if (!seller) {
+			return Promise.reject(new CreateHttpError[404]('Seller Not Found'))
+		}
+
+		return seller.categories
+	} catch (error) {
+		winston.debug('@error findCategoryProducts', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

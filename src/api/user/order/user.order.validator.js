@@ -2,14 +2,14 @@ import {
 	emptyValidator,
 	phoneValidator,
 	emailValidator,
-	alphaNumericValidator,
 	decimalValidator,
 	numberValidator,
-	arrayValidator
+	arrayValidator,
+	objectIdValidator
 } from '../../../util'
 
 export const postOrderValidator = [
-	alphaNumericValidator('sellerId'),
+	objectIdValidator('sellerId'),
 	emptyValidator('brandName'),
 	phoneValidator('apartmentContact.phone'),
 	phoneValidator('apartmentContact.whatsapp'),
@@ -19,5 +19,13 @@ export const postOrderValidator = [
 	emptyValidator('products.*.name'),
 	decimalValidator('products.*.price'),
 	emptyValidator('products.*.unitInfo'),
+	numberValidator('products.*.quantity')
+]
+
+export const postProductsValidator = [
+	objectIdValidator('sellerId'),
+	arrayValidator('products'),
+	objectIdValidator('products.*.productId'),
+	objectIdValidator('products.*.categoryId'),
 	numberValidator('products.*.quantity')
 ]

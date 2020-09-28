@@ -2,9 +2,12 @@ import { Router } from 'express'
 
 import { token, validationMiddleware } from '../../../util'
 
-import { postOrderValidator } from './user.order.validator'
+import {
+	postOrderValidator,
+	postProductsValidator
+} from './user.order.validator'
 
-import { postOrder } from './user.order.controller'
+import { postOrder, postProductsValidate } from './user.order.controller'
 
 const router = Router()
 
@@ -14,6 +17,14 @@ router.post(
 	postOrderValidator,
 	validationMiddleware,
 	postOrder
+)
+
+router.post(
+	'/validate',
+	token.authenticationMiddleware,
+	postProductsValidator,
+	validationMiddleware,
+	postProductsValidate
 )
 
 export default router
