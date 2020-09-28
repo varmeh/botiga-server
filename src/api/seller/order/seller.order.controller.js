@@ -81,8 +81,7 @@ export const getDeliveryByApartment = async (req, res, next) => {
 	try {
 		const orders = await findDeliveriesByApartmentId(
 			token.get(req),
-			apartmentId,
-			Date.now()
+			apartmentId
 		)
 
 		res.json(orders)
