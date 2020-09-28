@@ -60,3 +60,17 @@ export const findCategoryProducts = async sellerId => {
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
+
+export const findOrder = async orderId => {
+	try {
+		const order = await Order.findById(orderId)
+		if (!order) {
+			return Promise.reject(new CreateHttpError[404]('Order Not Found'))
+		}
+
+		return order
+	} catch (error) {
+		winston.debug('@error findOrder', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}

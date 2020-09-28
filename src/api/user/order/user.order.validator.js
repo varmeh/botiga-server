@@ -29,3 +29,5 @@ export const postProductsValidator = [
 	objectIdValidator('products.*.categoryId'),
 	numberValidator('products.*.quantity')
 ]
+
+export const postCancelOrderValidator = [objectIdValidator('orderId')]

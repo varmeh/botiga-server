@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 import { token } from '../../../util'
 
-import { createOrder, findCategoryProducts } from './user.order.dao'
+import { createOrder, findCategoryProducts, findOrder } from './user.order.dao'
 
 export const postOrder = async (req, res, next) => {
 	const {
@@ -59,6 +59,29 @@ export const postProductsValidate = async (req, res, next) => {
 		})
 
 		res.json({ totalAmount, products: validateList })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postCancelOrder = async (req, res, next) => {
+	const { orderId } = req.body
+
+	try {
+		// Verify Seller Id
+		const order = await findOrder(orderId)
+
+		if (order.buyer.id !== token.get(req)) {
+			// Ensuring the buyer for this order
+			throw new CreateHttpError[400]('Order Id does not belong to this user')
+		}
+
+		order.order.status('cancelled')
+
+		await order.save()
+
+		res.json({ message: 'cancelled', id: order._id })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
