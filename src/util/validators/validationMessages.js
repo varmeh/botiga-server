@@ -5,7 +5,7 @@ export const validationMessages = {
 	numeric: 'should have numbers only',
 	alphaSpace: 'should have alphabets & space only',
 	alphaOnly: 'should have alphabets only',
-	alphaNumeric: 'should have alphabets & numbers only',
+	objectId: 'should be a valid ObjectId',
 	decimal: 'should be a decimal',
 	pinLength: 'should have a length of 6 characters',
 	phoneLength: 'should have a length of 10 characters',

@@ -3,10 +3,10 @@ import {
 	pinValidator,
 	otpValidator,
 	phoneValidator,
-	alphaNumericValidator,
 	paramEmptyValidator,
 	emptyOptionalValidator,
-	alphaNumericOptionalValidator
+	objectIdValidator,
+	objectIdOptionalValidator
 } from '../../../util'
 
 export const getOtpValidator = paramEmptyValidator('phone')
@@ -37,7 +37,7 @@ export const postSignupValidator = [
 	phoneValidator('phone'),
 	pinValidator('pin'),
 	emptyValidator('house'),
-	alphaNumericValidator('apartmentId')
+	objectIdValidator('apartmentId')
 ]
 
 export const patchProfileValidator = [
@@ -47,7 +47,7 @@ export const patchProfileValidator = [
 		.matches(/^(male|female)$/, 'i')
 		.withMessage('should be either male or female'),
 	emptyOptionalValidator('house'),
-	alphaNumericOptionalValidator('apartmentId')
+	objectIdOptionalValidator('apartmentId')
 ]
 
 export const patchPinValidator = pinValidator('pin')

@@ -1,7 +1,7 @@
 import {
 	emptyValidator,
 	alphaSpaceValidator,
-	alphaNumericValidator,
+	objectIdValidator,
 	decimalValidator,
 	numberValidator,
 	paramEmptyValidator,
@@ -12,7 +12,7 @@ import {
 } from '../../../util'
 
 export const postProductValidator = [
-	alphaNumericValidator('categoryId'),
+	objectIdValidator('categoryId'),
 	alphaSpaceValidator('name'),
 	decimalValidator('price'),
 	numberValidator('size.quantity'),
@@ -32,8 +32,8 @@ export const getImageUrlValidator = [
 ]
 
 export const patchProductValidator = [
-	alphaNumericValidator('productId'),
-	alphaNumericValidator('categoryId'),
+	objectIdValidator('productId'),
+	objectIdValidator('categoryId'),
 	alphaSpaceOptionalValidator('name'),
 	decimalOptionalValidator('price'),
 	numberOptionalValidator('size.quantity'),

@@ -39,10 +39,11 @@ export const pinOptionalValidator = field =>
 		.matches(/^\d{6}$/)
 		.withMessage(validationMessages.pinLength)
 
-export const alphaNumericOptionalValidator = field =>
-	emptyOptionalValidator(field)
-		.isAlphanumeric()
-		.withMessage(validationMessages.alphaOnly)
-
 export const emailOptionalValidator = field =>
 	emptyOptionalValidator(field).isEmail().withMessage(validationMessages.email)
+
+export const objectIdOptionalValidator = field =>
+	emptyOptionalValidator(field)
+		.bail()
+		.matches(/^[0-9a-fA-F]{24}$/, 'i')
+		.withMessage(validationMessages.objectId)

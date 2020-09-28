@@ -1,5 +1,5 @@
-import { paramEmptyValidator } from '../../util'
+import { paramEmptyValidator, paramObjectIdValidator } from '../../util'
 
 export const getSellerValidator = paramEmptyValidator('apartmentId')
 
-export const getProductsValidator = paramEmptyValidator('sellerId')
+export const getProductsValidator = paramObjectIdValidator('sellerId')

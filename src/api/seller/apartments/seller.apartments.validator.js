@@ -1,12 +1,12 @@
 import {
-	alphaNumericValidator,
 	phoneValidator,
 	emptyValidator,
-	numberValidator
+	numberValidator,
+	objectIdValidator
 } from '../../../util'
 
 export const postApartmentValidator = [
-	alphaNumericValidator('apartmentId'),
+	objectIdValidator('apartmentId'),
 	phoneValidator('phone'),
 	phoneValidator('whatsapp'),
 	emptyValidator('deliveryType')
@@ -18,6 +18,6 @@ export const postApartmentValidator = [
 ]
 
 export const patchApartmentValidator = [
-	alphaNumericValidator('apartmentId'),
+	objectIdValidator('apartmentId'),
 	emptyValidator('live').isBoolean().withMessage('either true or false')
 ]

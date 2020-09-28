@@ -7,11 +7,6 @@ export const emptyValidator = field =>
 export const alphaValidator = field =>
 	emptyValidator(field).isAlpha().withMessage(validationMessages.alphaOnly)
 
-export const alphaNumericValidator = field =>
-	emptyValidator(field)
-		.isAlphanumeric()
-		.withMessage(validationMessages.alphaOnly)
-
 export const numberValidator = field =>
 	emptyValidator(field)
 		.isInt()
@@ -66,3 +61,9 @@ export const arrayValidator = field =>
 		.bail()
 		.isArray()
 		.withMessage(validationMessages.array)
+
+export const objectIdValidator = field =>
+	emptyValidator(field)
+		.bail()
+		.matches(/^[0-9a-fA-F]{24}$/, 'i')
+		.withMessage(validationMessages.objectId)
