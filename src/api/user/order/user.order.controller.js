@@ -1,7 +1,12 @@
 import CreateHttpError from 'http-errors'
 import { token } from '../../../util'
 
-import { createOrder, findCategoryProducts, findOrder } from './user.order.dao'
+import {
+	createOrder,
+	findCategoryProducts,
+	findOrderById,
+	findOrders
+} from './user.order.dao'
 
 export const postOrder = async (req, res, next) => {
 	const {
@@ -70,7 +75,7 @@ export const postCancelOrder = async (req, res, next) => {
 
 	try {
 		// Verify Seller Id
-		const order = await findOrder(orderId)
+		const order = await findOrderById(orderId)
 
 		if (order.buyer.id !== token.get(req)) {
 			// Ensuring the buyer for this order
@@ -82,6 +87,28 @@ export const postCancelOrder = async (req, res, next) => {
 		await order.save()
 
 		res.json({ message: 'cancelled', id: order._id })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getOrders = async (req, res, next) => {
+	try {
+		const page = req.query.page ?? 0
+		const limit = req.query.page ?? 10
+		const [totalOrders, orders] = await findOrders({
+			userId: token.get(req),
+			skip: page * limit,
+			limit
+		})
+
+		res.json({
+			pages: Math.ceil(totalOrders / limit),
+			currentPage: page,
+			perPage: limit,
+			orders
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

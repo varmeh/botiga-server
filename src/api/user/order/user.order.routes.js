@@ -11,7 +11,8 @@ import {
 import {
 	postOrder,
 	postProductsValidate,
-	postCancelOrder
+	postCancelOrder,
+	getOrders
 } from './user.order.controller'
 
 const router = Router()
@@ -39,5 +40,7 @@ router.post(
 	validationMiddleware,
 	postCancelOrder
 )
+
+router.get('/cancel', token.authenticationMiddleware, getOrders)
 
 export default router

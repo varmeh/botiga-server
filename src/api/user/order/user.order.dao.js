@@ -61,7 +61,7 @@ export const findCategoryProducts = async sellerId => {
 	}
 }
 
-export const findOrder = async orderId => {
+export const findOrderById = async orderId => {
 	try {
 		const order = await Order.findById(orderId)
 		if (!order) {
@@ -69,6 +69,25 @@ export const findOrder = async orderId => {
 		}
 
 		return order
+	} catch (error) {
+		winston.debug('@error findOrder', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const findOrders = async ({ userId, skip, limit }) => {
+	try {
+		const query = { 'buyer.id': userId }
+		const orders = await Order.find(query)
+			.sort({
+				createdAt: -1
+			})
+			.skip(skip)
+			.limit(limit)
+
+		const count = await Order.find(query).count()
+
+		return [count, orders]
 	} catch (error) {
 		winston.debug('@error findOrder', { error })
 		return Promise.reject(new CreateHttpError[500]())
