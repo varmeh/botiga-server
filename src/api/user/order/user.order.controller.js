@@ -86,6 +86,7 @@ export const postCancelOrder = async (req, res, next) => {
 
 		await order.save()
 
+		// TODO: Notify seller about the status change
 		res.json({ message: 'cancelled', id: order._id })
 	} catch (error) {
 		const { status, message } = error

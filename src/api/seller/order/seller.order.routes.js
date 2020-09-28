@@ -2,9 +2,12 @@ import { Router } from 'express'
 
 import { token, validationMiddleware } from '../../../util'
 
-import { postCancelOrderValidator } from './seller.order.validator'
+import {
+	postCancelOrderValidator,
+	patchOrderStatusValidator
+} from './seller.order.validator'
 
-import { postCancelOrder } from './seller.order.controller'
+import { postCancelOrder, patchOrderStatus } from './seller.order.controller'
 
 const router = Router()
 
@@ -14,6 +17,14 @@ router.post(
 	postCancelOrderValidator,
 	validationMiddleware,
 	postCancelOrder
+)
+
+router.patch(
+	'/status',
+	token.authenticationMiddleware,
+	patchOrderStatusValidator,
+	validationMiddleware,
+	patchOrderStatus
 )
 
 export default router
