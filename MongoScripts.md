@@ -27,7 +27,7 @@ db.sellers.createIndex({"contact.phone": 1}, {unique: true})
 -   Add `unique` index to _phone_ field
 
 ```
-db.users.createIndex({"phone": 1}, {unique: true})
+db.users.createIndex({"contact.phone": 1}, {unique: true})
 ```
 
 ### Order Collection

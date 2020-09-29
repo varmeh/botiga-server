@@ -16,11 +16,28 @@ export const createOrder = async ({
 			return Promise.reject(new CreateHttpError[404]('User Not Found'))
 		}
 
+		const seller = await Seller.findById(userId)
+		if (!seller) {
+			return Promise.reject(new CreateHttpError[404]('Seller Not Found'))
+		}
+
+		const [
+			{ house, aptName, area, city, state, pincode }
+		] = user.contact.address
+
 		const order = new Order({
+			apartment: {
+				id: user.apartmentId,
+				aptName,
+				area,
+				city,
+				state,
+				pincode
+			},
 			buyer: {
 				id: userId,
 				name: user.name,
-				deliveryAddress: user.deliveryAddress,
+				house,
 				phone: user.phone,
 				email: user.email,
 				pushToken: user.pushToken
@@ -31,7 +48,8 @@ export const createOrder = async ({
 				brandName,
 				phone,
 				whatsapp,
-				email
+				email,
+				pushToken: seller.pushToken
 			},
 			order: {
 				status: 'open',

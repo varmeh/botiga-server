@@ -18,7 +18,7 @@ export const numberValidator = field =>
 export const pinValidator = field =>
 	emptyValidator(field)
 		.bail()
-		.matches(/^\d{6}$/)
+		.matches(/^\d{4}$/)
 		.withMessage(validationMessages.pinLength)
 
 export const otpValidator = field =>

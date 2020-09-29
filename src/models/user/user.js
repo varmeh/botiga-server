@@ -1,5 +1,20 @@
 import { Schema, model } from 'mongoose'
 
+const addressSchema = new Schema({
+	aptId: {
+		type: Schema.Types.ObjectId,
+		ref: 'apartment',
+		required: true
+	},
+	label: { type: String, required: true },
+	house: { type: String, required: true },
+	aptName: { type: String, required: true },
+	area: { type: String, required: true },
+	city: { type: String, required: true },
+	state: { type: String, required: true },
+	pincode: { type: String, required: true, match: [/^\d{6}/] }
+})
+
 const userSchema = new Schema(
 	{
 		firstName: {
@@ -12,41 +27,32 @@ const userSchema = new Schema(
 			required: true,
 			trim: true
 		},
-		gender: {
-			type: String,
-			required: true,
-			enum: ['male', 'female']
-		},
-		apartmentId: {
-			type: Schema.Types.ObjectId,
-			ref: 'apartment',
-			required: true
-		},
-		phone: {
-			type: String,
-			unique: true,
-			required: [true, 'Login Number is mandatory'],
-			immutable: true,
-			match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
-		},
 		signinPin: { type: String, required: true },
-		email: String,
-		pushToken: String,
-		deliveryAddress: {
-			house: { type: String, required: true },
-			aptName: { type: String, required: true },
-			area: { type: String, required: true },
-			city: { type: String, required: true },
-			state: { type: String, required: true },
-			pincode: { type: String, required: true, match: [/^\d{6}/] }
+		contact: {
+			phone: {
+				type: String,
+				unique: true,
+				required: [true, 'Login Number is mandatory'],
+				immutable: true,
+				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
+			},
+			whatsapp: {
+				type: String,
+				unique: true,
+				required: [true, 'Login Number is mandatory'],
+				immutable: true,
+				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
+			},
+			address: [addressSchema],
+			email: String,
+			pushToken: String
 		}
 	},
 	{ timestamps: true }
 )
 
 userSchema.virtual('name').get(function () {
-	const title = this.gender === 'male' ? 'Mr.' : 'Ms.'
-	return `${title} ${this.firstName} ${this.lastName}`
+	return `${this.firstName} ${this.lastName}`
 })
 
 export const User = model('user', userSchema)

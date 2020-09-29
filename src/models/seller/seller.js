@@ -36,11 +36,6 @@ const sellerSchema = new Schema(
 				type: String,
 				required: true,
 				trim: true
-			},
-			gender: {
-				type: String,
-				required: true,
-				enum: ['male', 'female']
 			}
 		},
 		brand: {
@@ -70,7 +65,8 @@ const sellerSchema = new Schema(
 				city: String,
 				state: String,
 				pincode: { type: String, match: [/^\d{6}/] }
-			}
+			},
+			pushToken: String
 		},
 		categories: [categorySchema],
 		apartments: [sellerApartmentSchema]

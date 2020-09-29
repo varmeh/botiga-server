@@ -2,23 +2,28 @@ import { Schema, model } from 'mongoose'
 
 const orderSchema = new Schema(
 	{
-		apartmentId: {
-			type: Schema.Types.ObjectId,
-			ref: 'apartment',
-			required: true
+		apartment: {
+			id: {
+				type: Schema.Types.ObjectId,
+				ref: 'apartment',
+				required: true
+			},
+			aptName: { type: String, required: true },
+			area: { type: String, required: true },
+			city: { type: String, required: true },
+			state: { type: String, required: true },
+			pincode: { type: String, required: true, match: [/^\d{6}/] }
 		},
 		buyer: {
 			id: { type: Schema.Types.ObjectId, ref: 'user', required: true },
 			name: { type: String, required: true },
-			deliveryAddress: {
-				house: { type: String, required: true },
-				aptName: { type: String, required: true },
-				area: { type: String, required: true },
-				city: { type: String, required: true },
-				state: { type: String, required: true },
-				pincode: { type: String, required: true, match: [/^\d{6}/] }
-			},
+			house: { type: String, required: true },
 			phone: {
+				type: String,
+				required: true,
+				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
+			},
+			whatsapp: {
 				type: String,
 				required: true,
 				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
@@ -50,7 +55,7 @@ const orderSchema = new Schema(
 				required: true
 			},
 			totalAmount: {
-				type: String,
+				type: Number,
 				required: true
 			},
 			orderDate: {
@@ -90,8 +95,8 @@ const orderSchema = new Schema(
 )
 
 orderSchema.virtual('address').get(function () {
-	const { house, aptName, area, city } = this.buyer.deliveryAddress
-	return `${house}, ${aptName}, ${area}, ${city}`
+	const { aptName, area, city } = this.apartment
+	return `${this.buyer.house}, ${aptName}, ${area}, ${city}`
 })
 
 export const Order = model('order', orderSchema)

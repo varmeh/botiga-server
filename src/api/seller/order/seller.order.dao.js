@@ -28,14 +28,14 @@ export const findDeliveriesByApartment = async (sellerId, apartmentId) => {
 				$lte: moment(today).endOf('day').toDate()
 			},
 			'seller.id': sellerId,
-			apartmentId
+			'apartment.id': apartmentId
 		}).sort({
 			createdAt: -1
 		})
 
 		return orders
 	} catch (error) {
-		winston.debug('@error findDeliveriesByApartmentId', { error })
+		winston.debug('@error findDeliveriesByApartment', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
@@ -55,7 +55,7 @@ export const findOrdersByApartment = async (
 				$lte: moment(date).endOf('day').toDate()
 			},
 			'seller.id': sellerId,
-			apartmentId
+			'apartment.id': apartmentId
 		}).sort({
 			createdAt: -1
 		})
@@ -83,13 +83,10 @@ export const findSellerAggregatedData = async (sellerId, dateString) => {
 				}
 			},
 			{
-				$sort: { createdAt: -1 }
-			},
-			{
 				$group: {
-					_id: '$apartmentId',
-					apartName: '$buyer.deliveryAddress.aptName',
-					numberOfOrders: { $sum: 1 },
+					_id: '$apartment.id',
+					apartName: '$apartment.aptName',
+					ordersCount: { $sum: 1 },
 					revenue: { $sum: '$order.totalAmount' }
 				}
 			}

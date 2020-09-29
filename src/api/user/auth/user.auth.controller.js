@@ -30,7 +30,11 @@ export const postVerifyOtp = async (req, res, next) => {
 			return res.json({ message: 'createUser', phone })
 		}
 
-		const { firstName, lastName, gender, apartmentId, deliveryAddress } = user
+		const {
+			firstName,
+			lastName,
+			contact: { whatsapp, email, address }
+		} = user
 
 		// Add jwt token
 		token.set(res, user._id)
@@ -38,10 +42,10 @@ export const postVerifyOtp = async (req, res, next) => {
 		return res.json({
 			firstName,
 			lastName,
-			gender,
-			apartmentId,
 			phone,
-			deliveryAddress
+			whatsapp,
+			email,
+			address
 		})
 	} catch (error) {
 		const { status, message } = error
@@ -53,8 +57,9 @@ export const postUserSignup = async (req, res, next) => {
 	const {
 		firstName,
 		lastName,
-		gender,
 		phone,
+		whatsapp,
+		email,
 		pin,
 		house,
 		apartmentId
@@ -65,8 +70,9 @@ export const postUserSignup = async (req, res, next) => {
 		const user = await createUser({
 			firstName,
 			lastName,
-			gender,
 			phone,
+			whatsapp,
+			email,
 			hashedPin,
 			house,
 			apartmentId
@@ -75,7 +81,7 @@ export const postUserSignup = async (req, res, next) => {
 		// Add jwt token
 		token.set(res, user._id)
 
-		res.status(201).json(user)
+		res.status(201).json({ message: 'user created', id: user._id })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
@@ -97,10 +103,7 @@ export const postUserSigninPin = async (req, res, next) => {
 			const {
 				firstName,
 				lastName,
-				gender,
-				phone,
-				apartmentId,
-				deliveryAddress
+				contact: { whatsapp, address, email }
 			} = user
 
 			// Add jwt token
@@ -109,10 +112,10 @@ export const postUserSigninPin = async (req, res, next) => {
 			res.json({
 				firstName,
 				lastName,
-				gender,
-				apartmentId,
 				phone,
-				deliveryAddress
+				whatsapp,
+				email,
+				address: address[0]
 			})
 		} else {
 			throw new CreateHttpError[401]('Invalid Credentials')
@@ -134,21 +137,21 @@ export const postUserSignout = (_, res, next) => {
 }
 
 export const patchUserProfile = async (req, res, next) => {
-	const { firstName, lastName, gender, house, apartmentId } = req.body
+	const { firstName, lastName, house, email, whatsapp, apartmentId } = req.body
 	try {
 		const user = await updateUser(token.get(req), {
 			firstName,
 			lastName,
-			gender,
 			house,
+			email,
+			whatsapp,
 			apartmentId
 		})
 		res.json({
 			firstName: user.firstName,
 			lastName: user.lastName,
-			gender: user.gender,
 			apartmentId: user.apartmentId,
-			deliveryAddress: user.deliveryAddress
+			address: user.contact.address[0]
 		})
 	} catch (error) {
 		const { status, message } = error
