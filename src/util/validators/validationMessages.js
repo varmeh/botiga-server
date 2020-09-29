@@ -10,5 +10,6 @@ export const validationMessages = {
 	pinLength: 'should have a length of 6 characters',
 	phoneLength: 'should have a length of 10 characters',
 	email: 'should be a valid email Id',
-	array: 'should be an array'
+	array: 'should be an array',
+	date: 'should be a Valid date in format - YYYY-MM-DD'
 }

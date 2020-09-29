@@ -55,4 +55,8 @@ db.orders.createIndex({"buyer.id": 1})
         -   Total Revenue / community
         -   Total Orders / community
 
--   `Scenario 2`: Find all deliveries to be delivered by the date, grouped by community
+-   `Scenario 2`: Return all deliveries specific to an apartment
+
+```
+db.orders.createIndex({"order.expectedDeliveryDate": -1, "seller.id": 1})
+```

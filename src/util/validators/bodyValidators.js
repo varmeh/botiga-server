@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { body } from 'express-validator'
 import { validationMessages } from './validationMessages'
 
@@ -67,3 +68,10 @@ export const objectIdValidator = field =>
 		.bail()
 		.matches(/^[0-9a-fA-F]{24}$/, 'i')
 		.withMessage(validationMessages.objectId)
+
+export const dateValidator = field =>
+	emptyValidator(field).custom(value =>
+		moment(value, 'YYYY-MM-DD', true).isValid()
+			? true
+			: Promise.reject(validationMessages.date)
+	)

@@ -1,7 +1,12 @@
 import CreateHttpError from 'http-errors'
 import { token } from '../../../util'
 
-import { findOrderById, findDeliveriesByApartmentId } from './seller.order.dao'
+import {
+	findOrderById,
+	findDeliveriesByApartment,
+	findOrdersByApartment,
+	findSellerAggregatedData
+} from './seller.order.dao'
 
 export const postCancelOrder = async (req, res, next) => {
 	const { orderId } = req.body
@@ -79,12 +84,40 @@ export const getDeliveryByApartment = async (req, res, next) => {
 	const { apartmentId } = req.params
 
 	try {
-		const orders = await findDeliveriesByApartmentId(
+		const deliveries = await findDeliveriesByApartment(
 			token.get(req),
 			apartmentId
 		)
 
+		res.json(deliveries)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getOrdersByApartmentDate = async (req, res, next) => {
+	const { apartmentId, date } = req.params
+
+	try {
+		const orders = await findOrdersByApartment(
+			token.get(req),
+			apartmentId,
+			date
+		)
+
 		res.json(orders)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getOrdersAggregate = async (req, res, next) => {
+	try {
+		const data = await findSellerAggregatedData(token.get(req), req.params.date)
+
+		res.json(data)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

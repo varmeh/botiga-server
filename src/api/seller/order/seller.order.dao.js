@@ -18,7 +18,7 @@ export const findOrderById = async orderId => {
 	}
 }
 
-export const findDeliveriesByApartmentId = async (sellerId, apartmentId) => {
+export const findDeliveriesByApartment = async (sellerId, apartmentId) => {
 	try {
 		const today = moment().startOf('day')
 
@@ -35,7 +35,69 @@ export const findDeliveriesByApartmentId = async (sellerId, apartmentId) => {
 
 		return orders
 	} catch (error) {
-		winston.debug('@error findOrderById', { error })
+		winston.debug('@error findDeliveriesByApartmentId', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+/* Date String expected in ISO 8601 format - YYYY-MM-YY */
+export const findOrdersByApartment = async (
+	sellerId,
+	apartmentId,
+	dateString
+) => {
+	try {
+		const date = moment(dateString, 'YYYY-MM-DD').startOf('day')
+
+		const orders = await Order.find({
+			'order.orderDate': {
+				$gte: date.toDate(),
+				$lte: moment(date).endOf('day').toDate()
+			},
+			'seller.id': sellerId,
+			apartmentId
+		}).sort({
+			createdAt: -1
+		})
+
+		return orders
+	} catch (error) {
+		winston.debug('@error findOrdersByApartment', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+/* Date String expected in ISO 8601 format - YYYY-MM-YY */
+export const findSellerAggregatedData = async (sellerId, dateString) => {
+	try {
+		const date = moment(dateString, 'YYYY-MM-DD').startOf('day')
+
+		const data = await Order.aggregate([
+			{
+				$match: {
+					date: {
+						$gte: date.toDate(),
+						$lte: moment(date).endOf('day').toDate()
+					},
+					sellerId: sellerId
+				}
+			},
+			{
+				$sort: { createdAt: -1 }
+			},
+			{
+				$group: {
+					_id: '$apartmentId',
+					apartName: '$buyer.deliveryAddress.aptName',
+					numberOfOrders: { $sum: 1 },
+					revenue: { $sum: '$order.totalAmount' }
+				}
+			}
+		])
+
+		return data
+	} catch (error) {
+		winston.debug('@error findSellerAggregatedData', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

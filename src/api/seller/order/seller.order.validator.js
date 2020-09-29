@@ -1,7 +1,9 @@
 import {
 	emptyValidator,
 	objectIdValidator,
-	paramObjectIdValidator
+	paramObjectIdValidator,
+	paramDateValidator,
+	dateValidator
 } from '../../../util'
 
 export const postCancelOrderValidator = [objectIdValidator('orderId')]
@@ -15,10 +17,14 @@ export const patchDeliveryStatusValidator = [
 
 export const patchDeliveryDelayValidator = [
 	objectIdValidator('orderId'),
-	emptyValidator('newDate')
-		.toDate()
-		.isDate()
-		.withMessage('should be a valid date')
+	dateValidator('newDate')
 ]
 
 export const getDeliveryValidator = [paramObjectIdValidator('apartmentId')]
+
+export const getOrdersAggregateValidator = [paramDateValidator('date')]
+
+export const getOrdersValidator = [
+	paramObjectIdValidator('apartmentId'),
+	paramDateValidator('date')
+]
