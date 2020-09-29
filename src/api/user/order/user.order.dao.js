@@ -22,12 +22,12 @@ export const createOrder = async ({
 		}
 
 		const [
-			{ house, aptName, area, city, state, pincode }
+			{ aptId, house, aptName, area, city, state, pincode }
 		] = user.contact.address
 
 		const order = new Order({
 			apartment: {
-				id: user.apartmentId,
+				id: aptId,
 				aptName,
 				area,
 				city,

@@ -8,7 +8,31 @@ export const getSellersInApartment = async (req, res, next) => {
 	try {
 		const sellers = await findSellersInApartment(apartmentId)
 
-		res.json(sellers)
+		const sellersData = sellers.map(seller => {
+			const {
+				contact,
+				live,
+				brandName,
+				businessCategory,
+				brandImageUrl,
+				tagline
+			} = seller
+
+			return {
+				brandName,
+				live,
+				businessCategory,
+				brandImageUrl,
+				tagline,
+				contact,
+				delivery: {
+					message: seller.deliveryMessage,
+					date: seller.deliveryDate
+				}
+			}
+		})
+
+		res.json(sellersData)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
