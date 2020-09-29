@@ -11,8 +11,8 @@ import {
 export const postOrder = async (req, res, next) => {
 	const {
 		sellerId,
-		brandName,
 		apartmentContact: { phone, whatsapp, email },
+		deliveryDate,
 		totalAmount,
 		products
 	} = req.body
@@ -22,7 +22,7 @@ export const postOrder = async (req, res, next) => {
 		const order = await createOrder({
 			userId: token.get(req),
 			sellerId,
-			brandName,
+			deliveryDate,
 			sellerContact: { phone, whatsapp, email },
 			totalAmount,
 			products

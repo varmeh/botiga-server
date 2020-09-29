@@ -5,7 +5,7 @@ import { Order, Seller, User } from '../../../models'
 export const createOrder = async ({
 	userId,
 	sellerId,
-	brandName,
+	deliveryDate,
 	sellerContact: { phone, whatsapp, email },
 	totalAmount,
 	products
@@ -45,7 +45,7 @@ export const createOrder = async ({
 			seller: {
 				// seller contact information would be specific to user
 				id: sellerId,
-				brandName,
+				brandName: seller.brand.name,
 				phone,
 				whatsapp,
 				email,
@@ -54,6 +54,7 @@ export const createOrder = async ({
 			order: {
 				status: 'open',
 				totalAmount,
+				expectedDeliveryDate: deliveryDate,
 				products
 			}
 		})

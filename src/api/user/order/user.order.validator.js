@@ -5,16 +5,17 @@ import {
 	decimalValidator,
 	numberValidator,
 	arrayValidator,
-	objectIdValidator
+	objectIdValidator,
+	dateValidator
 } from '../../../util'
 
 export const postOrderValidator = [
 	objectIdValidator('sellerId'),
-	emptyValidator('brandName'),
 	phoneValidator('apartmentContact.phone'),
 	phoneValidator('apartmentContact.whatsapp'),
 	emailValidator('apartmentContact.email'),
 	decimalValidator('totalAmount'),
+	dateValidator('deliveryDate'),
 	arrayValidator('products'),
 	emptyValidator('products.*.name'),
 	decimalValidator('products.*.price'),
