@@ -31,7 +31,7 @@ export const postVerifyOtp = async (req, res, next) => {
 
 		// Else, signIn seller
 		const {
-			owner: { firstName, lastName, gender },
+			owner: { firstName, lastName },
 			brand,
 			contact
 		} = seller
@@ -42,7 +42,6 @@ export const postVerifyOtp = async (req, res, next) => {
 		return res.json({
 			firstName,
 			lastName,
-			gender,
 			brandName: brand.name,
 			phone: contact.phone,
 			whatsapp: contact.whatsapp
@@ -59,7 +58,6 @@ export const postSellerSignup = async (req, res, next) => {
 		businessCategory,
 		firstName,
 		lastName,
-		gender,
 		brandName,
 		phone,
 		pin
@@ -72,7 +70,6 @@ export const postSellerSignup = async (req, res, next) => {
 			businessCategory,
 			firstName,
 			lastName,
-			gender,
 			brandName,
 			phone,
 			hashedPin
@@ -101,7 +98,7 @@ export const postSellerLoginWithPin = async (req, res, next) => {
 		if (match) {
 			// remove seller pin before sending seller information to frontend
 			const {
-				owner: { firstName, lastName, gender },
+				owner: { firstName, lastName },
 				brand,
 				contact: { phone, whatsapp }
 			} = seller
@@ -112,7 +109,6 @@ export const postSellerLoginWithPin = async (req, res, next) => {
 			res.json({
 				firstName,
 				lastName,
-				gender,
 				brandName: brand.name,
 				phone,
 				whatsapp

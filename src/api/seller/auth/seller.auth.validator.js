@@ -33,9 +33,6 @@ export const postSignupValidator = [
 	alphaValidator('businessCategory'),
 	emptyValidator('firstName'),
 	emptyValidator('lastName'),
-	emptyValidator('gender')
-		.matches(/^(male|female)$/, 'i')
-		.withMessage('should be either male or female'),
 	emptyValidator('brandName'),
 	phoneValidator('phone'),
 	pinValidator('pin')

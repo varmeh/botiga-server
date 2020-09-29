@@ -7,7 +7,6 @@ export const createSeller = async ({
 	businessCategory,
 	firstName,
 	lastName,
-	gender,
 	brandName,
 	phone,
 	hashedPin
@@ -16,7 +15,7 @@ export const createSeller = async ({
 		const seller = new Seller({
 			companyName,
 			businessCategory,
-			owner: { firstName, lastName, gender },
+			owner: { firstName, lastName },
 			brand: { name: brandName },
 			pin: hashedPin,
 			contact: {
