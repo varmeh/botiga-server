@@ -96,7 +96,7 @@ export const postUserSigninPin = async (req, res, next) => {
 		if (!user) {
 			throw new CreateHttpError[404]('User Not Found')
 		}
-		const match = await password.compare(pin, user.signinPin)
+		const match = await password.compare(pin, user.loginPin)
 
 		if (match) {
 			// remove user pin before sending user information to frontend

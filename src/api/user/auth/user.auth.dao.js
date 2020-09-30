@@ -24,7 +24,7 @@ export const createUser = async ({
 			firstName,
 			lastName,
 			phone,
-			signinPin: hashedPin,
+			loginPin: hashedPin,
 			contact: {
 				phone,
 				whatsapp,
@@ -108,7 +108,7 @@ export const updateUser = async (
 export const updateUserPin = async (userId, pin) => {
 	try {
 		const user = await User.findById(userId)
-		user.signinPin = pin
+		user.loginPin = pin
 		return await user.save()
 	} catch (error) {
 		winston.debug('@error updateUserPin', { error, msg: error.message })

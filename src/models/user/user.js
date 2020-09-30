@@ -27,7 +27,7 @@ const userSchema = new Schema(
 			required: true,
 			trim: true
 		},
-		signinPin: { type: String, required: true },
+		loginPin: { type: String, required: true },
 		contact: {
 			phone: {
 				type: String,
