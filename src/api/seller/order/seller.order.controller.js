@@ -81,15 +81,24 @@ export const patchDeliveryDelay = async (req, res, next) => {
 }
 
 export const getDeliveryByApartment = async (req, res, next) => {
-	const { apartmentId } = req.params
+	const { apartmentId, date } = req.params
 
 	try {
 		const deliveries = await findDeliveriesByApartment(
 			token.get(req),
-			apartmentId
+			apartmentId,
+			date
 		)
 
-		res.json(deliveries)
+		const deliveryData = deliveries.map(delivery => {
+			const { buyer, order, _id } = delivery
+			return {
+				id: _id,
+				buyer,
+				order
+			}
+		})
+		res.json(deliveryData)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

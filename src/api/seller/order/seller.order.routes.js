@@ -47,7 +47,7 @@ router.patch(
 )
 
 router.get(
-	'/delivery/:apartmentId',
+	'/delivery/:apartmentId/:date',
 	token.authenticationMiddleware,
 	getDeliveryValidator,
 	validationMiddleware,

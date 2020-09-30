@@ -20,11 +20,11 @@ export const patchDeliveryDelayValidator = [
 	dateValidator('newDate')
 ]
 
-export const getDeliveryValidator = [paramObjectIdValidator('apartmentId')]
-
-export const getOrdersAggregateValidator = [paramDateValidator('date')]
-
-export const getOrdersValidator = [
+export const getDeliveryValidator = [
 	paramObjectIdValidator('apartmentId'),
 	paramDateValidator('date')
 ]
+
+export const getOrdersAggregateValidator = [paramDateValidator('date')]
+
+export const getOrdersValidator = [...getDeliveryValidator]

@@ -19,14 +19,18 @@ export const findOrderById = async orderId => {
 	}
 }
 
-export const findDeliveriesByApartment = async (sellerId, apartmentId) => {
+export const findDeliveriesByApartment = async (
+	sellerId,
+	apartmentId,
+	dateString
+) => {
 	try {
-		const today = moment().startOf('day')
+		const date = moment.utc(dateString, 'YYYY-MM-DD').startOf('day')
 
 		const orders = await Order.find({
 			'order.expectedDeliveryDate': {
-				$gte: today.toDate(),
-				$lte: moment(today).endOf('day').toDate()
+				$gte: date.toDate(),
+				$lte: moment.utc(date).endOf('day').toDate()
 			},
 			'seller.id': sellerId,
 			'apartment.id': apartmentId
