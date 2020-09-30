@@ -115,7 +115,12 @@ export const getOrdersByApartmentDate = async (req, res, next) => {
 			date
 		)
 
-		res.json(orders)
+		const orderData = orders.map(order => ({
+			id: order._id,
+			buyer: order.buyer,
+			order: order.order
+		}))
+		res.json(orderData)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
