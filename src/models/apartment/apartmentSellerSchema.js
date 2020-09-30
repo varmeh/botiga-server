@@ -18,13 +18,14 @@ export const apartmentSellerSchema = new Schema({
 			type: String,
 			required: true,
 			match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number']
-		}
+		},
+		email: String
 	},
 	delivery: {
 		type: {
 			type: String,
 			required: true,
-			enum: ['delay', 'day']
+			enum: ['duration', 'day']
 		},
 		// value depends on type. for
 		day: {
@@ -37,7 +38,7 @@ export const apartmentSellerSchema = new Schema({
 
 apartmentSellerSchema.virtual('deliveryMessage').get(function () {
 	const { type, day } = this.delivery
-	return type === 'delay'
+	return type === 'duration'
 		? `Delivers in ${day} day${day > 1 ? 's' : ''}`
 		: `Delivers Every ${moment()
 				.day(day - 1)
@@ -47,7 +48,7 @@ apartmentSellerSchema.virtual('deliveryMessage').get(function () {
 apartmentSellerSchema.virtual('deliveryDate').get(function () {
 	const { type, day } = this.delivery
 	let deliveryDate
-	if (type === 'delay') {
+	if (type === 'duration') {
 		deliveryDate = moment().endOf('day').add(day, 'd')
 	} else {
 		// In moment dates, Sunday is 0, Monday is 1 & so on
