@@ -18,12 +18,13 @@ export const getApartments = async (req, res, next) => {
 }
 
 export const postApartments = async (req, res, next) => {
-	const { apartmentId, phone, whatsapp, deliveryType, day } = req.body
+	const { apartmentId, phone, whatsapp, email, deliveryType, day } = req.body
 	try {
 		const apartment = await addApartment(token.get(req), {
 			apartmentId,
 			phone,
 			whatsapp,
+			email,
 			deliveryType,
 			day
 		})

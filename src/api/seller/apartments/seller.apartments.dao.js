@@ -25,7 +25,7 @@ export const findApartments = async sellerId => {
  */
 export const addApartment = async (
 	sellerId,
-	{ apartmentId, phone, whatsapp, deliveryType, day }
+	{ apartmentId, phone, whatsapp, email, deliveryType, day }
 ) => {
 	try {
 		const seller = await Seller.findById(sellerId)
@@ -57,7 +57,7 @@ export const addApartment = async (
 			brandImageUrl: imageUrl,
 			businessCategory,
 			live: false,
-			contact: { phone, whatsapp },
+			contact: { phone, whatsapp, email },
 			delivery: { type: deliveryType, day }
 		})
 

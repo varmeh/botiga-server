@@ -16,7 +16,9 @@ export const postApartmentValidator = [
 		.withMessage('should be either duration or day'),
 	numberValidator('day')
 		.custom(val => val >= 1 && val <= 7)
-		.withMessage('day should be in range 1-7')
+		.withMessage(
+			'day should be in range 1-7 with 1 for Sunday, 2 for Monday & so on'
+		)
 ]
 
 export const patchApartmentValidator = [
