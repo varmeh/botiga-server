@@ -36,7 +36,7 @@
 			}
 		}
 	],
-	"noInlineConfig": true,
+	// "noInlineConfig": true,
 	"reportUnusedDisableDirectives": true,
 	"rules": {
 		/* Eslint Rules on top of rules configured in eslint:recommned */

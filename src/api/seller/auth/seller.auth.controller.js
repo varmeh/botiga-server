@@ -54,25 +54,26 @@ export const postVerifyOtp = async (req, res, next) => {
 
 export const postSellerSignup = async (req, res, next) => {
 	const {
-		companyName,
-		businessCategory,
+		businessName,
 		firstName,
 		lastName,
 		brandName,
-		phone,
-		pin
+		businessCategory,
+		brandUrl,
+		tagline,
+		phone
 	} = req.body
 
 	try {
-		const hashedPin = await password.hash(pin)
 		const seller = await createSeller({
-			companyName,
-			businessCategory,
+			businessName,
 			firstName,
 			lastName,
 			brandName,
-			phone,
-			hashedPin
+			businessCategory,
+			brandUrl,
+			tagline,
+			phone
 		})
 
 		// Add jwt token
@@ -93,7 +94,7 @@ export const postSellerLoginWithPin = async (req, res, next) => {
 		if (!seller) {
 			throw new CreateHttpError[404]('Seller Not Found')
 		}
-		const match = await password.compare(pin, seller.pin)
+		const match = await password.compare(pin, seller.loginPin)
 
 		if (match) {
 			// remove seller pin before sending seller information to frontend

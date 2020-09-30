@@ -4,7 +4,9 @@ import {
 	pinValidator,
 	phoneValidator,
 	paramEmptyValidator,
-	otpValidator
+	otpValidator,
+	urlOptionalValidator,
+	emptyOptionalValidator
 } from '../../../util'
 
 export const getOtpValidator = paramEmptyValidator('phone')
@@ -29,11 +31,12 @@ export const postPinSigninValidator = [
 export const patchPinValidator = pinValidator('pin')
 
 export const postSignupValidator = [
-	emptyValidator('companyName'),
-	alphaValidator('businessCategory'),
+	emptyValidator('businessName'),
 	emptyValidator('firstName'),
 	emptyValidator('lastName'),
 	emptyValidator('brandName'),
-	phoneValidator('phone'),
-	pinValidator('pin')
+	alphaValidator('businessCategory'),
+	urlOptionalValidator('brandUrl'),
+	emptyOptionalValidator('tagline'),
+	phoneValidator('phone')
 ]

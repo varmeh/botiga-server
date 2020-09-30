@@ -3,12 +3,7 @@ module.exports = {
 	roots: ['<rootDir>/src'],
 	setupFiles: ['<rootDir>/src/configuration/setEnvVars.js'],
 	collectCoverageFrom: ['**/*.{js,jsx,ts,tsx}', '!**/*.d.ts'],
-	coveragePathIgnorePatterns: [
-		'/docs/',
-		'/configuration/',
-		'index.js',
-		'icmUrl.js'
-	],
+	coveragePathIgnorePatterns: ['/docs/', '/configuration/', 'index.js'],
 	coverageThreshold: {},
 	moduleDirectories: ['node_modules'],
 	transform: { '^.+\\.(js|jsx|ts|tsx)$': '<rootDir>/node_modules/babel-jest' },

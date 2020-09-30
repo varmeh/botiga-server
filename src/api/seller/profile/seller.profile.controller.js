@@ -42,10 +42,10 @@ export const patchContactInformation = async (req, res, next) => {
 
 export const getBusinessInformation = async (req, res, next) => {
 	try {
-		const { companyName, businessCategory, owner, brand } = await findSeller(
+		const { businessName, businessCategory, owner, brand } = await findSeller(
 			token.get(req)
 		)
-		res.json({ companyName, businessCategory, owner, brand })
+		res.json({ businessName, businessCategory, owner, brand })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

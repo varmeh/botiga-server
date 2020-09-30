@@ -3,21 +3,21 @@ import { winston } from '../../../util'
 import { Seller } from '../../../models'
 
 export const createSeller = async ({
-	companyName,
-	businessCategory,
+	businessName,
 	firstName,
 	lastName,
 	brandName,
-	phone,
-	hashedPin
+	businessCategory,
+	brandUrl,
+	tagline,
+	phone
 }) => {
 	try {
 		const seller = new Seller({
-			companyName,
+			businessName,
 			businessCategory,
 			owner: { firstName, lastName },
-			brand: { name: brandName },
-			pin: hashedPin,
+			brand: { name: brandName, tagline, imageUrl: brandUrl },
 			contact: {
 				phone,
 				whatsapp: phone
@@ -50,7 +50,7 @@ export const findSellerByNumber = async number => {
 export const updateSellerPin = async (sellerId, pin) => {
 	try {
 		const seller = await Seller.findById(sellerId)
-		seller.pin = pin
+		seller.signinPin = pin
 		return await seller.save()
 	} catch (error) {
 		winston.debug('@error updateSellerPin', { error, msg: error.message })

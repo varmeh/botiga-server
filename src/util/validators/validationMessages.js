@@ -11,5 +11,6 @@ export const validationMessages = {
 	phoneLength: 'should have a length of 10 characters',
 	email: 'should be a valid email Id',
 	array: 'should be an array',
-	date: 'should be a Valid date in format - YYYY-MM-DD'
+	date: 'should be a Valid date in format - YYYY-MM-DD',
+	url: 'should be a valid url with https protocol'
 }

@@ -47,3 +47,12 @@ export const objectIdOptionalValidator = field =>
 		.bail()
 		.matches(/^[0-9a-fA-F]{24}$/, 'i')
 		.withMessage(validationMessages.objectId)
+
+export const urlOptionalValidator = field =>
+	emptyOptionalValidator(field)
+		.isURL({
+			protocols: ['https'],
+			// eslint-disable-next-line camelcase
+			require_protocol: true
+		})
+		.withMessage(validationMessages.url)
