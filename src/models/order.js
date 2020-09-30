@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose'
+import chance from 'chance'
 
 const orderSchema = new Schema(
 	{
@@ -48,6 +49,10 @@ const orderSchema = new Schema(
 			pushToken: String
 		},
 		order: {
+			id: {
+				type: String,
+				default: chance().integer({ min: 100000, max: 999999 })
+			},
 			status: {
 				type: String,
 				enum: ['open', 'out', 'delayed', 'delivered', 'cancelled'],

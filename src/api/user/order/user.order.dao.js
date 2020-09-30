@@ -6,7 +6,7 @@ export const createOrder = async ({
 	userId,
 	sellerId,
 	deliveryDate,
-	sellerContact: { phone, whatsapp, email },
+	sellerContact, // has phone, email & whatsapp of apartment manager
 	totalAmount,
 	products
 }) => {
@@ -16,39 +16,38 @@ export const createOrder = async ({
 			return Promise.reject(new CreateHttpError[404]('User Not Found'))
 		}
 
-		const seller = await Seller.findById(userId)
+		const seller = await Seller.findById(sellerId)
 		if (!seller) {
 			return Promise.reject(new CreateHttpError[404]('Seller Not Found'))
 		}
 
-		const [
-			{ aptId, house, aptName, area, city, state, pincode }
-		] = user.contact.address
+		const { phone, whatsapp, email, address, pushToken } = user.contact
 
 		const order = new Order({
 			apartment: {
-				id: aptId,
-				aptName,
-				area,
-				city,
-				state,
-				pincode
+				id: address[0].aptId,
+				aptName: address[0].aptName,
+				area: address[0].area,
+				city: address[0].city,
+				state: address[0].state,
+				pincode: address[0].pincode
 			},
 			buyer: {
 				id: userId,
 				name: user.name,
-				house,
-				phone: user.phone,
-				email: user.email,
-				pushToken: user.pushToken
+				house: address[0].house,
+				phone,
+				whatsapp,
+				email,
+				pushToken
 			},
 			seller: {
 				// seller contact information would be specific to user
 				id: sellerId,
 				brandName: seller.brand.name,
-				phone,
-				whatsapp,
-				email,
+				phone: sellerContact.phone,
+				whatsapp: sellerContact.whatsapp,
+				email: sellerContact.email,
 				pushToken: seller.pushToken
 			},
 			order: {
