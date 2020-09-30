@@ -51,12 +51,12 @@ export const findOrdersByApartment = async (
 	dateString
 ) => {
 	try {
-		const date = moment(dateString, 'YYYY-MM-DD').startOf('day')
+		const date = moment.utc(dateString, 'YYYY-MM-DD').startOf('day')
 
 		const orders = await Order.find({
 			'order.orderDate': {
 				$gte: date.toDate(),
-				$lte: moment(date).endOf('day').toDate()
+				$lte: moment.utc(date).endOf('day').toDate()
 			},
 			'seller.id': sellerId,
 			'apartment.id': apartmentId
