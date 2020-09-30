@@ -54,20 +54,24 @@ router.get(
 	getDeliveryByApartment
 )
 
-router.get(
-	'/:apartmentId/:date',
-	token.authenticationMiddleware,
-	getOrdersValidator,
-	validationMiddleware,
-	getOrdersByApartmentDate
-)
-
+/*
+ * Orders route should be before Orders for apartment route
+ * As, Orders for apartment route is generic & accepts an open parameter
+ */
 router.get(
 	'/aggregate/:date',
 	token.authenticationMiddleware,
 	getOrdersAggregateValidator,
 	validationMiddleware,
 	getOrdersAggregate
+)
+
+router.get(
+	'/:apartmentId/:date',
+	token.authenticationMiddleware,
+	getOrdersValidator,
+	validationMiddleware,
+	getOrdersByApartmentDate
 )
 
 export default router

@@ -1,5 +1,6 @@
 import CreateHttpError from 'http-errors'
 import moment from 'moment'
+import { Types } from 'mongoose'
 
 import { winston } from '../../../util'
 import { Order } from '../../../models'
@@ -13,7 +14,7 @@ export const findOrderById = async orderId => {
 
 		return order
 	} catch (error) {
-		winston.debug('@error findOrderById', { error })
+		winston.debug('@error findOrderById', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
@@ -35,7 +36,10 @@ export const findDeliveriesByApartment = async (sellerId, apartmentId) => {
 
 		return orders
 	} catch (error) {
-		winston.debug('@error findDeliveriesByApartment', { error })
+		winston.debug('@error findDeliveriesByApartment', {
+			error,
+			msg: error.message
+		})
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
@@ -62,7 +66,7 @@ export const findOrdersByApartment = async (
 
 		return orders
 	} catch (error) {
-		winston.debug('@error findOrdersByApartment', { error })
+		winston.debug('@error findOrdersByApartment', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
@@ -70,22 +74,22 @@ export const findOrdersByApartment = async (
 /* Date String expected in ISO 8601 format - YYYY-MM-YY */
 export const findSellerAggregatedData = async (sellerId, dateString) => {
 	try {
-		const date = moment(dateString, 'YYYY-MM-DD').startOf('day')
+		const date = moment.utc(dateString, 'YYYY-MM-DD').startOf('day')
 
 		const data = await Order.aggregate([
 			{
 				$match: {
-					date: {
+					'order.orderDate': {
 						$gte: date.toDate(),
-						$lte: moment(date).endOf('day').toDate()
+						$lte: moment.utc(date).endOf('day').toDate()
 					},
-					sellerId: sellerId
+					'seller.id': Types.ObjectId(sellerId)
 				}
 			},
 			{
 				$group: {
 					_id: '$apartment.id',
-					apartName: '$apartment.aptName',
+					apartName: { $first: '$apartment.aptName' },
 					ordersCount: { $sum: 1 },
 					revenue: { $sum: '$order.totalAmount' }
 				}
@@ -94,7 +98,10 @@ export const findSellerAggregatedData = async (sellerId, dateString) => {
 
 		return data
 	} catch (error) {
-		winston.debug('@error findSellerAggregatedData', { error })
+		winston.debug('@error findSellerAggregatedData', {
+			error,
+			msg: error.message
+		})
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
