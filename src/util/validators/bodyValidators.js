@@ -21,6 +21,12 @@ export const pinValidator = field =>
 		.matches(/^\d{4}$/)
 		.withMessage(validationMessages.pinLength)
 
+export const pincodeValidator = field =>
+	emptyValidator(field)
+		.bail()
+		.matches(/^\d{6}$/)
+		.withMessage(validationMessages.pinLength)
+
 export const otpValidator = field =>
 	emptyValidator(field)
 		.bail()
