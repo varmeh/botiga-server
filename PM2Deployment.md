@@ -10,16 +10,12 @@ To avoid this, let’s setup a safe account that can still perform root operatio
 
 For the purposes of this document, let’s call our safe user **safeuser**
 
+### [How to add a User](https://www.digitalocean.com/community/tutorials/how-to-add-and-delete-users-on-ubuntu-16-04)
+
 -   Create a non-admin user
 
 ```
-useradd -s /bin/ -m -d /home/safeuser -c "safe user" safeuser
-```
-
--   Create a password for safeuser
-
-```
-passwd safeuser
+adduser safeuser
 ```
 
 -   Give the safe user permission to use root level commands
@@ -28,15 +24,53 @@ passwd safeuser
 usermod -aG sudo safeuser
 ```
 
--   To access user from remote terminal using ssh key, add your public ssh key to `/home/safeuser/.ssh/authorized_keys`
+-   Logging to this user will not work, as `PasswordAuthentication` is set to NO by default in `sshd_config`
 
--   Then, login from ssh client terminal, using command
+-   To fix it, do the following:
 
 ```
-ssh -i ~/.ssh/id_rsa_safeuser safeuser@<ip>
+sudo nano /etc/ssh/sshd_config
 ```
 
-## Install Nodejs
+Change:
+
+-   `PermitRootLogin yes`
+-   `PasswordAuthentication yes`
+
+And restart the service:
+
+```
+sudo systemctl restart sshd
+```
+
+-   Now, you could login to safeuser using your password
+
+-   Time to add `ssh-passkey` for authentication
+
+```
+ssh-copy-id -i .ssh/id_rsa_botiga_devdrop safeuser@<IP>
+```
+
+This will create the `.ssh/authorized_file` in `/home/safeuser`
+
+-   You could now login using your ssh command
+
+```
+ssh -i .ssh/id_rsa_botiga_devdrop safeuser@<IP>
+```
+
+To make your system safer, revert your changes in sshd_config file.
+
+## Installations
+
+`Required Only` when not using DigitalOcean Nodejs image which comes pre-packed with following:
+
+-   Nodejs - 12.18.0
+-   NPM - 6.14.4
+-   NGINX - 1.17.10
+-   PM2 - 4.4.0
+
+### Nodejs
 
 ```
 sudo apt install nodejs
@@ -44,7 +78,7 @@ sudo apt install nodejs
 
 [Instructions for Nodejs Versions](https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions)
 
-## Allowing access to PORT 80
+### Allowing access to PORT 80
 
 Safe user does not have permission to use the default HTTP port (80).
 
@@ -55,7 +89,7 @@ sudo apt-get install libcap2-bin
 sudo setcap cap_net_bind_service=+ep /usr/bin/node
 ```
 
-## Install PM2
+### PM2
 
 -   Install PM2 as global package
 
@@ -71,7 +105,7 @@ pm2 completion install
 
 To use PM2 auto-completion, open a new terminal
 
-## Clone Express App
+## Botiga Server App
 
 -   To access git remote repo, install git:
 
@@ -87,19 +121,21 @@ You will be prompted for your password - i.e. the safe user password
 ssh-keygen -t rsa
 ```
 
--   Now, copy the contents of `.ssh/id_rsa.pub` to `Gitlab -> Project -> Settings -> Deploy Keys -> Create New Key`
+-   Now, copy the contents of `.ssh/id_rsa.pub` to
+    -   `Gitlab -> Project -> Settings -> Deploy Keys -> Create New Key`
+    -   `Github -> Settings -> Deploy Keys -> Add Deploy Key`
 
 ```
-git clone git@139.59.249.90:stockal-servers/icm-server.git
+git clone git@github.com:varmehta/botiga-server.git
 ```
 
 ## Running Express App
 
--   Move to `icm-server` folder
--   Add a `.env` file to `icm-server` folder with correct values for environment variables
+-   Move to `botiga-server` folder
+-   Add a `.env` file to `botiga-server` folder with correct values for environment variables
 
 ```
-pm2 start npm --name="icm-server"  --node-args="--expose-gc" --time -- start
+pm2 start npm --name="botiga-server"  --node-args="--expose-gc" --time -- start
 ```
 
 _Above command will run start script from package.json_
