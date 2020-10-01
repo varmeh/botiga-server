@@ -10,6 +10,7 @@ export const getSellersInApartment = async (req, res, next) => {
 
 		const sellersData = sellers.map(seller => {
 			const {
+				_id,
 				contact,
 				live,
 				brandName,
@@ -19,6 +20,7 @@ export const getSellersInApartment = async (req, res, next) => {
 			} = seller
 
 			return {
+				id: _id,
 				brandName,
 				live,
 				businessCategory,

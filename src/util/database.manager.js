@@ -1,15 +1,7 @@
 import mongoose from 'mongoose'
 import { winston } from './winston.logger'
 
-const {
-	DB_NAME,
-	DB_AUTH_ENABLED,
-	DB_USER,
-	DB_PWD,
-	DB_HOST,
-	DB_PORT,
-	DB_SSL
-} = process.env
+const { DB_CONNECTION_STRING } = process.env
 
 const options = {
 	useNewUrlParser: true,
@@ -24,14 +16,9 @@ const options = {
 }
 
 // no auth string for local dev host
-const authString = DB_AUTH_ENABLED === 'true' ? `${DB_USER}:${DB_PWD}@` : ''
-
 export const mongooseConnect = async () => {
 	try {
-		await mongoose.connect(
-			`mongodb://${authString}${DB_HOST}:${DB_PORT}/${DB_NAME}?readPreference=primary&ssl=${DB_SSL}`,
-			options
-		)
+		await mongoose.connect(DB_CONNECTION_STRING, options)
 		winston.info('Mongodb connected')
 	} catch (error) {
 		winston.debug('@mongodb error', {
