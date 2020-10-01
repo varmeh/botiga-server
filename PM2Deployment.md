@@ -61,24 +61,7 @@ ssh -i .ssh/id_rsa_botiga_devdrop safeuser@<IP>
 
 To make your system safer, revert your changes in sshd_config file.
 
-## Installations
-
-`Required Only` when not using DigitalOcean Nodejs image which comes pre-packed with following:
-
--   Nodejs - 12.18.0
--   NPM - 6.14.4
--   NGINX - 1.17.10
--   PM2 - 4.4.0
-
-### Nodejs
-
-```
-sudo apt install nodejs
-```
-
-[Instructions for Nodejs Versions](https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions)
-
-### Allowing access to PORT 80
+### Optional - Allowing access to PORT 80
 
 Safe user does not have permission to use the default HTTP port (80).
 
@@ -89,9 +72,25 @@ sudo apt-get install libcap2-bin
 sudo setcap cap_net_bind_service=+ep /usr/bin/node
 ```
 
-### PM2
+## Installations
 
--   Install PM2 as global package
+`Required Only` when not using DigitalOcean Nodejs image which comes pre-packed with following:
+
+-   Nodejs - 12.18.0
+-   NPM - 6.14.4
+-   NGINX - 1.17.10
+-   PM2 - 4.4.0
+-   GIT - 2.25.1
+
+### Nodejs
+
+```
+sudo apt install nodejs
+```
+
+[Instructions for Nodejs Versions](https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions)
+
+### PM2
 
 ```
 sudo npm install -g pm2
@@ -105,17 +104,17 @@ pm2 completion install
 
 To use PM2 auto-completion, open a new terminal
 
-## Botiga Server App
-
--   To access git remote repo, install git:
+### Git
 
 ```
 sudo apt-get install git
 ```
 
+## Botiga Server App
+
 You will be prompted for your password - i.e. the safe user password
 
--   To access git app from dev server, generate a ssh key on server
+-   To access git app from dev server, generate a ssh key on server for safeuser
 
 ```
 ssh-keygen -t rsa
@@ -134,7 +133,11 @@ git clone git@github.com:varmehta/botiga-server.git
 -   Move to `botiga-server` folder
 -   Add a `.env` file to `botiga-server` folder with correct values for environment variables
 
+-   Edit variables
+-   Copy `firebase-admin-sdk.json` file to server & set it's path to `GOOGLE_APPLICATION_CREDENTIALS`
+
 ```
+npm install
 pm2 start npm --name="botiga-server"  --node-args="--expose-gc" --time -- start
 ```
 
@@ -174,3 +177,4 @@ sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -
 -   [How to deploy express app on digital ocean?](https://itnext.io/deploy-a-nodejs-and-expressjs-app-on-digital-ocean-with-nginx-and-free-ssl-edd88a5580fa)
 -   [How To Use PM2 to Setup a Node.js Production Environment On An Ubuntu VPS?](https://www.digitalocean.com/community/tutorials/how-to-use-pm2-to-setup-a-node-js-production-environment-on-an-ubuntu-vps)
 -   [How to Run PM2 as a service on ubuntu server?](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04)
+-   [PM2 Startup Documentation](https://pm2.keymetrics.io/docs/usage/startup/)
