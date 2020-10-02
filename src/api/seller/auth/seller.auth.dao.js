@@ -50,7 +50,7 @@ export const findSellerByNumber = async number => {
 export const updateSellerPin = async (sellerId, pin) => {
 	try {
 		const seller = await Seller.findById(sellerId)
-		seller.signinPin = pin
+		seller.loginPin = pin
 		return await seller.save()
 	} catch (error) {
 		winston.debug('@error updateSellerPin', { error, msg: error.message })
