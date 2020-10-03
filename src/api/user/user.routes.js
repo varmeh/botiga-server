@@ -15,7 +15,7 @@ router.use('/auth', authRouter)
 router.use('/orders', orderRouter)
 
 router.get(
-	'/apartments/:apartmentId',
+	'/sellers/:apartmentId',
 	token.authenticationMiddleware,
 	getSellerValidator,
 	validationMiddleware,
