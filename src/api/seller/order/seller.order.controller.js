@@ -1,8 +1,9 @@
 import CreateHttpError from 'http-errors'
+import moment from 'moment'
 import { token } from '../../../util'
 
 import {
-	findOrderById,
+	findOrderForSeller,
 	findDeliveriesByApartment,
 	findOrdersByApartment,
 	findSellerAggregatedData
@@ -12,18 +13,12 @@ export const postCancelOrder = async (req, res, next) => {
 	const { orderId } = req.body
 
 	try {
-		// Verify Seller Id
-		const order = await findOrderById(orderId)
+		const order = await findOrderForSeller(orderId, token.get(req))
 
-		if (order.seller.id !== token.get(req)) {
-			// Ensuring the buyer for this order
-			throw new CreateHttpError[400]('Order Id does not belong to this Seller')
-		}
+		order.order.status = 'cancelled'
+		await order.save()
 
 		// TODO: notify user that order has been cancelled
-		order.order.status('cancelled')
-
-		await order.save()
 
 		res.json({ message: 'cancelled', id: order._id })
 	} catch (error) {
@@ -36,15 +31,14 @@ export const patchDeliveryStatus = async (req, res, next) => {
 	const { orderId, status } = req.body
 
 	try {
-		// Verify Seller Id
-		const order = await findOrderById(orderId)
+		const order = await findOrderForSeller(orderId, token.get(req))
 
-		if (order.seller.id !== token.get(req)) {
-			// Ensuring the buyer for this order
-			throw new CreateHttpError[400]('Order Id does not belong to this Seller')
+		order.order.status = status
+
+		if (order.order.status === 'delivered') {
+			// Set actual delivery date
+			order.order.actualDeliveryDate = new Date()
 		}
-
-		order.order.status(status)
 		await order.save()
 
 		// TODO: notify user that change in order status
@@ -60,15 +54,13 @@ export const patchDeliveryDelay = async (req, res, next) => {
 	const { orderId, newDate } = req.body
 
 	try {
-		// Verify Seller Id
-		const order = await findOrderById(orderId)
+		const order = await findOrderForSeller(orderId, token.get(req))
 
-		if (order.seller.id !== token.get(req)) {
-			// Ensuring the buyer for this order
-			throw new CreateHttpError[400]('Order Id does not belong to this Seller')
-		}
-
-		order.order.expectedDeliveryDate = newDate
+		order.order.status = 'delayed'
+		order.order.expectedDeliveryDate = moment
+			.utc(newDate, 'YYYY-MM-DD')
+			.endOf('day')
+			.toDate()
 		await order.save()
 
 		// TODO: notify user that change in order status
@@ -131,7 +123,16 @@ export const getOrdersAggregate = async (req, res, next) => {
 	try {
 		const data = await findSellerAggregatedData(token.get(req), req.params.date)
 
-		res.json(data)
+		let totalRevenue = 0
+		let totalOrders = 0
+
+		const apartmentWiseBreakup = data.map(d => {
+			const { _id, apartmentName, orders, revenue } = d
+			totalRevenue += revenue
+			totalOrders += orders
+			return { id: _id, apartmentName, orders, revenue }
+		})
+		res.json({ totalRevenue, totalOrders, apartmentWiseBreakup })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

@@ -49,7 +49,7 @@ const orderSchema = new Schema(
 			pushToken: String
 		},
 		order: {
-			id: {
+			number: {
 				type: String,
 				default: chance().integer({ min: 100000, max: 999999 })
 			},

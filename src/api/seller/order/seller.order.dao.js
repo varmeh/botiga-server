@@ -5,9 +5,13 @@ import { Types } from 'mongoose'
 import { winston } from '../../../util'
 import { Order } from '../../../models'
 
-export const findOrderById = async orderId => {
+export const findOrderForSeller = async (orderId, sellerId) => {
 	try {
-		const order = await Order.findById(orderId)
+		console.error(orderId, sellerId)
+		const order = await Order.findOne({
+			_id: orderId,
+			'seller.id': sellerId
+		})
 		if (!order) {
 			return Promise.reject(new CreateHttpError[404]('Order Not Found'))
 		}
@@ -93,8 +97,8 @@ export const findSellerAggregatedData = async (sellerId, dateString) => {
 			{
 				$group: {
 					_id: '$apartment.id',
-					apartName: { $first: '$apartment.aptName' },
-					ordersCount: { $sum: 1 },
+					apartmentName: { $first: '$apartment.aptName' },
+					orders: { $sum: 1 },
 					revenue: { $sum: '$order.totalAmount' }
 				}
 			}
