@@ -38,3 +38,7 @@ export const productSchema = new Schema({
 		trim: true
 	}
 })
+
+productSchema.virtual('sizeInfo').get(function () {
+	return `${this.size.quantity} ${this.size.unit}`
+})
