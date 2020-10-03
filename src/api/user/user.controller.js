@@ -11,12 +11,14 @@ export const getSellersInApartment = async (req, res, next) => {
 		const sellersData = sellers.map(seller => {
 			const {
 				_id,
-				contact,
+				contact: { phone, whatsapp },
 				live,
 				brandName,
 				businessCategory,
 				brandImageUrl,
-				tagline
+				tagline,
+				deliveryMessage,
+				deliveryDate
 			} = seller
 
 			return {
@@ -26,11 +28,10 @@ export const getSellersInApartment = async (req, res, next) => {
 				businessCategory,
 				brandImageUrl,
 				tagline,
-				contact,
-				delivery: {
-					message: seller.deliveryMessage,
-					date: seller.deliveryDate
-				}
+				phone,
+				whatsapp,
+				deliveryMessage,
+				deliveryDate
 			}
 		})
 
