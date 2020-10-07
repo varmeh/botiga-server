@@ -7,7 +7,6 @@ import { Order } from '../../../models'
 
 export const findOrderForSeller = async (orderId, sellerId) => {
 	try {
-		console.error(orderId, sellerId)
 		const order = await Order.findOne({
 			_id: orderId,
 			'seller.id': sellerId
@@ -97,9 +96,20 @@ export const findSellerAggregatedData = async (sellerId, dateString) => {
 			{
 				$group: {
 					_id: '$apartment.id',
-					apartmentName: { $first: '$apartment.aptName' },
+					aptName: { $first: '$apartment.aptName' },
+					area: { $first: '$apartment.area' },
 					orders: { $sum: 1 },
 					revenue: { $sum: '$order.totalAmount' }
+				}
+			},
+			{
+				$project: {
+					_id: 1,
+					apartmentName: {
+						$concat: ['$aptName', ', ', '$area']
+					},
+					orders: 1,
+					revenue: 1
 				}
 			}
 		])
