@@ -105,9 +105,31 @@ export const getOrders = async (req, res, next) => {
 		})
 
 		const filteredOrderedData = orders.map(odr => {
-			const { seller, order, _id } = odr
+			const {
+				seller,
+				order: {
+					number,
+					status,
+					totalAmount,
+					orderDate,
+					expectedDeliveryDate,
+					actualDeliveryDate,
+					products
+				},
+				_id
+			} = odr
 
-			return { id: _id, seller, order }
+			return {
+				id: _id,
+				seller,
+				number,
+				status,
+				totalAmount,
+				orderDate,
+				expectedDeliveryDate,
+				actualDeliveryDate,
+				products
+			}
 		})
 
 		res.json({
