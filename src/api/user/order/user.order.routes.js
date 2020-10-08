@@ -5,7 +5,8 @@ import { token, validationMiddleware } from '../../../util'
 import {
 	postOrderValidator,
 	postProductsValidator,
-	postCancelOrderValidator
+	postCancelOrderValidator,
+	getOrdersValidator
 } from './user.order.validator'
 
 import {
@@ -41,6 +42,12 @@ router.post(
 	postCancelOrder
 )
 
-router.get('/cancel', token.authenticationMiddleware, getOrders)
+router.get(
+	'/',
+	token.authenticationMiddleware,
+	getOrdersValidator,
+	validationMiddleware,
+	getOrders
+)
 
 export default router

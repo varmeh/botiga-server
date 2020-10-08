@@ -60,7 +60,7 @@ export const createOrder = async ({
 
 		return await order.save()
 	} catch (error) {
-		winston.debug('@error createOrder', { error })
+		winston.debug('@error createOrder', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
@@ -74,7 +74,10 @@ export const findCategoryProducts = async sellerId => {
 
 		return seller.categories
 	} catch (error) {
-		winston.debug('@error findCategoryProducts', { error })
+		winston.debug('@error findCategoryProducts', {
+			error,
+			msg: error.message
+		})
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
@@ -88,7 +91,7 @@ export const findOrderById = async orderId => {
 
 		return order
 	} catch (error) {
-		winston.debug('@error findOrder', { error })
+		winston.debug('@error findOrder', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
@@ -96,6 +99,8 @@ export const findOrderById = async orderId => {
 export const findOrders = async ({ userId, skip, limit }) => {
 	try {
 		const query = { 'buyer.id': userId }
+
+		// TODO: validate sort method implementation
 		const orders = await Order.find(query)
 			.sort({
 				createdAt: -1
@@ -107,7 +112,7 @@ export const findOrders = async ({ userId, skip, limit }) => {
 
 		return [count, orders]
 	} catch (error) {
-		winston.debug('@error findOrder', { error })
+		winston.debug('@error findOrder', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

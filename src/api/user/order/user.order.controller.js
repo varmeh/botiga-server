@@ -97,18 +97,25 @@ export const postCancelOrder = async (req, res, next) => {
 export const getOrders = async (req, res, next) => {
 	try {
 		const page = req.query.page ?? 0
-		const limit = req.query.page ?? 10
+		const limit = req.query.limit ?? 10
 		const [totalOrders, orders] = await findOrders({
 			userId: token.get(req),
 			skip: page * limit,
 			limit
 		})
 
+		const filteredOrderedData = orders.map(odr => {
+			const { seller, order, _id } = odr
+
+			return { id: _id, seller, order }
+		})
+
 		res.json({
 			pages: Math.ceil(totalOrders / limit),
 			currentPage: page,
 			perPage: limit,
-			orders
+			totalOrders,
+			orders: filteredOrderedData
 		})
 	} catch (error) {
 		const { status, message } = error

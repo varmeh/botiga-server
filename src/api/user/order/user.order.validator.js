@@ -6,7 +6,8 @@ import {
 	numberValidator,
 	arrayValidator,
 	objectIdValidator,
-	dateValidator
+	dateValidator,
+	queryNumberValidator
 } from '../../../util'
 
 export const postOrderValidator = [
@@ -32,3 +33,8 @@ export const postProductsValidator = [
 ]
 
 export const postCancelOrderValidator = [objectIdValidator('orderId')]
+
+export const getOrdersValidator = [
+	queryNumberValidator('limit'),
+	queryNumberValidator('page')
+]
