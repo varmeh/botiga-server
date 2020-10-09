@@ -1,10 +1,12 @@
 import CreateHttpError from 'http-errors'
+import { Types } from 'mongoose'
+
 import { token } from '../../../util'
 
 import {
 	createOrder,
 	findCategoryProducts,
-	findOrderById,
+	findOrderForUser,
 	findOrders
 } from './user.order.dao'
 
@@ -75,15 +77,9 @@ export const postCancelOrder = async (req, res, next) => {
 
 	try {
 		// Verify Seller Id
-		const order = await findOrderById(orderId)
+		const order = await findOrderForUser(orderId, token.get(req))
 
-		if (order.buyer.id !== token.get(req)) {
-			// Ensuring the buyer for this order
-			throw new CreateHttpError[400]('Order Id does not belong to this user')
-		}
-
-		order.order.status('cancelled')
-
+		order.order.status = 'cancelled'
 		await order.save()
 
 		// TODO: Notify seller about the status change
