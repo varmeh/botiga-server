@@ -112,7 +112,7 @@ export const patchProduct = async (req, res, next) => {
 
 		res.json({
 			productId: updatedProduct._id,
-			message: 'produc updated'
+			message: 'product updated'
 		})
 	} catch (error) {
 		const { status, message } = error
