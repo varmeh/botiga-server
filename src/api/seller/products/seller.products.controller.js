@@ -26,7 +26,7 @@ export const postProduct = async (req, res, next) => {
 			imageUrl
 		})
 
-		res.status(201).json(product)
+		res.status(201).json({ id: product._id })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
