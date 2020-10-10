@@ -110,7 +110,10 @@ export const patchProduct = async (req, res, next) => {
 			winston.debug('@aws delete image', { data })
 		}
 
-		res.json(updatedProduct)
+		res.json({
+			productId: updateProduct._id,
+			message: 'produc updated'
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
