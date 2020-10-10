@@ -35,9 +35,28 @@ export const postProduct = async (req, res, next) => {
 
 export const getProducts = async (req, res, next) => {
 	try {
-		const productsCategories = await findProducts(token.get(req))
+		const categories = await findProducts(token.get(req))
 
-		res.json(productsCategories)
+		const flatCategories = categories.map(category => {
+			const { _id, name, products } = category
+
+			const flatProducts = products.map(product => {
+				const { _id, name, price, description, imageUrl, available } = product
+
+				return {
+					id: _id,
+					name,
+					price,
+					available,
+					description,
+					imageUrl,
+					size: product.sizeInfo
+				}
+			})
+			return { categoryId: _id, name, products: flatProducts }
+		})
+
+		res.json(flatCategories)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
