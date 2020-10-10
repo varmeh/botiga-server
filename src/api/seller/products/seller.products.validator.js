@@ -1,19 +1,19 @@
 import {
 	emptyValidator,
-	alphaSpaceValidator,
+	regexAlphaSpaceDigitsValidator,
 	objectIdValidator,
 	decimalValidator,
 	numberValidator,
 	paramEmptyValidator,
 	emptyOptionalValidator,
-	alphaSpaceOptionalValidator,
+	regexAlphaSpaceDigitsOptionalValidator,
 	decimalOptionalValidator,
 	numberOptionalValidator
 } from '../../../util'
 
 export const postProductValidator = [
 	objectIdValidator('categoryId'),
-	alphaSpaceValidator('name'),
+	regexAlphaSpaceDigitsValidator('name'),
 	decimalValidator('price'),
 	numberValidator('size.quantity'),
 	emptyValidator('size.unit')
@@ -21,7 +21,7 @@ export const postProductValidator = [
 		.withMessage(
 			'should be either of following - gms, kg, ml, lt, piece & pieces'
 		),
-	alphaSpaceOptionalValidator('description'),
+	regexAlphaSpaceDigitsOptionalValidator('description'),
 	emptyOptionalValidator('imageUrl')
 ]
 
@@ -34,7 +34,7 @@ export const getImageUrlValidator = [
 export const patchProductValidator = [
 	objectIdValidator('productId'),
 	objectIdValidator('categoryId'),
-	alphaSpaceOptionalValidator('name'),
+	regexAlphaSpaceDigitsOptionalValidator('name'),
 	decimalOptionalValidator('price'),
 	numberOptionalValidator('size.quantity'),
 	emptyOptionalValidator('size.unit')
@@ -45,7 +45,7 @@ export const patchProductValidator = [
 	emptyOptionalValidator('available')
 		.matches(/^(true|false)$/)
 		.withMessage('should be a either true or false'),
-	alphaSpaceOptionalValidator('description'),
+	regexAlphaSpaceDigitsOptionalValidator('description'),
 	emptyOptionalValidator('imageUrl')
 ]
 

@@ -50,10 +50,10 @@ export const addressValidator = field =>
 		.matches(/^[a-zA-Z0-9\s,.-]*$/, 'i')
 		.withMessage(validationMessages.addressRegex)
 
-export const alphaSpaceValidator = field =>
+export const regexAlphaSpaceDigitsValidator = field =>
 	emptyValidator(field)
-		.matches(/^[a-zA-Z\s]*$/, 'i')
-		.withMessage(validationMessages.alphaSpace)
+		.matches(/^[0-9a-zA-Z\s]*$/, 'i')
+		.withMessage(validationMessages.regexAlphaSpaceDigits)
 
 export const emailValidator = field =>
 	emptyValidator(field)

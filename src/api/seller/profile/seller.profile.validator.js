@@ -2,7 +2,7 @@ import {
 	emptyOptionalValidator,
 	phoneOptionalValidator,
 	addressOptionalValidator,
-	alphaSpaceOptionalValidator,
+	regexAlphaSpaceDigitsOptionalValidator,
 	pinOptionalValidator,
 	emailOptionalValidator
 } from '../../../util'
@@ -13,9 +13,9 @@ export const patchContactValidator = [
 	phoneOptionalValidator('whatsapp'),
 	addressOptionalValidator('address.building'),
 	addressOptionalValidator('address.street'),
-	alphaSpaceOptionalValidator('address.city'),
-	alphaSpaceOptionalValidator('address.area'),
-	alphaSpaceOptionalValidator('address.state'),
+	regexAlphaSpaceDigitsOptionalValidator('address.city'),
+	regexAlphaSpaceDigitsOptionalValidator('address.area'),
+	regexAlphaSpaceDigitsOptionalValidator('address.state'),
 	pinOptionalValidator('address.pincode')
 ]
 
