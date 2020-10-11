@@ -33,7 +33,7 @@ export const getCategories = async (req, res, next) => {
 
 export const deleteCategory = async (req, res, next) => {
 	try {
-		await removeCategory(token.get(req), req.body.categoryId)
+		await removeCategory(token.get(req), req.params.categoryId)
 
 		res.status(204).json()
 	} catch (error) {

@@ -33,7 +33,7 @@ router.patch(
 	patchCategory
 )
 router.delete(
-	'/',
+	'/:categoryId',
 	token.authenticationMiddleware,
 	deleteCategoryValidator,
 	validationMiddleware,
