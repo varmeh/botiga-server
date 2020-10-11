@@ -64,7 +64,7 @@ export const getProducts = async (req, res, next) => {
 }
 
 export const deleteProduct = async (req, res, next) => {
-	const { categoryId, productId } = req.body
+	const { categoryId, productId } = req.params
 	try {
 		await removeProduct(token.get(req), categoryId, productId)
 

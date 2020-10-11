@@ -8,7 +8,8 @@ import {
 	emptyOptionalValidator,
 	regexAlphaSpaceDigitsOptionalValidator,
 	decimalOptionalValidator,
-	numberOptionalValidator
+	numberOptionalValidator,
+	paramObjectIdValidator
 } from '../../../util'
 
 export const postProductValidator = [
@@ -50,6 +51,6 @@ export const patchProductValidator = [
 ]
 
 export const deleteProductValidator = [
-	emptyValidator('categoryId'),
-	emptyValidator('productId')
+	paramObjectIdValidator('categoryId'),
+	paramObjectIdValidator('productId')
 ]
