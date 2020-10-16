@@ -28,4 +28,8 @@ router.get(
 	getImageUrl
 )
 
+router.get('/token/validate', token.authenticationMiddleware, (_, res) =>
+	res.status(204).json()
+)
+
 export default router
