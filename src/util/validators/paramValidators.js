@@ -8,7 +8,6 @@ export const paramEmptyValidator = field =>
 
 export const paramObjectIdValidator = field =>
 	paramEmptyValidator(field)
-		.bail()
 		.matches(/^[0-9a-fA-F]{24}$/, 'i')
 		.withMessage(validationMessages.objectId)
 

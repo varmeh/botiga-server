@@ -20,11 +20,13 @@ export const decimalOptionalValidator = field =>
 		.withMessage(validationMessages.decimal)
 
 export const numberOptionalValidator = field =>
-	emptyOptionalValidator(field).isInt().withMessage(validationMessages.numeric)
+	emptyOptionalValidator(field)
+		.isInt()
+		.withMessage(validationMessages.numeric)
+		.toInt()
 
 export const phoneOptionalValidator = field =>
 	emptyOptionalValidator(field)
-		.bail()
 		.matches(/^[5-9]\d{9}$/)
 		.withMessage(validationMessages.phone)
 
@@ -33,18 +35,16 @@ export const addressOptionalValidator = field =>
 		.matches(/^[a-zA-Z0-9\s,.-]*$/, 'i')
 		.withMessage(validationMessages.addressRegex)
 
-export const pinOptionalValidator = field =>
+export const pincodeOptionalValidator = field =>
 	emptyOptionalValidator(field)
-		.bail()
 		.matches(/^\d{6}$/)
-		.withMessage(validationMessages.pinLength)
+		.withMessage(validationMessages.length6)
 
 export const emailOptionalValidator = field =>
 	emptyOptionalValidator(field).isEmail().withMessage(validationMessages.email)
 
 export const objectIdOptionalValidator = field =>
 	emptyOptionalValidator(field)
-		.bail()
 		.matches(/^[0-9a-fA-F]{24}$/, 'i')
 		.withMessage(validationMessages.objectId)
 

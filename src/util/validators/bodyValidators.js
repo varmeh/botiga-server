@@ -14,25 +14,21 @@ export const numberValidator = field =>
 
 export const pinValidator = field =>
 	emptyValidator(field)
-		.bail()
 		.matches(/^\d{4}$/)
-		.withMessage(validationMessages.pinLength)
+		.withMessage(validationMessages.length4)
 
 export const pincodeValidator = field =>
 	emptyValidator(field)
-		.bail()
 		.matches(/^\d{6}$/)
-		.withMessage(validationMessages.pinLength)
+		.withMessage(validationMessages.length6)
 
 export const otpValidator = field =>
 	emptyValidator(field)
-		.bail()
 		.matches(/^\d{6}$/)
-		.withMessage(validationMessages.pinLength)
+		.withMessage(validationMessages.length6)
 
 export const phoneValidator = field =>
 	emptyValidator(field)
-		.bail()
 		.matches(/^[5-9]\d{9}$/)
 		.withMessage(validationMessages.phone)
 
@@ -62,7 +58,6 @@ export const arrayValidator = field =>
 
 export const objectIdValidator = field =>
 	emptyValidator(field)
-		.bail()
 		.matches(/^[0-9a-fA-F]{24}$/, 'i')
 		.withMessage(validationMessages.objectId)
 
