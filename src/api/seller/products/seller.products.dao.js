@@ -43,6 +43,27 @@ const findProductHelper = async (sellerId, categoryId, productId) => {
 	}
 }
 
+const sortProducts = async (sellerId, categoryId) => {
+	try {
+		// Sort the products in category
+		return await Seller.updateOne(
+			{ _id: sellerId },
+			{
+				$push: {
+					'categories.$[element].products': {
+						$each: [],
+						$sort: { name: 1 }
+					}
+				}
+			},
+			{ arrayFilters: [{ 'element._id': categoryId }] }
+		)
+	} catch (error) {
+		winston.debug('@error sortProducts', logDbError(error))
+		return promiseRejectServerError()
+	}
+}
+
 export const createProduct = async (
 	sellerId,
 	categoryId,
@@ -54,6 +75,10 @@ export const createProduct = async (
 		category.products.push({ name, description, price, size, imageUrl })
 
 		const updatedSeller = await seller.save()
+
+		// Sort the products in this category
+		await sortProducts(sellerId, categoryId)
+
 		const { products } = updatedSeller.categories.id(categoryId)
 		return products[products.length - 1]
 	} catch (error) {
@@ -124,6 +149,12 @@ export const updateProduct = async ({
 		product.available = !available ? product.available : available
 
 		const updatedSeller = await seller.save()
+
+		if (!name) {
+			// As product name is updated, sort the products in category
+			await sortProducts(sellerId, categoryId)
+		}
+
 		const updatedProduct = updatedSeller.categories
 			.id(categoryId)
 			.products.id(productId)
