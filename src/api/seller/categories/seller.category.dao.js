@@ -6,16 +6,33 @@ const logDbError = error => ({ error, msg: error?.message })
 const promiseRejectServerError = () =>
 	Promise.reject(new CreateHttpError[500]())
 
-export const createCategory = async (sellerId, categoryName) => {
+const sortCategory = async sellerId => {
 	try {
 		return await Seller.updateOne(
 			{ _id: sellerId },
 			{
 				$push: {
-					categories: { $each: [{ name: categoryName }], $sort: { name: 1 } }
+					categories: { $each: [], $sort: { name: 1 } }
 				}
 			}
 		)
+	} catch (error) {
+		winston.debug('@error sortCategory', logDbError(error))
+		return promiseRejectServerError()
+	}
+}
+
+export const createCategory = async (sellerId, categoryName) => {
+	try {
+		const seller = await Seller.findById(sellerId)
+		seller.categories.push({ name: categoryName })
+		const updatedSeller = await seller.save()
+
+		await sortCategory(seller)
+
+		return updatedSeller.categories.filter(
+			category => category.name === categoryName
+		)[0]
 	} catch (error) {
 		winston.debug('@error createCategory', logDbError(error))
 		return promiseRejectServerError()
@@ -64,14 +81,7 @@ export const updateCategory = async (sellerId, categoryName, categoryId) => {
 		const updatedSeller = await seller.save()
 
 		// Sort the Categories
-		await Seller.updateOne(
-			{ _id: sellerId },
-			{
-				$push: {
-					categories: { $each: [], $sort: { name: 1 } }
-				}
-			}
-		)
+		await sortCategory(sellerId)
 
 		return updatedSeller.categories.id(categoryId)
 	} catch (error) {
