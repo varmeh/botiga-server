@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 
-import { token } from '../../../util'
+import { token, paginationData, skipData } from '../../../util'
 
 import {
 	createOrder,
@@ -91,11 +91,10 @@ export const postCancelOrder = async (req, res, next) => {
 
 export const getOrders = async (req, res, next) => {
 	try {
-		const page = req.query.page ?? 0
-		const limit = req.query.limit ?? 10
+		const { skip, limit, page } = skipData(req.query)
 		const [totalOrders, orders] = await findOrders({
 			userId: token.get(req),
-			skip: page * limit,
+			skip,
 			limit
 		})
 
@@ -128,10 +127,7 @@ export const getOrders = async (req, res, next) => {
 		})
 
 		res.json({
-			pages: Math.ceil(totalOrders / limit),
-			currentPage: page,
-			perPage: limit,
-			totalOrders,
+			...paginationData({ limit, totalOrders, currentPage: page }),
 			orders: filteredOrderedData
 		})
 	} catch (error) {

@@ -108,7 +108,7 @@ export const findOrders = async ({ userId, skip, limit }) => {
 			.skip(skip)
 			.limit(limit)
 
-		const count = await Order.find(query).estimatedDocumentCount()
+		const count = await Order.find(query).countDocuments()
 
 		return [count, orders]
 	} catch (error) {

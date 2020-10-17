@@ -22,26 +22,35 @@ export const findOrderForSeller = async (orderId, sellerId) => {
 	}
 }
 
-export const findDeliveriesByApartment = async (
+export const findDeliveriesByApartment = async ({
 	sellerId,
 	apartmentId,
-	dateString
-) => {
+	dateString,
+	skip,
+	limit
+}) => {
 	try {
 		const date = moment.utc(dateString, 'YYYY-MM-DD').startOf('day')
 
-		const orders = await Order.find({
+		const query = {
 			'order.expectedDeliveryDate': {
 				$gte: date.toDate(),
 				$lte: moment.utc(date).endOf('day').toDate()
 			},
 			'seller.id': sellerId,
 			'apartment.id': apartmentId
-		}).sort({
-			createdAt: -1
-		})
+		}
 
-		return orders
+		const deliveries = await Order.find(query)
+			.sort({
+				createdAt: 1
+			})
+			.skip(skip)
+			.limit(limit)
+
+		const count = await Order.find(query).countDocuments()
+
+		return [count, deliveries]
 	} catch (error) {
 		winston.debug('@error findDeliveriesByApartment', {
 			error,
@@ -52,26 +61,35 @@ export const findDeliveriesByApartment = async (
 }
 
 /* Date String expected in ISO 8601 format - YYYY-MM-YY */
-export const findOrdersByApartment = async (
+export const findOrdersByApartment = async ({
 	sellerId,
 	apartmentId,
-	dateString
-) => {
+	dateString,
+	skip,
+	limit
+}) => {
 	try {
 		const date = moment.utc(dateString, 'YYYY-MM-DD').startOf('day')
 
-		const orders = await Order.find({
+		const query = {
 			'order.orderDate': {
 				$gte: date.toDate(),
 				$lte: moment.utc(date).endOf('day').toDate()
 			},
 			'seller.id': sellerId,
 			'apartment.id': apartmentId
-		}).sort({
-			createdAt: -1
-		})
+		}
 
-		return orders
+		const orders = await Order.find(query)
+			.sort({
+				createdAt: -1
+			})
+			.skip(skip)
+			.limit(limit)
+
+		const count = await Order.find(query).countDocuments()
+
+		return [count, orders]
 	} catch (error) {
 		winston.debug('@error findOrdersByApartment', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())

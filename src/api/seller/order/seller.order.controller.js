@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 import moment from 'moment'
-import { token } from '../../../util'
+import { token, paginationData, skipData } from '../../../util'
 
 import {
 	findOrderForSeller,
@@ -75,12 +75,16 @@ export const patchDeliveryDelay = async (req, res, next) => {
 export const getDeliveryByApartment = async (req, res, next) => {
 	const { apartmentId, date } = req.params
 
+	const { skip, limit, page } = skipData(req.query)
+
 	try {
-		const deliveries = await findDeliveriesByApartment(
-			token.get(req),
+		const [totalOrders, deliveries] = await findDeliveriesByApartment({
+			sellerId: token.get(req),
 			apartmentId,
-			date
-		)
+			dateString: date,
+			skip,
+			limit
+		})
 
 		const deliveryData = deliveries.map(delivery => {
 			const { buyer, order, _id } = delivery
@@ -90,7 +94,10 @@ export const getDeliveryByApartment = async (req, res, next) => {
 				order
 			}
 		})
-		res.json(deliveryData)
+		res.json({
+			...paginationData({ limit, totalOrders, currentPage: page }),
+			deliveries: deliveryData
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
@@ -100,19 +107,27 @@ export const getDeliveryByApartment = async (req, res, next) => {
 export const getOrdersByApartmentDate = async (req, res, next) => {
 	const { apartmentId, date } = req.params
 
+	const { skip, limit, page } = skipData(req.query)
+
 	try {
-		const orders = await findOrdersByApartment(
-			token.get(req),
+		const [totalOrders, orders] = await findOrdersByApartment({
+			sellerId: token.get(req),
 			apartmentId,
-			date
-		)
+			dateString: date,
+			skip,
+			limit
+		})
 
 		const orderData = orders.map(order => ({
 			id: order._id,
 			buyer: order.buyer,
 			order: order.order
 		}))
-		res.json(orderData)
+
+		res.json({
+			...paginationData({ limit, totalOrders, currentPage: page }),
+			orders: orderData
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

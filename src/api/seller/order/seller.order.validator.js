@@ -3,7 +3,8 @@ import {
 	objectIdValidator,
 	paramObjectIdValidator,
 	paramDateValidator,
-	dateValidator
+	dateValidator,
+	queryNumberValidator
 } from '../../../util'
 
 export const postCancelOrderValidator = [objectIdValidator('orderId')]
@@ -22,7 +23,9 @@ export const patchDeliveryDelayValidator = [
 
 export const getDeliveryValidator = [
 	paramObjectIdValidator('apartmentId'),
-	paramDateValidator('date')
+	paramDateValidator('date'),
+	queryNumberValidator('limit'),
+	queryNumberValidator('page')
 ]
 
 export const getOrdersAggregateValidator = [paramDateValidator('date')]

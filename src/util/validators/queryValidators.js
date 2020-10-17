@@ -16,3 +16,5 @@ export const queryNumberValidator = field =>
 		.withMessage(validationMessages.numeric)
 		.bail()
 		.toInt()
+		.custom(val => val > 0)
+		.withMessage('should be greator than 0')
