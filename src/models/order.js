@@ -96,7 +96,7 @@ const orderSchema = new Schema(
 			]
 		}
 	},
-	{ timestamps: false }
+	{ timestamps: true }
 )
 
 orderSchema.virtual('address').get(function () {

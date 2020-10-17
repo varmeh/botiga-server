@@ -1,5 +1,4 @@
 import CreateHttpError from 'http-errors'
-import { Types } from 'mongoose'
 
 import { token } from '../../../util'
 
