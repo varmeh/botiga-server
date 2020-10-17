@@ -62,6 +62,17 @@ export const updateCategory = async (sellerId, categoryName, categoryId) => {
 		// Update category name
 		category.name = categoryName
 		const updatedSeller = await seller.save()
+
+		// Sort the Categories
+		await Seller.updateOne(
+			{ _id: sellerId },
+			{
+				$push: {
+					categories: { $each: [], $sort: { name: 1 } }
+				}
+			}
+		)
+
 		return updatedSeller.categories.id(categoryId)
 	} catch (error) {
 		winston.debug('@error updateCategory', logDbError(error))
@@ -72,7 +83,7 @@ export const updateCategory = async (sellerId, categoryName, categoryId) => {
 export const findCategories = async sellerId => {
 	try {
 		const { categories } = await Seller.findById(sellerId)
-		return categories.sort((a, b) => a.name > b.name)
+		return categories
 	} catch (error) {
 		winston.debug('@error findProduct', logDbError(error))
 		return promiseRejectServerError()
