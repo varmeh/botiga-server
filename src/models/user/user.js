@@ -34,14 +34,14 @@ const userSchema = new Schema(
 				unique: true,
 				required: [true, 'Login Number is mandatory'],
 				immutable: true,
-				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
+				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 			},
 			whatsapp: {
 				type: String,
 				unique: true,
 				required: [true, 'Login Number is mandatory'],
 				immutable: true,
-				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
+				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 			},
 			address: [addressSchema],
 			email: String,

@@ -12,12 +12,12 @@ export const apartmentSellerSchema = new Schema({
 		phone: {
 			type: String,
 			required: true,
-			match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
+			match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 		},
 		whatsapp: {
 			type: String,
 			required: true,
-			match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number']
+			match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number']
 		},
 		email: String
 	},

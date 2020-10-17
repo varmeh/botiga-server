@@ -5,9 +5,6 @@ import { validationMessages } from './validationMessages'
 export const emptyValidator = field =>
 	body(field).trim().notEmpty().withMessage(validationMessages.empty).bail()
 
-export const alphaValidator = field =>
-	emptyValidator(field).isAlpha().withMessage(validationMessages.alphaOnly)
-
 export const numberValidator = field =>
 	emptyValidator(field)
 		.isInt()
@@ -36,8 +33,8 @@ export const otpValidator = field =>
 export const phoneValidator = field =>
 	emptyValidator(field)
 		.bail()
-		.matches(/^9\d{9}$/)
-		.withMessage('should be a valid phone number')
+		.matches(/^[5-9]\d{9}$/)
+		.withMessage(validationMessages.phone)
 
 export const decimalValidator = field =>
 	emptyValidator(field)
@@ -54,12 +51,6 @@ export const regexAlphaSpaceDigitsValidator = field =>
 	emptyValidator(field)
 		.matches(/^[0-9a-zA-Z\s]*$/, 'i')
 		.withMessage(validationMessages.regexAlphaSpaceDigits)
-
-export const emailValidator = field =>
-	emptyValidator(field)
-		.isEmail()
-		.withMessage(validationMessages.email)
-		.normalizeEmail()
 
 export const arrayValidator = field =>
 	body(field)

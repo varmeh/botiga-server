@@ -51,12 +51,12 @@ const sellerSchema = new Schema(
 				unique: true,
 				required: [true, 'phone number is mandatory'],
 				immutable: true,
-				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
+				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 			},
 			whatsapp: {
 				type: String,
 				required: [true, 'Whatsapp Number is mandatory'],
-				match: [/^9\d{9}$/, 'Please provide a valid 10 digit mobile number']
+				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number']
 			},
 			address: {
 				building: String,

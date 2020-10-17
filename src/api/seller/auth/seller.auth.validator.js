@@ -1,24 +1,17 @@
 import {
 	emptyValidator,
-	alphaValidator,
+	regexAlphaSpaceDigitsValidator,
 	pinValidator,
 	phoneValidator,
-	paramEmptyValidator,
 	otpValidator,
 	urlOptionalValidator,
 	emptyOptionalValidator
 } from '../../../util'
 
-export const getOtpValidator = paramEmptyValidator('phone')
-	.bail()
-	.matches(/^9\d{9}$/)
-	.withMessage('should be a valid phone number')
+export const getOtpValidator = phoneValidator('phone')
 
 export const postOtpVerifyValidator = [
-	emptyValidator('phone')
-		.bail()
-		.matches(/^9\d{9}$/)
-		.withMessage('should be a valid phone number'),
+	phoneValidator('phone'),
 	emptyValidator('sessionId'),
 	otpValidator('otpVal')
 ]
@@ -35,7 +28,7 @@ export const postSignupValidator = [
 	emptyValidator('firstName'),
 	emptyValidator('lastName'),
 	emptyValidator('brandName'),
-	alphaValidator('businessCategory'),
+	regexAlphaSpaceDigitsValidator('businessCategory'),
 	urlOptionalValidator('brandUrl'),
 	emptyOptionalValidator('tagline'),
 	phoneValidator('phone')

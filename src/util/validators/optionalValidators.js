@@ -25,8 +25,8 @@ export const numberOptionalValidator = field =>
 export const phoneOptionalValidator = field =>
 	emptyOptionalValidator(field)
 		.bail()
-		.matches(/^9\d{9}$/)
-		.withMessage('should be a valid phone number')
+		.matches(/^[5-9]\d{9}$/)
+		.withMessage(validationMessages.phone)
 
 export const addressOptionalValidator = field =>
 	emptyOptionalValidator(field)

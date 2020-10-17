@@ -1,7 +1,7 @@
 import {
 	emptyValidator,
 	phoneValidator,
-	emailValidator,
+	emptyOptionalValidator,
 	decimalValidator,
 	numberValidator,
 	arrayValidator,
@@ -14,7 +14,7 @@ export const postOrderValidator = [
 	objectIdValidator('sellerId'),
 	phoneValidator('apartmentContact.phone'),
 	phoneValidator('apartmentContact.whatsapp'),
-	emailValidator('apartmentContact.email'),
+	emptyOptionalValidator('apartmentContact.email'),
 	decimalValidator('totalAmount'),
 	dateValidator('deliveryDate'),
 	arrayValidator('products'),

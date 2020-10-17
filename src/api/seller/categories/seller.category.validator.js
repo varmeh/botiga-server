@@ -1,10 +1,10 @@
 import {
-	alphaValidator,
+	regexAlphaSpaceDigitsValidator,
 	paramObjectIdValidator,
 	objectIdValidator
 } from '../../../util'
 
-export const postCategoryValidator = [alphaValidator('name')]
+export const postCategoryValidator = [regexAlphaSpaceDigitsValidator('name')]
 
 export const deleteCategoryValidator = [paramObjectIdValidator('categoryId')]
 
