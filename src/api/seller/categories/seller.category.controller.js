@@ -10,10 +10,9 @@ import {
 export const postCategory = async (req, res, next) => {
 	try {
 		// TODO: sort category while adding it
-		const { categories } = await createCategory(token.get(req), req.body.name)
+		await createCategory(token.get(req), req.body.name)
 
-		const { _id, name } = categories[categories.length - 1]
-		res.status(201).json({ id: _id, name })
+		res.status(201).json()
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

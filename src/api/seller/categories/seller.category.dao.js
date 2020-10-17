@@ -8,9 +8,14 @@ const promiseRejectServerError = () =>
 
 export const createCategory = async (sellerId, categoryName) => {
 	try {
-		const seller = await Seller.findById(sellerId)
-		seller.categories.push({ name: categoryName })
-		return seller.save()
+		return await Seller.updateOne(
+			{ _id: sellerId },
+			{
+				$push: {
+					categories: { $each: [{ name: categoryName }], $sort: { name: 1 } }
+				}
+			}
+		)
 	} catch (error) {
 		winston.debug('@error createCategory', logDbError(error))
 		return promiseRejectServerError()
@@ -67,7 +72,7 @@ export const updateCategory = async (sellerId, categoryName, categoryId) => {
 export const findCategories = async sellerId => {
 	try {
 		const { categories } = await Seller.findById(sellerId)
-		return categories
+		return categories.sort((a, b) => a.name > b.name)
 	} catch (error) {
 		winston.debug('@error findProduct', logDbError(error))
 		return promiseRejectServerError()
