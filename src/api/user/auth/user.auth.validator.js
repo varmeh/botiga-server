@@ -2,6 +2,7 @@ import {
 	emptyValidator,
 	pinValidator,
 	otpValidator,
+	paramPhoneValidator,
 	phoneValidator,
 	emptyOptionalValidator,
 	objectIdValidator,
@@ -10,7 +11,7 @@ import {
 	phoneOptionalValidator
 } from '../../../util'
 
-export const getOtpValidator = phoneValidator('phone')
+export const getOtpValidator = paramPhoneValidator('phone')
 
 export const postOtpVerifyValidator = [
 	phoneValidator('phone'),

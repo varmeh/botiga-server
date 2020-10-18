@@ -2,13 +2,14 @@ import {
 	emptyValidator,
 	regexAlphaSpaceDigitsValidator,
 	pinValidator,
+	paramPhoneValidator,
 	phoneValidator,
 	otpValidator,
 	urlOptionalValidator,
 	emptyOptionalValidator
 } from '../../../util'
 
-export const getOtpValidator = phoneValidator('phone')
+export const getOtpValidator = paramPhoneValidator('phone')
 
 export const postOtpVerifyValidator = [
 	phoneValidator('phone'),

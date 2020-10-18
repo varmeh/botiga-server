@@ -17,3 +17,8 @@ export const paramDateValidator = field =>
 			? true
 			: Promise.reject(validationMessages.date)
 	)
+
+export const paramPhoneValidator = field =>
+	paramEmptyValidator(field)
+		.matches(/^[5-9]\d{9}$/)
+		.withMessage(validationMessages.phone)
