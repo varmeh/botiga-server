@@ -42,10 +42,11 @@ export const findApartmentsSearch = async (searchText = '') => {
 				$or: [
 					{ name: { $regex: searchText, $options: 'i' } },
 					{ area: { $regex: searchText, $options: 'i' } },
-					{ city: { $regex: searchText, $options: 'i' } }
+					{ city: { $regex: searchText, $options: 'i' } },
+					{ pincode: { $regex: searchText, $options: 'i' } }
 				]
 			},
-			{ name: 1, area: 1, city: 1, pincode: 1 }
+			{ name: 1, area: 1, city: 1, pincode: 1, state: 1 }
 		)
 		return data
 	} catch (error) {
