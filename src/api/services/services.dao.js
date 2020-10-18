@@ -35,6 +35,25 @@ export const findApartmentsByCityAndArea = async (city, area) => {
 	}
 }
 
+export const findApartmentsSearch = async (searchText = '') => {
+	try {
+		const data = await Apartment.find(
+			{
+				$or: [
+					{ name: { $regex: searchText, $options: 'i' } },
+					{ area: { $regex: searchText, $options: 'i' } },
+					{ city: { $regex: searchText, $options: 'i' } }
+				]
+			},
+			{ name: 1, area: 1, city: 1, pincode: 1 }
+		)
+		return data
+	} catch (error) {
+		winston.debug('@error findApartmentsByCityAndArea', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
 export const findApartmentsByLocation = async (lat, long) => {
 	try {
 		// this query shows all apartments with-in 700 mtrs of point

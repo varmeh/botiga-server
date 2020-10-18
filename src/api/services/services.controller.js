@@ -5,7 +5,8 @@ import {
 	findCities,
 	findAreaByCity,
 	findApartmentsByCityAndArea,
-	findApartmentsByLocation
+	findApartmentsByLocation,
+	findApartmentsSearch
 } from './services.dao'
 
 export const getApartmentsByLocation = async (req, res, next) => {
@@ -51,6 +52,16 @@ export const getApartmentsByCityAndArea = async (req, res, next) => {
 	try {
 		const areas = await findApartmentsByCityAndArea(city, area)
 		res.json(areas)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getApartmentsSearch = async (req, res, next) => {
+	try {
+		const apartments = await findApartmentsSearch(req.query.text)
+		res.json(apartments)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

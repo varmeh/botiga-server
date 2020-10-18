@@ -7,7 +7,8 @@ import {
 	getApartmentsByCityAndArea,
 	getCities,
 	getAreasForCity,
-	getImageUrl
+	getImageUrl,
+	getApartmentsSearch
 } from './services.controller'
 
 const router = Router()
@@ -15,6 +16,8 @@ const router = Router()
 router.get('/apartments/location', getApartmentsByLocation)
 
 router.get('/apartments', getApartmentsByCityAndArea)
+
+router.get('/apartments/search', getApartmentsSearch)
 
 router.get('/cities', getCities)
 
