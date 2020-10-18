@@ -22,6 +22,13 @@ export const createApartment = async ({
 		return await apartment.save()
 	} catch (error) {
 		winston.debug('@error createApartment', { error })
+		if (error.code === 11000) {
+			// Apartment in area already exists
+			return Promise.reject(
+				new CreateHttpError[409]('Apartment already exists')
+			)
+		}
+
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

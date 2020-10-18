@@ -2,10 +2,11 @@
 
 ### Apartments Collection
 
--   Add `unique` index to _name_ field
+-   Add a unique index for apartment to avoid duplication
+-   As `text` search does not support substring search, same index should be used with regex to mimic text search
 
 ```
-db.apartments.createIndex({name: 1}, {unique: true})
+db.apartments.createIndex({name: 1, area: 1, city: 1}, {unique: true})
 ```
 
 -   Add geospatial index for User Location Queriesn
