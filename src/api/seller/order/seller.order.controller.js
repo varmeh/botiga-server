@@ -37,7 +37,7 @@ export const patchDeliveryStatus = async (req, res, next) => {
 
 		if (order.order.status === 'delivered') {
 			// Set actual delivery date
-			order.order.actualDeliveryDate = new Date()
+			order.order.actualDeliveryDate = moment.utc().toDate()
 		}
 		await order.save()
 

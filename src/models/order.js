@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose'
 import chance from 'chance'
+import moment from 'moment'
 
 const orderSchema = new Schema(
 	{
@@ -65,7 +66,7 @@ const orderSchema = new Schema(
 			},
 			orderDate: {
 				type: Date,
-				default: new Date()
+				default: moment.utc().toDate()
 			},
 			expectedDeliveryDate: {
 				type: Date,

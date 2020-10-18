@@ -27,7 +27,9 @@ export const findApartmentsByCityAndArea = async (city, area) => {
 		const data = await Apartment.find(
 			{ city, area },
 			{ name: 1, state: 1, pincode: 1 }
-		).sort()
+		)
+			.limit(50)
+			.sort({ name: 1 })
 		return data
 	} catch (error) {
 		winston.debug('@error findApartmentsByCityAndArea', { error })
@@ -48,6 +50,8 @@ export const findApartmentsSearch = async (searchText = '') => {
 			},
 			{ name: 1, area: 1, city: 1, pincode: 1, state: 1 }
 		)
+			.limit(50)
+			.sort({ name: 1 })
 		return data
 	} catch (error) {
 		winston.debug('@error findApartmentsByCityAndArea', { error })
@@ -68,7 +72,7 @@ export const findApartmentsByLocation = async (lat, long) => {
 				}
 			},
 			{ name: 1, state: 1, pincode: 1, city: 1, area: 1 }
-		)
+		).sort({ name: 1 })
 		return data
 	} catch (error) {
 		winston.debug('@error findApartmentsByLocation', { error })
