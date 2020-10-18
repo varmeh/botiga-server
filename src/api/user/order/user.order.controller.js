@@ -107,7 +107,7 @@ export const getOrders = async (req, res, next) => {
 					totalAmount,
 					orderDate,
 					expectedDeliveryDate,
-					actualDeliveryDate,
+					completionDate,
 					products
 				},
 				_id
@@ -121,7 +121,7 @@ export const getOrders = async (req, res, next) => {
 				totalAmount,
 				orderDate,
 				expectedDeliveryDate,
-				actualDeliveryDate,
+				completionDate,
 				products
 			}
 		})

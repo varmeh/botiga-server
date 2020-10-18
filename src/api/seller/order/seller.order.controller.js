@@ -16,6 +16,7 @@ export const postCancelOrder = async (req, res, next) => {
 		const order = await findOrderForSeller(orderId, token.get(req))
 
 		order.order.status = 'cancelled'
+		order.order.completionDate = moment.utc().toDate() // Reflects cancellation date
 		await order.save()
 
 		// TODO: notify user that order has been cancelled
@@ -37,7 +38,7 @@ export const patchDeliveryStatus = async (req, res, next) => {
 
 		if (order.order.status === 'delivered') {
 			// Set actual delivery date
-			order.order.actualDeliveryDate = moment.utc().toDate()
+			order.order.completionDate = moment.utc().toDate()
 		}
 		await order.save()
 

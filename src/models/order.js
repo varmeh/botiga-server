@@ -72,7 +72,7 @@ const orderSchema = new Schema(
 				type: Date,
 				required: true
 			},
-			actualDeliveryDate: Date,
+			completionDate: Date,
 			products: [
 				{
 					name: {
