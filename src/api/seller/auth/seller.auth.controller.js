@@ -12,9 +12,12 @@ export const getOtp = async (req, res, next) => {
 	try {
 		const sessionId = await otp.send(phone, 'SignupTemplate')
 		res.json({ phone, sessionId })
-	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+	} catch (_) {
+		next(
+			new CreateHttpError[500](
+				'OTP Request failed. Check your number & try again'
+			)
+		)
 	}
 }
 
