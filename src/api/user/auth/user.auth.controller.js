@@ -4,8 +4,9 @@ import { password, token, otp } from '../../../util'
 import {
 	createUser,
 	findUserByNumber,
-	updateUser,
-	updateUserPin
+	updateUserProfile,
+	updateUserPin,
+	updateUserAddress
 } from './user.auth.dao'
 
 export const getOtp = async (req, res, next) => {
@@ -57,28 +58,15 @@ export const postVerifyOtp = async (req, res, next) => {
 }
 
 export const postUserSignup = async (req, res, next) => {
-	const {
-		firstName,
-		lastName,
-		phone,
-		whatsapp,
-		email,
-		pin,
-		house,
-		apartmentId
-	} = req.body
+	const { firstName, lastName, phone, whatsapp, email } = req.body
 
 	try {
-		const hashedPin = await password.hash(pin)
 		const user = await createUser({
 			firstName,
 			lastName,
 			phone,
 			whatsapp,
-			email,
-			hashedPin,
-			house,
-			apartmentId
+			email
 		})
 
 		// Add jwt token
@@ -140,21 +128,20 @@ export const postUserSignout = (_, res, next) => {
 }
 
 export const patchUserProfile = async (req, res, next) => {
-	const { firstName, lastName, house, email, whatsapp, apartmentId } = req.body
+	const { firstName, lastName, email, whatsapp } = req.body
 	try {
-		const user = await updateUser(token.get(req), {
+		const user = await updateUserProfile(token.get(req), {
 			firstName,
 			lastName,
-			house,
 			email,
-			whatsapp,
-			apartmentId
+			whatsapp
 		})
 		res.json({
+			message: 'profile updated',
 			firstName: user.firstName,
 			lastName: user.lastName,
-			apartmentId: user.apartmentId,
-			address: user.contact.address[0]
+			email: user.email,
+			whatsapp: user.whatsapp
 		})
 	} catch (error) {
 		const { status, message } = error
@@ -169,6 +156,20 @@ export const patchUserPin = async (req, res, next) => {
 		await updateUserPin(token.get(req), hashedPin)
 		res.json({
 			message: 'pin updated'
+		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchUserAddress = async (req, res, next) => {
+	const { house, apartmentId } = req.body
+	try {
+		await updateUserAddress(token.get(req), house, apartmentId)
+
+		res.json({
+			message: 'updated address'
 		})
 	} catch (error) {
 		const { status, message } = error

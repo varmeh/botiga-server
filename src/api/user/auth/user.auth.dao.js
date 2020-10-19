@@ -7,45 +7,23 @@ export const createUser = async ({
 	lastName,
 	phone,
 	whatsapp,
-	email,
-	house,
-	apartmentId,
-	hashedPin
+	email
 }) => {
 	try {
-		const apartment = await Apartment.findById(apartmentId)
-
-		if (!apartment) {
-			return Promise.reject(new CreateHttpError[404]('Apartment Not Found'))
-		}
-
-		const { name, area, city, state, pincode } = apartment
 		const user = new User({
 			firstName,
 			lastName,
 			phone,
-			loginPin: hashedPin,
 			contact: {
 				phone,
 				whatsapp,
 				email
 			}
 		})
-
-		user.contact.address.push({
-			aptId: apartmentId,
-			label: 'home',
-			house,
-			aptName: name,
-			area,
-			city,
-			state,
-			pincode
-		})
 		return await user.save()
 	} catch (error) {
 		winston.debug('@error createUser', { error, msg: error.message })
-		if (error.code === 11000 && error.keyValue.phone === phone) {
+		if (error.code === 11000) {
 			// Phone number already used.
 			return Promise.reject(
 				new CreateHttpError[409]('Phone number already taken')
@@ -66,37 +44,17 @@ export const findUserByNumber = async number => {
 	}
 }
 
-export const updateUser = async (
+export const updateUserProfile = async (
 	userId,
-	{ firstName, lastName, house, whatsapp, email, apartmentId }
+	{ firstName, lastName, whatsapp, email }
 ) => {
 	try {
 		const user = await User.findById(userId)
 
-		user.firstName = !firstName ? user.firstName : firstName
-		user.lastName = !lastName ? user.lastName : lastName
-		user.contact.whatsapp = !whatsapp ? user.contact.whatsapp : whatsapp
-		user.contact.email = !email ? user.contact.email : email
-		user.contact.address.house = !house ? user.contact.address.house : house
-
-		if (apartmentId && apartmentId !== user.apartmentId) {
-			const apartment = await Apartment.findById(apartmentId)
-
-			if (!apartment) {
-				return Promise.reject(new CreateHttpError[404]('Apartment Not Found'))
-			}
-			user.apartmentId = apartmentId
-
-			// Update delivery address
-			const { name, area, city, state, pincode } = apartment
-
-			const [address] = user.contact.address
-			address.aptName = name
-			address.area = area
-			address.city = city
-			address.state = state
-			address.pincode = pincode
-		}
+		user.firstName = firstName
+		user.lastName = lastName
+		user.contact.whatsapp = whatsapp
+		user.contact.email = email
 
 		return await user.save()
 	} catch (error) {
@@ -112,6 +70,49 @@ export const updateUserPin = async (userId, pin) => {
 		return await user.save()
 	} catch (error) {
 		winston.debug('@error updateUserPin', { error, msg: error.message })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const updateUserAddress = async (userId, house, apartmentId) => {
+	try {
+		const apartment = await Apartment.findById(apartmentId)
+
+		if (!apartment) {
+			return Promise.reject(new CreateHttpError[404]('Apartment Not Found'))
+		}
+		const user = await User.findById(userId)
+
+		// Update delivery address
+		const { name, area, city, state, pincode } = apartment
+
+		if (user.contact.address.length > 0) {
+			// If address exists, update the address
+			const [address] = user.contact.address
+			address.aptName = name
+			address.area = area
+			address.city = city
+			address.state = state
+			address.pincode = pincode
+
+			address.house = house
+			address.aptId = apartmentId
+		} else {
+			user.contact.address.push({
+				aptId: apartmentId,
+				label: 'home',
+				house,
+				aptName: name,
+				area,
+				city,
+				state,
+				pincode
+			})
+		}
+
+		return await user.save()
+	} catch (error) {
+		winston.debug('@error updateUser', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

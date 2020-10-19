@@ -6,7 +6,8 @@ import {
 	postSigninPinValidator,
 	postSignupValidator,
 	patchProfileValidator,
-	patchPinValidator
+	patchPinValidator,
+	patchAddressValidator
 } from './user.auth.validator'
 import {
 	getOtp,
@@ -15,7 +16,8 @@ import {
 	postUserSigninPin,
 	postUserSignout,
 	patchUserProfile,
-	patchUserPin
+	patchUserPin,
+	patchUserAddress
 } from './user.auth.controller'
 
 const router = Router()
@@ -56,6 +58,14 @@ router.patch(
 	patchPinValidator,
 	validationMiddleware,
 	patchUserPin
+)
+
+router.patch(
+	'/address',
+	token.authenticationMiddleware,
+	patchAddressValidator,
+	validationMiddleware,
+	patchUserAddress
 )
 
 router.post('/signout', token.authenticationMiddleware, postUserSignout)

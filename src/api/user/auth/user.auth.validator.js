@@ -4,11 +4,9 @@ import {
 	otpValidator,
 	paramPhoneValidator,
 	phoneValidator,
-	emptyOptionalValidator,
 	objectIdValidator,
-	objectIdOptionalValidator,
-	emailOptionalValidator,
-	phoneOptionalValidator
+	addressValidator,
+	emailOptionalValidator
 } from '../../../util'
 
 export const getOtpValidator = paramPhoneValidator('phone')
@@ -29,19 +27,19 @@ export const postSignupValidator = [
 	emptyValidator('lastName'),
 	phoneValidator('phone'),
 	phoneValidator('whatsapp'),
-	emailOptionalValidator('email'),
-	pinValidator('pin'),
-	emptyValidator('house'),
-	objectIdValidator('apartmentId')
+	emailOptionalValidator('email')
 ]
 
 export const patchProfileValidator = [
-	emptyOptionalValidator('firstName'),
-	emptyOptionalValidator('lastName'),
-	emptyOptionalValidator('house'),
-	phoneOptionalValidator('whatsapp'),
-	emailOptionalValidator('email'),
-	objectIdOptionalValidator('apartmentId')
+	emptyValidator('firstName'),
+	emptyValidator('lastName'),
+	phoneValidator('whatsapp'),
+	emailOptionalValidator('email')
+]
+
+export const patchAddressValidator = [
+	objectIdValidator('apartmentId'),
+	addressValidator('house')
 ]
 
 export const patchPinValidator = pinValidator('pin')
