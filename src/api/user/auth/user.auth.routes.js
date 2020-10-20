@@ -15,6 +15,7 @@ import {
 	postUserSignup,
 	postUserSigninPin,
 	postUserSignout,
+	getUserProfile,
 	patchUserProfile,
 	patchUserPin,
 	patchUserAddress
@@ -43,6 +44,8 @@ router.post(
 	validationMiddleware,
 	postUserSigninPin
 )
+
+router.get('/profile', token.authenticationMiddleware, getUserProfile)
 
 router.patch(
 	'/profile',

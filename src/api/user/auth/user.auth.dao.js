@@ -33,6 +33,15 @@ export const createUser = async ({
 	}
 }
 
+export const findUser = async userId => {
+	try {
+		return await User.findById(userId)
+	} catch (error) {
+		winston.debug('@error findUser', { error, msg: error.message })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
 export const findUserByNumber = async number => {
 	try {
 		return await User.findOne({

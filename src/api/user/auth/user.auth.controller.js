@@ -4,6 +4,7 @@ import { password, token, otp } from '../../../util'
 import {
 	createUser,
 	findUserByNumber,
+	findUser,
 	updateUserProfile,
 	updateUserPin,
 	updateUserAddress
@@ -121,6 +122,36 @@ export const postUserSignout = (_, res, next) => {
 	try {
 		// TODO: Invalidate token on signout
 		res.status(204).json()
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getUserProfile = async (req, res, next) => {
+	try {
+		const {
+			firstName,
+			lastName,
+			contact: { whatsapp, email, address }
+		} = await findUser(token.get(req))
+
+		const [{ aptId, house, aptName, area, city, state, pincode }] = address
+		res.json({
+			firstName,
+			lastName,
+			whatsapp,
+			email,
+			address: {
+				id: aptId,
+				house,
+				apartment: aptName,
+				area,
+				city,
+				state,
+				pincode
+			}
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
