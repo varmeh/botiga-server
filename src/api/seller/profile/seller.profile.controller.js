@@ -7,6 +7,32 @@ import {
 	updateBusinessInformation
 } from './seller.profile.dao'
 
+export const getProfileInformation = async (req, res, next) => {
+	try {
+		const {
+			owner: { firstName, lastName },
+			businessName,
+			businessCategory,
+			brand,
+			contact,
+			apartments
+		} = await findSeller(token.get(req))
+		delete contact.pushToken
+		res.json({
+			firstName,
+			lastName,
+			businessName,
+			businessCategory,
+			brand,
+			contact,
+			apartments
+		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
 export const getContactInformation = async (req, res, next) => {
 	try {
 		const seller = await findSeller(token.get(req))

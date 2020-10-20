@@ -5,6 +5,7 @@ import {
 	patchBusinessValidator
 } from './seller.profile.validator'
 import {
+	getProfileInformation,
 	getContactInformation,
 	patchContactInformation,
 	getBusinessInformation,
@@ -12,6 +13,8 @@ import {
 } from './seller.profile.controller'
 
 const router = Router()
+
+router.get('/', token.authenticationMiddleware, getProfileInformation)
 
 router.get('/contact', token.authenticationMiddleware, getContactInformation)
 
