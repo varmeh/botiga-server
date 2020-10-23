@@ -10,6 +10,32 @@ import {
 	updateUserAddress
 } from './user.auth.dao'
 
+const userProfile = user => {
+	const {
+		firstName,
+		lastName,
+		contact: { whatsapp, email, address }
+	} = user
+
+	const [{ aptId, house, aptName, area, city, state, pincode }] = address
+
+	return {
+		firstName,
+		lastName,
+		whatsapp,
+		email,
+		address: {
+			id: aptId,
+			house,
+			apartment: aptName,
+			area,
+			city,
+			state,
+			pincode
+		}
+	}
+}
+
 export const getOtp = async (req, res, next) => {
 	const { phone } = req.params
 	try {
@@ -35,23 +61,10 @@ export const postVerifyOtp = async (req, res, next) => {
 			return res.json({ message: 'createUser', phone })
 		}
 
-		const {
-			firstName,
-			lastName,
-			contact: { whatsapp, email, address }
-		} = user
-
 		// Add jwt token
 		token.set(res, user._id)
 
-		return res.json({
-			firstName,
-			lastName,
-			phone,
-			whatsapp,
-			email,
-			address
-		})
+		return res.json(userProfile(user))
 	} catch (error) {
 		const { status, message } = error
 		return next(new CreateHttpError(status, message))
@@ -91,24 +104,10 @@ export const postUserSigninPin = async (req, res, next) => {
 		const match = await password.compare(pin, user.loginPin)
 
 		if (match) {
-			// remove user pin before sending user information to frontend
-			const {
-				firstName,
-				lastName,
-				contact: { whatsapp, address, email }
-			} = user
-
 			// Add jwt token
 			token.set(res, user._id)
 
-			res.json({
-				firstName,
-				lastName,
-				phone,
-				whatsapp,
-				email,
-				address: address[0]
-			})
+			res.json(userProfile(user))
 		} else {
 			throw new CreateHttpError[401]('Invalid Credentials')
 		}
@@ -130,28 +129,8 @@ export const postUserSignout = (_, res, next) => {
 
 export const getUserProfile = async (req, res, next) => {
 	try {
-		const {
-			firstName,
-			lastName,
-			contact: { whatsapp, email, address }
-		} = await findUser(token.get(req))
-
-		const [{ aptId, house, aptName, area, city, state, pincode }] = address
-		res.json({
-			firstName,
-			lastName,
-			whatsapp,
-			email,
-			address: {
-				id: aptId,
-				house,
-				apartment: aptName,
-				area,
-				city,
-				state,
-				pincode
-			}
-		})
+		const user = await findUser(token.get(req))
+		res.json(userProfile(user))
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
