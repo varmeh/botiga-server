@@ -8,6 +8,7 @@ import {
 	getCities,
 	getAreasForCity,
 	getImageUrl,
+	getBrandImageUrl,
 	getApartmentsSearch
 } from './services.controller'
 
@@ -29,6 +30,13 @@ router.get(
 	getImageUrlValidator,
 	validationMiddleware,
 	getImageUrl
+)
+
+router.get(
+	'/brandimageurls/:imageType',
+	getImageUrlValidator,
+	validationMiddleware,
+	getBrandImageUrl
 )
 
 router.get('/token/validate', token.authenticationMiddleware, (_, res) =>
