@@ -43,24 +43,27 @@ export const postProductsValidate = async (req, res, next) => {
 	try {
 		// Verify Seller Id
 		const categoryProducts = await findCategoryProducts(sellerId)
+		const productDictionary = {}
+
+		// Create validation dictionary
+		categoryProducts.forEach(category => {
+			category.products.forEach(product => {
+				const { id, available, price } = product
+				productDictionary[id] = { available, price }
+			})
+		})
 
 		let totalAmount = 0
 
 		const validateList = products.map(product => {
-			const { categoryId, productId, quantity } = product
-			const category = categoryProducts.id(categoryId)
-			if (!category) {
-				// Category mismatch
-				return { categoryId, productId, quantity, available: false }
+			const { productId, quantity } = product
+
+			const _product = productDictionary[productId]
+			if (_product && _product.available) {
+				totalAmount += quantity * _product.price
+				return { productId, quantity, available: true }
 			} else {
-				const _product = category.products.id(productId)
-				if (!_product || !_product.available) {
-					// Product not found or is not available
-					return { categoryId, productId, quantity, available: false }
-				} else {
-					totalAmount += quantity * _product.price
-					return { categoryId, productId, quantity, available: true }
-				}
+				return { productId, quantity, available: false }
 			}
 		})
 

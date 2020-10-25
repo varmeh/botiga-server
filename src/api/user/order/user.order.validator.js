@@ -28,7 +28,6 @@ export const postProductsValidator = [
 	objectIdValidator('sellerId'),
 	arrayValidator('products'),
 	objectIdValidator('products.*.productId'),
-	objectIdValidator('products.*.categoryId'),
 	numberValidator('products.*.quantity')
 ]
 
