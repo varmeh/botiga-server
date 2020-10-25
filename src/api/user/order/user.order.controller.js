@@ -59,9 +59,14 @@ export const postProductsValidate = async (req, res, next) => {
 			const { productId, quantity } = product
 
 			const _product = productDictionary[productId]
-			if (_product && _product.available) {
+			if (_product) {
 				totalAmount += quantity * _product.price
-				return { productId, quantity, available: true }
+				return {
+					productId,
+					quantity,
+					price: _product.price,
+					available: _product.available
+				}
 			} else {
 				return { productId, quantity, available: false }
 			}
