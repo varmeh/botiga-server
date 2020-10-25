@@ -17,6 +17,15 @@ const userProfile = user => {
 		contact: { whatsapp, email, address }
 	} = user
 
+	if (address.length === 0) {
+		return {
+			firstName,
+			lastName,
+			whatsapp,
+			email
+		}
+	}
+
 	const [{ aptId, house, aptName, area, city, state, pincode }] = address
 
 	return {
