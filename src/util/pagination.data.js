@@ -1,6 +1,7 @@
 export const paginationData = ({ limit, totalOrders, currentPage }) => {
+	const pages = Math.ceil(totalOrders / limit)
 	return {
-		pages: Math.ceil(totalOrders / limit),
+		pages: pages === 0 ? 1 : pages,
 		perPage: limit,
 		currentPage,
 		totalOrders
