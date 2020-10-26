@@ -3,13 +3,17 @@ import { validationMiddleware, token } from '../../../util'
 
 import {
 	postApartmentValidator,
-	patchApartmentValidator
+	patchApartmentValidator,
+	patchDeliveryValidator,
+	patchContactInfoValidator
 } from './seller.apartments.validator'
 
 import {
 	getApartments,
 	postApartments,
-	patchApartmentLive
+	patchApartmentLive,
+	patchDelierySchedule,
+	patchContactInformation
 } from './seller.apartments.controller'
 
 const router = Router()
@@ -30,6 +34,22 @@ router.patch(
 	patchApartmentValidator,
 	validationMiddleware,
 	patchApartmentLive
+)
+
+router.patch(
+	'/delivery',
+	token.authenticationMiddleware,
+	patchDeliveryValidator,
+	validationMiddleware,
+	patchDelierySchedule
+)
+
+router.patch(
+	'/contact',
+	token.authenticationMiddleware,
+	patchContactInfoValidator,
+	validationMiddleware,
+	patchContactInformation
 )
 
 export default router

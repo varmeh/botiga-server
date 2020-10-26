@@ -3,7 +3,9 @@ import { token } from '../../../util'
 import {
 	findApartments,
 	addApartment,
-	updateApartmentLiveStatus
+	updateApartmentLiveStatus,
+	updateApartmentDeliverySchedule,
+	updateApartmentContactInformation
 } from './seller.apartments.dao'
 
 export const getApartments = async (req, res, next) => {
@@ -42,6 +44,37 @@ export const patchApartmentLive = async (req, res, next) => {
 		const apartment = await updateApartmentLiveStatus(token.get(req), {
 			apartmentId,
 			live
+		})
+		res.json(apartment)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchDelierySchedule = async (req, res, next) => {
+	const { apartmentId, deliveryType, day } = req.body
+	try {
+		const apartment = await updateApartmentDeliverySchedule(token.get(req), {
+			apartmentId,
+			deliveryType,
+			day
+		})
+		res.json(apartment)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchContactInformation = async (req, res, next) => {
+	const { apartmentId, phone, whatsapp, email } = req.body
+	try {
+		const apartment = await updateApartmentContactInformation(token.get(req), {
+			apartmentId,
+			phone,
+			whatsapp,
+			email
 		})
 		res.json(apartment)
 	} catch (error) {

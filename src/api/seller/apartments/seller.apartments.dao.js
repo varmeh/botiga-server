@@ -102,3 +102,55 @@ export const updateApartmentLiveStatus = async (
 		return promiseRejectServerError()
 	}
 }
+
+export const updateApartmentDeliverySchedule = async (
+	sellerId,
+	{ apartmentId, deliveryType, day }
+) => {
+	try {
+		const seller = await Seller.findById(sellerId)
+
+		const apartment = await Apartment.findById(apartmentId)
+
+		apartment.sellers.id(sellerId).delivery = { type: deliveryType, day }
+
+		await apartment.save()
+
+		seller.apartments.id(apartmentId).deliveryMessage = apartment.sellers.id(
+			sellerId
+		).deliveryMessage
+
+		const updatedSeller = await seller.save()
+
+		return updatedSeller.apartments.id(apartmentId)
+	} catch (error) {
+		winston.debug('@error updateApartmentDeliverySchedule', logDbError(error))
+		return promiseRejectServerError()
+	}
+}
+
+export const updateApartmentContactInformation = async (
+	sellerId,
+	{ apartmentId, phone, whatsapp, email }
+) => {
+	try {
+		const seller = await Seller.findById(sellerId)
+
+		const apartment = await Apartment.findById(apartmentId)
+
+		apartment.sellers.id(sellerId).contact = { phone, whatsapp, email }
+
+		await apartment.save()
+
+		seller.apartments.id(apartmentId).contact = apartment.sellers.id(
+			sellerId
+		).contact
+
+		const updatedSeller = await seller.save()
+
+		return updatedSeller.apartments.id(apartmentId)
+	} catch (error) {
+		winston.debug('@error updateApartmentContactInformation', logDbError(error))
+		return promiseRejectServerError()
+	}
+}
