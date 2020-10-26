@@ -70,7 +70,7 @@ export const addApartment = async (
 			apartmentArea: apartment.area,
 			live: false,
 			contact: { phone, whatsapp, email },
-			delivery: { type: deliveryType, day }
+			deliveryMessage: apartment.sellers.id(sellerId).deliveryMessage
 		})
 
 		const updatedSeller = await seller.save()

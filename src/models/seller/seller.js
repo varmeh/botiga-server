@@ -33,19 +33,7 @@ export const sellerApartmentSchema = new Schema({
 		},
 		email: String
 	},
-	delivery: {
-		type: {
-			type: String,
-			required: true,
-			enum: ['duration', 'day']
-		},
-		// value depends on type. for
-		day: {
-			type: Number,
-			min: 1,
-			max: 7
-		}
-	}
+	deliveryMessage: String
 })
 
 const sellerSchema = new Schema(
