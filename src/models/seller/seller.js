@@ -19,6 +19,32 @@ export const sellerApartmentSchema = new Schema({
 	live: {
 		type: Boolean,
 		default: false
+	},
+	contact: {
+		phone: {
+			type: String,
+			required: true,
+			match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
+		},
+		whatsapp: {
+			type: String,
+			required: true,
+			match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number']
+		},
+		email: String
+	},
+	delivery: {
+		type: {
+			type: String,
+			required: true,
+			enum: ['duration', 'day']
+		},
+		// value depends on type. for
+		day: {
+			type: Number,
+			min: 1,
+			max: 7
+		}
 	}
 })
 
