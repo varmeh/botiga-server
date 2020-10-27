@@ -129,15 +129,19 @@ export const updateUserAddress = async (userId, house, apartmentId) => {
 export const updateToken = async (userId, token) => {
 	try {
 		const user = await User.findById(userId)
-		user.contact.pushToken = token
-		await user.save()
+		if (!user.contact.pushTokens.includes(token)) {
+			user.contact.pushTokens.push(token)
+			await user.save()
+
+			notifications.apartment.subscribe({
+				type: notifications.subscriberType.Users,
+				apartmentId: user.contact.address.aptId,
+				userToken: token
+			})
+		}
 
 		// Register user to apartment topic for notifications
-		return notifications.apartment.subscribe({
-			type: notifications.subscriberType.Users,
-			apartmentId: user.contact.address.aptId,
-			userToken: token
-		})
+		return user
 	} catch (error) {
 		winston.debug('@error updateToken', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())

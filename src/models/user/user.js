@@ -45,7 +45,7 @@ const userSchema = new Schema(
 			},
 			address: [addressSchema],
 			email: String,
-			pushToken: String
+			pushTokens: [String]
 		},
 		cart: {
 			sellerId: {

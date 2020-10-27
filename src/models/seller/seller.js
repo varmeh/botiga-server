@@ -80,7 +80,7 @@ const sellerSchema = new Schema(
 				state: String,
 				pincode: { type: String, match: [/^\d{6}/] }
 			},
-			pushToken: String
+			pushTokens: [String]
 		},
 		categories: [categorySchema],
 		apartments: [sellerApartmentSchema]

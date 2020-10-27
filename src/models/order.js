@@ -38,8 +38,7 @@ const orderSchema = new Schema(
 				required: true,
 				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 			},
-			email: String,
-			pushToken: String // used to send mobile notifications
+			email: String
 		},
 		seller: {
 			id: { type: Schema.Types.ObjectId, ref: 'seller' },
@@ -54,8 +53,7 @@ const orderSchema = new Schema(
 				required: true,
 				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number']
 			},
-			email: String,
-			pushToken: String
+			email: String
 		},
 		order: {
 			number: {

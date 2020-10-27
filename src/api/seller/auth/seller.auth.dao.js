@@ -61,17 +61,19 @@ export const updateSellerPin = async (sellerId, pin) => {
 export const updateToken = async (sellerId, token) => {
 	try {
 		const seller = await Seller.findById(sellerId)
-		seller.contact.pushToken = token
-		await seller.save()
 
-		// Register user to apartment topic for notifications
-		return seller.apartments.forEach(apartment => {
+		if (!seller.contact.pushTokens.includes(token)) {
+			seller.contact.pushTokens.push(token)
+			await seller.save()
+
+			// Register user to apartment topic for notifications
 			notifications.apartment.subscribe({
 				type: notifications.subscriberType.Sellers,
-				apartmentId: apartment._id,
+				apartmentId: seller.contact.address.aptId,
 				userToken: token
 			})
-		})
+		}
+		return seller
 	} catch (error) {
 		winston.debug('@error updateToken', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
