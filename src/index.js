@@ -1,10 +1,12 @@
 import {} from 'dotenv/config'
-import { mongooseConnect, winston } from './util'
+import { mongooseConnect, winston, notifications } from './util'
 import app from './app'
 
 const startServer = async () => {
 	try {
 		await mongooseConnect()
+		notifications.configure() // Configure push notifications
+
 		const port = process.env.PORT || 3000
 		app.listen(port, () => {
 			winston.debug(`Server on http://localhost:${port}`)
