@@ -7,7 +7,8 @@ import {
 	findUser,
 	updateUserProfile,
 	updateUserPin,
-	updateUserAddress
+	updateUserAddress,
+	updateToken
 } from './user.auth.dao'
 
 const userProfile = user => {
@@ -190,6 +191,17 @@ export const patchUserAddress = async (req, res, next) => {
 		res.json({
 			message: 'updated address'
 		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchUserPushToken = async (req, res, next) => {
+	try {
+		await updateToken(token.get(req), req.body.token)
+
+		res.json({ message: 'token updated' })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

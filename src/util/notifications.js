@@ -24,17 +24,16 @@ const sendToUser = (pushToken, title, body) => {
 		.sendToDevice(pushToken, notificationPayload(title, body), messagingOptions)
 }
 
+const subscriberType = {
+	Users: 'users',
+	Sellers: 'sellers'
+}
+
 const apartment = {
-	subscribe: ({ apartmentId, userToken, type = 'users' }) => {
-		if (type !== 'users' || type !== 'sellers') {
-			throw new Error('Invalid Type. Valid Values - users & sellers')
-		}
+	subscribe: ({ apartmentId, userToken, type = subscriberType.Users }) => {
 		admin.messaging().subscribeToTopic(userToken, `${apartmentId}_${type}`)
 	},
-	send: ({ apartmentId, title, body, type = 'users' }) => {
-		if (type !== 'users' || type !== 'sellers') {
-			throw new Error('Invalid Type. Valid Values - users & sellers')
-		}
+	send: ({ apartmentId, title, body, type = subscriberType.Users }) => {
 		admin
 			.messaging()
 			.sendToTopic(
@@ -45,4 +44,4 @@ const apartment = {
 	}
 }
 
-export default { configure, sendToUser, apartment }
+export default { configure, sendToUser, apartment, subscriberType }

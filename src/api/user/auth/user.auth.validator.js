@@ -43,3 +43,5 @@ export const patchAddressValidator = [
 ]
 
 export const patchPinValidator = pinValidator('pin')
+
+export const patchTokenRegisterValidator = [emptyValidator('token')]
