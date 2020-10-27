@@ -22,7 +22,7 @@ export const createOrder = async ({
 			return Promise.reject(new CreateHttpError[404]('Seller Not Found'))
 		}
 
-		const { phone, whatsapp, email, address, pushToken } = user.contact
+		const { phone, whatsapp, email, address } = user.contact
 
 		const order = new Order({
 			apartment: {
@@ -39,8 +39,7 @@ export const createOrder = async ({
 				house: address[0].house,
 				phone,
 				whatsapp,
-				email,
-				pushToken
+				email
 			},
 			seller: {
 				// seller contact information would be specific to user
@@ -48,8 +47,7 @@ export const createOrder = async ({
 				brandName: seller.brand.name,
 				phone: sellerContact.phone,
 				whatsapp: sellerContact.whatsapp,
-				email: sellerContact.email,
-				pushToken: seller.pushToken
+				email: sellerContact.email
 			},
 			order: {
 				status: 'open',
@@ -107,7 +105,6 @@ export const findOrders = async ({ userId, skip, limit }) => {
 	try {
 		const query = { 'buyer.id': userId }
 
-		// TODO: validate sort method implementation
 		const orders = await Order.find(query)
 			.sort({
 				createdAt: -1

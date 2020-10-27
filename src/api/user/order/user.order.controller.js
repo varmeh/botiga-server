@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { OrderStatus } from '../../../models'
+import { OrderStatus, Seller } from '../../../models'
 
 import { token, paginationData, skipData, notifications } from '../../../util'
 
@@ -82,20 +82,21 @@ export const postCancelOrder = async (req, res, next) => {
 	const { orderId } = req.body
 
 	try {
-		// Verify Seller Id
 		const order = await updateOrder(
 			orderId,
 			token.get(req),
 			OrderStatus.cancelled
 		)
 
-		if (!order.seller.pushToken) {
+		// Send notification to seller devices
+		const seller = await Seller.findById(order.seller.id)
+		seller.contact.pushTokens.forEach(token =>
 			notifications.sendToUser(
-				order.seller.pushToken,
+				token,
 				'Order Cancelled',
 				`Order #${order.order.number} has been cancelled`
 			)
-		}
+		)
 
 		res.json({ message: 'cancelled', id: order._id })
 	} catch (error) {

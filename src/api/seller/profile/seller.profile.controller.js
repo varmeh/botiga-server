@@ -17,7 +17,8 @@ export const getProfileInformation = async (req, res, next) => {
 			contact,
 			apartments
 		} = await findSeller(token.get(req))
-		delete contact.pushToken
+
+		delete contact.pushTokens
 		res.json({
 			firstName,
 			lastName,

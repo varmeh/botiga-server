@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 import { token, paginationData, skipData, notifications } from '../../../util'
-import { OrderStatus } from '../../../models'
+import { OrderStatus, User } from '../../../models'
 
 import {
 	updateOrder,
@@ -9,23 +9,28 @@ import {
 	findSellerAggregatedData
 } from './seller.order.dao'
 
-export const postCancelOrder = async (req, res, next) => {
-	const { orderId } = req.body
+const sendNotifications = async (userId, body, title) => {
+	// Send notification to seller devices
+	const user = await User.findById(userId)
 
+	user.contact.pushTokens.forEach(token =>
+		notifications.sendToUser(token, title, body)
+	)
+}
+
+export const postCancelOrder = async (req, res, next) => {
 	try {
 		const order = await updateOrder(
-			orderId,
+			req.body.orderId,
 			token.get(req),
 			OrderStatus.cancelled
 		)
 
-		if (!order.buyer.pushToken) {
-			notifications.sendToUser(
-				order.buyer.pushToken,
-				'Order Cancelled',
-				`Your order #${order.order.number} from ${order.seller.brandName} has been cancelled `
-			)
-		}
+		await sendNotifications(
+			order.buyer.id,
+			'Order Cancelled',
+			`Your order #${order.order.number} from ${order.seller.brandName} has been cancelled`
+		)
 
 		res.json({ message: 'cancelled', id: order._id })
 	} catch (error) {
@@ -43,20 +48,18 @@ export const patchDeliveryStatus = async (req, res, next) => {
 
 		const order = await updateOrder(orderId, token.get(req), orderStatus)
 
-		if (!order.buyer.pushToken) {
-			if (orderStatus === OrderStatus.outForDelivery) {
-				notifications.sendToUser(
-					order.buyer.pushToken,
-					'Order in delivery',
-					`Your order #${order.order.number} from ${order.seller.brandName} is in delivery`
-				)
-			} else {
-				notifications.sendToUser(
-					order.buyer.pushToken,
-					'Order delivered',
-					`Your order #${order.order.number} from ${order.seller.brandName} has been delivered`
-				)
-			}
+		if (orderStatus === OrderStatus.outForDelivery) {
+			await sendNotifications(
+				order.buyer.id,
+				'Order in delivery',
+				`Your order #${order.order.number} from ${order.seller.brandName} is in delivery`
+			)
+		} else {
+			await sendNotifications(
+				order.buyer.id,
+				'Order delivered',
+				`Your order #${order.order.number} from ${order.seller.brandName} has been delivered`
+			)
 		}
 
 		res.json({ message: status, id: order._id })
@@ -77,8 +80,8 @@ export const patchDeliveryDelay = async (req, res, next) => {
 			newDate
 		)
 
-		notifications.sendToUser(
-			order.buyer.pushToken,
+		await sendNotifications(
+			order.buyer.id,
 			'Order delayed',
 			`Your order #${order.order.number} from ${order.seller.brandName} has been delayed to ${newDate}`
 		)
