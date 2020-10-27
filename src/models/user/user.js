@@ -46,6 +46,22 @@ const userSchema = new Schema(
 			address: [addressSchema],
 			email: String,
 			pushToken: String
+		},
+		cart: {
+			sellerId: {
+				type: Schema.Types.ObjectId,
+				ref: 'seller'
+			},
+			totalAmount: {
+				type: Number,
+				min: 0.0
+			},
+			products: [
+				{
+					productId: { type: Schema.Types.ObjectId, required: true },
+					quantity: { type: Number, min: 0.0 }
+				}
+			]
 		}
 	},
 	{ timestamps: true }

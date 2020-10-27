@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 import { winston } from '../../util'
-import { Apartment, Seller } from '../../models'
+import { Apartment, Seller, User } from '../../models'
 
 export const findSellersInApartment = async apartmentId => {
 	try {
@@ -28,6 +28,33 @@ export const findProductsBySeller = async sellerId => {
 		return seller.categories
 	} catch (error) {
 		winston.debug('@error findProductsBySeller', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const findCart = async userId => {
+	try {
+		const user = await User.findById(userId)
+		return user.cart
+	} catch (error) {
+		winston.debug('@error findCart', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const updateCart = async ({
+	userId,
+	sellerId,
+	totalAmount,
+	products
+}) => {
+	try {
+		const user = await User.findById(userId)
+		user.cart = { sellerId, totalAmount, products }
+
+		return await user.save()
+	} catch (error) {
+		winston.debug('@error updateCart', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

@@ -1,6 +1,13 @@
 import CreateHttpError from 'http-errors'
 
-import { findSellersInApartment, findProductsBySeller } from './user.dao'
+import { token } from '../../util'
+
+import {
+	findSellersInApartment,
+	findProductsBySeller,
+	findCart,
+	updateCart
+} from './user.dao'
 
 export const getSellersInApartment = async (req, res, next) => {
 	const { apartmentId } = req.params
@@ -69,6 +76,34 @@ export const getProductsOfSeller = async (req, res, next) => {
 		})
 
 		res.json(flatCategories)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getUserCart = async (req, res, next) => {
+	try {
+		const cart = await findCart(token.get(req))
+
+		res.json({ ...cart })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchUserCart = async (req, res, next) => {
+	const { sellerId, totalAmount, products } = req.body
+	try {
+		await updateCart({
+			userId: token.get(req),
+			sellerId,
+			totalAmount,
+			products
+		})
+
+		res.json({ message: 'cart updated' })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
