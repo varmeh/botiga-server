@@ -4,7 +4,8 @@ import { password, token, otp } from '../../../util'
 import {
 	createSeller,
 	findSellerByNumber,
-	updateSellerPin
+	updateSellerPin,
+	updateToken
 } from './seller.auth.dao'
 
 export const getOtp = async (req, res, next) => {
@@ -144,6 +145,17 @@ export const patchUserPin = async (req, res, next) => {
 		res.json({
 			message: 'pin updated'
 		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchPushToken = async (req, res, next) => {
+	try {
+		await updateToken(token.get(req), req.body.token)
+
+		res.json({ message: 'token updated' })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

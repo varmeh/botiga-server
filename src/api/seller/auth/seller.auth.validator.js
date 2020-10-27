@@ -34,3 +34,5 @@ export const postSignupValidator = [
 	emptyOptionalValidator('tagline'),
 	phoneValidator('phone')
 ]
+
+export const patchTokenRegisterValidator = [emptyValidator('token')]

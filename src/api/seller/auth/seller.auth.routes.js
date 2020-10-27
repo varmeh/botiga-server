@@ -5,7 +5,8 @@ import {
 	postOtpVerifyValidator,
 	postPinSigninValidator,
 	patchPinValidator,
-	postSignupValidator
+	postSignupValidator,
+	patchTokenRegisterValidator
 } from './seller.auth.validator'
 import {
 	getOtp,
@@ -13,7 +14,8 @@ import {
 	postSellerSignup,
 	postSellerLoginWithPin,
 	postSellerSignout,
-	patchUserPin
+	patchUserPin,
+	patchPushToken
 } from './seller.auth.controller'
 
 const router = Router()
@@ -46,6 +48,14 @@ router.patch(
 	patchPinValidator,
 	validationMiddleware,
 	patchUserPin
+)
+
+router.patch(
+	'/token',
+	token.authenticationMiddleware,
+	patchTokenRegisterValidator,
+	validationMiddleware,
+	patchPushToken
 )
 
 router.post('/signout', token.authenticationMiddleware, postSellerSignout)

@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { winston } from '../../../util'
+import { winston, notifications } from '../../../util'
 import { Seller } from '../../../models'
 
 export const createSeller = async ({
@@ -54,6 +54,26 @@ export const updateSellerPin = async (sellerId, pin) => {
 		return await seller.save()
 	} catch (error) {
 		winston.debug('@error updateSellerPin', { error, msg: error.message })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const updateToken = async (sellerId, token) => {
+	try {
+		const seller = await Seller.findById(sellerId)
+		seller.contact.pushToken = token
+		await seller.save()
+
+		// Register user to apartment topic for notifications
+		return seller.apartments.forEach(apartment => {
+			notifications.apartment.subscribe({
+				type: notifications.subscriberType.Sellers,
+				apartmentId: apartment._id,
+				userToken: token
+			})
+		})
+	} catch (error) {
+		winston.debug('@error updateToken', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
