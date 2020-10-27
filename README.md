@@ -9,6 +9,12 @@
 
 Set all env variables in `.env` file
 
+### Copy Firebase Service Key Json file to Server
+
+```
+scp -i ~/.ssh/id_rsa_botiga_devdrop /Users/varunmehta/Projects/botiga/botiga-dev-firebase-adminsdk-c1asw-9878b74cbb.json safeuser@167.71.227.118:/home/safeuser/.firesdk-dev-admin.json
+```
+
 ## Running the app
 
 ```bash
