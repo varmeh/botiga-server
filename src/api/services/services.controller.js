@@ -81,7 +81,7 @@ const awsPredefinedImageUrl = async (fileName, imageType, res, next) => {
 
 		res.status(201).json({
 			uploadUrl: data,
-			downloadUrl: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${fileName}`
+			downloadUrl: `https://s3.${AWS_REGION}.amazonaws.com/${AWS_BUCKET_NAME}/${fileName}`
 		})
 	} catch (error) {
 		const { status, message } = error
