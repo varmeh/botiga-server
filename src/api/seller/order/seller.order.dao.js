@@ -3,21 +3,46 @@ import moment from 'moment'
 import { Types } from 'mongoose'
 
 import { winston } from '../../../util'
-import { Order } from '../../../models'
+import { Order, OrderStatus } from '../../../models'
 
-export const findOrderForSeller = async (orderId, sellerId) => {
+export const updateOrder = async (
+	orderId,
+	sellerId,
+	status,
+	newDate = null
+) => {
 	try {
 		const order = await Order.findOne({
 			_id: orderId,
 			'seller.id': sellerId
 		})
+
 		if (!order) {
 			return Promise.reject(new CreateHttpError[404]('Order Not Found'))
 		}
 
-		return order
+		order.order.status = status
+
+		switch (status) {
+			case OrderStatus.cancelled:
+			case OrderStatus.delivered:
+				// Set completion date
+				order.order.completionDate = moment.utc().toDate()
+				break
+
+			case OrderStatus.delayed:
+				order.order.expectedDeliveryDate = moment
+					.utc(newDate, 'YYYY-MM-DD')
+					.endOf('day')
+					.toDate()
+				break
+
+			default:
+		}
+
+		return await order.save()
 	} catch (error) {
-		winston.debug('@error findOrderById', { error, msg: error.message })
+		winston.debug('@error updateOrder', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

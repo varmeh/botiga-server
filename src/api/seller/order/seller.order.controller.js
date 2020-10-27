@@ -1,9 +1,9 @@
 import CreateHttpError from 'http-errors'
-import moment from 'moment'
-import { token, paginationData, skipData } from '../../../util'
+import { token, paginationData, skipData, notifications } from '../../../util'
+import { OrderStatus } from '../../../models'
 
 import {
-	findOrderForSeller,
+	updateOrder,
 	findDeliveriesByApartment,
 	findOrdersByApartment,
 	findSellerAggregatedData
@@ -13,13 +13,19 @@ export const postCancelOrder = async (req, res, next) => {
 	const { orderId } = req.body
 
 	try {
-		const order = await findOrderForSeller(orderId, token.get(req))
+		const order = await updateOrder(
+			orderId,
+			token.get(req),
+			OrderStatus.cancelled
+		)
 
-		order.order.status = 'cancelled'
-		order.order.completionDate = moment.utc().toDate() // Reflects cancellation date
-		await order.save()
-
-		// TODO: notify user that order has been cancelled
+		if (!order.buyer.pushToken) {
+			notifications.sendToUser(
+				order.buyer.pushToken,
+				'Order Cancelled',
+				`Your order #${order.order.number} from ${order.seller.brandName} has been cancelled `
+			)
+		}
 
 		res.json({ message: 'cancelled', id: order._id })
 	} catch (error) {
@@ -32,17 +38,26 @@ export const patchDeliveryStatus = async (req, res, next) => {
 	const { orderId, status } = req.body
 
 	try {
-		const order = await findOrderForSeller(orderId, token.get(req))
+		const orderStatus =
+			status === 'out' ? OrderStatus.outForDelivery : OrderStatus.delivered
 
-		order.order.status = status
+		const order = await updateOrder(orderId, token.get(req), orderStatus)
 
-		if (order.order.status === 'delivered') {
-			// Set actual delivery date
-			order.order.completionDate = moment.utc().toDate()
+		if (!order.buyer.pushToken) {
+			if (orderStatus === OrderStatus.outForDelivery) {
+				notifications.sendToUser(
+					order.buyer.pushToken,
+					'Order in delivery',
+					`Your order #${order.order.number} from ${order.seller.brandName} is in delivery`
+				)
+			} else {
+				notifications.sendToUser(
+					order.buyer.pushToken,
+					'Order delivered',
+					`Your order #${order.order.number} from ${order.seller.brandName} has been delivered`
+				)
+			}
 		}
-		await order.save()
-
-		// TODO: notify user that change in order status
 
 		res.json({ message: status, id: order._id })
 	} catch (error) {
@@ -55,16 +70,18 @@ export const patchDeliveryDelay = async (req, res, next) => {
 	const { orderId, newDate } = req.body
 
 	try {
-		const order = await findOrderForSeller(orderId, token.get(req))
+		const order = await updateOrder(
+			orderId,
+			token.get(req),
+			OrderStatus.delayed,
+			newDate
+		)
 
-		order.order.status = 'delayed'
-		order.order.expectedDeliveryDate = moment
-			.utc(newDate, 'YYYY-MM-DD')
-			.endOf('day')
-			.toDate()
-		await order.save()
-
-		// TODO: notify user that change in order status
+		notifications.sendToUser(
+			order.buyer.pushToken,
+			'Order delayed',
+			`Your order #${order.order.number} from ${order.seller.brandName} has been delayed to ${newDate}`
+		)
 
 		res.json({ message: `delivery date changed to ${newDate}`, id: order._id })
 	} catch (error) {

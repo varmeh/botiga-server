@@ -2,6 +2,14 @@ import { Schema, model } from 'mongoose'
 import chance from 'chance'
 import moment from 'moment'
 
+export const OrderStatus = {
+	open: 'open',
+	outForDelivery: 'out',
+	delayed: 'delayed',
+	delivered: 'delivered',
+	cancelled: 'cancelled'
+}
+
 const orderSchema = new Schema(
 	{
 		apartment: {
@@ -56,8 +64,14 @@ const orderSchema = new Schema(
 			},
 			status: {
 				type: String,
-				enum: ['open', 'out', 'delayed', 'delivered', 'cancelled'],
-				default: 'open',
+				enum: [
+					OrderStatus.open,
+					OrderStatus.outForDelivery,
+					OrderStatus.delayed,
+					OrderStatus.delivered,
+					OrderStatus.cancelled
+				],
+				default: OrderStatus.open,
 				required: true
 			},
 			totalAmount: {
