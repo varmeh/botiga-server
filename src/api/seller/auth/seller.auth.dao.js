@@ -66,12 +66,14 @@ export const updateToken = async (sellerId, token) => {
 			seller.contact.pushTokens.push(token)
 			await seller.save()
 
-			// Register user to apartment topic for notifications
-			notifications.apartment.subscribe({
-				type: notifications.subscriberType.Sellers,
-				apartmentId: seller.contact.address.aptId,
-				userToken: token
-			})
+			// Register new token to all seller apartment topics for notifications
+			seller.apartments.forEach(apartment =>
+				notifications.apartment.subscribe({
+					type: notifications.subscriberType.Sellers,
+					apartmentId: apartment._id,
+					userToken: token
+				})
+			)
 		}
 		return seller
 	} catch (error) {
