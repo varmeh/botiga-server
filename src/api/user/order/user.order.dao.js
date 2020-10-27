@@ -1,6 +1,7 @@
 import CreateHttpError from 'http-errors'
+import moment from 'moment'
 import { winston } from '../../../util'
-import { Order, Seller, User } from '../../../models'
+import { Order, Seller, User, OrderStatus } from '../../../models'
 
 export const createOrder = async ({
 	userId,
@@ -82,16 +83,22 @@ export const findCategoryProducts = async sellerId => {
 	}
 }
 
-export const findOrderForUser = async (orderId, userId) => {
+export const updateOrder = async (orderId, userId, status) => {
 	try {
 		const order = await Order.findOne({ _id: orderId, 'buyer.id': userId })
 		if (!order) {
 			return Promise.reject(new CreateHttpError[404]('Order Not Found'))
 		}
 
+		order.order.status = status
+
+		if (status === OrderStatus.cancelled) {
+			order.order.completionDate = moment.utc().toDate()
+		}
+
 		return order
 	} catch (error) {
-		winston.debug('@error findOrder', { error, msg: error.message })
+		winston.debug('@error updateOrder', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
