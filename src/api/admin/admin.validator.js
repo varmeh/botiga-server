@@ -3,7 +3,8 @@ import {
 	addressValidator,
 	pincodeValidator,
 	decimalValidator,
-	regexAlphaSpaceDigitsValidator
+	regexAlphaSpaceDigitsValidator,
+	objectIdValidator
 } from '../../util'
 
 export const apartmentValidator = [
@@ -17,3 +18,15 @@ export const apartmentValidator = [
 ]
 
 export const postBusinessCategoryValidator = [emptyValidator('category')]
+
+export const postNotificationUserValidator = [
+	objectIdValidator('userId'),
+	emptyValidator('title'),
+	emptyValidator('content')
+]
+
+export const postNotificationApartmentValidator = [
+	objectIdValidator('apartmentId'),
+	emptyValidator('title'),
+	emptyValidator('content')
+]
