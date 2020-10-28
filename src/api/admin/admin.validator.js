@@ -1,4 +1,5 @@
 import {
+	emptyValidator,
 	addressValidator,
 	pincodeValidator,
 	decimalValidator,
@@ -14,3 +15,5 @@ export const apartmentValidator = [
 	decimalValidator('location.lat'),
 	decimalValidator('location.long')
 ]
+
+export const postBusinessCategoryValidator = [emptyValidator('category')]

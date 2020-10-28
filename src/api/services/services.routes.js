@@ -9,7 +9,8 @@ import {
 	getAreasForCity,
 	getImageUrl,
 	getBrandImageUrl,
-	getApartmentsSearch
+	getApartmentsSearch,
+	getBusinessCategory
 } from './services.controller'
 
 const router = Router()
@@ -23,6 +24,8 @@ router.get('/apartments/search', getApartmentsSearch)
 router.get('/cities', getCities)
 
 router.get('/areas/:city', getAreasForCity)
+
+router.get('/businessCategory', getBusinessCategory)
 
 router.get(
 	'/imageurls/:imageType',

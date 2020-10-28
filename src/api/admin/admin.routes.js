@@ -1,7 +1,10 @@
 import { Router } from 'express'
 import { validationMiddleware } from '../../util'
-import { postApartment } from './admin.controller'
-import { apartmentValidator } from './admin.validator'
+import {
+	apartmentValidator,
+	postBusinessCategoryValidator
+} from './admin.validator'
+import { postApartment, postBusinessCategory } from './admin.controller'
 
 const router = Router()
 
@@ -12,4 +15,10 @@ router.post(
 	postApartment
 )
 
+router.post(
+	'/businessCategory',
+	postBusinessCategoryValidator,
+	validationMiddleware,
+	postBusinessCategory
+)
 export default router
