@@ -49,12 +49,7 @@ export const regexAlphaSpaceDigitsValidator = field =>
 		.withMessage(validationMessages.regexAlphaSpaceDigits)
 
 export const arrayValidator = field =>
-	body(field)
-		.notEmpty()
-		.withMessage(validationMessages.empty)
-		.bail()
-		.isArray()
-		.withMessage(validationMessages.array)
+	body(field).isArray().withMessage(validationMessages.array)
 
 export const objectIdValidator = field =>
 	emptyValidator(field)
