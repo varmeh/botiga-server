@@ -3,7 +3,7 @@ import { validationMessages } from './validationMessages'
 
 export const emptyOptionalValidator = field =>
 	body(field)
-		.optional()
+		.optional({ nullable: true, checkFalsy: true })
 		.trim()
 		.notEmpty()
 		.withMessage(validationMessages.empty)
