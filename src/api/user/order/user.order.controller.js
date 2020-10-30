@@ -11,21 +11,15 @@ import {
 } from './user.order.dao'
 
 export const postOrder = async (req, res, next) => {
-	const {
-		sellerId,
-		apartmentContact: { phone, whatsapp, email },
-		deliveryDate,
-		totalAmount,
-		products
-	} = req.body
+	const { sellerId, apartmentId, house, totalAmount, products } = req.body
 
 	try {
 		// Verify Seller Id
 		const order = await createOrder({
 			userId: token.get(req),
 			sellerId,
-			deliveryDate,
-			sellerContact: { phone, whatsapp, email },
+			apartmentId,
+			house,
 			totalAmount,
 			products
 		})

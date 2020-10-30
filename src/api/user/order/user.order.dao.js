@@ -1,13 +1,13 @@
 import CreateHttpError from 'http-errors'
 import moment from 'moment'
 import { winston } from '../../../util'
-import { Order, Seller, User, OrderStatus } from '../../../models'
+import { Order, Seller, User, Apartment, OrderStatus } from '../../../models'
 
 export const createOrder = async ({
 	userId,
 	sellerId,
-	deliveryDate,
-	sellerContact, // has phone, email & whatsapp of apartment manager
+	house,
+	apartmentId,
 	totalAmount,
 	products
 }) => {
@@ -17,42 +17,44 @@ export const createOrder = async ({
 			return Promise.reject(new CreateHttpError[404]('User Not Found'))
 		}
 
-		const seller = await Seller.findById(sellerId)
+		const apartment = await Apartment.findById(apartmentId)
+		if (!apartment) {
+			return Promise.reject(new CreateHttpError[404]('Apartment Not Found'))
+		}
+
+		const seller = apartment.sellers.id(sellerId)
 		if (!seller) {
 			return Promise.reject(new CreateHttpError[404]('Seller Not Found'))
 		}
-
-		const { phone, whatsapp, email, address } = user.contact
-
 		const order = new Order({
 			apartment: {
-				id: address[0].aptId,
-				aptName: address[0].aptName,
-				area: address[0].area,
-				city: address[0].city,
-				state: address[0].state,
-				pincode: address[0].pincode
+				id: apartment._id,
+				aptName: apartment.name,
+				area: apartment.area,
+				city: apartment.city,
+				state: apartment.state,
+				pincode: apartment.pincode
 			},
 			buyer: {
 				id: userId,
 				name: user.name,
-				house: address[0].house,
-				phone,
-				whatsapp,
-				email
+				house,
+				phone: user.contact.phone,
+				whatsapp: user.contact.whatsapp,
+				email: user.contact.email
 			},
 			seller: {
 				// seller contact information would be specific to user
 				id: sellerId,
-				brandName: seller.brand.name,
-				phone: sellerContact.phone,
-				whatsapp: sellerContact.whatsapp,
-				email: sellerContact.email
+				brandName: seller.brandName,
+				phone: seller.contact.phone,
+				whatsapp: seller.contact.whatsapp,
+				email: seller.contact.email
 			},
 			order: {
 				status: 'open',
 				totalAmount,
-				expectedDeliveryDate: deliveryDate,
+				expectedDeliveryDate: seller.deliveryDate,
 				products
 			}
 		})

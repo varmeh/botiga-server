@@ -1,22 +1,18 @@
 import {
 	emptyValidator,
-	phoneValidator,
-	emptyOptionalValidator,
 	decimalValidator,
 	numberValidator,
 	arrayValidator,
 	objectIdValidator,
-	dateValidator,
-	queryNumberValidator
+	queryNumberValidator,
+	addressValidator
 } from '../../../util'
 
 export const postOrderValidator = [
 	objectIdValidator('sellerId'),
-	phoneValidator('apartmentContact.phone'),
-	phoneValidator('apartmentContact.whatsapp'),
-	emptyOptionalValidator('apartmentContact.email'),
+	objectIdValidator('apartmentId'),
+	addressValidator('house'),
 	decimalValidator('totalAmount'),
-	dateValidator('deliveryDate'),
 	arrayValidator('products'),
 	emptyValidator('products.*.name'),
 	decimalValidator('products.*.price'),
