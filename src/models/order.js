@@ -78,7 +78,7 @@ const orderSchema = new Schema(
 			},
 			orderDate: {
 				type: Date,
-				default: moment.utc().toDate()
+				default: moment().toDate()
 			},
 			expectedDeliveryDate: {
 				type: Date,

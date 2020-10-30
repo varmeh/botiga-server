@@ -27,12 +27,11 @@ export const updateOrder = async (
 			case OrderStatus.cancelled:
 			case OrderStatus.delivered:
 				// Set completion date
-				order.order.completionDate = moment.utc().toDate()
+				order.order.completionDate = moment().toDate()
 				break
 
 			case OrderStatus.delayed:
-				order.order.expectedDeliveryDate = moment
-					.utc(newDate, 'YYYY-MM-DD')
+				order.order.expectedDeliveryDate = moment(newDate, 'YYYY-MM-DD')
 					.endOf('day')
 					.toDate()
 				break
@@ -55,12 +54,12 @@ export const findDeliveriesByApartment = async ({
 	limit
 }) => {
 	try {
-		const date = moment.utc(dateString, 'YYYY-MM-DD').startOf('day')
+		const date = moment(dateString, 'YYYY-MM-DD').startOf('day')
 
 		const query = {
 			'order.expectedDeliveryDate': {
 				$gte: date.toDate(),
-				$lte: moment.utc(date).endOf('day').toDate()
+				$lte: moment(date).endOf('day').toDate()
 			},
 			'seller.id': sellerId,
 			'apartment.id': apartmentId
@@ -94,12 +93,12 @@ export const findOrdersByApartment = async ({
 	limit
 }) => {
 	try {
-		const date = moment.utc(dateString, 'YYYY-MM-DD').startOf('day')
+		const date = moment(dateString, 'YYYY-MM-DD').startOf('day')
 
 		const query = {
 			'order.orderDate': {
 				$gte: date.toDate(),
-				$lte: moment.utc(date).endOf('day').toDate()
+				$lte: moment(date).endOf('day').toDate()
 			},
 			'seller.id': sellerId,
 			'apartment.id': apartmentId
@@ -124,14 +123,14 @@ export const findOrdersByApartment = async ({
 /* Date String expected in ISO 8601 format - YYYY-MM-YY */
 export const findSellerAggregatedData = async (sellerId, dateString) => {
 	try {
-		const date = moment.utc(dateString, 'YYYY-MM-DD').startOf('day')
+		const date = moment(dateString, 'YYYY-MM-DD').startOf('day')
 
 		const data = await Order.aggregate([
 			{
 				$match: {
 					'order.orderDate': {
 						$gte: date.toDate(),
-						$lte: moment.utc(date).endOf('day').toDate()
+						$lte: moment(date).endOf('day').toDate()
 					},
 					'seller.id': Types.ObjectId(sellerId)
 				}
