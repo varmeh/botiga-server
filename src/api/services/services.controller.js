@@ -79,35 +79,26 @@ export const getBusinessCategory = async (_, res, next) => {
 	}
 }
 
-const awsPredefinedImageUrl = async (fileName, imageType, res, next) => {
-	const { AWS_BUCKET_NAME, AWS_REGION } = process.env
+export const getImageUrl = async (req, res, next) => {
 	try {
-		const data = await aws.s3.getSignedUrlPromise('putObject', {
-			Bucket: AWS_BUCKET_NAME,
-			Key: fileName,
-			Expires: 10 * 60,
-			ContentType: `image/${imageType}`,
-			ACL: 'public-read'
-		})
-
-		res.status(201).json({
-			uploadUrl: data,
-			downloadUrl: `https://s3.${AWS_REGION}.amazonaws.com/${AWS_BUCKET_NAME}/${fileName}`
-		})
+		const { imageType } = req.params
+		const fileName = `${token.get(req)}_${nanoid(6)}.${imageType}`
+		const data = await aws.s3.getPredefinedImageUrl(fileName, imageType)
+		res.status(201).json(data)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
 	}
 }
 
-export const getImageUrl = async (req, res, next) => {
-	const { imageType } = req.params
-	const fileName = `${token.get(req)}_${nanoid(6)}.${imageType}`
-	await awsPredefinedImageUrl(fileName, imageType, res, next)
-}
-
 export const getBrandImageUrl = async (req, res, next) => {
-	const { imageType } = req.params
-	const fileName = `${nanoid()}.${imageType}`
-	await awsPredefinedImageUrl(fileName, imageType, res, next)
+	try {
+		const { imageType } = req.params
+		const fileName = `${nanoid()}.${imageType}`
+		const data = await aws.s3.getPredefinedImageUrl(fileName, imageType)
+		res.status(201).json(data)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
 }
