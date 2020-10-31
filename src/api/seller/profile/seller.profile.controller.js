@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 
-import { token } from '../../../util'
+import { token, aws, winston } from '../../../util'
 import {
 	findSeller,
 	updateContactInformation,
@@ -81,13 +81,31 @@ export const getBusinessInformation = async (req, res, next) => {
 
 /* Could be expanded to accomodate update of other business information */
 export const patchBusinessInformation = async (req, res, next) => {
-	const { brandName, tagline, imageUrl } = req.body
+	const { brandName, tagline, imageUrl, updateImage } = req.body
 	try {
-		const contact = await updateBusinessInformation(token.get(req), {
-			brandName,
-			tagline,
-			imageUrl
-		})
+		const [oldImageUrl, contact] = await updateBusinessInformation(
+			token.get(req),
+			{
+				brandName,
+				tagline,
+				imageUrl,
+				updateImage
+			}
+		)
+
+		if (updateImage) {
+			// User have uploaded a new image
+			// Delete the old image from s3 bucket
+			try {
+				await aws.s3.deleteImageUrl(oldImageUrl)
+			} catch (error) {
+				winston.error('@error patchBusinessInformation', {
+					error: error.message,
+					msg: 'old image deletion failed',
+					oldImageUrl
+				})
+			}
+		}
 
 		res.json(contact)
 	} catch (error) {

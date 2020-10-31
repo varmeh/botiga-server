@@ -43,16 +43,21 @@ export const updateContactInformation = async (
 
 export const updateBusinessInformation = async (
 	sellerId,
-	{ brandName, tagline, imageUrl }
+	{ brandName, tagline, imageUrl, updateImage }
 ) => {
 	try {
 		const seller = await Seller.findById(sellerId)
 
 		const { brand } = seller
 
+		const oldImageUrl = brand.imageUrl
+
 		brand.name = !brandName ? brand.name : brandName
 		brand.tagline = !tagline ? brand.tagline : tagline
-		brand.imageUrl = !imageUrl ? brand.imageUrl : imageUrl
+
+		if (updateImage) {
+			brand.imageUrl = imageUrl
+		}
 
 		/* Brand info needs to be updated in all apartments serviced by seller */
 
@@ -70,7 +75,7 @@ export const updateBusinessInformation = async (
 		}
 
 		const updatedSeller = await seller.save()
-		return updatedSeller.brand
+		return [oldImageUrl, updatedSeller.brand]
 	} catch (error) {
 		winston.debug('@error updateBusinessInformation', { error })
 		return Promise.reject(new CreateHttpError[500]())

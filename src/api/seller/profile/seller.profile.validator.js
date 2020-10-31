@@ -4,7 +4,9 @@ import {
 	addressOptionalValidator,
 	regexAlphaSpaceDigitsOptionalValidator,
 	pincodeOptionalValidator,
-	emailOptionalValidator
+	emailOptionalValidator,
+	emptyValidator,
+	boolValidator
 } from '../../../util'
 
 export const patchContactValidator = [
@@ -20,9 +22,10 @@ export const patchContactValidator = [
 ]
 
 export const patchBusinessValidator = [
-	emptyOptionalValidator('brandName'),
-	emptyOptionalValidator('tagline'),
-	emptyOptionalValidator('imageUrl').isURL({
+	emptyValidator('brandName'),
+	emptyValidator('tagline'),
+	emptyValidator('imageUrl').isURL({
 		protocols: ['https']
-	})
+	}),
+	boolValidator('updateImage')
 ]
