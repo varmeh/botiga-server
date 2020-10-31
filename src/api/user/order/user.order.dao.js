@@ -96,7 +96,7 @@ export const updateOrder = async (orderId, userId, status) => {
 			order.order.completionDate = moment.utc().toDate()
 		}
 
-		return order
+		return order.save()
 	} catch (error) {
 		winston.debug('@error updateOrder', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
