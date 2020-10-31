@@ -93,7 +93,7 @@ export const updateOrder = async (orderId, userId, status) => {
 		order.order.status = status
 
 		if (status === OrderStatus.cancelled) {
-			order.order.completionDate = moment.utc().toDate()
+			order.order.completionDate = moment().toDate()
 		}
 
 		return order.save()
