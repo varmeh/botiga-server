@@ -125,12 +125,13 @@ export const updateProduct = async ({
 	name,
 	description,
 	price,
-	size = {},
+	quantity,
+	unit,
 	imageUrl,
-	available
+	available,
+	updateImage
 }) => {
 	try {
-		const { quantity, unit } = size
 		const { seller, product } = await findProductHelper(
 			sellerId,
 			categoryId,
@@ -139,18 +140,22 @@ export const updateProduct = async ({
 
 		const oldImageUrl = product.imageUrl
 
+		const isNameUpdate = product.name !== name
+
 		// Update Product Information
-		product.name = !name ? product.name : name
-		product.description = !description ? product.description : description
-		product.price = !price ? product.price : price
-		product.size.quantity = !quantity ? product.size.quantity : quantity
-		product.size.unit = !unit ? product.size.unit : unit
-		product.imageUrl = !imageUrl ? product.imageUrl : imageUrl
-		product.available = !available ? product.available : available
+		product.name = name
+		product.description = description
+		product.price = price
+		product.size.quantity = quantity
+		product.size.unit = unit
+		if (updateImage) {
+			product.imageUrl = imageUrl
+		}
+		product.available = available
 
 		const updatedSeller = await seller.save()
 
-		if (!name) {
+		if (isNameUpdate) {
 			// As product name is updated, sort the products in category
 			await sortProducts(sellerId, categoryId)
 		}

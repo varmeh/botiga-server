@@ -7,8 +7,7 @@ import {
 	paramEmptyValidator,
 	emptyOptionalValidator,
 	regexAlphaSpaceDigitsOptionalValidator,
-	decimalOptionalValidator,
-	numberOptionalValidator,
+	boolValidator,
 	paramObjectIdValidator
 } from '../../../util'
 
@@ -35,19 +34,18 @@ export const getImageUrlValidator = [
 export const patchProductValidator = [
 	objectIdValidator('productId'),
 	objectIdValidator('categoryId'),
-	regexAlphaSpaceDigitsOptionalValidator('name'),
-	decimalOptionalValidator('price'),
-	numberOptionalValidator('size.quantity'),
-	emptyOptionalValidator('size.unit')
+	regexAlphaSpaceDigitsValidator('name'),
+	decimalValidator('price'),
+	numberValidator('quantity'),
+	emptyValidator('unit')
 		.matches(/^(gms|kg|ml|lt|piece|pieces)$/, 'i')
 		.withMessage(
 			'should be either of following - gms, kg, ml, lt, piece & pieces'
 		),
-	emptyOptionalValidator('available')
-		.matches(/^(true|false)$/)
-		.withMessage('should be a either true or false'),
+	boolValidator('available'),
 	regexAlphaSpaceDigitsOptionalValidator('description'),
-	emptyOptionalValidator('imageUrl')
+	emptyOptionalValidator('imageUrl'),
+	boolValidator('updateImage')
 ]
 
 export const deleteProductValidator = [

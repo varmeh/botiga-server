@@ -62,3 +62,10 @@ export const dateValidator = field =>
 			? true
 			: Promise.reject(validationMessages.date)
 	)
+
+export const boolValidator = field =>
+	emptyValidator(field)
+		.isBoolean()
+		.withMessage(validationMessages.bool)
+		.bail()
+		.toBoolean(true)

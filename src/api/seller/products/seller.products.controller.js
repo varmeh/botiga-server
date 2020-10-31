@@ -82,9 +82,11 @@ export const patchProduct = async (req, res, next) => {
 		name,
 		description,
 		price,
-		size,
+		quantity,
+		unit,
 		available,
-		imageUrl
+		imageUrl,
+		updateImage
 	} = req.body
 	try {
 		const [updatedProduct, oldImageUrl] = await updateProduct({
@@ -94,20 +96,30 @@ export const patchProduct = async (req, res, next) => {
 			name,
 			description,
 			price,
-			size,
+			quantity,
+			unit,
 			available,
-			imageUrl
+			imageUrl,
+			updateImage
 		})
 
-		if (updatedProduct.imageUrl !== oldImageUrl) {
+		if (updateImage) {
 			// User have uploaded a new image
 			// Delete the old image from s3 bucket
-			const arr = oldImageUrl.split('/')
-			const data = await aws.s3.deleteObject({
-				Bucket: process.env.AWS_BUCKET_NAME,
-				Key: arr[arr.length - 1]
-			})
-			winston.debug('@aws delete image', { data })
+			try {
+				const arr = oldImageUrl.split('/')
+				const data = await aws.s3.deleteObject({
+					Bucket: process.env.AWS_BUCKET_NAME,
+					Key: arr[arr.length - 1]
+				})
+				winston.debug('@aws delete image', { data })
+			} catch (error) {
+				winston.error('@error updateProduct', {
+					error: error.message,
+					msg: 'old image deletion failed',
+					oldImageUrl
+				})
+			}
 		}
 
 		res.json({

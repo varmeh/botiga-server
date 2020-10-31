@@ -12,5 +12,6 @@ export const validationMessages = {
 	email: 'should be a valid email Id',
 	array: 'should be an array',
 	date: 'should be a Valid date in format - YYYY-MM-DD',
-	url: 'should be a valid url with https protocol'
+	url: 'should be a valid url with https protocol',
+	bool: 'should be either true or false'
 }
