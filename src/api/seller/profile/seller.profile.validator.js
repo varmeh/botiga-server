@@ -1,5 +1,4 @@
 import {
-	emptyOptionalValidator,
 	phoneOptionalValidator,
 	addressOptionalValidator,
 	regexAlphaSpaceDigitsOptionalValidator,
