@@ -1,6 +1,5 @@
 import CreateHttpError from 'http-errors'
-import moment from 'moment'
-import { winston } from '../../../util'
+import { winston, moment } from '../../../util'
 import { Order, Seller, User, Apartment, OrderStatus } from '../../../models'
 
 export const createOrder = async ({

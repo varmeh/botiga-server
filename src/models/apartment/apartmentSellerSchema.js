@@ -1,5 +1,5 @@
-import moment from 'moment'
 import { Schema } from 'mongoose'
+import { moment } from '../../util'
 
 export const apartmentSellerSchema = new Schema({
 	_id: { type: Schema.Types.ObjectId, ref: 'seller' },

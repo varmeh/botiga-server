@@ -1,8 +1,7 @@
 import CreateHttpError from 'http-errors'
-import moment from 'moment'
 import { Types } from 'mongoose'
 
-import { winston } from '../../../util'
+import { winston, moment } from '../../../util'
 import { Order, OrderStatus } from '../../../models'
 
 export const updateOrder = async (
