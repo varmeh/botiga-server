@@ -108,11 +108,16 @@ export const getDeliveryByApartment = async (req, res, next) => {
 		})
 
 		const deliveryData = deliveries.map(delivery => {
-			const { buyer, order, _id } = delivery
+			const { buyer, order, _id, createdAt } = delivery
+			delete order.$init
+
 			return {
 				id: _id,
 				buyer,
-				order
+				order: {
+					orderDate: createdAt,
+					...order
+				}
 			}
 		})
 		res.json({
