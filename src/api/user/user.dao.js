@@ -1,16 +1,32 @@
 import CreateHttpError from 'http-errors'
+import { Types } from 'mongoose'
+
 import { winston } from '../../util'
 import { Apartment, Seller, User } from '../../models'
 
 export const findSellersInApartment = async apartmentId => {
 	try {
-		const apartment = await Apartment.findById(apartmentId)
+		const data = await Apartment.aggregate([
+			{
+				$match: {
+					_id: Types.ObjectId(apartmentId)
+				}
+			},
+			{
+				$project: { sellers: 1, _id: 0 }
+			},
+			{
+				$unwind: '$sellers'
+			},
+			{
+				$replaceWith: '$sellers'
+			},
+			{
+				$sort: { live: -1, brandName: 1 }
+			}
+		])
 
-		if (!apartment) {
-			return Promise.reject(new CreateHttpError[404]('Apartment Not Found'))
-		}
-
-		return apartment.sellers
+		return data
 	} catch (error) {
 		winston.debug('@error findSellersInApartment', { error })
 		return Promise.reject(new CreateHttpError[500]())
