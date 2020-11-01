@@ -139,11 +139,17 @@ export const getOrdersByApartmentDate = async (req, res, next) => {
 			limit
 		})
 
-		const orderData = orders.map(order => ({
-			id: order._id,
-			buyer: order.buyer,
-			order: order.order
-		}))
+		const orderData = orders.map(order => {
+			delete order.order.$init
+			return {
+				id: order._id,
+				buyer: order.buyer,
+				order: {
+					orderDate: order.createdAt,
+					...order.order
+				}
+			}
+		})
 
 		res.json({
 			...paginationData({ limit, totalOrders, currentPage: page }),

@@ -103,7 +103,7 @@ export const findOrdersByApartment = async ({
 			'apartment.id': apartmentId
 		}
 
-		const orders = await Order.find(query, { buyer: 1, order: 1 })
+		const orders = await Order.find(query, { buyer: 1, order: 1, createdAt: 1 })
 			.sort({
 				createdAt: -1
 			})
