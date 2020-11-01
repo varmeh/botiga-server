@@ -1,6 +1,5 @@
 import { Schema, model } from 'mongoose'
 import chance from 'chance'
-import { moment } from '../util'
 
 export const OrderStatus = {
 	open: 'open',
