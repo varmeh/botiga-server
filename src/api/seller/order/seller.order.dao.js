@@ -95,7 +95,7 @@ export const findOrdersByApartment = async ({
 		const date = moment(dateString, 'YYYY-MM-DD').startOf('day')
 
 		const query = {
-			'order.orderDate': {
+			createdAt: {
 				$gte: date.toDate(),
 				$lte: moment(date).endOf('day').toDate()
 			},
@@ -127,7 +127,7 @@ export const findSellerAggregatedData = async (sellerId, dateString) => {
 		const data = await Order.aggregate([
 			{
 				$match: {
-					'order.orderDate': {
+					createdAt: {
 						$gte: date.toDate(),
 						$lte: moment(date).endOf('day').toDate()
 					},

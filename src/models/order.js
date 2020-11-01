@@ -76,10 +76,10 @@ const orderSchema = new Schema(
 				type: Number,
 				required: true
 			},
-			orderDate: {
-				type: Date,
-				default: moment().toDate()
-			},
+			// orderDate: {
+			// 	type: Date,
+			// 	default: moment().toDate()
+			// },
 			expectedDeliveryDate: {
 				type: Date,
 				required: true
