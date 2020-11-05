@@ -1,7 +1,13 @@
 import CreateHttpError from 'http-errors'
-import { OrderStatus, Seller } from '../../../models'
+import { OrderStatus, Seller, User } from '../../../models'
 
-import { token, paginationData, skipData, notifications } from '../../../util'
+import {
+	token,
+	paginationData,
+	skipData,
+	notifications,
+	payments
+} from '../../../util'
 
 import {
 	createOrder,
@@ -142,6 +148,27 @@ export const getOrders = async (req, res, next) => {
 		})
 	} catch (error) {
 		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+/**
+ * Transaction APIs
+ * 	- initiateTransaction
+ */
+
+export const postInitiateTransaction = async (req, res, next) => {
+	try {
+		const { txnAmount, orderNumber } = req.body
+		const user = await User.findById(token.get(req))
+		const txnToken = await payments.initiateTransaction({
+			txnAmount,
+			orderNumber,
+			customerId: `${user.lastName}_${user.contact.phone.substr(-6, 6)}`
+		})
+
+		res.json({ txnToken })
+	} catch ({ status, message }) {
 		next(new CreateHttpError(status, message))
 	}
 }

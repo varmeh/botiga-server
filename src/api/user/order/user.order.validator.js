@@ -33,3 +33,8 @@ export const getOrdersValidator = [
 	queryNumberValidator('limit'),
 	queryNumberValidator('page')
 ]
+
+export const postTxnInitiateValidator = [
+	decimalValidator('txnAmount'),
+	emptyValidator('orderNumber')
+]

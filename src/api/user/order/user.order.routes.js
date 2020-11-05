@@ -6,14 +6,16 @@ import {
 	postOrderValidator,
 	postProductsValidator,
 	postCancelOrderValidator,
-	getOrdersValidator
+	getOrdersValidator,
+	postTxnInitiateValidator
 } from './user.order.validator'
 
 import {
 	postOrder,
 	postProductsValidate,
 	postCancelOrder,
-	getOrders
+	getOrders,
+	postInitiateTransaction
 } from './user.order.controller'
 
 const router = Router()
@@ -48,6 +50,14 @@ router.get(
 	getOrdersValidator,
 	validationMiddleware,
 	getOrders
+)
+
+router.post(
+	'/transaction/initiate',
+	token.authenticationMiddleware,
+	postTxnInitiateValidator,
+	validationMiddleware,
+	postInitiateTransaction
 )
 
 export default router
