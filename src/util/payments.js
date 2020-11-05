@@ -15,7 +15,7 @@ const initiateTransaction = async ({ txnAmount, orderNumber, customerId }) => {
 				mid: PAYTM_MID,
 				orderId: orderNumber,
 				websiteName: PAYTM_WEBSITE,
-				callbackUrl: `${PAYTM_HOST}/theia/api/v1/paytm/callback?orderId=${orderNumber}`,
+				// callbackUrl: `${PAYTM_HOST}/theia/api/v1/paytm/callback?orderId=${orderNumber}`,
 				txnAmount: {
 					value: txnAmount,
 					currency: 'INR'
@@ -56,7 +56,7 @@ const initiateTransaction = async ({ txnAmount, orderNumber, customerId }) => {
 			})
 			throw new Error('Paytm Gateway Down. Please try again')
 		}
-		return { txnToken: body.txnToken, callbackUrl: paytmData.body.callbackUrl }
+		return { txnToken: body.txnToken }
 	} catch (error) {
 		winston.debug('@payment initiate transaction failed', {
 			error,
