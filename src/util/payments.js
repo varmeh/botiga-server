@@ -54,7 +54,7 @@ const initiateTransaction = async ({ txnAmount, orderNumber, customerId }) => {
 			winston.debug('@paytm initiate transaction failed', {
 				error: body.resultInfo
 			})
-			throw Error(body.resultInfo.resultMsg)
+			throw new Error('Paytm Gateway Down. Please try again')
 		}
 		return body.txnToken
 	} catch (error) {
