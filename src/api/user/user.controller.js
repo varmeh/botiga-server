@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 
 import { token } from '../../util'
-
+import { apartmentVirtuals } from '../../models'
 import {
 	findSellersInApartment,
 	findProductsBySeller,
@@ -24,8 +24,7 @@ export const getSellersInApartment = async (req, res, next) => {
 				businessCategory,
 				brandImageUrl,
 				tagline,
-				deliveryMessage,
-				deliveryDate
+				delivery: { type, day }
 			} = seller
 
 			return {
@@ -37,8 +36,8 @@ export const getSellersInApartment = async (req, res, next) => {
 				tagline,
 				phone,
 				whatsapp,
-				deliveryMessage,
-				deliveryDate
+				deliveryMessage: apartmentVirtuals.deliveryMessage(type, day),
+				deliveryDate: apartmentVirtuals.deliveryDate(type, day)
 			}
 		})
 

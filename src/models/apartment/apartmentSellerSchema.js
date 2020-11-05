@@ -36,17 +36,7 @@ export const apartmentSellerSchema = new Schema({
 	}
 })
 
-apartmentSellerSchema.virtual('deliveryMessage').get(function () {
-	const { type, day } = this.delivery
-	return type === 'duration'
-		? `Delivers in ${day} day${day > 1 ? 's' : ''}`
-		: `Delivers Every ${moment()
-				.day(day - 1)
-				.format('dddd')}`
-})
-
-apartmentSellerSchema.virtual('deliveryDate').get(function () {
-	const { type, day } = this.delivery
+const deliveryDate = (type, day) => {
 	let deliveryDate
 	if (type === 'duration') {
 		deliveryDate = moment().endOf('day').add(day, 'd')
@@ -64,4 +54,24 @@ apartmentSellerSchema.virtual('deliveryDate').get(function () {
 				: deliveryDateOfThisWeek.add(1, 'weeks') // give next week delivery date
 	}
 	return deliveryDate.format('YYYY-MM-DD')
+}
+
+apartmentSellerSchema.virtual('deliveryDate').get(function () {
+	const { type, day } = this.delivery
+	return deliveryDate(type, day)
 })
+
+const deliveryMessage = (type, day) => {
+	return type === 'duration'
+		? `Delivers in ${day} day${day > 1 ? 's' : ''}`
+		: `Delivers Every ${moment()
+				.day(day - 1)
+				.format('dddd')}`
+}
+
+apartmentSellerSchema.virtual('deliveryMessage').get(function () {
+	const { type, day } = this.delivery
+	return deliveryMessage(type, day)
+})
+
+export const apartmentVirtuals = { deliveryMessage, deliveryDate }
