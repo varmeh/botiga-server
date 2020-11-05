@@ -161,13 +161,13 @@ export const postInitiateTransaction = async (req, res, next) => {
 	try {
 		const { txnAmount, orderNumber } = req.body
 		const user = await User.findById(token.get(req))
-		const txnToken = await payments.initiateTransaction({
+		const data = await payments.initiateTransaction({
 			txnAmount,
 			orderNumber,
 			customerId: `${user.lastName}_${user.contact.phone.substr(-6, 6)}`
 		})
 
-		res.json({ txnToken })
+		res.json(data)
 	} catch ({ status, message }) {
 		next(new CreateHttpError(status, message))
 	}
