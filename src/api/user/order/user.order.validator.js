@@ -34,7 +34,4 @@ export const getOrdersValidator = [
 	queryNumberValidator('page')
 ]
 
-export const postTxnInitiateValidator = [
-	decimalValidator('txnAmount'),
-	emptyValidator('orderNumber')
-]
+export const postTxnRetryValidator = [objectIdValidator('orderId')]

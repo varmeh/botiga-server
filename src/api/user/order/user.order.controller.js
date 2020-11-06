@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { OrderStatus, Seller, User } from '../../../models'
+import { OrderStatus, Seller, Order } from '../../../models'
 
 import {
 	token,
@@ -164,17 +164,17 @@ export const getOrders = async (req, res, next) => {
 
 /**
  * Transaction APIs
- * 	- initiateTransaction
+ * 	- postTransactionRetry
+ * 	- postTransactionStatus - callback from paytm webview in flutter app
  */
 
-export const postInitiateTransaction = async (req, res, next) => {
+export const postTransactionRetry = async (req, res, next) => {
 	try {
-		const { txnAmount, orderNumber } = req.body
-		const user = await User.findById(token.get(req))
+		const order = await Order.findById(req.body.orderId)
 		const data = await payments.initiateTransaction({
-			txnAmount,
-			orderId: orderNumber,
-			customerId: `${user.lastName}_${user.contact.phone.substr(-6, 6)}`
+			txnAmount: order.order.totalAmount,
+			orderId: order._id,
+			customerId: `cust_${order.buyer.phone.substr(-6, 6)}`
 		})
 
 		res.json(data)
