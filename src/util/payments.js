@@ -15,7 +15,8 @@ const initiateTransaction = async ({ txnAmount, orderNumber, customerId }) => {
 				mid: PAYTM_MID,
 				orderId: orderNumber,
 				websiteName: PAYTM_WEBSITE,
-				// callbackUrl: `${PAYTM_HOST}/theia/api/v1/paytm/callback?orderId=${orderNumber}`,
+				callbackUrl:
+					'https://dev.botiga.app/api/user/orders/transaction/callback',
 				txnAmount: {
 					value: txnAmount,
 					currency: 'INR'

@@ -15,7 +15,8 @@ import {
 	postProductsValidate,
 	postCancelOrder,
 	getOrders,
-	postInitiateTransaction
+	postInitiateTransaction,
+	postTransactionCallback
 } from './user.order.controller'
 
 const router = Router()
@@ -59,5 +60,7 @@ router.post(
 	validationMiddleware,
 	postInitiateTransaction
 )
+
+router.post('/transaction/callback', postTransactionCallback)
 
 export default router
