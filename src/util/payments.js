@@ -2,6 +2,7 @@ import axios from 'axios'
 import paytmChecksum from 'paytmchecksum'
 import { nanoid } from 'nanoid'
 
+import { Order, PaymentStatus } from '../models'
 import { winston } from './winston.logger'
 
 const {
@@ -12,6 +13,24 @@ const {
 	API_HOST_URL
 } = process.env
 
+const verifyCheckSumHelper = async (body, signature) => {
+	try {
+		const isVerifySignature = await paytmChecksum.verifySignature(
+			JSON.stringify(body),
+			PAYTM_KEY,
+			signature
+		)
+
+		if (!isVerifySignature) {
+			winston.debug('@paytm checksum mismatched', {
+				error: 'paytm might be compromised. Verfiy'
+			})
+		}
+	} catch (error) {
+		winston.debug('@paytm checksum verification error')
+	}
+}
+
 /**
  * Returns txnToken
  */
@@ -19,6 +38,12 @@ const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
 	try {
 		// Required to ensure a unique id for payments
 		const paymentId = `${orderId}_${nanoid(6)}`
+
+		// Save payment id for future reference
+		const order = await Order.findById(orderId)
+		order.payment.status = PaymentStatus.initiated
+		order.payment.paymentId = paymentId
+		await order.save()
 
 		const paytmData = {
 			body: {
@@ -47,27 +72,17 @@ const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
 			`${PAYTM_HOST}/theia/api/v1/initiateTransaction?mid=${PAYTM_MID}&orderId=${paymentId}`,
 			paytmData
 		)
-		if (body.resultInfo.resultStatus === 'S') {
-			// Validate Checksum
-			const isVerifySignature = await paytmChecksum.verifySignature(
-				JSON.stringify(body),
-				PAYTM_KEY,
-				head.signature
-			)
 
-			if (!isVerifySignature) {
-				winston.debug('@paytm checksum mismatched', {
-					error: 'paytm might be compromised. Verfiy'
-				})
-				throw new Error('Paytm Gateway Down. Please try again')
-			}
+		await verifyCheckSumHelper(body, head.signature)
+
+		if (body.resultInfo.resultStatus === 'S') {
+			return { paymentToken: body.txnToken, paymentId: paymentId }
 		} else {
 			winston.debug('@paytm initiate transaction failed', {
 				error: body.resultInfo
 			})
 			throw new Error('Paytm Gateway Down. Please try again')
 		}
-		return { paymentToken: body.txnToken, paymentId: paymentId }
 	} catch (error) {
 		winston.debug('@payment initiate transaction failed', {
 			error,
@@ -98,26 +113,39 @@ const transactionStatus = async ({ paymentId }) => {
 			data: { head, body }
 		} = await axios.post(`${PAYTM_HOST}/v3/order/status`, paytmData)
 
-		if (body.resultInfo.resultStatus === 'TXN_SUCCESS') {
-			// Validate Checksum
-			const isVerifySignature = await paytmChecksum.verifySignature(
-				JSON.stringify(body),
-				PAYTM_KEY,
-				head.signature
-			)
+		await verifyCheckSumHelper(body, head.signature)
 
-			if (!isVerifySignature) {
-				winston.debug('@paytm checksum mismatched', {
-					error: 'paytm might be compromised. Verfiy'
-				})
-				throw new Error('Paytm Gateway Down. Please try again')
-			}
+		// Save payment data into order
+		const [orderId] = paymentId.split('_')
+		const order = await Order.findById(orderId)
+
+		const { payment } = order
+		const {
+			txnId,
+			bankTxnId,
+			gatewayName,
+			bankName,
+			paymentMode,
+			txnDate,
+			resultInfo: { resultMsg, resultStatus }
+		} = body
+		payment.txnId = txnId
+		payment.txnDate = txnDate
+		payment.paymentMode = paymentMode
+		payment.bankTxnId = bankTxnId
+		payment.gatewayName = gatewayName
+		payment.bankName = bankName
+		payment.txnMessage = resultMsg
+
+		if (resultStatus === 'TXN_SUCCESS') {
+			payment.status = PaymentStatus.completed
+		} else if (resultStatus === 'TXN_FAILURE') {
+			payment.status = PaymentStatus.failed
 		} else {
-			winston.debug('@paytm transaction status failed', {
-				error: body.resultInfo
-			})
-			throw new Error(body.resultInfo.resultMsg)
+			payment.status = PaymentStatus.pending
 		}
+
+		await order.save()
 
 		return body
 	} catch (error) {

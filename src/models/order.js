@@ -9,6 +9,13 @@ export const OrderStatus = {
 	cancelled: 'cancelled'
 }
 
+export const PaymentStatus = {
+	initiated: 'initiated',
+	pending: 'pending',
+	successful: 'successful',
+	failed: 'failed'
+}
+
 const orderSchema = new Schema(
 	{
 		apartment: {
@@ -75,10 +82,6 @@ const orderSchema = new Schema(
 				type: Number,
 				required: true
 			},
-			// orderDate: {
-			// 	type: Date,
-			// 	default: moment().toDate()
-			// },
 			expectedDeliveryDate: {
 				type: Date,
 				required: true
@@ -106,6 +109,39 @@ const orderSchema = new Schema(
 					}
 				}
 			]
+		},
+		payment: {
+			paymentId: String,
+			status: {
+				type: String,
+				enum: [
+					PaymentStatus.initiated,
+					PaymentStatus.pending,
+					PaymentStatus.successful,
+					PaymentStatus.failed
+				]
+			},
+			txnId: String,
+			txnDate: String,
+			paymentMode: String,
+			resMessage: String,
+			bankTxnId: String,
+			gatewayName: String,
+			bankName: String
+		},
+		refund: {
+			status: {
+				type: String,
+				enum: [
+					PaymentStatus.initiated,
+					PaymentStatus.pending,
+					PaymentStatus.successful,
+					PaymentStatus.failed
+				]
+			},
+			redundId: String,
+			refundDate: String,
+			amount: String
 		}
 	},
 	{ timestamps: true }
