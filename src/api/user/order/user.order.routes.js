@@ -16,7 +16,7 @@ import {
 	postCancelOrder,
 	getOrders,
 	postInitiateTransaction,
-	postTransactionCallback
+	postTransactionStatus
 } from './user.order.controller'
 
 const router = Router()
@@ -61,6 +61,6 @@ router.post(
 	postInitiateTransaction
 )
 
-router.post('/transaction/callback', postTransactionCallback)
+router.post('/transaction/status', postTransactionStatus)
 
 export default router

@@ -21,7 +21,7 @@ export const postOrder = async (req, res, next) => {
 
 	try {
 		// Verify Seller Id
-		const order = await createOrder({
+		const newOrder = await createOrder({
 			userId: token.get(req),
 			sellerId,
 			apartmentId,
@@ -30,7 +30,18 @@ export const postOrder = async (req, res, next) => {
 			products
 		})
 
-		res.status(201).json(order)
+		const { _id, order, buyer, seller, createdAt, updatedAt } = newOrder
+
+		const { txnToken } = await payments.initiateTransaction({
+			txnAmount: totalAmount,
+			orderId: _id,
+			customerId: `${buyer.lastName}_${buyer.phone.substr(-6, 6)}`,
+			callbackUrl: `${process.env.API_HOST_URL}/api/user/orders/transaction/status?orderId=${_id}`
+		})
+
+		res
+			.status(201)
+			.json({ id: _id, order, buyer, seller, createdAt, updatedAt, txnToken })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
@@ -173,9 +184,8 @@ export const postInitiateTransaction = async (req, res, next) => {
 	}
 }
 
-export const postTransactionCallback = async (req, res, next) => {
+export const postTransactionStatus = async (req, res, next) => {
 	try {
-		console.error(req.query.orderId)
 		const data = await payments.transactionStatus(req.query.orderId)
 
 		res.json(data)

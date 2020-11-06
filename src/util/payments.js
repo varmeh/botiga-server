@@ -7,7 +7,12 @@ const { PAYTM_HOST, PAYTM_MID, PAYTM_KEY, PAYTM_WEBSITE } = process.env
 /**
  * Returns txnToken
  */
-const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
+const initiateTransaction = async ({
+	txnAmount,
+	orderId,
+	customerId,
+	callbackUrl
+}) => {
 	try {
 		const paytmData = {
 			body: {
@@ -15,7 +20,7 @@ const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
 				mid: PAYTM_MID,
 				orderId: orderId,
 				websiteName: PAYTM_WEBSITE,
-				callbackUrl: `https://dev.botiga.app/api/user/orders/transaction/callback?orderId=${orderId}`,
+				callbackUrl: callbackUrl,
 				txnAmount: {
 					value: txnAmount,
 					currency: 'INR'
@@ -87,7 +92,7 @@ const transactionStatus = async orderId => {
 			data: { head, body }
 		} = await axios.post(`${PAYTM_HOST}/v3/order/status`, paytmData)
 
-		console.error(`transactionStatus:${orderId}`, head, body)
+		console.error(`transactionStatus:${orderId}\n`, head, body)
 
 		if (body.resultInfo.resultStatus === 'TXN_SUCCESS') {
 			// Validate Checksum
