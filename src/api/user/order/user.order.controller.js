@@ -35,7 +35,7 @@ export const postOrder = async (req, res, next) => {
 		const { txnToken } = await payments.initiateTransaction({
 			txnAmount: totalAmount,
 			orderId: _id,
-			customerId: `${buyer.lastName}_${buyer.phone.substr(-6, 6)}`,
+			customerId: `cust_${buyer.phone.substr(-6, 6)}`,
 			callbackUrl: `${process.env.API_HOST_URL}/api/user/orders/transaction/status?orderId=${_id}`
 		})
 
