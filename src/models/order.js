@@ -124,10 +124,11 @@ const orderSchema = new Schema(
 			txnId: String,
 			txnDate: String,
 			paymentMode: String,
-			resMessage: String,
+			txnResponseMessage: String,
 			bankTxnId: String,
 			gatewayName: String,
-			bankName: String
+			bankName: String,
+			txnAmount: String
 		},
 		refund: {
 			status: {

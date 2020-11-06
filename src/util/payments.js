@@ -127,6 +127,7 @@ const transactionStatus = async ({ paymentId }) => {
 			bankName,
 			paymentMode,
 			txnDate,
+			txnAmount,
 			resultInfo: { resultMsg, resultStatus }
 		} = body
 		payment.txnId = txnId
@@ -135,7 +136,8 @@ const transactionStatus = async ({ paymentId }) => {
 		payment.bankTxnId = bankTxnId
 		payment.gatewayName = gatewayName
 		payment.bankName = bankName
-		payment.txnMessage = resultMsg
+		payment.txnResponseMessage = resultMsg
+		payment.txnAmount = txnAmount
 
 		if (resultStatus === 'TXN_SUCCESS') {
 			payment.status = PaymentStatus.completed
