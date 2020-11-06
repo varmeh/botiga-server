@@ -32,7 +32,7 @@ export const postOrder = async (req, res, next) => {
 
 		const { _id, order, buyer, seller, createdAt, updatedAt } = newOrder
 
-		const { txnToken } = await payments.initiateTransaction({
+		const data = await payments.initiateTransaction({
 			txnAmount: totalAmount,
 			orderId: _id,
 			customerId: `cust_${buyer.phone.substr(-6, 6)}`,
@@ -41,7 +41,7 @@ export const postOrder = async (req, res, next) => {
 
 		res
 			.status(201)
-			.json({ id: _id, order, buyer, seller, createdAt, updatedAt, txnToken })
+			.json({ id: _id, order, buyer, seller, createdAt, updatedAt, ...data })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

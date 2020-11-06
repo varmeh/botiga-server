@@ -1,5 +1,7 @@
 import axios from 'axios'
 import paytmChecksum from 'paytmchecksum'
+import { nanoid } from 'nanoid'
+
 import { winston } from './winston.logger'
 
 const { PAYTM_HOST, PAYTM_MID, PAYTM_KEY, PAYTM_WEBSITE } = process.env
@@ -14,11 +16,14 @@ const initiateTransaction = async ({
 	callbackUrl
 }) => {
 	try {
+		// Required to ensure a unique id for payments
+		const orderIdRandom = `${orderId}_${nanoid(6)}`
+
 		const paytmData = {
 			body: {
 				requestType: 'Payment',
 				mid: PAYTM_MID,
-				orderId: orderId,
+				orderId: orderIdRandom,
 				websiteName: PAYTM_WEBSITE,
 				callbackUrl: callbackUrl,
 				txnAmount: {
@@ -38,7 +43,7 @@ const initiateTransaction = async ({
 		const {
 			data: { head, body }
 		} = await axios.post(
-			`${PAYTM_HOST}/theia/api/v1/initiateTransaction?mid=${PAYTM_MID}&orderId=${orderId}`,
+			`${PAYTM_HOST}/theia/api/v1/initiateTransaction?mid=${PAYTM_MID}&orderId=${orderIdRandom}`,
 			paytmData
 		)
 		if (body.resultInfo.resultStatus === 'S') {
@@ -61,7 +66,7 @@ const initiateTransaction = async ({
 			})
 			throw new Error('Paytm Gateway Down. Please try again')
 		}
-		return { txnToken: body.txnToken }
+		return { paymentToken: body.txnToken, paymentId: orderIdRandom }
 	} catch (error) {
 		winston.debug('@payment initiate transaction failed', {
 			error,
@@ -91,8 +96,6 @@ const transactionStatus = async orderId => {
 		const {
 			data: { head, body }
 		} = await axios.post(`${PAYTM_HOST}/v3/order/status`, paytmData)
-
-		console.error(`transactionStatus:${orderId}\n`, head, body)
 
 		if (body.resultInfo.resultStatus === 'TXN_SUCCESS') {
 			// Validate Checksum
