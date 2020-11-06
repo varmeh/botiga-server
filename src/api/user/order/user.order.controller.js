@@ -163,7 +163,7 @@ export const postInitiateTransaction = async (req, res, next) => {
 		const user = await User.findById(token.get(req))
 		const data = await payments.initiateTransaction({
 			txnAmount,
-			orderNumber,
+			orderId: orderNumber,
 			customerId: `${user.lastName}_${user.contact.phone.substr(-6, 6)}`
 		})
 
