@@ -4,28 +4,29 @@ import { nanoid } from 'nanoid'
 
 import { winston } from './winston.logger'
 
-const { PAYTM_HOST, PAYTM_MID, PAYTM_KEY, PAYTM_WEBSITE } = process.env
+const {
+	PAYTM_HOST,
+	PAYTM_MID,
+	PAYTM_KEY,
+	PAYTM_WEBSITE,
+	API_HOST_URL
+} = process.env
 
 /**
  * Returns txnToken
  */
-const initiateTransaction = async ({
-	txnAmount,
-	orderId,
-	customerId,
-	callbackUrl
-}) => {
+const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
 	try {
 		// Required to ensure a unique id for payments
-		const orderIdRandom = `${orderId}_${nanoid(6)}`
+		const paymentId = `${orderId}_${nanoid(6)}`
 
 		const paytmData = {
 			body: {
 				requestType: 'Payment',
 				mid: PAYTM_MID,
-				orderId: orderIdRandom,
+				orderId: paymentId,
 				websiteName: PAYTM_WEBSITE,
-				callbackUrl: callbackUrl,
+				callbackUrl: `${API_HOST_URL}/api/user/orders/transaction/status?paymentId=${paymentId}`,
 				txnAmount: {
 					value: txnAmount,
 					currency: 'INR'
@@ -43,7 +44,7 @@ const initiateTransaction = async ({
 		const {
 			data: { head, body }
 		} = await axios.post(
-			`${PAYTM_HOST}/theia/api/v1/initiateTransaction?mid=${PAYTM_MID}&orderId=${orderIdRandom}`,
+			`${PAYTM_HOST}/theia/api/v1/initiateTransaction?mid=${PAYTM_MID}&orderId=${paymentId}`,
 			paytmData
 		)
 		if (body.resultInfo.resultStatus === 'S') {
@@ -66,7 +67,7 @@ const initiateTransaction = async ({
 			})
 			throw new Error('Paytm Gateway Down. Please try again')
 		}
-		return { paymentToken: body.txnToken, paymentId: orderIdRandom }
+		return { paymentToken: body.txnToken, paymentId: paymentId }
 	} catch (error) {
 		winston.debug('@payment initiate transaction failed', {
 			error,
@@ -76,13 +77,13 @@ const initiateTransaction = async ({
 	}
 }
 
-const transactionStatus = async orderId => {
+const transactionStatus = async ({ paymentId }) => {
 	try {
 		const paytmData = {
 			body: {
 				requestType: 'Payment',
 				mid: PAYTM_MID,
-				orderId: orderId,
+				orderId: paymentId,
 				websiteName: PAYTM_WEBSITE
 			},
 			head: { channelId: 'WAP' }

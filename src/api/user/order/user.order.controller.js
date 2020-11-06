@@ -35,8 +35,7 @@ export const postOrder = async (req, res, next) => {
 		const data = await payments.initiateTransaction({
 			txnAmount: totalAmount,
 			orderId: _id,
-			customerId: `cust_${buyer.phone.substr(-6, 6)}`,
-			callbackUrl: `${process.env.API_HOST_URL}/api/user/orders/transaction/status?orderId=${_id}`
+			customerId: `cust_${buyer.phone.substr(-6, 6)}`
 		})
 
 		res
@@ -186,7 +185,7 @@ export const postInitiateTransaction = async (req, res, next) => {
 
 export const postTransactionStatus = async (req, res, next) => {
 	try {
-		const data = await payments.transactionStatus(req.query.orderId)
+		const data = await payments.transactionStatus(req.query)
 
 		res.json(data)
 	} catch ({ status, message }) {
