@@ -173,10 +173,12 @@ export const postInitiateTransaction = async (req, res, next) => {
 	}
 }
 
-export const postTransactionCallback = (req, res, next) => {
+export const postTransactionCallback = async (req, res, next) => {
 	try {
-		console.error(req)
-		res.json(req.body)
+		console.error(req.query.orderId)
+		const data = await payments.initiateTransaction(req.query.orderId)
+
+		res.json(data)
 	} catch ({ status, message }) {
 		next(new CreateHttpError(status, message))
 	}
