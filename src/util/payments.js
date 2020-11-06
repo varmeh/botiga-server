@@ -119,7 +119,6 @@ const transactionStatus = async ({ paymentId }) => {
 		const [orderId] = paymentId.split('_')
 		const order = await Order.findById(orderId)
 
-		const { payment } = order
 		const {
 			txnId,
 			bankTxnId,
@@ -130,21 +129,25 @@ const transactionStatus = async ({ paymentId }) => {
 			txnAmount,
 			resultInfo: { resultMsg, resultStatus }
 		} = body
-		payment.txnId = txnId
-		payment.txnDate = txnDate
-		payment.paymentMode = paymentMode
-		payment.bankTxnId = bankTxnId
-		payment.gatewayName = gatewayName
-		payment.bankName = bankName
-		payment.txnResponseMessage = resultMsg
-		payment.txnAmount = txnAmount
 
+		let status = PaymentStatus.pending
 		if (resultStatus === 'TXN_SUCCESS') {
-			payment.status = PaymentStatus.completed
+			status = PaymentStatus.successful
 		} else if (resultStatus === 'TXN_FAILURE') {
-			payment.status = PaymentStatus.failed
-		} else {
-			payment.status = PaymentStatus.pending
+			status = PaymentStatus.failed
+		}
+
+		order.payment = {
+			paymentId,
+			status,
+			txnId,
+			txnDate,
+			paymentMode,
+			gatewayName,
+			bankTxnId,
+			bankName,
+			txnResponseMessage: resultMsg,
+			txnAmount
 		}
 
 		await order.save()
