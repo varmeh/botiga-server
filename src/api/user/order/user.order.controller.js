@@ -175,7 +175,7 @@ export const postInitiateTransaction = async (req, res, next) => {
 
 export const postTransactionCallback = (req, res, next) => {
 	try {
-		console.error(req.body)
+		console.error(req)
 		res.json(req.body)
 	} catch ({ status, message }) {
 		next(new CreateHttpError(status, message))
