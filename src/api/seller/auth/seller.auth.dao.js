@@ -61,21 +61,22 @@ export const updateSellerPin = async (sellerId, pin) => {
 export const updateToken = async (sellerId, token) => {
 	try {
 		const seller = await Seller.findById(sellerId)
-
-		if (!seller.contact.pushTokens.includes(token)) {
-			seller.contact.pushTokens.push(token)
-			await seller.save()
-
-			// Register new token to all seller apartment topics for notifications
-			seller.apartments.forEach(apartment =>
-				notifications.apartment.subscribe({
-					type: notifications.subscriberType.Sellers,
-					apartmentId: apartment._id,
-					userToken: token
-				})
-			)
+		if (seller.contact.pushTokens.includes(token)) {
+			return 'token already exists'
 		}
-		return seller
+		seller.contact.pushTokens.push(token)
+		await seller.save()
+
+		// Register new token to all seller apartment topics for notifications
+		seller.apartments.forEach(apartment =>
+			notifications.apartment.subscribe({
+				type: notifications.subscriberType.Sellers,
+				apartmentId: apartment._id,
+				userToken: token
+			})
+		)
+		// Register user to apartment topic for notifications
+		return 'token added'
 	} catch (error) {
 		winston.debug('@error updateToken', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())

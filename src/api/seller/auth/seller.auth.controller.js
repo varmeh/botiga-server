@@ -153,9 +153,9 @@ export const patchUserPin = async (req, res, next) => {
 
 export const patchPushToken = async (req, res, next) => {
 	try {
-		await updateToken(token.get(req), req.body.token)
+		const message = await updateToken(token.get(req), req.body.token)
 
-		res.json({ message: 'token updated' })
+		res.json({ message })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
