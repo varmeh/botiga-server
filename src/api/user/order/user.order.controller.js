@@ -192,3 +192,13 @@ export const postTransactionStatus = async (req, res, next) => {
 		next(new CreateHttpError(status, message))
 	}
 }
+
+export const postTransactionWebhook = (req, res, next) => {
+	try {
+		console.info('~~~~~~~~~ postTransactionWebhook called ~~~~~~~~~')
+		console.info(req.body)
+		res.json()
+	} catch ({ status, message }) {
+		next(new CreateHttpError(status, message))
+	}
+}
