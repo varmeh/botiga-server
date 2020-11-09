@@ -12,8 +12,8 @@ export const OrderStatus = {
 export const PaymentStatus = {
 	initiated: 'initiated',
 	pending: 'pending',
-	successful: 'successful',
-	failed: 'failed'
+	success: 'success',
+	failure: 'failure'
 }
 
 const orderSchema = new Schema(
@@ -117,8 +117,8 @@ const orderSchema = new Schema(
 				enum: [
 					PaymentStatus.initiated,
 					PaymentStatus.pending,
-					PaymentStatus.successful,
-					PaymentStatus.failed
+					PaymentStatus.success,
+					PaymentStatus.failure
 				]
 			},
 			txnId: String,
@@ -136,8 +136,8 @@ const orderSchema = new Schema(
 				enum: [
 					PaymentStatus.initiated,
 					PaymentStatus.pending,
-					PaymentStatus.successful,
-					PaymentStatus.failed
+					PaymentStatus.success,
+					PaymentStatus.failure
 				]
 			},
 			redundId: String,

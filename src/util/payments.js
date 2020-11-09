@@ -132,9 +132,9 @@ const transactionStatus = async ({ paymentId }) => {
 
 		let status = PaymentStatus.pending
 		if (resultStatus === 'TXN_SUCCESS') {
-			status = PaymentStatus.successful
+			status = PaymentStatus.success
 		} else if (resultStatus === 'TXN_FAILURE') {
-			status = PaymentStatus.failed
+			status = PaymentStatus.failure
 		}
 
 		order.payment = {
@@ -152,7 +152,7 @@ const transactionStatus = async ({ paymentId }) => {
 
 		await order.save()
 
-		return body
+		return order.payment
 	} catch (error) {
 		winston.debug('@payment transaction status failed', {
 			error,
