@@ -136,7 +136,9 @@ export const getOrders = async (req, res, next) => {
 					products
 				},
 				createdAt,
-				_id
+				_id,
+				payment,
+				refund
 			} = odr
 
 			return {
@@ -148,7 +150,9 @@ export const getOrders = async (req, res, next) => {
 				orderDate: createdAt,
 				expectedDeliveryDate,
 				completionDate,
-				products
+				products,
+				payment,
+				refund
 			}
 		})
 
