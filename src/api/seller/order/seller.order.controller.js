@@ -31,7 +31,7 @@ export const postCancelOrder = async (req, res, next) => {
 			`Your order #${order.order.number} from ${order.seller.brandName} has been cancelled`
 		)
 
-		res.json({ message: 'cancelled', id: order._id })
+		res.json({ message: 'cancelled', id: order._id, refund: order.refund })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

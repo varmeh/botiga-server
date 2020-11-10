@@ -2,7 +2,7 @@ import CreateHttpError from 'http-errors'
 import { Types } from 'mongoose'
 
 import { winston, moment } from '../../../util'
-import { Order, OrderStatus } from '../../../models'
+import { Order, OrderStatus, PaymentStatus } from '../../../models'
 
 export const updateOrder = async (
 	orderId,
@@ -24,6 +24,16 @@ export const updateOrder = async (
 
 		switch (status) {
 			case OrderStatus.cancelled:
+				// Set completion date
+				order.order.completionDate = moment().toDate()
+
+				// Refund Initiated
+				if (order.payment.status === PaymentStatus.success) {
+					order.refund.status = PaymentStatus.initiated
+					order.refund.amount = order.order.totalAmount
+				}
+				break
+
 			case OrderStatus.delivered:
 				// Set completion date
 				order.order.completionDate = moment().toDate()
