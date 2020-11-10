@@ -141,7 +141,7 @@ const orderSchema = new Schema(
 				]
 			},
 			id: String,
-			date: String,
+			date: Date,
 			amount: String
 		}
 	},
