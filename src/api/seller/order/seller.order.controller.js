@@ -108,16 +108,17 @@ export const getDeliveryByApartment = async (req, res, next) => {
 		})
 
 		const deliveryData = deliveries.map(delivery => {
-			const { buyer, order, _id, createdAt } = delivery
-			delete order.$init
-
+			delete delivery.order.$init
+			const { buyer, order, createdAt, payment, refund, _id } = delivery
 			return {
 				id: _id,
 				buyer,
 				order: {
 					orderDate: createdAt,
 					...order
-				}
+				},
+				payment,
+				refund
 			}
 		})
 		res.json({
@@ -144,15 +145,18 @@ export const getOrdersByApartmentDate = async (req, res, next) => {
 			limit
 		})
 
-		const orderData = orders.map(order => {
-			delete order.order.$init
+		const orderData = orders.map(odr => {
+			delete odr.order.$init
+			const { buyer, order, createdAt, payment, refund, _id } = odr
 			return {
-				id: order._id,
-				buyer: order.buyer,
+				id: _id,
+				buyer,
 				order: {
-					orderDate: order.createdAt,
-					...order.order
-				}
+					orderDate: createdAt,
+					...order
+				},
+				payment,
+				refund
 			}
 		})
 
