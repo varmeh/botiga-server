@@ -4,18 +4,12 @@ import { token, validationMiddleware } from '../../../util'
 
 import {
 	postCancelOrderValidator,
-	patchDeliveryStatusValidator,
-	patchDeliveryDelayValidator,
-	getDeliveryValidator,
 	getOrdersValidator,
 	getOrdersAggregateValidator
 } from './seller.order.validator'
 
 import {
 	postCancelOrder,
-	patchDeliveryStatus,
-	patchDeliveryDelay,
-	getDeliveryByApartment,
 	getOrdersByApartmentDate,
 	getOrdersAggregate
 } from './seller.order.controller'
@@ -28,30 +22,6 @@ router.post(
 	postCancelOrderValidator,
 	validationMiddleware,
 	postCancelOrder
-)
-
-router.patch(
-	'/delivery/status',
-	token.authenticationMiddleware,
-	patchDeliveryStatusValidator,
-	validationMiddleware,
-	patchDeliveryStatus
-)
-
-router.patch(
-	'/delivery/delayed',
-	token.authenticationMiddleware,
-	patchDeliveryDelayValidator,
-	validationMiddleware,
-	patchDeliveryDelay
-)
-
-router.get(
-	'/delivery/:apartmentId/:date',
-	token.authenticationMiddleware,
-	getDeliveryValidator,
-	validationMiddleware,
-	getDeliveryByApartment
 )
 
 /*

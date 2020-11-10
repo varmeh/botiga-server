@@ -1,5 +1,4 @@
 import CreateHttpError from 'http-errors'
-import { Types } from 'mongoose'
 
 import { winston, moment } from '../../../util'
 import { Order, OrderStatus } from '../../../models'
@@ -45,8 +44,7 @@ export const updateOrder = async (
 	}
 }
 
-/* Date String expected in ISO 8601 format - YYYY-MM-YY */
-export const findOrdersByApartment = async ({
+export const findDeliveriesByApartment = async ({
 	sellerId,
 	apartmentId,
 	dateString,
@@ -57,7 +55,7 @@ export const findOrdersByApartment = async ({
 		const date = moment(dateString, 'YYYY-MM-DD').startOf('day')
 
 		const query = {
-			createdAt: {
+			'order.expectedDeliveryDate': {
 				$gte: date.toDate(),
 				$lte: moment(date).endOf('day').toDate()
 			},
@@ -65,7 +63,7 @@ export const findOrdersByApartment = async ({
 			'apartment.id': apartmentId
 		}
 
-		const orders = await Order.find(query, {
+		const deliveries = await Order.find(query, {
 			buyer: 1,
 			order: 1,
 			createdAt: 1,
@@ -73,59 +71,16 @@ export const findOrdersByApartment = async ({
 			refund: 1
 		})
 			.sort({
-				createdAt: -1
+				createdAt: 1
 			})
 			.skip(skip)
 			.limit(limit)
 
 		const count = await Order.find(query).countDocuments()
 
-		return [count, orders]
+		return [count, deliveries]
 	} catch (error) {
-		winston.debug('@error findOrdersByApartment', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
-	}
-}
-
-/* Date String expected in ISO 8601 format - YYYY-MM-YY */
-export const findSellerAggregatedData = async (sellerId, dateString) => {
-	try {
-		const date = moment(dateString, 'YYYY-MM-DD').startOf('day')
-
-		const data = await Order.aggregate([
-			{
-				$match: {
-					createdAt: {
-						$gte: date.toDate(),
-						$lte: moment(date).endOf('day').toDate()
-					},
-					'seller.id': Types.ObjectId(sellerId)
-				}
-			},
-			{
-				$group: {
-					_id: '$apartment.id',
-					aptName: { $first: '$apartment.aptName' },
-					area: { $first: '$apartment.area' },
-					orders: { $sum: 1 },
-					revenue: { $sum: '$order.totalAmount' }
-				}
-			},
-			{
-				$project: {
-					_id: 1,
-					apartmentName: {
-						$concat: ['$aptName', ', ', '$area']
-					},
-					orders: 1,
-					revenue: 1
-				}
-			}
-		])
-
-		return data
-	} catch (error) {
-		winston.debug('@error findSellerAggregatedData', {
+		winston.debug('@error findDeliveriesByApartment', {
 			error,
 			msg: error.message
 		})

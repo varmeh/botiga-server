@@ -1,33 +1,17 @@
 import {
-	emptyValidator,
 	objectIdValidator,
 	paramObjectIdValidator,
 	paramDateValidator,
-	dateValidator,
 	queryNumberValidator
 } from '../../../util'
 
 export const postCancelOrderValidator = [objectIdValidator('orderId')]
 
-export const patchDeliveryStatusValidator = [
-	objectIdValidator('orderId'),
-	emptyValidator('status')
-		.matches(/^(out|delivered)$/, 'i')
-		.withMessage('valid status options - out and delayed')
-]
+export const getOrdersAggregateValidator = [paramDateValidator('date')]
 
-export const patchDeliveryDelayValidator = [
-	objectIdValidator('orderId'),
-	dateValidator('newDate')
-]
-
-export const getDeliveryValidator = [
+export const getOrdersValidator = [
 	paramObjectIdValidator('apartmentId'),
 	paramDateValidator('date'),
 	queryNumberValidator('limit'),
 	queryNumberValidator('page')
 ]
-
-export const getOrdersAggregateValidator = [paramDateValidator('date')]
-
-export const getOrdersValidator = [...getDeliveryValidator]
