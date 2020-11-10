@@ -16,6 +16,57 @@ import {
 	findOrders
 } from './user.order.dao'
 
+export const getOrders = async (req, res, next) => {
+	try {
+		const { skip, limit, page } = skipData(req.query)
+		const [totalOrders, orders] = await findOrders({
+			userId: token.get(req),
+			skip,
+			limit
+		})
+
+		const filteredOrderedData = orders.map(odr => {
+			const {
+				seller,
+				order: {
+					number,
+					status,
+					totalAmount,
+					expectedDeliveryDate,
+					completionDate,
+					products
+				},
+				createdAt,
+				_id,
+				payment,
+				refund
+			} = odr
+
+			return {
+				id: _id,
+				seller,
+				number,
+				status,
+				totalAmount,
+				orderDate: createdAt,
+				expectedDeliveryDate,
+				completionDate,
+				products,
+				payment,
+				refund
+			}
+		})
+
+		res.json({
+			...paginationData({ limit, totalOrders, currentPage: page }),
+			orders: filteredOrderedData
+		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
 export const postOrder = async (req, res, next) => {
 	const { sellerId, apartmentId, house, totalAmount, products } = req.body
 
@@ -105,57 +156,6 @@ export const postCancelOrder = async (req, res, next) => {
 		)
 
 		res.json({ message: 'cancelled', id: order._id })
-	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
-	}
-}
-
-export const getOrders = async (req, res, next) => {
-	try {
-		const { skip, limit, page } = skipData(req.query)
-		const [totalOrders, orders] = await findOrders({
-			userId: token.get(req),
-			skip,
-			limit
-		})
-
-		const filteredOrderedData = orders.map(odr => {
-			const {
-				seller,
-				order: {
-					number,
-					status,
-					totalAmount,
-					expectedDeliveryDate,
-					completionDate,
-					products
-				},
-				createdAt,
-				_id,
-				payment,
-				refund
-			} = odr
-
-			return {
-				id: _id,
-				seller,
-				number,
-				status,
-				totalAmount,
-				orderDate: createdAt,
-				expectedDeliveryDate,
-				completionDate,
-				products,
-				payment,
-				refund
-			}
-		})
-
-		res.json({
-			...paginationData({ limit, totalOrders, currentPage: page }),
-			orders: filteredOrderedData
-		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

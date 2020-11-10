@@ -22,6 +22,15 @@ import {
 
 const router = Router()
 
+router.get(
+	'/',
+	token.authenticationMiddleware,
+	getOrdersValidator,
+	validationMiddleware,
+	getOrders
+)
+
+// Create a new order & initiate transaction
 router.post(
 	'/',
 	token.authenticationMiddleware,
@@ -46,14 +55,7 @@ router.post(
 	postCancelOrder
 )
 
-router.get(
-	'/',
-	token.authenticationMiddleware,
-	getOrdersValidator,
-	validationMiddleware,
-	getOrders
-)
-
+/* Transaction APIs */
 router.post(
 	'/transaction/retry',
 	token.authenticationMiddleware,
@@ -62,8 +64,7 @@ router.post(
 	postTransactionRetry
 )
 
-// API Callback from paytm payment webview
-router.post('/transaction/status', postTransactionStatus)
-router.post('/transaction/webhook', postTransactionWebhook)
+router.post('/transaction/status', postTransactionStatus) // API Callback from paytm payment webview
+router.post('/transaction/webhook', postTransactionWebhook) // Webhook for Paytm Payment Server
 
 export default router
