@@ -140,8 +140,8 @@ const orderSchema = new Schema(
 					PaymentStatus.failure
 				]
 			},
-			redundId: String,
-			refundDate: String,
+			id: String,
+			date: String,
 			amount: String
 		}
 	},

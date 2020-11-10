@@ -7,6 +7,8 @@ import {
 
 export const postCancelOrderValidator = [objectIdValidator('orderId')]
 
+export const patchRefundCompletedValidator = [objectIdValidator('orderId')]
+
 export const getOrdersAggregateValidator = [paramDateValidator('date')]
 
 export const getOrdersValidator = [

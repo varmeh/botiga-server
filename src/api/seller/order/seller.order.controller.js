@@ -4,6 +4,7 @@ import { OrderStatus, User } from '../../../models'
 
 import {
 	updateOrder,
+	updateRefund,
 	findOrdersByApartment,
 	findSellerAggregatedData
 } from './seller.order.dao'
@@ -32,6 +33,27 @@ export const postCancelOrder = async (req, res, next) => {
 		)
 
 		res.json({ message: 'cancelled', id: order._id, refund: order.refund })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchRefundCompleted = async (req, res, next) => {
+	try {
+		const order = await updateRefund(req.body.orderId, token.get(req))
+
+		await sendNotifications(
+			order.buyer.id,
+			'Refund Completed',
+			`Your refund for order #${order.order.number} from ${order.seller.brandName} has been completed`
+		)
+
+		res.json({
+			message: 'refund completed',
+			id: order._id,
+			refund: order.refund
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

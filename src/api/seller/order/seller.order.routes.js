@@ -4,12 +4,14 @@ import { token, validationMiddleware } from '../../../util'
 
 import {
 	postCancelOrderValidator,
+	patchRefundCompletedValidator,
 	getOrdersValidator,
 	getOrdersAggregateValidator
 } from './seller.order.validator'
 
 import {
 	postCancelOrder,
+	patchRefundCompleted,
 	getOrdersByApartmentDate,
 	getOrdersAggregate
 } from './seller.order.controller'
@@ -22,6 +24,14 @@ router.post(
 	postCancelOrderValidator,
 	validationMiddleware,
 	postCancelOrder
+)
+
+router.patch(
+	'/refund/completed',
+	token.authenticationMiddleware,
+	patchRefundCompletedValidator,
+	validationMiddleware,
+	patchRefundCompleted
 )
 
 /*

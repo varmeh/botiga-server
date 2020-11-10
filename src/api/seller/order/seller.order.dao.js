@@ -55,6 +55,27 @@ export const updateOrder = async (
 	}
 }
 
+export const updateRefund = async (orderId, sellerId) => {
+	try {
+		const order = await Order.findOne({
+			_id: orderId,
+			'seller.id': sellerId
+		})
+
+		if (!order) {
+			return Promise.reject(new CreateHttpError[404]('Order Not Found'))
+		}
+
+		order.refund.status = PaymentStatus.success
+		order.refund.date = moment().toDate()
+
+		return await order.save()
+	} catch (error) {
+		winston.debug('@error updateRefund', { error, msg: error.message })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
 /* Date String expected in ISO 8601 format - YYYY-MM-YY */
 export const findOrdersByApartment = async ({
 	sellerId,
