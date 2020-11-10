@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { OrderStatus, Seller, Order } from '../../../models'
+import { Seller, Order } from '../../../models'
 
 import {
 	token,
@@ -12,7 +12,7 @@ import {
 import {
 	createOrder,
 	findCategoryProducts,
-	updateOrder,
+	cancelOrder,
 	findOrders
 } from './user.order.dao'
 
@@ -92,11 +92,7 @@ export const postCancelOrder = async (req, res, next) => {
 	const { orderId } = req.body
 
 	try {
-		const order = await updateOrder(
-			orderId,
-			token.get(req),
-			OrderStatus.cancelled
-		)
+		const order = await cancelOrder(orderId, token.get(req))
 
 		// Send notification to seller devices
 		const seller = await Seller.findById(order.seller.id)
