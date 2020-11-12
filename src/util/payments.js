@@ -152,7 +152,7 @@ const transactionStatus = async ({ paymentId }) => {
 
 		await order.save()
 
-		return order.payment
+		return order
 	} catch (error) {
 		winston.debug('@payment transaction status failed', {
 			error,
