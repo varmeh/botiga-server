@@ -16,6 +16,38 @@ import {
 	findOrders
 } from './user.order.dao'
 
+const orderOrchestrator = order => {
+	const {
+		seller,
+		order: {
+			number,
+			status,
+			totalAmount,
+			expectedDeliveryDate,
+			completionDate,
+			products
+		},
+		createdAt,
+		_id,
+		payment,
+		refund
+	} = order
+
+	return {
+		id: _id,
+		seller,
+		number,
+		status,
+		totalAmount,
+		orderDate: createdAt,
+		expectedDeliveryDate,
+		completionDate,
+		products,
+		payment,
+		refund
+	}
+}
+
 export const getOrders = async (req, res, next) => {
 	try {
 		const { skip, limit, page } = skipData(req.query)
@@ -25,37 +57,7 @@ export const getOrders = async (req, res, next) => {
 			limit
 		})
 
-		const filteredOrderedData = orders.map(odr => {
-			const {
-				seller,
-				order: {
-					number,
-					status,
-					totalAmount,
-					expectedDeliveryDate,
-					completionDate,
-					products
-				},
-				createdAt,
-				_id,
-				payment,
-				refund
-			} = odr
-
-			return {
-				id: _id,
-				seller,
-				number,
-				status,
-				totalAmount,
-				orderDate: createdAt,
-				expectedDeliveryDate,
-				completionDate,
-				products,
-				payment,
-				refund
-			}
-		})
+		const filteredOrderedData = orders.map(order => orderOrchestrator(order))
 
 		res.json({
 			...paginationData({ limit, totalOrders, currentPage: page }),
@@ -185,9 +187,9 @@ export const postTransactionRetry = async (req, res, next) => {
 
 export const postTransactionStatus = async (req, res, next) => {
 	try {
-		const data = await payments.transactionStatus(req.query)
+		const order = await payments.transactionStatus(req.query)
 
-		res.json(data)
+		res.json(orderOrchestrator(order))
 	} catch ({ status, message }) {
 		next(new CreateHttpError(status, message))
 	}
