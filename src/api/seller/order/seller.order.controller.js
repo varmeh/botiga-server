@@ -9,7 +9,7 @@ import {
 	findSellerAggregatedData
 } from './seller.order.dao'
 
-const sendNotifications = async (userId, body, title) => {
+const sendNotifications = async (userId, title, body) => {
 	// Send notification to seller devices
 	const user = await User.findById(userId)
 
