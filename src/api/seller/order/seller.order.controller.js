@@ -9,7 +9,7 @@ import {
 	findSellerAggregatedData
 } from './seller.order.dao'
 
-const sendNotifications = async (userId, title, body) => {
+const sendNotifications = async ({ userId, title, body }) => {
 	// Send notification to seller devices
 	const user = await User.findById(userId)
 
@@ -26,11 +26,11 @@ export const postCancelOrder = async (req, res, next) => {
 			OrderStatus.cancelled
 		)
 
-		await sendNotifications(
-			order.buyer.id,
-			'Order Cancelled',
-			`Your order #${order.order.number} from ${order.seller.brandName} has been cancelled`
-		)
+		await sendNotifications({
+			userId: order.buyer.id,
+			title: 'Order Cancelled',
+			body: `Your order #${order.order.number} from ${order.seller.brandName} has been cancelled`
+		})
 
 		res.json({ message: 'cancelled', id: order._id, refund: order.refund })
 	} catch (error) {
@@ -43,11 +43,11 @@ export const patchRefundCompleted = async (req, res, next) => {
 	try {
 		const order = await updateRefund(req.body.orderId, token.get(req))
 
-		await sendNotifications(
-			order.buyer.id,
-			'Refund Completed',
-			`Your refund for order #${order.order.number} from ${order.seller.brandName} has been completed`
-		)
+		await sendNotifications({
+			userId: order.buyer.id,
+			title: 'Refund Completed',
+			body: `Your refund for order #${order.order.number} from ${order.seller.brandName} has been completed`
+		})
 
 		res.json({
 			message: 'refund completed',

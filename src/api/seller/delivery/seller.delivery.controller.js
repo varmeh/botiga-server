@@ -4,7 +4,7 @@ import { OrderStatus, User } from '../../../models'
 
 import { updateOrder, findDeliveriesByApartment } from './seller.delivery.dao'
 
-const sendNotifications = async (userId, body, title) => {
+const sendNotifications = async (userId, title, body) => {
 	// Send notification to seller devices
 	const user = await User.findById(userId)
 

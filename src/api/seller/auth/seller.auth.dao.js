@@ -69,10 +69,7 @@ export const updateToken = async (sellerId, token) => {
 
 		// Register new token to all seller apartment topics for notifications
 		seller.apartments.forEach(apartment =>
-			notifications.apartment.subscribeSeller({
-				apartmentId: apartment._id,
-				userToken: token
-			})
+			notifications.apartment.subscribeSeller(apartment._id, token)
 		)
 		// Register user to apartment topic for notifications
 		return 'token added'
