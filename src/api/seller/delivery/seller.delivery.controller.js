@@ -26,7 +26,7 @@ export const patchDeliveryStatus = async (req, res, next) => {
 			await sendNotifications(
 				order.buyer.id,
 				'Order in delivery',
-				`Your order #${order.order.number} from ${order.seller.brandName} is in delivery`
+				`Your order #${order.order.number} from ${order.seller.brandName} is out for delivery`
 			)
 		} else {
 			await sendNotifications(
@@ -56,8 +56,8 @@ export const patchDeliveryDelay = async (req, res, next) => {
 
 		await sendNotifications(
 			order.buyer.id,
-			'Order delayed',
-			`Your order #${order.order.number} from ${order.seller.brandName} has been delayed to ${newDate}`
+			'Order delivery date changed',
+			`Your order #${order.order.number} from ${order.seller.brandName}, delivery date has been changed to ${newDate}`
 		)
 
 		res.json({ message: `delivery date changed to ${newDate}`, id: order._id })
