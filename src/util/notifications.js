@@ -11,7 +11,8 @@ const notificationPayload = (title, body) => {
 		notification: {
 			title,
 			body,
-			clickAction: 'FLUTTER_NOTIFICATION_CLICK'
+			clickAction: 'FLUTTER_NOTIFICATION_CLICK',
+			sound: 'default'
 		}
 	}
 }
