@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { createBusinessCategory, User } from '../../models'
+import { createBusinessCategory, User, Seller } from '../../models'
 import { notifications } from '../../util'
 import { createApartment } from './admin.dao'
 
@@ -24,16 +24,17 @@ export const postBusinessCategory = async (req, res, next) => {
 	}
 }
 
-export const postNotificationApartment = (req, res, next) => {
-	const { apartmentId, title, content } = req.body
+export const postNotificationTopic = (req, res, next) => {
+	const { topic, title, content } = req.body
 	try {
-		notifications.apartment.send({
-			apartmentId,
+		notifications.sendToTopic({
+			topic,
 			title,
-			body: content,
-			type: notifications.subscriberType.Users
+			body: content
 		})
-		res.json({ message: 'notification send to apartment topic' })
+		res.json({
+			message: `notification send to topic - ${topic}`
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
@@ -41,9 +42,9 @@ export const postNotificationApartment = (req, res, next) => {
 }
 
 export const postNotificationUser = async (req, res, next) => {
-	const { userId, title, content } = req.body
+	const { id, title, content } = req.body
 	try {
-		const user = await User.findById(userId)
+		const user = await User.findById(id)
 
 		if (!user) {
 			throw new CreateHttpError[404]('User Not Found')
@@ -54,6 +55,26 @@ export const postNotificationUser = async (req, res, next) => {
 		)
 
 		res.json({ message: 'notification send to user devices' })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postNotificationSeller = async (req, res, next) => {
+	const { id, title, content } = req.body
+	try {
+		const seller = await Seller.findById(id)
+
+		if (!seller) {
+			throw new CreateHttpError[404]('Seller Not Found')
+		}
+
+		seller.contact.pushTokens.forEach(token =>
+			notifications.sendToUser(token, title, content)
+		)
+
+		res.json({ message: 'notification send to seller devices' })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

@@ -20,13 +20,13 @@ export const apartmentValidator = [
 export const postBusinessCategoryValidator = [emptyValidator('category')]
 
 export const postNotificationUserValidator = [
-	objectIdValidator('userId'),
+	objectIdValidator('id'),
 	emptyValidator('title'),
 	emptyValidator('content')
 ]
 
-export const postNotificationApartmentValidator = [
-	objectIdValidator('apartmentId'),
+export const postNotificationTopicValidator = [
+	emptyValidator('topic'),
 	emptyValidator('title'),
 	emptyValidator('content')
 ]

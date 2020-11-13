@@ -135,8 +135,7 @@ export const updateToken = async (userId, token) => {
 		user.contact.pushTokens.push(token)
 		await user.save()
 
-		notifications.apartment.subscribe({
-			type: notifications.subscriberType.Users,
+		notifications.apartment.subscribeUser({
 			apartmentId: user.contact.address.aptId,
 			userToken: token
 		})

@@ -3,14 +3,15 @@ import { validationMiddleware } from '../../util'
 import {
 	apartmentValidator,
 	postBusinessCategoryValidator,
-	postNotificationApartmentValidator,
+	postNotificationTopicValidator,
 	postNotificationUserValidator
 } from './admin.validator'
 import {
 	postApartment,
 	postBusinessCategory,
-	postNotificationApartment,
-	postNotificationUser
+	postNotificationTopic,
+	postNotificationUser,
+	postNotificationSeller
 } from './admin.controller'
 
 const router = Router()
@@ -30,10 +31,10 @@ router.post(
 )
 
 router.post(
-	'/notification/apartment',
-	postNotificationApartmentValidator,
+	'/notification/topic',
+	postNotificationTopicValidator,
 	validationMiddleware,
-	postNotificationApartment
+	postNotificationTopic
 )
 
 router.post(
@@ -41,6 +42,13 @@ router.post(
 	postNotificationUserValidator,
 	validationMiddleware,
 	postNotificationUser
+)
+
+router.post(
+	'/notification/seller',
+	postNotificationUserValidator,
+	validationMiddleware,
+	postNotificationSeller
 )
 
 export default router

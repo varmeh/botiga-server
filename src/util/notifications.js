@@ -24,24 +24,19 @@ const sendToUser = (pushToken, title, body) => {
 		.sendToDevice(pushToken, notificationPayload(title, body), messagingOptions)
 }
 
-const subscriberType = {
-	Users: 'users',
-	Sellers: 'sellers'
+const sendToTopic = ({ topic, title, body }) => {
+	admin
+		.messaging()
+		.sendToTopic(topic, notificationPayload(title, body), messagingOptions)
 }
 
 const apartment = {
-	subscribe: ({ apartmentId, userToken, type = subscriberType.Users }) => {
-		admin.messaging().subscribeToTopic(userToken, `${apartmentId}_${type}`)
+	subscribeUser: ({ apartmentId, userToken }) => {
+		admin.messaging().subscribeToTopic(userToken, `${apartmentId}_users`)
 	},
-	send: ({ apartmentId, title, body, type = subscriberType.Users }) => {
-		admin
-			.messaging()
-			.sendToTopic(
-				`${apartmentId}_${type}`,
-				notificationPayload(title, body),
-				messagingOptions
-			)
+	subscribeSeller: ({ apartmentId, userToken }) => {
+		admin.messaging().subscribeToTopic(userToken, `${apartmentId}_sellers`)
 	}
 }
 
-export default { configure, sendToUser, apartment, subscriberType }
+export default { configure, sendToUser, sendToTopic, apartment }
