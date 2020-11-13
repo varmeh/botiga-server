@@ -1,5 +1,7 @@
 import CreateHttpError from 'http-errors'
+import chance from 'chance'
 import { winston, moment } from '../../../util'
+
 import {
 	Order,
 	Seller,
@@ -58,6 +60,7 @@ export const createOrder = async ({
 				email: seller.contact.email
 			},
 			order: {
+				number: chance().integer({ min: 100000, max: 999999 }),
 				status: 'open',
 				totalAmount,
 				expectedDeliveryDate: seller.deliveryDate,

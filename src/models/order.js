@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose'
-import chance from 'chance'
 
 export const OrderStatus = {
 	open: 'open',
@@ -64,7 +63,7 @@ const orderSchema = new Schema(
 		order: {
 			number: {
 				type: String,
-				default: chance().integer({ min: 100000, max: 999999 })
+				required: true
 			},
 			status: {
 				type: String,
