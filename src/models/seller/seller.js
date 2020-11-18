@@ -90,9 +90,9 @@ const sellerSchema = new Schema(
 			beneficiaryName: String,
 			accountNumber: String,
 			ifscCode: String,
-			bankName: String,
-			mid: String
+			bankName: String
 		},
+		mid: String, // paytm merchant id for split payments. Separated from bank details to avoid encryption
 		categories: [categorySchema],
 		apartments: [sellerApartmentSchema]
 	},
@@ -100,7 +100,7 @@ const sellerSchema = new Schema(
 )
 
 sellerSchema.virtual('isBankDetailVerified').get(function () {
-	return !!this.bankDetails.mid
+	return !!this.mid
 })
 
 export const Seller = model('seller', sellerSchema)

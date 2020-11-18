@@ -103,9 +103,10 @@ export const updateBankDetails = async ({
 			beneficiaryName,
 			accountNumber,
 			ifscCode,
-			bankName,
-			mid: ''
+			bankName
 		}
+
+		seller.mid = 'DummyValue'
 
 		return await seller.save()
 	} catch (error) {
