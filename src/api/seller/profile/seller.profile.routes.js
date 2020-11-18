@@ -11,6 +11,7 @@ import {
 	patchContactInformation,
 	getBusinessInformation,
 	patchBusinessInformation,
+	getBankDetails,
 	patchBankDetails
 } from './seller.profile.controller'
 
@@ -37,6 +38,8 @@ router.patch(
 	validationMiddleware,
 	patchBusinessInformation
 )
+
+router.get('/bankdetails', token.authenticationMiddleware, getBankDetails)
 
 router.patch(
 	'/bankdetails',

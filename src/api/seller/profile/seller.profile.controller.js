@@ -115,6 +115,23 @@ export const patchBusinessInformation = async (req, res, next) => {
 	}
 }
 
+export const getBankDetails = async (req, res, next) => {
+	try {
+		const seller = await findSeller(token.get(req))
+		const {
+			beneficiaryName,
+			accountNumber,
+			ifscCode,
+			bankName
+		} = seller.bankDetails
+
+		res.json({ beneficiaryName, accountNumber, ifscCode, bankName })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
 export const patchBankDetails = async (req, res, next) => {
 	const { beneficiaryName, accountNumber, ifscCode, bankName } = req.body
 
