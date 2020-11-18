@@ -4,7 +4,8 @@ import { token, aws, winston } from '../../../util'
 import {
 	findSeller,
 	updateContactInformation,
-	updateBusinessInformation
+	updateBusinessInformation,
+	updateBankDetails
 } from './seller.profile.dao'
 
 export const getProfileInformation = async (req, res, next) => {
@@ -108,6 +109,28 @@ export const patchBusinessInformation = async (req, res, next) => {
 		}
 
 		res.json(contact)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchBankDetails = async (req, res, next) => {
+	const { beneficiaryName, accountNumber, ifscCode, bankName } = req.body
+
+	try {
+		await updateBankDetails({
+			sellerId: token.get(req),
+			beneficiaryName,
+			accountNumber,
+			ifscCode,
+			bankName
+		})
+
+		res.json({
+			message:
+				'Bank details updated. Please contact support team for bank details validation'
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

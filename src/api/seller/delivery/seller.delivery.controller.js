@@ -5,7 +5,7 @@ import { OrderStatus, User } from '../../../models'
 import { updateOrder, findDeliveriesByApartment } from './seller.delivery.dao'
 
 const sendNotifications = async (userId, title, body) => {
-	// Send notification to seller devices
+	// Send notification to User devices
 	const user = await User.findById(userId)
 
 	user.contact.pushTokens.forEach(token =>

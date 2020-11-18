@@ -12,6 +12,11 @@ export const numberValidator = field =>
 		.bail()
 		.toInt()
 
+export const alphaNumericValidator = field =>
+	emptyValidator(field)
+		.isAlphanumeric()
+		.withMessage(validationMessages.alphanumeric)
+
 export const pinValidator = field =>
 	emptyValidator(field)
 		.matches(/^\d{4}$/)

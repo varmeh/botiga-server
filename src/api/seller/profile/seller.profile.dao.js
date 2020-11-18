@@ -81,3 +81,35 @@ export const updateBusinessInformation = async (
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
+
+export const updateBankDetails = async ({
+	sellerId,
+	beneficiaryName,
+	accountNumber,
+	ifscCode,
+	bankName
+}) => {
+	try {
+		const seller = await Seller.findById(sellerId)
+
+		if (!seller.bankDetails.editable) {
+			return Promise.reject(
+				new CreateHttpError[401]('Bank details update not authorized')
+			)
+		}
+
+		seller.bankDetails = {
+			editable: false,
+			beneficiaryName,
+			accountNumber,
+			ifscCode,
+			bankName,
+			mid: ''
+		}
+
+		return await seller.save()
+	} catch (error) {
+		winston.debug('@error updateBankDetails', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}

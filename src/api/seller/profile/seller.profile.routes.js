@@ -2,14 +2,16 @@ import { Router } from 'express'
 import { validationMiddleware, token } from '../../../util'
 import {
 	patchContactValidator,
-	patchBusinessValidator
+	patchBusinessValidator,
+	patchBankDetailsValidator
 } from './seller.profile.validator'
 import {
 	getProfileInformation,
 	getContactInformation,
 	patchContactInformation,
 	getBusinessInformation,
-	patchBusinessInformation
+	patchBusinessInformation,
+	patchBankDetails
 } from './seller.profile.controller'
 
 const router = Router()
@@ -34,6 +36,14 @@ router.patch(
 	patchBusinessValidator,
 	validationMiddleware,
 	patchBusinessInformation
+)
+
+router.patch(
+	'/bankdetails',
+	token.authenticationMiddleware,
+	patchBankDetailsValidator,
+	validationMiddleware,
+	patchBankDetails
 )
 
 export default router

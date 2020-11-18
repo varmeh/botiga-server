@@ -82,10 +82,25 @@ const sellerSchema = new Schema(
 			},
 			pushTokens: [String]
 		},
+		bankDetails: {
+			editable: {
+				type: Boolean,
+				default: true
+			},
+			beneficiaryName: String,
+			accountNumber: String,
+			ifscCode: String,
+			bankName: String,
+			mid: String
+		},
 		categories: [categorySchema],
 		apartments: [sellerApartmentSchema]
 	},
 	{ timestamps: true }
 )
+
+sellerSchema.virtual('isBankDetailVerified').get(function () {
+	return !!this.bankDetails.mid
+})
 
 export const Seller = model('seller', sellerSchema)

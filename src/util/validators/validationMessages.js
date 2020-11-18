@@ -3,6 +3,7 @@ export const validationMessages = {
 	addressRegex:
 		'should have following characters - alphabets, numbers, comma, spaces, dot and hypen',
 	numeric: 'should have numbers only',
+	alphanumeric: 'should have alphabets & numbers only',
 	regexAlphaSpaceDigits: 'should have alphabets, numbers & space only',
 	objectId: 'should be a valid ObjectId',
 	decimal: 'should be a decimal',

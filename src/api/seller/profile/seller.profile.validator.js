@@ -5,7 +5,8 @@ import {
 	pincodeOptionalValidator,
 	emailOptionalValidator,
 	emptyValidator,
-	boolValidator
+	boolValidator,
+	alphaNumericValidator
 } from '../../../util'
 
 export const patchContactValidator = [
@@ -27,4 +28,11 @@ export const patchBusinessValidator = [
 		protocols: ['https']
 	}),
 	boolValidator('updateImage')
+]
+
+export const patchBankDetailsValidator = [
+	emptyValidator('beneficiaryName'),
+	alphaNumericValidator('accountNumber'),
+	alphaNumericValidator('ifscCode'),
+	emptyValidator('bankName')
 ]
