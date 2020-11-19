@@ -2,7 +2,7 @@ import axios from 'axios'
 import paytmChecksum from 'paytmchecksum'
 import { nanoid } from 'nanoid'
 
-import { Order, PaymentStatus } from '../models'
+import { Order, PaymentStatus } from '../models/order'
 import { winston } from './winston.logger'
 
 const {

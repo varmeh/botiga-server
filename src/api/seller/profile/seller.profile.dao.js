@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { winston } from '../../../util'
+import { winston, crypto } from '../../../util'
 import { Apartment, Seller } from '../../../models'
 
 export const findSeller = async sellerId => {
@@ -100,8 +100,8 @@ export const updateBankDetails = async ({
 
 		seller.bankDetails = {
 			editable: false,
-			beneficiaryName,
-			accountNumber,
+			beneficiaryName: crypto.encryptString(beneficiaryName),
+			accountNumber: crypto.encryptString(accountNumber),
 			ifscCode,
 			bankName
 		}
@@ -111,6 +111,31 @@ export const updateBankDetails = async ({
 		return await seller.save()
 	} catch (error) {
 		winston.debug('@error updateBankDetails', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const findBankDetails = async sellerId => {
+	try {
+		const seller = await Seller.findById(sellerId)
+
+		const {
+			editable,
+			beneficiaryName,
+			accountNumber,
+			ifscCode,
+			bankName
+		} = seller.bankDetails
+
+		return {
+			editable,
+			beneficiaryName: crypto.decryptString(beneficiaryName),
+			accountNumber: crypto.decryptString(accountNumber),
+			ifscCode,
+			bankName
+		}
+	} catch (error) {
+		winston.debug('@error getBankDetails', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

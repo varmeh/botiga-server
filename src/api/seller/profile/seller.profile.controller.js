@@ -5,7 +5,8 @@ import {
 	findSeller,
 	updateContactInformation,
 	updateBusinessInformation,
-	updateBankDetails
+	updateBankDetails,
+	findBankDetails
 } from './seller.profile.dao'
 
 export const getProfileInformation = async (req, res, next) => {
@@ -117,9 +118,9 @@ export const patchBusinessInformation = async (req, res, next) => {
 
 export const getBankDetails = async (req, res, next) => {
 	try {
-		const seller = await findSeller(token.get(req))
+		const bankDetails = await findBankDetails(token.get(req))
 
-		res.json(seller.bankDetails)
+		res.json(bankDetails)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
