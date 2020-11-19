@@ -4,14 +4,16 @@ import {
 	apartmentValidator,
 	postBusinessCategoryValidator,
 	postNotificationTopicValidator,
-	postNotificationUserValidator
+	postNotificationUserValidator,
+	getSellerDetailsValidator
 } from './admin.validator'
 import {
 	postApartment,
 	postBusinessCategory,
 	postNotificationTopic,
 	postNotificationUser,
-	postNotificationSeller
+	postNotificationSeller,
+	getSellerBankDetails
 } from './admin.controller'
 
 const router = Router()
@@ -49,6 +51,13 @@ router.post(
 	postNotificationUserValidator,
 	validationMiddleware,
 	postNotificationSeller
+)
+
+router.get(
+	'/seller/bankdetails/:phone',
+	getSellerDetailsValidator,
+	validationMiddleware,
+	getSellerBankDetails
 )
 
 export default router

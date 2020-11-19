@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
-import { winston } from '../../util'
-import { Apartment } from '../../models'
+import { winston, crypto } from '../../util'
+import { Apartment, Seller } from '../../models'
 
 export const createApartment = async ({
 	name,
@@ -29,6 +29,50 @@ export const createApartment = async ({
 			)
 		}
 
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const findSellerByNumber = async phone => {
+	try {
+		return await Seller.findOne({ 'contact.phone': phone })
+	} catch (error) {
+		winston.debug('@error findSellerByNumber', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const findSellerBankDetails = async phone => {
+	try {
+		const seller = await findSellerByNumber(phone)
+
+		if (!seller) {
+			return Promise.reject(new CreateHttpError[404]('Seller not found'))
+		}
+
+		if (!seller.bankDetails.beneficiaryName) {
+			return Promise.reject(
+				new CreateHttpError[404]('Bank Details not available')
+			)
+		}
+
+		const {
+			editable,
+			beneficiaryName,
+			accountNumber,
+			ifscCode,
+			bankName
+		} = seller.bankDetails
+
+		return {
+			editable,
+			beneficiaryName: crypto.decryptString(beneficiaryName),
+			accountNumber: crypto.decryptString(accountNumber),
+			ifscCode,
+			bankName
+		}
+	} catch (error) {
+		winston.debug('@error findSellerBankDetails', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
