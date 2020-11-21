@@ -25,7 +25,7 @@ export const getOtp = async (req, res, next) => {
 export const postVerifyOtp = async (req, res, next) => {
 	const { phone, sessionId, otpVal } = req.body
 	try {
-		await otp.verify(sessionId, otpVal)
+		await otp.verify(phone, sessionId, otpVal)
 
 		// Check if seller already exist
 		const seller = await findSellerByNumber(phone)

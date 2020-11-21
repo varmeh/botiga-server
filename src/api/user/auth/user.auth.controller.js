@@ -63,7 +63,7 @@ export const getOtp = async (req, res, next) => {
 export const postVerifyOtp = async (req, res, next) => {
 	const { phone, sessionId, otpVal } = req.body
 	try {
-		await otp.verify(sessionId, otpVal)
+		await otp.verify(phone, sessionId, otpVal)
 
 		// Check if user already exist
 		const user = await findUserByNumber(phone)
