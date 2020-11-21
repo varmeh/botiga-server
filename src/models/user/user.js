@@ -29,7 +29,11 @@ const userSchema = new Schema(
 		},
 		loginPin: { type: String },
 		contact: {
-			countryCode: '91',
+			countryCode: {
+				type: String,
+				required: true,
+				default: '91'
+			},
 			phone: {
 				type: String,
 				unique: true,

@@ -60,7 +60,11 @@ const sellerSchema = new Schema(
 		loginPin: { type: String },
 		contact: {
 			email: String,
-			countryCode: '91',
+			countryCode: {
+				type: String,
+				required: true,
+				default: '91'
+			},
 			phone: {
 				type: String,
 				unique: true,
