@@ -1,6 +1,9 @@
 import { Router } from 'express'
 import { token, validationMiddleware } from '../../util'
-import { getImageUrlValidator } from './services.validator'
+import {
+	getImageUrlValidator,
+	postImageUrlValidator
+} from './services.validator'
 
 import {
 	getApartmentsByLocation,
@@ -10,7 +13,8 @@ import {
 	getImageUrl,
 	getBrandImageUrl,
 	getApartmentsSearch,
-	getBusinessCategory
+	getBusinessCategory,
+	postImageDelete
 } from './services.controller'
 
 const router = Router()
@@ -44,6 +48,14 @@ router.get(
 
 router.get('/token/validate', token.authenticationMiddleware, (_, res) =>
 	res.status(204).json()
+)
+
+router.post(
+	'/image/delete',
+	token.authenticationMiddleware,
+	postImageUrlValidator,
+	validationMiddleware,
+	postImageDelete
 )
 
 export default router

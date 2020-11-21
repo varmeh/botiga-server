@@ -4,7 +4,6 @@ import {
 	objectIdValidator,
 	decimalValidator,
 	numberValidator,
-	paramEmptyValidator,
 	emptyOptionalValidator,
 	regexAlphaSpaceDigitsOptionalValidator,
 	boolValidator,
@@ -23,12 +22,6 @@ export const postProductValidator = [
 		),
 	regexAlphaSpaceDigitsOptionalValidator('description'),
 	emptyOptionalValidator('imageUrl')
-]
-
-export const getImageUrlValidator = [
-	paramEmptyValidator('imageType')
-		.matches(/^(jpg|jpeg|png)$/, 'i')
-		.withMessage('Valid Image Format - png, jpg and jpeg')
 ]
 
 export const patchProductValidator = [

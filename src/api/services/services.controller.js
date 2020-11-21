@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 import { nanoid } from 'nanoid'
 import { token, aws } from '../../util'
-import { findBusinessCategory } from '../../models'
+import { findBusinessCategory, Seller } from '../../models'
 import {
 	findCities,
 	findAreaByCity,
@@ -97,6 +97,23 @@ export const getBrandImageUrl = async (req, res, next) => {
 		const fileName = `${nanoid()}.${imageType}`
 		const data = await aws.s3.getPredefinedImageUrl(fileName, imageType)
 		res.status(201).json(data)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postImageDelete = async (req, res, next) => {
+	try {
+		// First validate seller exists as only seller could delete image
+		const seller = await Seller.findById(token.get(req))
+
+		if (!seller) {
+			throw new CreateHttpError[404]('Seller Not Found')
+		}
+
+		await aws.s3.deleteImageUrl(req.body.imageUrl)
+		res.status(204).json()
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
