@@ -127,6 +127,17 @@ export const findBankDetails = async sellerId => {
 			bankName
 		} = seller.bankDetails
 
+		if (!seller.bankDetails.beneficiaryName) {
+			// Bank details don't exist
+			return {
+				editable: true,
+				beneficiaryName: '',
+				accountNumber: '',
+				ifscCode: '',
+				bankName: ''
+			}
+		}
+
 		return {
 			editable,
 			beneficiaryName: crypto.decryptString(beneficiaryName),
