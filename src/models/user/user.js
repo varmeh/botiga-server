@@ -29,6 +29,7 @@ const userSchema = new Schema(
 		},
 		loginPin: { type: String },
 		contact: {
+			countryCode: '91',
 			phone: {
 				type: String,
 				unique: true,
@@ -39,7 +40,7 @@ const userSchema = new Schema(
 			whatsapp: {
 				type: String,
 				unique: true,
-				required: [true, 'Login Number is mandatory'],
+				required: [true, 'Whatsapp Number is mandatory'],
 				immutable: true,
 				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 			},
