@@ -44,11 +44,12 @@ const s3 = {
 	deleteImageUrl: async imageUrl => {
 		try {
 			const arr = imageUrl.split('/')
-			const data = await aws_s3.deleteObject({
-				Bucket: process.env.AWS_BUCKET_NAME,
-				Key: arr[arr.length - 1]
-			})
-			winston.debug('@aws delete image', { data })
+			const data = await aws_s3
+				.deleteObject({
+					Bucket: process.env.AWS_BUCKET_NAME,
+					Key: arr[arr.length - 1]
+				})
+				.promise()
 		} catch (error) {
 			winston.debug('@error deleteImageUrl', {
 				error,
