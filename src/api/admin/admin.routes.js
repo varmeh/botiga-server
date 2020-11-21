@@ -5,12 +5,10 @@ import {
 	postBusinessCategoryValidator,
 	postNotificationTopicValidator,
 	postNotificationUserValidator,
-	getSellerDetailsValidator,
-	postImageUrlValidator
+	getSellerDetailsValidator
 } from './admin.validator'
 import {
 	postApartment,
-	postImageDelete,
 	postBusinessCategory,
 	postNotificationTopic,
 	postNotificationUser,
@@ -25,13 +23,6 @@ router.post(
 	postApartmentValidator,
 	validationMiddleware,
 	postApartment
-)
-
-router.post(
-	'/image/delete',
-	postImageUrlValidator,
-	validationMiddleware,
-	postImageDelete
 )
 
 router.post(

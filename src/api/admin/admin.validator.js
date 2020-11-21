@@ -5,8 +5,7 @@ import {
 	decimalValidator,
 	regexAlphaSpaceDigitsValidator,
 	objectIdValidator,
-	paramPhoneValidator,
-	urlValidator
+	paramPhoneValidator
 } from '../../util'
 
 export const postApartmentValidator = [
@@ -18,8 +17,6 @@ export const postApartmentValidator = [
 	decimalValidator('location.lat'),
 	decimalValidator('location.long')
 ]
-
-export const postImageUrlValidator = urlValidator('imageUrl')
 
 export const postBusinessCategoryValidator = [emptyValidator('category')]
 
