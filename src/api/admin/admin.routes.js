@@ -1,14 +1,16 @@
 import { Router } from 'express'
 import { validationMiddleware } from '../../util'
 import {
-	apartmentValidator,
+	postApartmentValidator,
 	postBusinessCategoryValidator,
 	postNotificationTopicValidator,
 	postNotificationUserValidator,
-	getSellerDetailsValidator
+	getSellerDetailsValidator,
+	postImageUrlValidator
 } from './admin.validator'
 import {
 	postApartment,
+	postImageDelete,
 	postBusinessCategory,
 	postNotificationTopic,
 	postNotificationUser,
@@ -20,9 +22,16 @@ const router = Router()
 
 router.post(
 	'/apartments',
-	apartmentValidator,
+	postApartmentValidator,
 	validationMiddleware,
 	postApartment
+)
+
+router.post(
+	'/image/delete',
+	postImageUrlValidator,
+	validationMiddleware,
+	postImageDelete
 )
 
 router.post(

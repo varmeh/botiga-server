@@ -1,12 +1,23 @@
 import CreateHttpError from 'http-errors'
 import { createBusinessCategory, User, Seller } from '../../models'
-import { notifications } from '../../util'
+import { notifications, aws } from '../../util'
 import { createApartment, findSellerBankDetails } from './admin.dao'
 
 export const postApartment = async (req, res, next) => {
 	try {
 		const areas = await createApartment(req.body)
 		res.json(areas)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postImageDelete = async (req, res, next) => {
+	try {
+		const { imageUrl } = req.body
+		await aws.s3.deleteImageUrl(imageUrl)
+		res.json({ message: 's3 image deleted', imageUrl })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

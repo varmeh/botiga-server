@@ -74,3 +74,12 @@ export const boolValidator = field =>
 		.withMessage(validationMessages.bool)
 		.bail()
 		.toBoolean(true)
+
+export const urlValidator = field =>
+	emptyValidator(field)
+		.isURL({
+			protocols: ['https'],
+			// eslint-disable-next-line camelcase
+			require_protocol: true
+		})
+		.withMessage(validationMessages.url)
