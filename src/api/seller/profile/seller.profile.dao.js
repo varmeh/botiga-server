@@ -87,7 +87,8 @@ export const updateBankDetails = async ({
 	beneficiaryName,
 	accountNumber,
 	ifscCode,
-	bankName
+	bankName,
+	accountType
 }) => {
 	try {
 		const seller = await Seller.findById(sellerId)
@@ -103,7 +104,8 @@ export const updateBankDetails = async ({
 			beneficiaryName: crypto.encryptString(beneficiaryName),
 			accountNumber: crypto.encryptString(accountNumber),
 			ifscCode,
-			bankName
+			bankName,
+			accountType
 		}
 
 		seller.mid = 'DummyValue'
@@ -124,7 +126,8 @@ export const findBankDetails = async sellerId => {
 			beneficiaryName,
 			accountNumber,
 			ifscCode,
-			bankName
+			bankName,
+			accountType
 		} = seller.bankDetails
 
 		if (!seller.bankDetails.beneficiaryName) {
@@ -134,7 +137,8 @@ export const findBankDetails = async sellerId => {
 				beneficiaryName: '',
 				accountNumber: '',
 				ifscCode: '',
-				bankName: ''
+				bankName: '',
+				accountType: ''
 			}
 		}
 
@@ -143,7 +147,8 @@ export const findBankDetails = async sellerId => {
 			beneficiaryName: crypto.decryptString(beneficiaryName),
 			accountNumber: crypto.decryptString(accountNumber),
 			ifscCode,
-			bankName
+			bankName,
+			accountType
 		}
 	} catch (error) {
 		winston.debug('@error getBankDetails', { error })

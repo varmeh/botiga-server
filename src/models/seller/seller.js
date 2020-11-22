@@ -1,6 +1,11 @@
 import { Schema, model } from 'mongoose'
 import { categorySchema } from './categorySchema'
 
+export const AccountType = {
+	current: 'current',
+	savings: 'savings'
+}
+
 export const sellerApartmentSchema = new Schema({
 	_id: {
 		// Same as apartmentId _id in apartment schema
@@ -94,6 +99,11 @@ const sellerSchema = new Schema(
 			},
 			beneficiaryName: String,
 			accountNumber: String,
+			accountType: {
+				type: String,
+				enum: [AccountType.current, AccountType.savings],
+				default: AccountType.current
+			},
 			ifscCode: String,
 			bankName: String
 		},

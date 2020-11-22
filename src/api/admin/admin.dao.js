@@ -61,7 +61,8 @@ export const findSellerBankDetails = async phone => {
 			beneficiaryName,
 			accountNumber,
 			ifscCode,
-			bankName
+			bankName,
+			accountType
 		} = seller.bankDetails
 
 		return {
@@ -69,7 +70,8 @@ export const findSellerBankDetails = async phone => {
 			beneficiaryName: crypto.decryptString(beneficiaryName),
 			accountNumber: crypto.decryptString(accountNumber),
 			ifscCode,
-			bankName
+			bankName,
+			accountType
 		}
 	} catch (error) {
 		winston.debug('@error findSellerBankDetails', { error })

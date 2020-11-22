@@ -9,6 +9,11 @@ import {
 	findBankDetails
 } from './seller.profile.dao'
 
+const getContactInfo = contact => {
+	const { address, countryCode, phone, whatsapp, email } = contact
+	return { countryCode, phone, whatsapp, email, address }
+}
+
 export const getProfileInformation = async (req, res, next) => {
 	try {
 		const {
@@ -20,14 +25,13 @@ export const getProfileInformation = async (req, res, next) => {
 			apartments
 		} = await findSeller(token.get(req))
 
-		delete contact.pushTokens
 		res.json({
 			firstName,
 			lastName,
 			businessName,
 			businessCategory,
 			brand,
-			contact,
+			contact: getContactInfo(contact),
 			apartments
 		})
 	} catch (error) {
@@ -39,7 +43,7 @@ export const getProfileInformation = async (req, res, next) => {
 export const getContactInformation = async (req, res, next) => {
 	try {
 		const seller = await findSeller(token.get(req))
-		res.json(seller.contact)
+		res.json(getContactInfo(seller.contact))
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
@@ -62,7 +66,7 @@ export const patchContactInformation = async (req, res, next) => {
 			pincode
 		})
 
-		res.json(contact)
+		res.json(getContactInfo(contact))
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
@@ -128,7 +132,13 @@ export const getBankDetails = async (req, res, next) => {
 }
 
 export const patchBankDetails = async (req, res, next) => {
-	const { beneficiaryName, accountNumber, ifscCode, bankName } = req.body
+	const {
+		beneficiaryName,
+		accountNumber,
+		ifscCode,
+		bankName,
+		accountType
+	} = req.body
 
 	try {
 		await updateBankDetails({
@@ -136,7 +146,8 @@ export const patchBankDetails = async (req, res, next) => {
 			beneficiaryName,
 			accountNumber,
 			ifscCode,
-			bankName
+			bankName,
+			accountType
 		})
 
 		res.json({

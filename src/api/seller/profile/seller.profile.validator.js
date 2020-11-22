@@ -34,5 +34,8 @@ export const patchBankDetailsValidator = [
 	emptyValidator('beneficiaryName'),
 	alphaNumericValidator('accountNumber'),
 	alphaNumericValidator('ifscCode'),
-	emptyValidator('bankName')
+	emptyValidator('bankName'),
+	emptyValidator('accountType')
+		.matches(/^(current|savings)$/, 'i')
+		.withMessage('should be either current or savings')
 ]
