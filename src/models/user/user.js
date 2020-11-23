@@ -27,7 +27,6 @@ const userSchema = new Schema(
 			required: true,
 			trim: true
 		},
-		loginPin: { type: String },
 		contact: {
 			countryCode: {
 				type: String,
