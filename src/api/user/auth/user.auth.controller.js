@@ -69,7 +69,11 @@ export const postVerifyOtp = async (req, res, next) => {
 		// Check if user already exist
 		const user = await findUserByNumber(phone)
 		if (!user) {
-			return res.json({ message: 'createUser', phone })
+			return res.json({
+				message: 'createUser',
+				phone,
+				createToken: token.generateToken(phone)
+			})
 		}
 
 		// Add jwt token
@@ -83,9 +87,16 @@ export const postVerifyOtp = async (req, res, next) => {
 }
 
 export const postUserSignup = async (req, res, next) => {
-	const { firstName, lastName, phone, whatsapp, email } = req.body
+	const { firstName, lastName, phone, whatsapp, email, createToken } = req.body
 
 	try {
+		// Validation of create request using create token
+		const val = token.extractPayload(createToken)
+
+		if (val !== phone) {
+			throw new CreateHttpError[400]('Token value mismatch with phone number')
+		}
+
 		const user = await createUser({
 			firstName,
 			lastName,

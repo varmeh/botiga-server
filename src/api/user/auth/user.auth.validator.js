@@ -22,7 +22,8 @@ export const postSignupValidator = [
 	emptyValidator('lastName'),
 	phoneValidator('phone'),
 	phoneOptionalValidator('whatsapp'),
-	emailOptionalValidator('email')
+	emailOptionalValidator('email'),
+	emptyValidator('createToken')
 ]
 
 export const patchProfileValidator = [

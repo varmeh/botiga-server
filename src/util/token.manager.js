@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import CreateHttpError from 'http-errors'
 import { winston } from './winston.logger'
 
-const authHttpHeader = 'Authorization'
+const authToken = 'Authorization'
 const secsInDay = 24 * 60 * 60
 const jwtExpirySeconds =
 	process.env.NODE_ENV === 'production' ? 10 * secsInDay : 30 * secsInDay // 10 days for Prod, 30 days for dev
@@ -28,28 +28,34 @@ const extractPayload = token => {
 }
 
 /* Methods to add & retrieve authorization tokens */
-const set = (res, id) => res.set(authHttpHeader, generateToken(id))
+const set = (res, id) => res.set(authToken, generateToken(id))
 
-const get = req => extractPayload(req.get(authHttpHeader))
+const get = req => extractPayload(req.get(authToken))
 
 /* Middlewares to authenticate & refresh tokens */
 const authenticationMiddleware = (req, _res, next) => {
-	if (!req.get(authHttpHeader)) {
+	if (!req.get(authToken)) {
 		winston.error('Auth Token Missing')
 		throw new CreateHttpError[400]('Bad Request - Token Missing')
-	} else {
-		// Extract payload throws errors for stale tokens
-		extractPayload(req.get(authHttpHeader))
 	}
+	// Extract payload throws errors for stale tokens
+	extractPayload(req.get(authToken))
 	next()
 }
 
 const refreshMiddleware = (req, res, next) => {
-	const id = extractPayload(req.get(authHttpHeader))
+	const id = extractPayload(req.get(authToken))
 
 	// Set refreshed tokens on response object
 	set(res, id)
 	next()
 }
 
-export default { get, set, authenticationMiddleware, refreshMiddleware }
+export default {
+	generateToken,
+	extractPayload,
+	get,
+	set,
+	authenticationMiddleware,
+	refreshMiddleware
+}
