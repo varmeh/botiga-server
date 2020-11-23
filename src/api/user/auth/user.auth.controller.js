@@ -10,17 +10,18 @@ import {
 	updateToken
 } from './user.auth.dao'
 
-const userProfile = user => {
+const extractUserProfile = user => {
 	const {
 		firstName,
 		lastName,
-		contact: { whatsapp, email, address }
+		contact: { phone, whatsapp, email, address }
 	} = user
 
 	if (address.length === 0) {
 		return {
 			firstName,
 			lastName,
+			phone,
 			whatsapp,
 			email
 		}
@@ -31,6 +32,7 @@ const userProfile = user => {
 	return {
 		firstName,
 		lastName,
+		phone,
 		whatsapp,
 		email,
 		address: {
@@ -73,7 +75,7 @@ export const postVerifyOtp = async (req, res, next) => {
 		// Add jwt token
 		token.set(res, user._id)
 
-		return res.json(userProfile(user))
+		return res.json(extractUserProfile(user))
 	} catch (error) {
 		const { status, message } = error
 		return next(new CreateHttpError(status, message))
@@ -115,7 +117,7 @@ export const postUserSignout = (_, res, next) => {
 export const getUserProfile = async (req, res, next) => {
 	try {
 		const user = await findUser(token.get(req))
-		res.json(userProfile(user))
+		res.json(extractUserProfile(user))
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

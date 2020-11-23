@@ -8,6 +8,7 @@ import {
 	patchAddressValidator,
 	patchTokenRegisterValidator
 } from './user.auth.validator'
+
 import {
 	getOtp,
 	postVerifyOtp,
