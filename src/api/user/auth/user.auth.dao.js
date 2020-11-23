@@ -72,17 +72,6 @@ export const updateUserProfile = async (
 	}
 }
 
-export const updateUserPin = async (userId, pin) => {
-	try {
-		const user = await User.findById(userId)
-		user.loginPin = pin
-		return await user.save()
-	} catch (error) {
-		winston.debug('@error updateUserPin', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
-	}
-}
-
 export const updateUserAddress = async (userId, house, apartmentId) => {
 	try {
 		const apartment = await Apartment.findById(apartmentId)

@@ -1,12 +1,11 @@
 import CreateHttpError from 'http-errors'
 
-import { password, token, otp } from '../../../util'
+import { token, otp } from '../../../util'
 import {
 	createUser,
 	findUserByNumber,
 	findUser,
 	updateUserProfile,
-	updateUserPin,
 	updateUserAddress,
 	updateToken
 } from './user.auth.dao'
@@ -103,30 +102,6 @@ export const postUserSignup = async (req, res, next) => {
 	}
 }
 
-export const postUserSigninPin = async (req, res, next) => {
-	const { phone, pin } = req.body
-
-	try {
-		const user = await findUserByNumber(phone)
-		if (!user) {
-			throw new CreateHttpError[404]('User Not Found')
-		}
-		const match = await password.compare(pin, user.loginPin)
-
-		if (match) {
-			// Add jwt token
-			token.set(res, user._id)
-
-			res.json(userProfile(user))
-		} else {
-			throw new CreateHttpError[401]('Invalid Credentials')
-		}
-	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
-	}
-}
-
 export const postUserSignout = (_, res, next) => {
 	try {
 		// TODO: Invalidate token on signout
@@ -162,20 +137,6 @@ export const patchUserProfile = async (req, res, next) => {
 			lastName: user.lastName,
 			email: user.email,
 			whatsapp: user.whatsapp
-		})
-	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
-	}
-}
-
-export const patchUserPin = async (req, res, next) => {
-	try {
-		const hashedPin = await password.hash(req.body.pin)
-
-		await updateUserPin(token.get(req), hashedPin)
-		res.json({
-			message: 'pin updated'
 		})
 	} catch (error) {
 		const { status, message } = error

@@ -1,6 +1,5 @@
 import {
 	emptyValidator,
-	pinValidator,
 	otpValidator,
 	paramPhoneValidator,
 	phoneValidator,
@@ -15,11 +14,6 @@ export const postOtpVerifyValidator = [
 	phoneValidator('phone'),
 	emptyValidator('sessionId'),
 	otpValidator('otpVal')
-]
-
-export const postSigninPinValidator = [
-	phoneValidator('phone'),
-	pinValidator('pin')
 ]
 
 export const postSignupValidator = [
@@ -41,7 +35,5 @@ export const patchAddressValidator = [
 	objectIdValidator('apartmentId'),
 	addressValidator('house')
 ]
-
-export const patchPinValidator = pinValidator('pin')
 
 export const patchTokenRegisterValidator = [emptyValidator('token')]

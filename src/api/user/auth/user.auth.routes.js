@@ -3,10 +3,8 @@ import { validationMiddleware, token } from '../../../util'
 import {
 	getOtpValidator,
 	postOtpVerifyValidator,
-	postSigninPinValidator,
 	postSignupValidator,
 	patchProfileValidator,
-	patchPinValidator,
 	patchAddressValidator,
 	patchTokenRegisterValidator
 } from './user.auth.validator'
@@ -14,11 +12,9 @@ import {
 	getOtp,
 	postVerifyOtp,
 	postUserSignup,
-	postUserSigninPin,
 	postUserSignout,
 	getUserProfile,
 	patchUserProfile,
-	patchUserPin,
 	patchUserAddress,
 	patchUserPushToken
 } from './user.auth.controller'
@@ -40,13 +36,6 @@ router.post(
 	postUserSignup
 )
 
-router.post(
-	'/signin/pin',
-	postSigninPinValidator,
-	validationMiddleware,
-	postUserSigninPin
-)
-
 router.get('/profile', token.authenticationMiddleware, getUserProfile)
 
 router.patch(
@@ -55,14 +44,6 @@ router.patch(
 	patchProfileValidator,
 	validationMiddleware,
 	patchUserProfile
-)
-
-router.patch(
-	'/pin',
-	token.authenticationMiddleware,
-	patchPinValidator,
-	validationMiddleware,
-	patchUserPin
 )
 
 router.patch(
