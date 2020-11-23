@@ -32,7 +32,8 @@ export const postSignupValidator = [
 	regexAlphaSpaceDigitsValidator('businessCategory'),
 	urlOptionalValidator('brandUrl'),
 	emptyOptionalValidator('tagline'),
-	phoneValidator('phone')
+	phoneValidator('phone'),
+	emptyValidator('createToken')
 ]
 
 export const patchTokenRegisterValidator = [emptyValidator('token')]

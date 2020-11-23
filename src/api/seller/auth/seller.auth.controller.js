@@ -30,7 +30,11 @@ export const postVerifyOtp = async (req, res, next) => {
 		// Check if seller already exist
 		const seller = await findSellerByNumber(phone)
 		if (!seller) {
-			return res.json({ message: 'createSeller', phone })
+			return res.json({
+				message: 'createSeller',
+				phone,
+				createToken: token.generateToken(phone)
+			})
 		}
 
 		// Else, signIn seller
@@ -65,10 +69,18 @@ export const postSellerSignup = async (req, res, next) => {
 		businessCategory,
 		brandUrl,
 		tagline,
-		phone
+		phone,
+		createToken
 	} = req.body
 
 	try {
+		// Validation of create request using create token
+		const val = token.extractPayload(createToken)
+
+		if (val !== phone) {
+			throw new CreateHttpError[400]('Token value mismatch with phone number')
+		}
+
 		const seller = await createSeller({
 			businessName,
 			firstName,
