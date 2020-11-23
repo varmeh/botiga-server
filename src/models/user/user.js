@@ -42,9 +42,6 @@ const userSchema = new Schema(
 			},
 			whatsapp: {
 				type: String,
-				unique: true,
-				required: [true, 'Whatsapp Number is mandatory'],
-				immutable: true,
 				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 			},
 			address: [addressSchema],

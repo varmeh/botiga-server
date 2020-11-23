@@ -5,7 +5,8 @@ import {
 	phoneValidator,
 	objectIdValidator,
 	addressValidator,
-	emailOptionalValidator
+	emailOptionalValidator,
+	phoneOptionalValidator
 } from '../../../util'
 
 export const getOtpValidator = paramPhoneValidator('phone')
@@ -20,14 +21,14 @@ export const postSignupValidator = [
 	emptyValidator('firstName'),
 	emptyValidator('lastName'),
 	phoneValidator('phone'),
-	phoneValidator('whatsapp'),
+	phoneOptionalValidator('whatsapp'),
 	emailOptionalValidator('email')
 ]
 
 export const patchProfileValidator = [
 	emptyValidator('firstName'),
 	emptyValidator('lastName'),
-	phoneValidator('whatsapp'),
+	phoneOptionalValidator('whatsapp'),
 	emailOptionalValidator('email')
 ]
 

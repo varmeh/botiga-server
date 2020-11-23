@@ -13,7 +13,6 @@ export const createUser = async ({
 		const user = new User({
 			firstName,
 			lastName,
-			phone,
 			contact: {
 				phone,
 				whatsapp,
