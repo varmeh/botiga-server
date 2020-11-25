@@ -7,7 +7,8 @@ import {
 	emptyOptionalValidator,
 	regexAlphaSpaceDigitsOptionalValidator,
 	boolValidator,
-	paramObjectIdValidator
+	paramObjectIdValidator,
+	urlOptionalValidator
 } from '../../../util'
 
 export const postProductValidator = [
@@ -20,8 +21,8 @@ export const postProductValidator = [
 		.withMessage(
 			'should be either of following - gms, kg, ml, lt, piece & pieces'
 		),
-	regexAlphaSpaceDigitsOptionalValidator('description'),
-	emptyOptionalValidator('imageUrl')
+	emptyOptionalValidator('description'),
+	urlOptionalValidator('imageUrl')
 ]
 
 export const patchProductValidator = [

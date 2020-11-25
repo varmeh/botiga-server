@@ -25,7 +25,6 @@ router.use('/orders', orderRouter)
 
 router.get(
 	'/sellers/:apartmentId',
-	token.authenticationMiddleware,
 	getSellerValidator,
 	validationMiddleware,
 	getSellersInApartment
@@ -33,7 +32,6 @@ router.get(
 
 router.get(
 	'/products/:sellerId',
-	token.authenticationMiddleware,
 	getProductsValidator,
 	validationMiddleware,
 	getProductsOfSeller
