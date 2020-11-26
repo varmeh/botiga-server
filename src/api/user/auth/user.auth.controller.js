@@ -30,7 +30,7 @@ const extractUserAddress = user => {
 					id: _id,
 					aptId,
 					house,
-					aptName,
+					apartment: aptName,
 					area,
 					city,
 					state,
