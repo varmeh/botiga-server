@@ -117,7 +117,9 @@ export const postUserSignup = async (req, res, next) => {
 		// Add jwt token
 		token.set(res, user._id)
 
-		res.status(201).json({ message: 'user created', id: user._id })
+		res
+			.status(201)
+			.json({ message: 'user created', ...extractUserProfile(user) })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
