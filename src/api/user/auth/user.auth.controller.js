@@ -6,28 +6,45 @@ import {
 	findUserByNumber,
 	findUser,
 	updateUserProfile,
-	updateUserAddress,
-	updateToken
+	updateToken,
+	createAddress,
+	updateAddress,
+	deleteAddress
 } from './user.auth.dao'
+
+const extractUserAddress = user => {
+	return user.contact.addresses.length === 0
+		? []
+		: user.contact.addresses.map(address => {
+				const {
+					_id,
+					aptId,
+					house,
+					aptName,
+					area,
+					city,
+					state,
+					pincode
+				} = address
+				return {
+					id: _id,
+					aptId,
+					house,
+					aptName,
+					area,
+					city,
+					state,
+					pincode
+				}
+		  })
+}
 
 const extractUserProfile = user => {
 	const {
 		firstName,
 		lastName,
-		contact: { phone, whatsapp, email, address }
+		contact: { phone, whatsapp, email }
 	} = user
-
-	if (address.length === 0) {
-		return {
-			firstName,
-			lastName,
-			phone,
-			whatsapp,
-			email
-		}
-	}
-
-	const [{ aptId, house, aptName, area, city, state, pincode }] = address
 
 	return {
 		firstName,
@@ -35,15 +52,7 @@ const extractUserProfile = user => {
 		phone,
 		whatsapp,
 		email,
-		address: {
-			id: aptId,
-			house,
-			apartment: aptName,
-			area,
-			city,
-			state,
-			pincode
-		}
+		addresses: extractUserAddress(user)
 	}
 }
 
@@ -157,25 +166,59 @@ export const patchUserProfile = async (req, res, next) => {
 	}
 }
 
-export const patchUserAddress = async (req, res, next) => {
-	const { house, apartmentId } = req.body
+export const patchUserPushToken = async (req, res, next) => {
 	try {
-		await updateUserAddress(token.get(req), house, apartmentId)
+		const message = await updateToken(token.get(req), req.body.token)
 
-		res.json({
-			message: 'updated address'
-		})
+		res.json({ message })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
 	}
 }
 
-export const patchUserPushToken = async (req, res, next) => {
+export const getUserAddress = async (req, res, next) => {
 	try {
-		const message = await updateToken(token.get(req), req.body.token)
+		const user = await findUser(token.get(req))
 
-		res.json({ message })
+		res.json(extractUserAddress(user))
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postUserAddress = async (req, res, next) => {
+	const { house, apartmentId } = req.body
+	try {
+		await createAddress(token.get(req), house, apartmentId)
+
+		res.status(201).json({ message: 'address created' })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const deleteUserAddress = async (req, res, next) => {
+	try {
+		await deleteAddress(token.get(req), req.params.id)
+
+		res.status(204).json()
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchUserAddress = async (req, res, next) => {
+	const { house, id } = req.body
+	try {
+		await updateAddress(token.get(req), house, id)
+
+		res.json({
+			message: 'updated address'
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

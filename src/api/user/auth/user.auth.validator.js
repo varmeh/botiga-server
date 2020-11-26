@@ -6,7 +6,8 @@ import {
 	objectIdValidator,
 	addressValidator,
 	emailOptionalValidator,
-	phoneOptionalValidator
+	phoneOptionalValidator,
+	paramObjectIdValidator
 } from '../../../util'
 
 export const getOtpValidator = paramPhoneValidator('phone')
@@ -33,9 +34,16 @@ export const patchProfileValidator = [
 	emailOptionalValidator('email')
 ]
 
-export const patchAddressValidator = [
+export const patchTokenRegisterValidator = [emptyValidator('token')]
+
+export const postAddressValidator = [
 	objectIdValidator('apartmentId'),
 	addressValidator('house')
 ]
 
-export const patchTokenRegisterValidator = [emptyValidator('token')]
+export const patchAddressValidator = [
+	objectIdValidator('id'),
+	addressValidator('house')
+]
+
+export const deleteAddressValidator = [paramObjectIdValidator('id')]

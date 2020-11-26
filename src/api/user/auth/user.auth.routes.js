@@ -6,6 +6,8 @@ import {
 	postSignupValidator,
 	patchProfileValidator,
 	patchAddressValidator,
+	postAddressValidator,
+	deleteAddressValidator,
 	patchTokenRegisterValidator
 } from './user.auth.validator'
 
@@ -16,8 +18,11 @@ import {
 	postUserSignout,
 	getUserProfile,
 	patchUserProfile,
+	patchUserPushToken,
+	getUserAddress,
+	postUserAddress,
 	patchUserAddress,
-	patchUserPushToken
+	deleteUserAddress
 } from './user.auth.controller'
 
 const router = Router()
@@ -48,19 +53,37 @@ router.patch(
 )
 
 router.patch(
-	'/address',
+	'/token',
+	token.authenticationMiddleware,
+	patchTokenRegisterValidator,
+	validationMiddleware,
+	patchUserPushToken
+)
+
+router.get('/addresses', token.authenticationMiddleware, getUserAddress)
+
+router.post(
+	'/addresses',
+	token.authenticationMiddleware,
+	postAddressValidator,
+	validationMiddleware,
+	postUserAddress
+)
+
+router.patch(
+	'/addresses',
 	token.authenticationMiddleware,
 	patchAddressValidator,
 	validationMiddleware,
 	patchUserAddress
 )
 
-router.patch(
-	'/token',
+router.delete(
+	'/addresses/:id',
 	token.authenticationMiddleware,
-	patchTokenRegisterValidator,
+	deleteAddressValidator,
 	validationMiddleware,
-	patchUserPushToken
+	deleteUserAddress
 )
 
 router.post('/signout', token.authenticationMiddleware, postUserSignout)

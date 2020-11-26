@@ -44,7 +44,7 @@ const userSchema = new Schema(
 				type: String,
 				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 			},
-			address: [addressSchema],
+			addresses: [addressSchema],
 			email: String,
 			pushTokens: [String]
 		},

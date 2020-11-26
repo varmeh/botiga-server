@@ -71,49 +71,6 @@ export const updateUserProfile = async (
 	}
 }
 
-export const updateUserAddress = async (userId, house, apartmentId) => {
-	try {
-		const apartment = await Apartment.findById(apartmentId)
-
-		if (!apartment) {
-			return Promise.reject(new CreateHttpError[404]('Apartment Not Found'))
-		}
-		const user = await User.findById(userId)
-
-		// Update delivery address
-		const { name, area, city, state, pincode } = apartment
-
-		if (user.contact.address.length > 0) {
-			// If address exists, update the address
-			const [address] = user.contact.address
-			address.aptName = name
-			address.area = area
-			address.city = city
-			address.state = state
-			address.pincode = pincode
-
-			address.house = house
-			address.aptId = apartmentId
-		} else {
-			user.contact.address.push({
-				aptId: apartmentId,
-				label: 'home',
-				house,
-				aptName: name,
-				area,
-				city,
-				state,
-				pincode
-			})
-		}
-
-		return await user.save()
-	} catch (error) {
-		winston.debug('@error updateUser', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
-	}
-}
-
 export const updateToken = async (userId, token) => {
 	try {
 		const user = await User.findById(userId)
@@ -129,6 +86,68 @@ export const updateToken = async (userId, token) => {
 		return 'token added'
 	} catch (error) {
 		winston.debug('@error updateToken', { error, msg: error.message })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const createAddress = async (userId, house, apartmentId) => {
+	try {
+		const apartment = await Apartment.findById(apartmentId)
+
+		if (!apartment) {
+			return Promise.reject(new CreateHttpError[404]('Apartment Not Found'))
+		}
+		const user = await User.findById(userId)
+
+		// Add delivery address
+		const { name, area, city, state, pincode } = apartment
+
+		user.contact.addresses.push({
+			aptId: apartmentId,
+			label: 'home',
+			house,
+			aptName: name,
+			area,
+			city,
+			state,
+			pincode
+		})
+
+		return await user.save()
+	} catch (error) {
+		winston.debug('@error createUserAddress', { error, msg: error.message })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const updateAddress = async (userId, house, id) => {
+	try {
+		const user = await User.findById(userId)
+
+		const address = user.contact.addresses.id(id)
+
+		if (!address) {
+			return Promise.reject(new CreateHttpError[404]('Address Not Found'))
+		}
+
+		address.house = house
+
+		return await user.save()
+	} catch (error) {
+		winston.debug('@error updateUserAddress', { error, msg: error.message })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const deleteAddress = async (userId, id) => {
+	try {
+		const user = await User.findById(userId)
+
+		user.contact.addresses.id(id).remove()
+
+		return await user.save()
+	} catch (error) {
+		winston.debug('@error deleteUserAddress', { error, msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
