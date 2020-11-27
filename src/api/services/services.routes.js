@@ -24,8 +24,9 @@ router.get('/apartments/location', getApartmentsByLocation)
 
 router.get('/apartments/search', getApartmentsSearch)
 
+// This one should be below all other apartment apis
 router.get(
-	'/apartments/id/:apartmentId',
+	'/apartments/:apartmentId',
 	getApartmentValidator,
 	validationMiddleware,
 	getApartmentById
