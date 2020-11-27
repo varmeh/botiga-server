@@ -143,6 +143,11 @@ export const deleteAddress = async (userId, id) => {
 	try {
 		const user = await User.findById(userId)
 
+		if (user.contact.addresses.length === 1) {
+			return Promise.reject(
+				new CreateHttpError[401]('Unauthorized - Atleast one address required')
+			)
+		}
 		user.contact.addresses.id(id).remove()
 
 		return await user.save()
