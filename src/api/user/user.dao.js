@@ -28,7 +28,7 @@ export const findSellersInApartment = async apartmentId => {
 
 		return data
 	} catch (error) {
-		winston.debug('@error findSellersInApartment', { error })
+		winston.debug('@error findSellersInApartment', { msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
@@ -43,7 +43,7 @@ export const findProductsBySeller = async sellerId => {
 
 		return seller.categories
 	} catch (error) {
-		winston.debug('@error findProductsBySeller', { error })
+		winston.debug('@error findProductsBySeller', { msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
@@ -53,24 +53,19 @@ export const findCart = async userId => {
 		const user = await User.findById(userId)
 		return user.cart
 	} catch (error) {
-		winston.debug('@error findCart', { error })
+		winston.debug('@error findCart', { msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
 
-export const updateCart = async ({
-	userId,
-	sellerId,
-	totalAmount,
-	products
-}) => {
+export const updateCart = async ({ userId, sellerId, addressId, products }) => {
 	try {
 		const user = await User.findById(userId)
-		user.cart = { sellerId, totalAmount, products }
+		user.cart = { sellerId, addressId, products }
 
 		return await user.save()
 	} catch (error) {
-		winston.debug('@error updateCart', { error })
+		winston.debug('@error updateCart', { msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

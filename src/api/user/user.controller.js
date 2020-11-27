@@ -93,12 +93,12 @@ export const getUserCart = async (req, res, next) => {
 }
 
 export const patchUserCart = async (req, res, next) => {
-	const { sellerId, totalAmount, products } = req.body
+	const { sellerId, addressId, products } = req.body
 	try {
 		await updateCart({
 			userId: token.get(req),
 			sellerId,
-			totalAmount,
+			addressId,
 			products
 		})
 

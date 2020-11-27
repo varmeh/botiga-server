@@ -53,6 +53,10 @@ const userSchema = new Schema(
 				type: Schema.Types.ObjectId,
 				ref: 'seller'
 			},
+			addressId: {
+				type: Schema.Types.ObjectId,
+				ref: 'user.addresses'
+			},
 			totalAmount: {
 				type: Number,
 				min: 0.0
