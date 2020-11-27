@@ -38,11 +38,7 @@ const orderSchema = new Schema(
 				required: true,
 				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
 			},
-			whatsapp: {
-				type: String,
-				required: true,
-				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
-			},
+			whatsapp: String,
 			email: String
 		},
 		seller: {
