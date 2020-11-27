@@ -12,7 +12,20 @@ const addressSchema = new Schema({
 	area: { type: String, required: true },
 	city: { type: String, required: true },
 	state: { type: String, required: true },
-	pincode: { type: String, required: true, match: [/^\d{6}/] }
+	pincode: { type: String, required: true, match: [/^\d{6}/] },
+	// A cart is associated to an address
+	cart: {
+		sellerId: {
+			type: Schema.Types.ObjectId,
+			ref: 'seller'
+		},
+		products: [
+			{
+				productId: { type: Schema.Types.ObjectId, required: true },
+				quantity: { type: Number, min: 0.0 }
+			}
+		]
+	}
 })
 
 const userSchema = new Schema(
@@ -47,26 +60,6 @@ const userSchema = new Schema(
 			addresses: [addressSchema],
 			email: String,
 			pushTokens: [String]
-		},
-		cart: {
-			sellerId: {
-				type: Schema.Types.ObjectId,
-				ref: 'seller'
-			},
-			addressId: {
-				type: Schema.Types.ObjectId,
-				ref: 'user.addresses'
-			},
-			totalAmount: {
-				type: Number,
-				min: 0.0
-			},
-			products: [
-				{
-					productId: { type: Schema.Types.ObjectId, required: true },
-					quantity: { type: Number, min: 0.0 }
-				}
-			]
 		}
 	},
 	{ timestamps: true }

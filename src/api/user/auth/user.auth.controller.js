@@ -43,8 +43,7 @@ const extractUserProfile = user => {
 	const {
 		firstName,
 		lastName,
-		contact: { phone, whatsapp, email },
-		cart
+		contact: { phone, whatsapp, email }
 	} = user
 
 	return {
@@ -53,7 +52,6 @@ const extractUserProfile = user => {
 		phone,
 		whatsapp,
 		email,
-		cartAddressId: cart.addressId,
 		addresses: extractUserAddress(user)
 	}
 }

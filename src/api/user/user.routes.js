@@ -8,6 +8,7 @@ import orderRouter from './order/user.order.routes'
 import {
 	getSellerValidator,
 	getProductsValidator,
+	getCartValidator,
 	patchCartValidator
 } from './user.validator'
 
@@ -37,7 +38,13 @@ router.get(
 	getProductsOfSeller
 )
 
-router.get('/cart', token.authenticationMiddleware, getUserCart)
+router.get(
+	'/cart/:addressId',
+	token.authenticationMiddleware,
+	getCartValidator,
+	validationMiddleware,
+	getUserCart
+)
 
 router.patch(
 	'/cart',

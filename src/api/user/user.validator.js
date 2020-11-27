@@ -10,6 +10,8 @@ export const getSellerValidator = paramEmptyValidator('apartmentId')
 
 export const getProductsValidator = paramObjectIdValidator('sellerId')
 
+export const getCartValidator = paramObjectIdValidator('addressId')
+
 export const patchCartValidator = [
 	objectIdValidator('sellerId'),
 	objectIdValidator('addressId'),

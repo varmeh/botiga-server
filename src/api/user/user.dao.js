@@ -48,10 +48,14 @@ export const findProductsBySeller = async sellerId => {
 	}
 }
 
-export const findCart = async userId => {
+export const findCart = async (userId, addressId) => {
 	try {
 		const user = await User.findById(userId)
-		return user.cart
+		const address = user.contact.addresses.id(addressId)
+		if (!address) {
+			return Promise.reject(new CreateHttpError[404]('Address Not Found'))
+		}
+		return address.cart
 	} catch (error) {
 		winston.debug('@error findCart', { msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
@@ -61,7 +65,11 @@ export const findCart = async userId => {
 export const updateCart = async ({ userId, sellerId, addressId, products }) => {
 	try {
 		const user = await User.findById(userId)
-		user.cart = { sellerId, addressId, products }
+		const address = user.contact.addresses.id(addressId)
+		if (!address) {
+			return Promise.reject(new CreateHttpError[404]('Address Not Found'))
+		}
+		address.cart = { sellerId, products }
 
 		return await user.save()
 	} catch (error) {

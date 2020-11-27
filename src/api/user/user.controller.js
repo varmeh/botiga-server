@@ -83,7 +83,7 @@ export const getProductsOfSeller = async (req, res, next) => {
 
 export const getUserCart = async (req, res, next) => {
 	try {
-		const cart = await findCart(token.get(req))
+		const cart = await findCart(token.get(req), req.params.addressId)
 
 		res.json({ ...cart })
 	} catch (error) {
