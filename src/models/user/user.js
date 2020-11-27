@@ -60,6 +60,10 @@ const userSchema = new Schema(
 			addresses: [addressSchema],
 			email: String,
 			pushTokens: [String]
+		},
+		lastUsedAddressId: {
+			type: Schema.Types.ObjectId,
+			ref: 'user.addresses'
 		}
 	},
 	{ timestamps: true }

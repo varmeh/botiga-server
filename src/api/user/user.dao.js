@@ -55,6 +55,9 @@ export const findCart = async (userId, addressId) => {
 		if (!address) {
 			return Promise.reject(new CreateHttpError[404]('Address Not Found'))
 		}
+		// save this address as last used address
+		user.lastUsedAddress = addressId
+		await user.save()
 		return address.cart
 	} catch (error) {
 		winston.debug('@error findCart', { msg: error.message })
