@@ -70,15 +70,14 @@ export const getOrders = async (req, res, next) => {
 }
 
 export const postOrder = async (req, res, next) => {
-	const { sellerId, apartmentId, house, totalAmount, products } = req.body
+	const { sellerId, addressId, totalAmount, products } = req.body
 
 	try {
 		// Verify Seller Id
 		const newOrder = await createOrder({
 			userId: token.get(req),
 			sellerId,
-			apartmentId,
-			house,
+			addressId,
 			totalAmount,
 			products
 		})

@@ -4,14 +4,12 @@ import {
 	numberValidator,
 	arrayValidator,
 	objectIdValidator,
-	queryNumberValidator,
-	addressValidator
+	queryNumberValidator
 } from '../../../util'
 
 export const postOrderValidator = [
 	objectIdValidator('sellerId'),
-	objectIdValidator('apartmentId'),
-	addressValidator('house'),
+	objectIdValidator('addressId'),
 	decimalValidator('totalAmount'),
 	arrayValidator('products'),
 	emptyValidator('products.*.name'),

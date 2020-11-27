@@ -14,8 +14,7 @@ import {
 export const createOrder = async ({
 	userId,
 	sellerId,
-	house,
-	apartmentId,
+	addressId,
 	totalAmount,
 	products
 }) => {
@@ -25,28 +24,30 @@ export const createOrder = async ({
 			return Promise.reject(new CreateHttpError[404]('User Not Found'))
 		}
 
-		const apartment = await Apartment.findById(apartmentId)
-		if (!apartment) {
-			return Promise.reject(new CreateHttpError[404]('Apartment Not Found'))
+		const address = user.contact.addresses.id(addressId)
+		if (!address) {
+			return Promise.reject(new CreateHttpError[404]('Address Not Found'))
 		}
 
-		const seller = apartment.sellers.id(sellerId)
+		const apartment = await Apartment.findById(address.aptId)
+		const seller = apartment.sellers.id(sellerId) // required to access apartment manager info
 		if (!seller) {
 			return Promise.reject(new CreateHttpError[404]('Seller Not Found'))
 		}
+
 		const order = new Order({
 			apartment: {
-				id: apartment._id,
-				aptName: apartment.name,
-				area: apartment.area,
-				city: apartment.city,
-				state: apartment.state,
-				pincode: apartment.pincode
+				id: address.aptId,
+				aptName: address.aptName,
+				area: address.area,
+				city: address.city,
+				state: address.state,
+				pincode: address.pincode
 			},
 			buyer: {
 				id: userId,
 				name: user.name,
-				house,
+				house: address.house,
 				phone: user.contact.phone,
 				whatsapp: user.contact.whatsapp,
 				email: user.contact.email
