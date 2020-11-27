@@ -2,12 +2,13 @@ import { Router } from 'express'
 import { token, validationMiddleware } from '../../util'
 import {
 	getImageUrlValidator,
+	getApartmentValidator,
 	postImageUrlValidator
 } from './services.validator'
 
 import {
+	getApartmentById,
 	getApartmentsByLocation,
-	getApartmentsByCityAndArea,
 	getCities,
 	getAreasForCity,
 	getImageUrl,
@@ -21,7 +22,12 @@ const router = Router()
 
 router.get('/apartments/location', getApartmentsByLocation)
 
-router.get('/apartments', getApartmentsByCityAndArea)
+router.get(
+	'/apartments/:apartmentId',
+	getApartmentValidator,
+	validationMiddleware,
+	getApartmentById
+)
 
 router.get('/apartments/search', getApartmentsSearch)
 

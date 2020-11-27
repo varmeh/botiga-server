@@ -3,12 +3,27 @@ import { nanoid } from 'nanoid'
 import { token, aws } from '../../util'
 import { findBusinessCategory, Seller } from '../../models'
 import {
+	findApartment,
 	findCities,
 	findAreaByCity,
-	findApartmentsByCityAndArea,
 	findApartmentsByLocation,
 	findApartmentsSearch
 } from './services.dao'
+
+const extractApartmentInfo = apartment => {
+	const { _id, name, area, city, state, pincode } = apartment
+	return { _id, name, area, city, state, pincode }
+}
+
+export const getApartmentById = async (req, res, next) => {
+	try {
+		const apartment = await findApartment(req.params.apartmentId)
+		res.json(extractApartmentInfo(apartment))
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
 
 export const getApartmentsByLocation = async (req, res, next) => {
 	const { lat, long } = req.query
@@ -38,20 +53,6 @@ export const getCities = async (_, res, next) => {
 export const getAreasForCity = async (req, res, next) => {
 	try {
 		const areas = await findAreaByCity(req.params.city)
-		res.json(areas)
-	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
-	}
-}
-
-export const getApartmentsByCityAndArea = async (req, res, next) => {
-	const { city, area } = req.query
-	if (!city || !area) {
-		throw new CreateHttpError[400]('Missing Query Params - city or area')
-	}
-	try {
-		const areas = await findApartmentsByCityAndArea(city, area)
 		res.json(areas)
 	} catch (error) {
 		const { status, message } = error

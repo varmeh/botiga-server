@@ -1,4 +1,10 @@
-import { paramEmptyValidator, urlValidator } from '../../util'
+import {
+	paramEmptyValidator,
+	urlValidator,
+	paramObjectIdValidator
+} from '../../util'
+
+export const getApartmentValidator = paramObjectIdValidator('apartmentId')
 
 export const getImageUrlValidator = [
 	paramEmptyValidator('imageType')

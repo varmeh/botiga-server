@@ -2,6 +2,19 @@ import CreateHttpError from 'http-errors'
 import { winston } from '../../util'
 import { Apartment } from '../../models'
 
+export const findApartment = async apartmenId => {
+	try {
+		const apartment = await Apartment.findById(apartmenId)
+		if (!apartment) {
+			return Promise.reject(new CreateHttpError[404]('Apartment not found'))
+		}
+		return apartment
+	} catch (error) {
+		winston.debug('@error findApartment', { msg: error.message })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
 export const findCities = async () => {
 	try {
 		const data = await Apartment.distinct('city').sort()
@@ -18,21 +31,6 @@ export const findAreaByCity = async city => {
 		return data
 	} catch (error) {
 		winston.debug('@error findAreaByCity', { error })
-		return Promise.reject(new CreateHttpError[500]())
-	}
-}
-
-export const findApartmentsByCityAndArea = async (city, area) => {
-	try {
-		const data = await Apartment.find(
-			{ city, area },
-			{ name: 1, state: 1, pincode: 1 }
-		)
-			.limit(50)
-			.sort({ name: 1 })
-		return data
-	} catch (error) {
-		winston.debug('@error findApartmentsByCityAndArea', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
