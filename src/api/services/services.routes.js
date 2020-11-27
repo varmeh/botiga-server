@@ -22,14 +22,14 @@ const router = Router()
 
 router.get('/apartments/location', getApartmentsByLocation)
 
+router.get('/apartments/search', getApartmentsSearch)
+
 router.get(
-	'/apartments/:apartmentId',
+	'/apartments/id/:apartmentId',
 	getApartmentValidator,
 	validationMiddleware,
 	getApartmentById
 )
-
-router.get('/apartments/search', getApartmentsSearch)
 
 router.get('/cities', getCities)
 
