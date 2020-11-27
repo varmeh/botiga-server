@@ -56,7 +56,7 @@ export const findCart = async (userId, addressId) => {
 			return Promise.reject(new CreateHttpError[404]('Address Not Found'))
 		}
 		// save this address as last used address
-		user.lastUsedAddress = addressId
+		user.lastUsedAddressId = addressId
 		await user.save()
 		return address.cart
 	} catch (error) {
