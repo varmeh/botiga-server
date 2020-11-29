@@ -72,7 +72,8 @@ export const updateCart = async ({ userId, sellerId, addressId, products }) => {
 		if (!address) {
 			return Promise.reject(new CreateHttpError[404]('Address Not Found'))
 		}
-		address.cart = { sellerId, products }
+		const validSellerId = !sellerId ? null : sellerId // Valid values for an ObjectId field are null and objectId
+		address.cart = { sellerId: validSellerId, products }
 
 		return await user.save()
 	} catch (error) {

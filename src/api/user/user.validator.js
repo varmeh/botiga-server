@@ -2,6 +2,7 @@ import {
 	paramEmptyValidator,
 	paramObjectIdValidator,
 	objectIdValidator,
+	objectIdOptionalValidator,
 	decimalValidator,
 	arrayValidator
 } from '../../util'
@@ -13,7 +14,7 @@ export const getProductsValidator = paramObjectIdValidator('sellerId')
 export const getCartValidator = paramObjectIdValidator('addressId')
 
 export const patchCartValidator = [
-	objectIdValidator('sellerId'),
+	objectIdOptionalValidator('sellerId'),
 	objectIdValidator('addressId'),
 	arrayValidator('products'),
 	objectIdValidator('products.*.productId'),
