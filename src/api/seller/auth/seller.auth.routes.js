@@ -3,8 +3,6 @@ import { validationMiddleware, token } from '../../../util'
 import {
 	getOtpValidator,
 	postOtpVerifyValidator,
-	postPinSigninValidator,
-	patchPinValidator,
 	postSignupValidator,
 	patchTokenRegisterValidator
 } from './seller.auth.validator'
@@ -12,9 +10,7 @@ import {
 	getOtp,
 	postVerifyOtp,
 	postSellerSignup,
-	postSellerLoginWithPin,
 	postSellerSignout,
-	patchUserPin,
 	patchPushToken
 } from './seller.auth.controller'
 
@@ -33,21 +29,6 @@ router.post(
 	postSignupValidator,
 	validationMiddleware,
 	postSellerSignup
-)
-
-router.post(
-	'/signin/pin',
-	postPinSigninValidator,
-	validationMiddleware,
-	postSellerLoginWithPin
-)
-
-router.patch(
-	'/pin',
-	token.authenticationMiddleware,
-	patchPinValidator,
-	validationMiddleware,
-	patchUserPin
 )
 
 router.patch(

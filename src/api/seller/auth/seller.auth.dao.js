@@ -47,17 +47,6 @@ export const findSellerByNumber = async number => {
 	}
 }
 
-export const updateSellerPin = async (sellerId, pin) => {
-	try {
-		const seller = await Seller.findById(sellerId)
-		seller.loginPin = pin
-		return await seller.save()
-	} catch (error) {
-		winston.debug('@error updateSellerPin', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
-	}
-}
-
 export const updateToken = async (sellerId, token) => {
 	try {
 		const seller = await Seller.findById(sellerId)

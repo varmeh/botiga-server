@@ -62,7 +62,6 @@ const sellerSchema = new Schema(
 			tagline: String,
 			imageUrl: String
 		},
-		loginPin: { type: String },
 		contact: {
 			email: String,
 			countryCode: {
