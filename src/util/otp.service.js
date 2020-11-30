@@ -4,10 +4,14 @@ import { winston } from './winston.logger'
 const { OTP_API_KEY } = process.env
 const baseUrl = `https://2factor.in/API/V1/${OTP_API_KEY}/SMS`
 
-const testNumber = '5000012345'
+const testNumbers = ['5000012345']
 
 const send = async (phone, template) => {
 	try {
+		if (testNumbers.includes(phone)) {
+			return 'dummy-session-id-for-test-numbers'
+		}
+
 		const { data } = await axios.get(`${baseUrl}/${phone}/AUTOGEN/${template}`)
 		return data.Details
 	} catch (error) {
@@ -18,7 +22,7 @@ const send = async (phone, template) => {
 
 const verify = async (phone, sessionId, otp) => {
 	try {
-		if (phone === testNumber) {
+		if (testNumbers.includes(phone)) {
 			return { status: 'success' }
 		}
 		const data = await axios.get(`${baseUrl}/VERIFY/${sessionId}/${otp}`)
@@ -30,4 +34,4 @@ const verify = async (phone, sessionId, otp) => {
 	}
 }
 
-export default { send, verify, testNumber }
+export default { send, verify }
