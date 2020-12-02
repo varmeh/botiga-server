@@ -29,7 +29,12 @@ export const validationMiddleware = (req, _res, next) => {
 	const errors = validationResult(req)
 	if (!errors.isEmpty()) {
 		// We have validation error
-		throw new ValidationError(422, 'Invalid Inputs', errors.array())
+		const [error] = errors.array()
+		throw new ValidationError(
+			422,
+			`${error.param} ${error.msg}`,
+			errors.array()
+		)
 	}
 	next()
 }
