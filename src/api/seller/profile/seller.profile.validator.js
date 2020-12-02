@@ -6,7 +6,8 @@ import {
 	emptyValidator,
 	boolValidator,
 	alphaNumericValidator,
-	emptyOptionalValidator
+	emptyOptionalValidator,
+	urlOptionalValidator
 } from '../../../util'
 
 export const patchContactValidator = [
@@ -24,9 +25,7 @@ export const patchContactValidator = [
 export const patchBusinessValidator = [
 	emptyValidator('brandName'),
 	emptyValidator('tagline'),
-	emptyValidator('imageUrl').isURL({
-		protocols: ['https']
-	}),
+	urlOptionalValidator('imageUrl'),
 	boolValidator('updateImage')
 ]
 

@@ -37,7 +37,7 @@ export const patchProductValidator = [
 		),
 	boolValidator('available'),
 	emptyOptionalValidator('description'),
-	emptyOptionalValidator('imageUrl'),
+	urlOptionalValidator('imageUrl'),
 	boolValidator('updateImage')
 ]
 
