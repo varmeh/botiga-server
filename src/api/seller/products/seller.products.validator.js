@@ -5,7 +5,6 @@ import {
 	decimalValidator,
 	numberValidator,
 	emptyOptionalValidator,
-	regexAlphaSpaceDigitsOptionalValidator,
 	boolValidator,
 	paramObjectIdValidator,
 	urlOptionalValidator
@@ -37,7 +36,7 @@ export const patchProductValidator = [
 			'should be either of following - gms, kg, ml, lt, piece & pieces'
 		),
 	boolValidator('available'),
-	regexAlphaSpaceDigitsOptionalValidator('description'),
+	emptyOptionalValidator('description'),
 	emptyOptionalValidator('imageUrl'),
 	boolValidator('updateImage')
 ]
