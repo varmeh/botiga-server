@@ -1,7 +1,6 @@
 - [Botiga App Deployemnt](#botiga-app-deployemnt)
   - [Droplet Creation](#droplet-creation)
   - [Create a Non-Admin user](#create-a-non-admin-user)
-  - [Configure Firewall](#configure-firewall)
   - [Installations](#installations)
     - [Update apt](#update-apt)
     - [Nodejs](#nodejs)
@@ -11,7 +10,8 @@
   - [Running Express App](#running-express-app)
     - [Copy configuration files](#copy-configuration-files)
     - [Configure app](#configure-app)
-  - [Allowing access to PORT 80](#allowing-access-to-port-80)
+  - [Configure Firewall](#configure-firewall)
+    - [Access to PORT 80](#access-to-port-80)
   - [Configurels PM2 as a service](#configurels-pm2-as-a-service)
   - [References](#references)
 
@@ -24,8 +24,6 @@ This document lists down all the steps for express app deployment using PM2
 -   Create a new droplet with latest version of ubuntu
 
 ## [Create a Non-Admin user](Safeuser.md)
-
-## Configure Firewall
 
 ## Installations
 
@@ -135,7 +133,17 @@ Advantages of running your application with PM2:
 -   it keeps a log of your unhandled exceptions at `/home/safeuser/.pm2/logs`
 -   With one command, PM2 can ensure that any applications it manages restart when the server reboots. Basically, your node application will start as a service
 
-## Allowing access to PORT 80
+## Configure Firewall
+
+-   Allow port number defined in file on which app will run
+
+```
+sudo ufw allow 5000
+```
+
+### Access to PORT 80
+
+Following steps should be followed in case you need to enable http port.
 
 Safe user does not have permission to use the default HTTP port (80).
 
@@ -150,12 +158,12 @@ sudo setcap cap_net_bind_service=+ep /usr/bin/node
 
 -   Applications that are running under PM2 will be restarted automatically if the application crashes or is killed.
 
--   But what to do if server crashed?
+-   _But what to do if server crashed?_
 
 -   To cater this scenario, run PM2 as a service which will restart application on server reboot.
 
-    -   To do so, use `startup` subcommand
-    -   The startup subcommand generates and configures a startup script to launch PM2 and its managed processes on server boots
+-   To do so, use `startup` subcommand
+-   The startup subcommand generates and configures a startup script to launch PM2 and its managed processes on server boots
 
 ```
 pm2 startup systemd
