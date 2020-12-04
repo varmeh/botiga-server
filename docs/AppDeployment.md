@@ -2,10 +2,8 @@
   - [Droplet Creation](#droplet-creation)
   - [Create a Non-Admin user](#create-a-non-admin-user)
   - [Installations](#installations)
-    - [Update apt](#update-apt)
     - [Nodejs](#nodejs)
     - [PM2](#pm2)
-    - [Git](#git)
   - [Download Botiga Server App](#download-botiga-server-app)
   - [Running Express App](#running-express-app)
     - [Copy configuration files](#copy-configuration-files)
@@ -27,16 +25,7 @@ This document lists down all the steps for express app deployment using PM2
 
 ## Installations
 
-`Required Only` when not using DigitalOcean Nodejs image which comes pre-packed with following:
-
--   Nodejs - 12.18.0
--   NPM - 6.14.4
--   PM2 - 4.4.0
--   GIT - 2.25.1
-
-### Update apt
-
--   First of all update, apt to access packages
+-   First of all, update apt to access packages
 
 ```
 sudo apt update
@@ -46,7 +35,7 @@ sudo apt update
 
 ```
 curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-sudo apt install nodejs
+sudo apt install -y nodejs
 ```
 
 [Instructions for Nodejs Versions](https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions)
@@ -64,14 +53,6 @@ pm2 completion install
 ```
 
 -   To use PM2 auto-completion, open a new terminal
-
-### Git
-
--   Check before installation if exists
-
-```
-sudo apt install git
-```
 
 ## Download Botiga Server App
 
@@ -97,16 +78,16 @@ git clone git@github.com:varmehta/botiga-server.git
 
 -   To run app, we need a .env file
 -   The easiest way to configure it is by copying it from your local setup to your droplet.
--   To do so, open your local terminal:
+-   To do so, open your local terminal & cd to your botiga-server project:
 
 ```
-scp -i ~/.ssh/id_rsa_botiga_drop ../.env.prod safeuser@143.110.186.116:/home/safeuser/botiga-server/.env
+scp -i ~/.ssh/id_rsa_botiga_drop ./.env.prod safeuser@<your_server_ip>:/home/safeuser/botiga-server/.env
 ```
 
 -   Also, copy `firebase-adminsdk.json` files
 
 ```
-scp -i ~/.ssh/id_rsa_botiga_drop ../../firebase-adminsdk-prod.json safeuser@143.110.186.116:/home/safeuser/botiga-server/firebase-adminsdk-prod.json
+scp -i ~/.ssh/id_rsa_botiga_drop /Users/varunmehta/Projects/botiga/firebase-adminsdk-prod.json safeuser@<your_server_ip>:/home/safeuser/botiga-server/firebase-adminsdk-prod.json
 ```
 
 ### Configure app
@@ -135,11 +116,21 @@ Advantages of running your application with PM2:
 
 ## Configure Firewall
 
+-   Enable it. Refer [Firewall](FirewallSetup.md)
+
 -   Allow port number defined in file on which app will run
 
 ```
 sudo ufw allow 5000
 ```
+
+-   Check status afterwards
+
+```
+sudo ufw status
+```
+
+-   Confirm app access from your browser with url `http://143.110.190.70:5000/api/live`
 
 ### Access to PORT 80
 

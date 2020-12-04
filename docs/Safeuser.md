@@ -77,7 +77,7 @@ sudo systemctl restart sshd
 -   Open a new terminal on your computer
 
 ```
-ssh-copy-id -i .ssh/id_rsa_botiga_devdrop safeuser@<IP>
+ssh-copy-id -i .ssh/id_rsa_botiga_drop safeuser@<IP>
 ```
 
 -   Now, you could login to safeuser using your ssh key
