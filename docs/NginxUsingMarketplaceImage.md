@@ -29,6 +29,6 @@ sudo -u nodejs pm2 delete hello
 sudo -u nodejs pm2 save
 ```
 
-## [Setup a Non-Root User](./UbuntuServerInitialSetup.md)
+## [Setup a Non-Root User](./Safeuser.md)
 
 ## [Setting up Nginx Reverse Proxy](./NginxReverseProxyConfiguration.md)

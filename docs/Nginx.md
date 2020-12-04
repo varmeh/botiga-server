@@ -1,5 +1,11 @@
 # Nginx Deployment
 
+## Create a Droplet
+
+-   Create a new droplet with ubuntu latest version
+
+## [Create a Non Admin user](Safeuser.md)
+
 ## Installing Nginx
 
 ```

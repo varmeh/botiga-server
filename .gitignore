@@ -6,4 +6,5 @@ logs/
 
 # Files
 server.log
-.env
+.env*
+
