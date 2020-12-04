@@ -94,9 +94,7 @@ export const createWinstonLogger = (
 		transports: [new DailyRotateFile(fileTransportOptions(service, logsFolder))]
 	})
 
-	if (process.env.NODE_ENV !== 'production') {
-		logger.add(new transports.Console(consoleTransportOptions))
-	}
+	logger.add(new transports.Console(consoleTransportOptions))
 
 	if (dataDogLogging && ddogApiKey) {
 		logger.add(new transports.Http(httpTransportOptions(service)))
