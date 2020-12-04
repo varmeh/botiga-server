@@ -4,73 +4,7 @@ This document lists down all the steps for express app deployment using PM2
 
 ## Create a Safe Account to Run Your Code
 
-If you run your code using the root account, and if a hostile party compromises the code, that party could get total control of your VPS.
-
-To avoid this, let’s setup a safe account that can still perform root operations if we supply the appropriate password.
-
-For the purposes of this document, let’s call our safe user **safeuser**
-
-### [How to add a User](https://www.digitalocean.com/community/tutorials/how-to-add-and-delete-users-on-ubuntu-16-04)
-
--   Create a non-admin user
-
-```
-adduser safeuser
-```
-
--   Give the safe user permission to use root level commands
-
-```
-usermod -aG sudo safeuser
-```
-
--   Logging to this user will not work, as `PasswordAuthentication` is set to NO by default in `sshd_config`
-
--   To fix it, do the following:
-
-```
-sudo nano /etc/ssh/sshd_config
-```
-
-Change:
-
--   `PermitRootLogin yes`
--   `PasswordAuthentication yes`
-
-And restart the service:
-
-```
-sudo systemctl restart sshd
-```
-
--   Now, you could login to safeuser using your password
-
--   Time to add `ssh-passkey` for authentication
-
-```
-ssh-copy-id -i .ssh/id_rsa_botiga_devdrop safeuser@<IP>
-```
-
-This will create the `.ssh/authorized_file` in `/home/safeuser`
-
--   You could now login using your ssh command
-
-```
-ssh -i .ssh/id_rsa_botiga_devdrop safeuser@<IP>
-```
-
-To make your system safer, revert your changes in sshd_config file.
-
-### Optional - Allowing access to PORT 80
-
-Safe user does not have permission to use the default HTTP port (80).
-
-To fix it, run following commands.
-
-```
-sudo apt-get install libcap2-bin
-sudo setcap cap_net_bind_service=+ep /usr/bin/node
-```
+For detailed instruction, follow steps mentioned in document [UbuntuServerInitialSetup](./UbuntuServerInitialSetup.md)
 
 ## Installations
 
