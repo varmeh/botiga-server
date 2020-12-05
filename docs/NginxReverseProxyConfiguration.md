@@ -37,6 +37,11 @@ sudo nano /etc/nginx/sites-available/prod.botiga.app
 -   Paste the following configuration block
 
 ```
+upstream appServers {
+    least_conn;
+    server 10.122.0.2:5000;
+}
+
 server {
     listen 80;
     listen [::]:80;
@@ -44,7 +49,7 @@ server {
     server_name prod.botiga.app;
 
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://appServers;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';

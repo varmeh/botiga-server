@@ -31,4 +31,6 @@ sudo -u nodejs pm2 save
 
 ## [Setup a Non-Root User](./Safeuser.md)
 
+-   **Note:** Make sure you login as safeuser before setting up nginx reverse proxy
+
 ## [Setting up Nginx Reverse Proxy](./NginxReverseProxyConfiguration.md)
