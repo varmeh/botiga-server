@@ -93,17 +93,19 @@ scp -i ~/.ssh/id_rsa_botiga_drop /Users/varunmehta/Projects/botiga/firebase-admi
 ### Configure app
 
 -   Move to `botiga-server` folder
--   Set `firebase-admin-sdk.json` path to `GOOGLE_APPLICATION_CREDENTIALS`
+<!-- -   Set `firebase-admin-sdk.json` path to `GOOGLE_APPLICATION_CREDENTIALS`
 
-```
+````
 export GOOGLE_APPLICATION_CREDENTIALS=/home/safeuser/botiga-server/firebase-adminsdk-prod.json
-```
+``` -->
 
 -   Verify your `.env` file
 
-```
+````
+
 npm install
-pm2 start npm --name="botiga-server"  --node-args="--expose-gc" --time -- start
+pm2 start npm --name="botiga-server" --node-args="--expose-gc" --time -- start
+
 ```
 
 _Above command will run start script from package.json_
@@ -121,13 +123,17 @@ Advantages of running your application with PM2:
 -   Allow port number defined in file on which app will run
 
 ```
+
 sudo ufw allow 5000
+
 ```
 
 -   Check status afterwards
 
 ```
+
 sudo ufw status
+
 ```
 
 -   Confirm app access from your browser with url `http://143.110.190.70:5000/api/live`
@@ -141,8 +147,10 @@ Safe user does not have permission to use the default HTTP port (80).
 To fix it, run following commands.
 
 ```
+
 sudo apt-get install libcap2-bin
 sudo setcap cap_net_bind_service=+ep /usr/bin/node
+
 ```
 
 ## Configurels PM2 as a service
@@ -157,13 +165,17 @@ sudo setcap cap_net_bind_service=+ep /usr/bin/node
 -   The startup subcommand generates and configures a startup script to launch PM2 and its managed processes on server boots
 
 ```
+
 pm2 startup systemd
+
 ```
 
 -   The last line of the resulting output will include a command that you must run with superuser privileges:
 
 ```
+
 sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u safeuser --hp /home/safeuser
+
 ```
 
 -   This will create a systemd `unit` which runs pm2 for your user on boot
@@ -174,3 +186,4 @@ sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -
 -   [How To Use PM2 to Setup a Node.js Production Environment On An Ubuntu VPS?](https://www.digitalocean.com/community/tutorials/how-to-use-pm2-to-setup-a-node-js-production-environment-on-an-ubuntu-vps)
 -   [How to Run PM2 as a service on ubuntu server?](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04)
 -   [PM2 Startup Documentation](https://pm2.keymetrics.io/docs/usage/startup/)
+```
