@@ -55,7 +55,7 @@ const fileTransportOptions = (service, logsfolder) => ({
 
 const httpTransportOptions = service => ({
 	format: combine(timestampFormat, metaDataFormat, logFormat, json()),
-	host: 'http-intake.logs.datadoghq.com',
+	host: 'http-intake.logs.datadoghq.eu',
 	level: 'info',
 	path: `/v1/input/${process.env.DD_API_KEY}?ddsource=nodejs&service=${service}`,
 	silent: process.env.NODE_ENV === 'test',
