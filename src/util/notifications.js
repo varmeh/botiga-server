@@ -1,8 +1,9 @@
 import admin from 'firebase-admin'
 
 const configure = () => {
+	const serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS
 	admin.initializeApp({
-		credential: admin.credential.applicationDefault()
+		credential: admin.credential.cert(serviceAccount)
 	})
 }
 
