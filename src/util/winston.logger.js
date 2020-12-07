@@ -97,6 +97,7 @@ export const createWinstonLogger = (
 	logger.add(new transports.Console(consoleTransportOptions))
 
 	if (dataDogLogging && ddogApiKey) {
+		logger.debug('Enabled logging to datadog')
 		logger.add(new transports.Http(httpTransportOptions(service)))
 	}
 
