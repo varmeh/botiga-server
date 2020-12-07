@@ -52,7 +52,7 @@ export const addApartment = async (
 		const { businessCategory, brand } = seller
 		const { name, tagline, imageUrl } = brand
 
-		const live = seller.bankDetailsUnverified
+		const live = !seller.bankDetailsUnverified
 
 		apartment.sellers.push({
 			_id: sellerId,
