@@ -32,8 +32,6 @@ export const addApartment = async (
 	try {
 		const seller = await Seller.findById(sellerId)
 
-		const live = seller.bankDetailsUnverified
-
 		// Check if apartment already exists in seller list
 		if (seller.apartments.id(apartmentId)) {
 			return Promise.reject(new CreateHttpError[409]('Duplicate Apartment'))
@@ -53,6 +51,8 @@ export const addApartment = async (
 		// Add seller information to apartment list
 		const { businessCategory, brand } = seller
 		const { name, tagline, imageUrl } = brand
+
+		const live = seller.bankDetailsUnverified
 
 		apartment.sellers.push({
 			_id: sellerId,
