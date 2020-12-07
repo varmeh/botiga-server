@@ -4,15 +4,17 @@ import { winston } from '../../../util'
 import { Seller, Apartment } from '../../../models'
 
 const logDbError = error => ({ error, msg: error?.message })
-const promiseRejectServerError = () =>
-	Promise.reject(new CreateHttpError[500]())
+const promiseRejectServerError = error => {
+	const { status, message } = error
+	return Promise.reject(new CreateHttpError[status ?? 500](message))
+}
 
 export const findApartments = async sellerId => {
 	try {
 		return await Seller.findById(sellerId, 'apartments')
 	} catch (error) {
 		winston.debug('@error findApartments', logDbError(error))
-		return promiseRejectServerError()
+		return promiseRejectServerError(error)
 	}
 }
 
@@ -29,6 +31,8 @@ export const addApartment = async (
 ) => {
 	try {
 		const seller = await Seller.findById(sellerId)
+
+		const live = seller.bankDetailsUnverified
 
 		// Check if apartment already exists in seller list
 		if (seller.apartments.id(apartmentId)) {
@@ -56,7 +60,7 @@ export const addApartment = async (
 			tagline,
 			brandImageUrl: imageUrl,
 			businessCategory,
-			live: false,
+			live: live,
 			contact: { phone, whatsapp, email },
 			delivery: { type: deliveryType, day }
 		})
@@ -68,7 +72,7 @@ export const addApartment = async (
 			_id: apartmentId,
 			apartmentName: apartment.name,
 			apartmentArea: apartment.area,
-			live: false,
+			live: live,
 			contact: { phone, whatsapp, email },
 			deliveryMessage: apartment.sellers.id(sellerId).deliveryMessage
 		})
@@ -78,7 +82,7 @@ export const addApartment = async (
 		return updatedSeller.apartments.id(apartmentId)
 	} catch (error) {
 		winston.debug('@error addApartment', logDbError(error))
-		return promiseRejectServerError()
+		return promiseRejectServerError(error)
 	}
 }
 
@@ -87,19 +91,26 @@ export const updateApartmentLiveStatus = async (
 	{ apartmentId, live }
 ) => {
 	try {
+		const seller = await Seller.findById(sellerId)
+
+		// Check if seller has a mid
+		if (seller.bankDetailsUnverified) {
+			throw new CreateHttpError[401](
+				'Bank Details Not Verified. Contact Botiga customer care'
+			)
+		}
 		// If either seller or apartment does not exist, accessing their information will cause internal server error
 		const apartment = await Apartment.findById(apartmentId)
 		apartment.sellers.id(sellerId).live = live
 		await apartment.save()
 
-		const seller = await Seller.findById(sellerId)
 		seller.apartments.id(apartmentId).live = live
 		const updatedSeller = await seller.save()
 
 		return updatedSeller.apartments.id(apartmentId)
 	} catch (error) {
 		winston.debug('@error updateApartmentLiveStatus', logDbError(error))
-		return promiseRejectServerError()
+		return promiseRejectServerError(error)
 	}
 }
 
@@ -125,7 +136,7 @@ export const updateApartmentDeliverySchedule = async (
 		return updatedSeller.apartments.id(apartmentId)
 	} catch (error) {
 		winston.debug('@error updateApartmentDeliverySchedule', logDbError(error))
-		return promiseRejectServerError()
+		return promiseRejectServerError(error)
 	}
 }
 
@@ -151,6 +162,6 @@ export const updateApartmentContactInformation = async (
 		return updatedSeller.apartments.id(apartmentId)
 	} catch (error) {
 		winston.debug('@error updateApartmentContactInformation', logDbError(error))
-		return promiseRejectServerError()
+		return promiseRejectServerError(error)
 	}
 }

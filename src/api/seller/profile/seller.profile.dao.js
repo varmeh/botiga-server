@@ -108,7 +108,7 @@ export const updateBankDetails = async ({
 			accountType
 		}
 
-		seller.mid = 'DummyValue'
+		seller.mid = process.env.NODE_ENV !== 'production' ? 'dummyValue' : ''
 
 		return await seller.save()
 	} catch (error) {

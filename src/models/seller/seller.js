@@ -113,8 +113,8 @@ const sellerSchema = new Schema(
 	{ timestamps: true }
 )
 
-sellerSchema.virtual('isBankDetailVerified').get(function () {
-	return !!this.mid
+sellerSchema.virtual('bankDetailsUnverified').get(function () {
+	return !this.mid
 })
 
 export const Seller = model('seller', sellerSchema)
