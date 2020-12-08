@@ -137,11 +137,11 @@ const transactionStatus = async ({ paymentId }) => {
 			status = PaymentStatus.failure
 		}
 
-		if (status !== PaymentStatus.success) {
+		if (status === PaymentStatus.pending) {
+			// If payment status is pending, check after 5 mins for payment update
 			setTimeout(() => {
-				console.error('~~~~~~~ timer set for payment update ~~~~~~~~~')
 				transactionStatus({ paymentId })
-			}, 10 * 1000)
+			}, 5 * 60 * 1000)
 		}
 		order.payment = {
 			paymentId,
