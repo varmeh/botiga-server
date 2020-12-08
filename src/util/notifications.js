@@ -36,8 +36,8 @@ const apartment = {
 	subscribeUser: (apartmentId, userToken) => {
 		admin.messaging().subscribeToTopic(userToken, `${apartmentId}_users`)
 	},
-	subscribeSeller: (apartmentId, userToken) => {
-		admin.messaging().subscribeToTopic(userToken, `${apartmentId}_sellers`)
+	subscribeSeller: (apartmentId, sellerToken) => {
+		admin.messaging().subscribeToTopic(sellerToken, `${apartmentId}_sellers`)
 	}
 }
 

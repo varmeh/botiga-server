@@ -80,7 +80,10 @@ export const updateToken = async (userId, token) => {
 		user.contact.pushTokens.push(token)
 		await user.save()
 
-		notifications.apartment.subscribeUser(user.contact.address.aptId, token)
+		// Register new token to all seller apartment topics for notifications
+		user.contact.addresses.forEach(address =>
+			notifications.apartment.subscribeUser(address.aptId, token)
+		)
 
 		// Register user to apartment topic for notifications
 		return 'token added'
