@@ -9,15 +9,6 @@ import {
 	findSellerAggregatedData
 } from './seller.order.dao'
 
-const sendNotifications = async ({ userId, title, body }) => {
-	// Send notification to seller devices
-	const user = await User.findById(userId)
-
-	user.contact.pushTokens.forEach(token =>
-		notifications.sendToUser(token, title, body)
-	)
-}
-
 export const postCancelOrder = async (req, res, next) => {
 	try {
 		const order = await updateOrder(
@@ -26,11 +17,12 @@ export const postCancelOrder = async (req, res, next) => {
 			OrderStatus.cancelled
 		)
 
-		await sendNotifications({
-			userId: order.buyer.id,
-			title: 'Order Cancelled',
-			body: `Your order #${order.order.number} from ${order.seller.brandName} has been cancelled`
-		})
+		const user = await User.findById(order.buyer.id)
+
+		user.sendNotifications(
+			'Order Cancelled',
+			`Your order #${order.order.number} from ${order.seller.brandName} has been cancelled`
+		)
 
 		res.json({ message: 'cancelled', id: order._id, refund: order.refund })
 	} catch (error) {
@@ -43,11 +35,12 @@ export const patchRefundCompleted = async (req, res, next) => {
 	try {
 		const order = await updateRefund(req.body.orderId, token.get(req))
 
-		await sendNotifications({
-			userId: order.buyer.id,
-			title: 'Refund Completed',
-			body: `Your refund for order #${order.order.number} from ${order.seller.brandName} has been completed`
-		})
+		const user = await User.findById(order.buyer.id)
+
+		user.sendNotifications(
+			'Refund Completed',
+			`Your refund for order #${order.order.number} from ${order.seller.brandName} has been completed`
+		)
 
 		res.json({
 			message: 'refund completed',

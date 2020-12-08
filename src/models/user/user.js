@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose'
+import { notifications } from '../../util'
 
 const addressSchema = new Schema({
 	aptId: {
@@ -72,5 +73,11 @@ const userSchema = new Schema(
 userSchema.virtual('name').get(function () {
 	return `${this.firstName} ${this.lastName}`
 })
+
+userSchema.methods.sendNotifications = function (title, body) {
+	this.contact.pushTokens.forEach(token =>
+		notifications.sendToUser(token, title, body)
+	)
+}
 
 export const User = model('user', userSchema)

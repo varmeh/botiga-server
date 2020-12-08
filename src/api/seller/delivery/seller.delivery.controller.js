@@ -4,15 +4,6 @@ import { OrderStatus, User } from '../../../models'
 
 import { updateOrder, findDeliveriesByApartment } from './seller.delivery.dao'
 
-const sendNotifications = async (userId, title, body) => {
-	// Send notification to User devices
-	const user = await User.findById(userId)
-
-	user.contact.pushTokens.forEach(token =>
-		notifications.sendToUser(token, title, body)
-	)
-}
-
 export const patchDeliveryStatus = async (req, res, next) => {
 	const { orderId, status } = req.body
 
@@ -22,15 +13,14 @@ export const patchDeliveryStatus = async (req, res, next) => {
 
 		const order = await updateOrder(orderId, token.get(req), orderStatus)
 
+		const user = await User.findById(order.buyer.id)
 		if (orderStatus === OrderStatus.outForDelivery) {
-			await sendNotifications(
-				order.buyer.id,
+			user.sendNotifications(
 				'Order in delivery',
 				`Your order #${order.order.number} from ${order.seller.brandName} is out for delivery`
 			)
 		} else {
-			await sendNotifications(
-				order.buyer.id,
+			user.sendNotifications(
 				'Order delivered',
 				`Your order #${order.order.number} from ${order.seller.brandName} has been delivered`
 			)
@@ -54,8 +44,9 @@ export const patchDeliveryDelay = async (req, res, next) => {
 			newDate
 		)
 
-		await sendNotifications(
-			order.buyer.id,
+		const user = await User.findById(order.buyer.id)
+
+		user.sendNotifications(
 			'Order delivery date changed',
 			`Your order #${order.order.number} from ${order.seller.brandName}, delivery date has been changed to ${newDate}`
 		)
