@@ -92,7 +92,7 @@ const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
 	}
 }
 
-const transactionStatus = async ({ paymentId }) => {
+const getTransactionStatus = async paymentId => {
 	try {
 		const paytmData = {
 			body: {
@@ -115,6 +115,18 @@ const transactionStatus = async ({ paymentId }) => {
 
 		await verifyCheckSumHelper(body, head.signature)
 
+		return body
+	} catch (error) {
+		winston.debug('@payment getTransactionStatus failed', {
+			error,
+			msg: error.message
+		})
+		return Promise.reject(new Error(error.message))
+	}
+}
+
+const updateOrderDataInDb = async (paymentId, txnData) => {
+	try {
 		// Save payment data into order
 		const [orderId] = paymentId.split('_')
 		const order = await Order.findById(orderId)
@@ -128,7 +140,7 @@ const transactionStatus = async ({ paymentId }) => {
 			txnDate,
 			txnAmount,
 			resultInfo: { resultMsg, resultStatus }
-		} = body
+		} = txnData
 
 		let status = PaymentStatus.pending
 		if (resultStatus === 'TXN_SUCCESS') {
@@ -137,12 +149,6 @@ const transactionStatus = async ({ paymentId }) => {
 			status = PaymentStatus.failure
 		}
 
-		if (status === PaymentStatus.pending) {
-			// If payment status is pending, check after 5 mins for payment update
-			setTimeout(() => {
-				transactionStatus({ paymentId })
-			}, 5 * 60 * 1000)
-		}
 		order.payment = {
 			paymentId,
 			status,
@@ -157,6 +163,52 @@ const transactionStatus = async ({ paymentId }) => {
 		}
 
 		await order.save()
+
+		return order
+	} catch (error) {
+		winston.debug('@payment updateOrderDataInDb failed', {
+			error,
+			msg: error.message
+		})
+		return Promise.reject(new Error(error.message))
+	}
+}
+
+const pendingStatusUpdate = async paymentId => {
+	try {
+		const data = await getTransactionStatus(paymentId)
+
+		const {
+			resultInfo: { resultStatus }
+		} = data
+
+		if (resultStatus === 'TXN_SUCCESS' || resultStatus === 'TXN_FAILURE') {
+			await updateOrderDataInDb(paymentId, data)
+		} else {
+			setTimeout(() => pendingStatusUpdate(paymentId), 5 * 60 * 1000)
+		}
+		return
+	} catch (error) {
+		winston.debug('@payment pendingStatusUpdate failed', {
+			error,
+			msg: error.message,
+			paymentId
+		})
+		winston.error('@payment pendingStatusUpdate failed', { paymentId })
+	}
+}
+
+const transactionStatus = async ({ paymentId }) => {
+	try {
+		const data = await getTransactionStatus(paymentId)
+
+		// Save payment data into order database
+		const order = await updateOrderDataInDb(paymentId, data)
+
+		if (order.status === PaymentStatus.pending) {
+			// If payment status is pending, check after 5 mins for payment update
+			setTimeout(() => pendingStatusUpdate(paymentId), 5 * 60 * 1000)
+		}
 
 		return order
 	} catch (error) {
