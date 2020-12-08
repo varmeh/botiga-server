@@ -50,16 +50,18 @@ export const findSellerByNumber = async number => {
 export const updateToken = async (sellerId, token) => {
 	try {
 		const seller = await Seller.findById(sellerId)
+
+		// Register new token to all seller apartment topics for notifications
+		seller.apartments.forEach(apartment =>
+			notifications.apartment.subscribeSeller(apartment._id, token)
+		)
+
 		if (seller.contact.pushTokens.includes(token)) {
 			return 'token already exists'
 		}
 		seller.contact.pushTokens.push(token)
 		await seller.save()
 
-		// Register new token to all seller apartment topics for notifications
-		seller.apartments.forEach(apartment =>
-			notifications.apartment.subscribeSeller(apartment._id, token)
-		)
 		// Register user to apartment topic for notifications
 		return 'token added'
 	} catch (error) {

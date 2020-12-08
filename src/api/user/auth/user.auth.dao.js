@@ -74,16 +74,17 @@ export const updateUserProfile = async (
 export const updateToken = async (userId, token) => {
 	try {
 		const user = await User.findById(userId)
-		if (user.contact.pushTokens.includes(token)) {
-			return 'token already exists'
-		}
-		user.contact.pushTokens.push(token)
-		await user.save()
 
 		// Register new token to all seller apartment topics for notifications
 		user.contact.addresses.forEach(address =>
 			notifications.apartment.subscribeUser(address.aptId, token)
 		)
+
+		if (user.contact.pushTokens.includes(token)) {
+			return 'token already exists'
+		}
+		user.contact.pushTokens.push(token)
+		await user.save()
 
 		// Register user to apartment topic for notifications
 		return 'token added'
