@@ -196,13 +196,15 @@ const pendingStatusUpdate = async paymentId => {
 					: 'failed. Please try again.'
 			}`
 		)
+
+		return order
 	} catch (error) {
 		winston.debug('@payment pendingStatusUpdate failed', {
 			error,
 			msg: error.message,
 			paymentId
 		})
-		winston.error('@payment pendingStatusUpdate failed', { paymentId })
+		return winston.error('@payment pendingStatusUpdate failed', { paymentId })
 	}
 }
 
@@ -228,4 +230,4 @@ const transactionStatus = async ({ paymentId }) => {
 	}
 }
 
-export default { initiateTransaction, transactionStatus }
+export default { initiateTransaction, transactionStatus, pendingStatusUpdate }

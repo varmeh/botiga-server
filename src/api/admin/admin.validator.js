@@ -5,7 +5,8 @@ import {
 	decimalValidator,
 	regexAlphaSpaceDigitsValidator,
 	objectIdValidator,
-	paramPhoneValidator
+	paramPhoneValidator,
+	emptyOptionalValidator
 } from '../../util'
 
 export const postApartmentValidator = [
@@ -33,3 +34,5 @@ export const postNotificationTopicValidator = [
 ]
 
 export const getSellerDetailsValidator = paramPhoneValidator('phone')
+
+export const postPaymentUpdateValidator = emptyValidator('paymentId')

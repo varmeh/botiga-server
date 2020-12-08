@@ -5,7 +5,8 @@ import {
 	postBusinessCategoryValidator,
 	postNotificationTopicValidator,
 	postNotificationUserValidator,
-	getSellerDetailsValidator
+	getSellerDetailsValidator,
+	postPaymentUpdateValidator
 } from './admin.validator'
 import {
 	postApartment,
@@ -13,7 +14,8 @@ import {
 	postNotificationTopic,
 	postNotificationUser,
 	postNotificationSeller,
-	getSellerBankDetails
+	getSellerBankDetails,
+	postPaymentUpdate
 } from './admin.controller'
 
 const router = Router()
@@ -58,6 +60,13 @@ router.get(
 	getSellerDetailsValidator,
 	validationMiddleware,
 	getSellerBankDetails
+)
+
+router.post(
+	'/payment/update',
+	postPaymentUpdateValidator,
+	validationMiddleware,
+	postPaymentUpdate
 )
 
 export default router
