@@ -174,9 +174,10 @@ const updateOrderDataInDb = async (paymentId, txnData) => {
 	}
 }
 
+const retryInterval = 1 * 60 * 1000
+
 const pendingStatusUpdate = async paymentId => {
 	try {
-		console.error(`payment status update callback for paymentId - ${paymentId}`)
 		const data = await getTransactionStatus(paymentId)
 
 		const {
@@ -184,16 +185,13 @@ const pendingStatusUpdate = async paymentId => {
 		} = data
 
 		if (resultStatus === 'TXN_SUCCESS' || resultStatus === 'TXN_FAILURE') {
-			console.error(`payment status update - ${resultStatus}`)
 			const order = await updateOrderDataInDb(paymentId, data)
 
-			console.error('order info: ', order)
 			const user = await User.findById(order.buyer.id)
 
-			console.error('user info: ', user)
 			user.sendNotifications(
 				'Payment Update',
-				`Your payment of ${order.totalAmount} for order #${
+				`Your payment of ${order.order.totalAmount} for order #${
 					order.order.number
 				} to ${order.seller.brandName} has ${
 					resultStatus === 'TXN_SUCCESS'
@@ -202,7 +200,7 @@ const pendingStatusUpdate = async paymentId => {
 				}`
 			)
 		} else {
-			setTimeout(() => pendingStatusUpdate(paymentId), 1 * 60 * 1000)
+			setTimeout(() => pendingStatusUpdate(paymentId), retryInterval)
 		}
 	} catch (error) {
 		winston.debug('@payment pendingStatusUpdate failed', {
@@ -223,7 +221,7 @@ const transactionStatus = async ({ paymentId }) => {
 
 		if (order.payment.status === PaymentStatus.pending) {
 			// If payment status is pending, check after 5 mins for payment update
-			setTimeout(() => pendingStatusUpdate(paymentId), 1 * 60 * 1000)
+			setTimeout(() => pendingStatusUpdate(paymentId), retryInterval)
 		}
 
 		return order
