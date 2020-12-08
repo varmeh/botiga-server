@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { token, paginationData, skipData, notifications } from '../../../util'
+import { token, paginationData, skipData } from '../../../util'
 import { OrderStatus, User } from '../../../models'
 
 import {

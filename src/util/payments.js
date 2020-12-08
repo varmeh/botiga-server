@@ -176,6 +176,7 @@ const updateOrderDataInDb = async (paymentId, txnData) => {
 
 const pendingStatusUpdate = async paymentId => {
 	try {
+		console.error(`payment status update callback for paymentId - ${paymentId}`)
 		const data = await getTransactionStatus(paymentId)
 
 		const {
@@ -197,7 +198,7 @@ const pendingStatusUpdate = async paymentId => {
 				}`
 			)
 		} else {
-			setTimeout(() => pendingStatusUpdate(paymentId), 5 * 60 * 1000)
+			setTimeout(() => pendingStatusUpdate(paymentId), 1 * 60 * 1000)
 		}
 		return
 	} catch (error) {
@@ -218,8 +219,11 @@ const transactionStatus = async ({ paymentId }) => {
 		const order = await updateOrderDataInDb(paymentId, data)
 
 		if (order.status === PaymentStatus.pending) {
+			console.error(
+				`setting payment status update callback for paymentId - ${paymentId}`
+			)
 			// If payment status is pending, check after 5 mins for payment update
-			setTimeout(() => pendingStatusUpdate(paymentId), 5 * 60 * 1000)
+			setTimeout(() => pendingStatusUpdate(paymentId), 1 * 60 * 1000)
 		}
 
 		return order
