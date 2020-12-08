@@ -219,7 +219,7 @@ const transactionStatus = async ({ paymentId }) => {
 		const order = await updateOrderDataInDb(paymentId, data)
 
 		console.error()
-		if (order.order.status === PaymentStatus.pending) {
+		if (order.payment.status === PaymentStatus.pending) {
 			console.error(
 				`setting payment status update callback for paymentId - ${paymentId}`
 			)
