@@ -137,10 +137,12 @@ const transactionStatus = async ({ paymentId }) => {
 			status = PaymentStatus.failure
 		}
 
-		setTimeout(() => {
-			console.error('~~~~~~~ timer error ~~~~~~~~~')
-			console.error(paymentId, status)
-		}, 2000)
+		if (status !== PaymentStatus.success) {
+			setTimeout(() => {
+				console.error('~~~~~~~ timer set for payment update ~~~~~~~~~')
+				transactionStatus({ paymentId })
+			}, 10 * 1000)
+		}
 		order.payment = {
 			paymentId,
 			status,
