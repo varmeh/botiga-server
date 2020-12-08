@@ -2,7 +2,7 @@ import axios from 'axios'
 import paytmChecksum from 'paytmchecksum'
 import { nanoid } from 'nanoid'
 
-import { Order, PaymentStatus } from '../models/order'
+import { Order, PaymentStatus, User } from '../models'
 import { winston } from './winston.logger'
 
 const {
@@ -183,7 +183,19 @@ const pendingStatusUpdate = async paymentId => {
 		} = data
 
 		if (resultStatus === 'TXN_SUCCESS' || resultStatus === 'TXN_FAILURE') {
-			await updateOrderDataInDb(paymentId, data)
+			const order = await updateOrderDataInDb(paymentId, data)
+			const user = await User.findById(order.buyer.id)
+
+			user.sendNotifications(
+				'Payment Update',
+				`Your payment of ${order.totalAmount} for order #${
+					order.order.number
+				} to ${order.seller.brandName} has ${
+					resultStatus === 'TXN_SUCCESS'
+						? 'been successful'
+						: 'failed. Please try again.'
+				}`
+			)
 		} else {
 			setTimeout(() => pendingStatusUpdate(paymentId), 5 * 60 * 1000)
 		}
