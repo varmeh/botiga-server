@@ -137,6 +137,10 @@ const transactionStatus = async ({ paymentId }) => {
 			status = PaymentStatus.failure
 		}
 
+		setTimeout(() => {
+			console.error('~~~~~~~ timer error ~~~~~~~~~')
+			console.error(paymentId, status)
+		}, 2000)
 		order.payment = {
 			paymentId,
 			status,
