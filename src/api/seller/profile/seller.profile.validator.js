@@ -17,7 +17,7 @@ export const patchContactValidator = [
 	emptyOptionalValidator('address.building'),
 	emptyOptionalValidator('address.street'),
 	regexAlphaSpaceDigitsOptionalValidator('address.city'),
-	regexAlphaSpaceDigitsOptionalValidator('address.area'),
+	emptyOptionalValidator('address.area'),
 	regexAlphaSpaceDigitsOptionalValidator('address.state'),
 	pincodeOptionalValidator('address.pincode')
 ]
