@@ -79,7 +79,7 @@ export const addApartment = async (
 
 		const updatedSeller = await seller.save()
 
-		return updatedSeller.apartments.id(apartmentId)
+		return [updatedSeller.apartments.id(apartmentId), updatedSeller]
 	} catch (error) {
 		winston.debug('@error addApartment', logDbError(error))
 		return promiseRejectServerError(error)

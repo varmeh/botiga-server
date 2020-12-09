@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { token } from '../../../util'
+import { token, notifications } from '../../../util'
 import {
 	findApartments,
 	addApartment,
@@ -22,7 +22,7 @@ export const getApartments = async (req, res, next) => {
 export const postApartments = async (req, res, next) => {
 	const { apartmentId, phone, whatsapp, email, deliveryType, day } = req.body
 	try {
-		const apartment = await addApartment(token.get(req), {
+		const [apartment, seller] = await addApartment(token.get(req), {
 			apartmentId,
 			phone,
 			whatsapp,
@@ -30,6 +30,16 @@ export const postApartments = async (req, res, next) => {
 			deliveryType,
 			day
 		})
+
+		// Send notification to all users in apartment
+		if (seller.live) {
+			notifications.sendToTopic(
+				`${apartmentId}_users`,
+				'Merchant Added',
+				`${seller.brand.name} is now servicing your apartment. Check out it's extensive catalog to buy interesting products`
+			)
+		}
+
 		res.json(apartment)
 	} catch (error) {
 		const { status, message } = error
