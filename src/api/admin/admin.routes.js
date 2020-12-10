@@ -18,7 +18,8 @@ import {
 	postNotificationSeller,
 	getSellerBankDetails,
 	postPaymentUpdate,
-	getDeliveryXls
+	getDeliveryXls,
+	testEmail
 } from './admin.controller'
 
 const router = Router()
@@ -78,5 +79,7 @@ router.get(
 	validationMiddleware,
 	getDeliveryXls
 )
+
+router.get('/email', testEmail)
 
 export default router

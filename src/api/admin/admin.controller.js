@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 import { createBusinessCategory, User, Seller } from '../../models'
-import { notifications, payments } from '../../util'
+import { notifications, payments, aws } from '../../util'
 import {
 	createApartment,
 	findSellerBankDetails,
@@ -118,4 +118,17 @@ export const getDeliveryXls = async (req, res, next) => {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
 	}
+}
+
+export const testEmail = (_, res) => {
+	aws.ses.sendMail({
+		from: 'noreply@botiga.app',
+		to: 'varun@botiga.app',
+		subject: 'test subject',
+		text: 'hope it works!!!',
+		filename: 'test.xls',
+		path: '/Users/varunmehta/Desktop/premium.xls'
+	})
+
+	res.json({ message: 'done' })
 }
