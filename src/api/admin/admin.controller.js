@@ -1,7 +1,11 @@
 import CreateHttpError from 'http-errors'
 import { createBusinessCategory, User, Seller } from '../../models'
 import { notifications, payments } from '../../util'
-import { createApartment, findSellerBankDetails } from './admin.dao'
+import {
+	createApartment,
+	findSellerBankDetails,
+	findDeliveriesForSeller
+} from './admin.dao'
 
 export const postApartment = async (req, res, next) => {
 	try {
@@ -95,6 +99,21 @@ export const postPaymentUpdate = async (req, res, next) => {
 		const order = await payments.pendingStatusUpdate(paymentId)
 
 		res.json(order)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getDeliveryXls = async (req, res, next) => {
+	const { sellerPhone, date } = req.params
+
+	try {
+		const deliveries = await findDeliveriesForSeller({
+			sellerPhone,
+			dateString: date
+		})
+		res.json(deliveries)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

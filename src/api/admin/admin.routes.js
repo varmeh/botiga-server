@@ -6,8 +6,10 @@ import {
 	postNotificationTopicValidator,
 	postNotificationUserValidator,
 	getSellerDetailsValidator,
-	postPaymentUpdateValidator
+	postPaymentUpdateValidator,
+	getDeliveryValidator
 } from './admin.validator'
+
 import {
 	postApartment,
 	postBusinessCategory,
@@ -15,7 +17,8 @@ import {
 	postNotificationUser,
 	postNotificationSeller,
 	getSellerBankDetails,
-	postPaymentUpdate
+	postPaymentUpdate,
+	getDeliveryXls
 } from './admin.controller'
 
 const router = Router()
@@ -67,6 +70,13 @@ router.post(
 	postPaymentUpdateValidator,
 	validationMiddleware,
 	postPaymentUpdate
+)
+
+router.get(
+	'/delivery/:sellerPhone/:date',
+	getDeliveryValidator,
+	validationMiddleware,
+	getDeliveryXls
 )
 
 export default router

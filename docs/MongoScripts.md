@@ -63,5 +63,5 @@ db.orders.createIndex({"seller.id": 1, "createdAt": -1, "apartment.id": 1})
 -   `Scenario 2`: Return all deliveries specific to an apartment
 
 ```
-db.orders.createIndex({"seller.id": 1, "order.expectedDeliveryDate": -1})
+db.orders.createIndex({"seller.id": 1, "order.expectedDeliveryDate": -1, "apartment.id": 1})
 ```
