@@ -1,22 +1,15 @@
-import AWS from 'aws-sdk'
 import CreateHttpError from 'http-errors'
 
-import { winston } from './winston.logger'
+import { winston } from '../winston.logger'
 
-const { AWS_ACCESS_KEY, AWS_ACCESS_SECRET, AWS_REGION } = process.env
+import aws from './aws.config'
 
-AWS.config.update({
-	accessKeyId: AWS_ACCESS_KEY,
-	secretAccessKey: AWS_ACCESS_SECRET,
-	region: AWS_REGION
-})
-
-const aws_s3 = new AWS.S3({ apiVersion: '2006-03-01' })
+const awsS3 = new aws.S3({ apiVersion: '2006-03-01' })
 
 const awsPredefinedImageUrl = async (fileName, imageType) => {
 	const { AWS_BUCKET_NAME, AWS_REGION } = process.env
 	try {
-		const data = await aws_s3.getSignedUrlPromise('putObject', {
+		const data = await awsS3.getSignedUrlPromise('putObject', {
 			Bucket: AWS_BUCKET_NAME,
 			Key: fileName,
 			Expires: 10 * 60,
@@ -39,12 +32,12 @@ const awsPredefinedImageUrl = async (fileName, imageType) => {
 	}
 }
 
-const s3 = {
+export default {
 	getPredefinedImageUrl: awsPredefinedImageUrl,
 	deleteImageUrl: async imageUrl => {
 		try {
 			const arr = imageUrl.split('/')
-			const data = await aws_s3
+			return await awsS3
 				.deleteObject({
 					Bucket: process.env.AWS_BUCKET_NAME,
 					Key: arr[arr.length - 1]
@@ -61,5 +54,3 @@ const s3 = {
 		}
 	}
 }
-
-export default { s3 }
