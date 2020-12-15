@@ -61,7 +61,7 @@ const extractUserProfile = user => {
 export const getOtp = async (req, res, next) => {
 	const { phone } = req.params
 	try {
-		const sessionId = await otp.send(phone, 'SignupTemplate')
+		const sessionId = await otp.send(phone, 'OtpLogin')
 		res.json({ phone, sessionId })
 	} catch (_) {
 		next(
