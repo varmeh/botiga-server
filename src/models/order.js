@@ -54,7 +54,8 @@ const orderSchema = new Schema(
 				required: true,
 				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number']
 			},
-			email: String
+			email: String,
+			accountId: String
 		},
 		order: {
 			number: {

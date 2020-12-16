@@ -58,7 +58,8 @@ export const createOrder = async ({
 				brandName: seller.brandName,
 				phone: seller.contact.phone,
 				whatsapp: seller.contact.whatsapp,
-				email: seller.contact.email
+				email: seller.contact.email,
+				accountId: seller.mid
 			},
 			order: {
 				number: chance().integer({ min: 100000, max: 999999 }),

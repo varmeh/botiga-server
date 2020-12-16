@@ -58,6 +58,18 @@ const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
 				},
 				userInfo: {
 					custId: customerId
+				},
+				splitSettlementInfo: {
+					splitMethod: 'AMOUNT',
+					splitInfo: [
+						{
+							mid: order.seller.accountId,
+							amount: {
+								value: order.order.totalAmount,
+								currency: 'INR'
+							}
+						}
+					]
 				}
 			},
 			head: { channelId: 'WAP' }
