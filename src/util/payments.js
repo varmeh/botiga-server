@@ -60,14 +60,11 @@ const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
 					custId: customerId
 				},
 				splitSettlementInfo: {
-					splitMethod: 'AMOUNT',
+					splitMethod: 'PERCENTAGE',
 					splitInfo: [
 						{
 							mid: order.seller.accountId,
-							amount: {
-								value: order.order.totalAmount,
-								currency: 'INR'
-							}
+							percentage: '100.0'
 						}
 					]
 				}
