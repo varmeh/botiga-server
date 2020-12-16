@@ -32,4 +32,4 @@ export const getOrdersValidator = [
 	queryNumberValidator('page')
 ]
 
-export const postTxnRetryValidator = [objectIdValidator('orderId')]
+export const postTransactionValidator = [objectIdValidator('orderId')]

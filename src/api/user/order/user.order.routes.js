@@ -7,7 +7,7 @@ import {
 	postProductsValidator,
 	postCancelOrderValidator,
 	getOrdersValidator,
-	postTxnRetryValidator
+	postTransactionValidator
 } from './user.order.validator'
 
 import {
@@ -15,7 +15,7 @@ import {
 	postProductsValidate,
 	postCancelOrder,
 	getOrders,
-	postTransactionRetry,
+	postTransaction,
 	postTransactionStatus
 } from './user.order.controller'
 
@@ -56,11 +56,11 @@ router.post(
 
 /* Transaction APIs */
 router.post(
-	'/transaction/retry',
+	'/transaction',
 	token.authenticationMiddleware,
-	postTxnRetryValidator,
+	postTransactionValidator,
 	validationMiddleware,
-	postTransactionRetry
+	postTransaction
 )
 
 router.post('/transaction/status', postTransactionStatus) // API Callback from paytm payment webview
