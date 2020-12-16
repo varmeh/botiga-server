@@ -30,9 +30,16 @@ export const createOrder = async ({
 		}
 
 		const apartment = await Apartment.findById(address.aptId)
-		const seller = apartment.sellers.id(sellerId) // required to access apartment manager info
+		const apartmentManager = apartment.sellers.id(sellerId) // required to access apartment manager info
+		if (!apartmentManager) {
+			return Promise.reject(
+				new CreateHttpError[404]('Seller not registered to apartment')
+			)
+		}
+
+		const seller = await Seller.findById(sellerId)
 		if (!seller) {
-			return Promise.reject(new CreateHttpError[404]('Seller Not Found'))
+			return Promise.reject(new CreateHttpError[404]('Seller not found'))
 		}
 
 		const order = new Order({
@@ -55,17 +62,17 @@ export const createOrder = async ({
 			seller: {
 				// seller contact information would be specific to user
 				id: sellerId,
-				brandName: seller.brandName,
-				phone: seller.contact.phone,
-				whatsapp: seller.contact.whatsapp,
-				email: seller.contact.email,
+				brandName: apartmentManager.brandName,
+				phone: apartmentManager.contact.phone,
+				whatsapp: apartmentManager.contact.whatsapp,
+				email: apartmentManager.contact.email,
 				accountId: seller.mid
 			},
 			order: {
 				number: chance().integer({ min: 100000, max: 999999 }),
 				status: 'open',
 				totalAmount,
-				expectedDeliveryDate: seller.deliveryDate,
+				expectedDeliveryDate: apartmentManager.deliveryDate,
 				products
 			}
 		})
