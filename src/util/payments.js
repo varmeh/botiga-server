@@ -58,19 +58,23 @@ const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
 				},
 				userInfo: {
 					custId: customerId
-				},
-				splitSettlementInfo: {
-					splitMethod: 'PERCENTAGE',
-					splitInfo: [
-						{
-							mid: order.seller.accountId,
-							percentage: '100.0'
-						}
-					]
 				}
 			},
 			head: { channelId: 'WAP' }
 		}
+
+		if (process.env.NODE_ENV === 'production') {
+			paytmData.body.splitSettlementInfo = {
+				splitMethod: 'PERCENTAGE',
+				splitInfo: [
+					{
+						mid: order.seller.accountId,
+						percentage: '100.0'
+					}
+				]
+			}
+		}
+
 		paytmData.head.signature = await paytmChecksum.generateSignature(
 			JSON.stringify(paytmData.body),
 			PAYTM_KEY
