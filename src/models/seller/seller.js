@@ -96,6 +96,10 @@ const sellerSchema = new Schema(
 				type: Boolean,
 				default: true
 			},
+			verified: {
+				type: Boolean,
+				default: false
+			},
 			beneficiaryName: String,
 			accountNumber: String,
 			accountType: {
@@ -113,8 +117,8 @@ const sellerSchema = new Schema(
 	{ timestamps: true }
 )
 
-sellerSchema.virtual('bankDetailsUnverified').get(function () {
-	return !this.mid
+sellerSchema.virtual('bankDetailsVerified').get(function () {
+	return !!this.bankDetails.verified
 })
 
 export const Seller = model('seller', sellerSchema)

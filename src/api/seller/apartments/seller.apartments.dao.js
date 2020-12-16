@@ -52,7 +52,7 @@ export const addApartment = async (
 		const { businessCategory, brand } = seller
 		const { name, tagline, imageUrl } = brand
 
-		const live = !seller.bankDetailsUnverified
+		const live = seller.bankDetailsVerified
 
 		apartment.sellers.push({
 			_id: sellerId,
@@ -93,8 +93,8 @@ export const updateApartmentLiveStatus = async (
 	try {
 		const seller = await Seller.findById(sellerId)
 
-		// Check if seller has a mid
-		if (seller.bankDetailsUnverified) {
+		// Check if seller has account has been verified
+		if (!seller.bankDetailsVerified) {
 			throw new CreateHttpError[401](
 				'Bank Details Not Verified. Contact Botiga customer care'
 			)
