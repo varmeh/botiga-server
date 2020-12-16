@@ -88,15 +88,9 @@ export const postOrder = async (req, res, next) => {
 
 		const { _id, order, buyer, seller, createdAt, updatedAt } = newOrder
 
-		const data = await payments.initiateTransaction({
-			txnAmount: totalAmount,
-			orderId: _id,
-			customerId: `cust_${buyer.phone.substr(-6, 6)}`
-		})
-
 		res
 			.status(201)
-			.json({ id: _id, order, buyer, seller, createdAt, updatedAt, ...data })
+			.json({ id: _id, order, buyer, seller, createdAt, updatedAt })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
@@ -169,11 +163,11 @@ export const postCancelOrder = async (req, res, next) => {
 
 /**
  * Transaction APIs
- * 	- postTransactionRetry
+ * 	- postTransaction
  * 	- postTransactionStatus - callback from paytm webview in flutter app
  */
 
-export const postTransactionRetry = async (req, res, next) => {
+export const postTransaction = async (req, res, next) => {
 	try {
 		const order = await Order.findById(req.body.orderId)
 		const data = await payments.initiateTransaction({
