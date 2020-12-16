@@ -78,7 +78,7 @@ export const postOrder = async (req, res, next) => {
 
 	try {
 		// Verify Seller Id
-		const newOrder = await createOrder({
+		const order = await createOrder({
 			userId: token.get(req),
 			sellerId,
 			addressId,
@@ -86,11 +86,7 @@ export const postOrder = async (req, res, next) => {
 			products
 		})
 
-		const { _id, order, buyer, seller, createdAt, updatedAt } = newOrder
-
-		res
-			.status(201)
-			.json({ id: _id, order, buyer, seller, createdAt, updatedAt })
+		res.status(201).json(orderOrchestrator(order))
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
