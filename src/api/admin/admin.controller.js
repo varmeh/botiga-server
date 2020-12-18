@@ -159,7 +159,7 @@ export const patchSellerBankDetails = async (req, res, next) => {
 	}
 }
 
-export const postPaymentUpdate = async (req, res, next) => {
+export const patchPaymentUpdate = async (req, res, next) => {
 	try {
 		const { paymentId } = req.body
 
