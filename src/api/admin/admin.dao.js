@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { winston, crypto, moment } from '../../util'
+import { winston, moment } from '../../util'
 import { Apartment, Seller, Order } from '../../models'
 
 export const createApartment = async ({
@@ -33,54 +33,6 @@ export const createApartment = async ({
 	}
 }
 
-const sellerOrchestrator = seller => {
-	const {
-		businessName,
-		businessCategory,
-		owner: { firstName, lastName },
-		brand: { name, tagline, imageUrl },
-		contact: { phone, whatsapp, email },
-		bankDetails
-	} = seller
-
-	let returnBankDetails = {}
-	if (seller.bankDetails.beneficiaryName) {
-		// Seller bank details available
-		const {
-			editable,
-			verified,
-			beneficiaryName,
-			accountNumber,
-			ifscCode,
-			bankName,
-			accountType
-		} = bankDetails
-
-		returnBankDetails = {
-			editable,
-			verified,
-			beneficiaryName: crypto.decryptString(beneficiaryName),
-			accountNumber: crypto.decryptString(accountNumber),
-			ifscCode,
-			bankName,
-			accountType
-		}
-	}
-
-	return {
-		businessName,
-		businessCategory,
-		owner: `${firstName} ${lastName}`,
-		brand: name,
-		tagline,
-		brandImageUrl: imageUrl,
-		phone,
-		whatsapp,
-		email,
-		...returnBankDetails,
-		mid: seller.mid
-	}
-}
 export const findSellerByNumber = async phone => {
 	try {
 		const seller = await Seller.findOne({ 'contact.phone': phone })
@@ -88,7 +40,7 @@ export const findSellerByNumber = async phone => {
 			return Promise.reject(new CreateHttpError[404]('Seller not found'))
 		}
 
-		return sellerOrchestrator(seller)
+		return seller
 	} catch (error) {
 		winston.debug('@error findSellerByNumber', { error })
 		return Promise.reject(new CreateHttpError[500]())

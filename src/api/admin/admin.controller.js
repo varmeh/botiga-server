@@ -1,11 +1,60 @@
 import CreateHttpError from 'http-errors'
 import { createBusinessCategory, User, Seller } from '../../models'
-import { notifications, payments, aws } from '../../util'
+import { notifications, payments, aws, crypto } from '../../util'
 import {
 	createApartment,
 	findSellerByNumber,
 	findDeliveriesForSeller
 } from './admin.dao'
+
+const sellerOrchestrator = seller => {
+	const {
+		businessName,
+		businessCategory,
+		owner: { firstName, lastName },
+		brand: { name, tagline, imageUrl },
+		contact: { phone, whatsapp, email },
+		bankDetails
+	} = seller
+
+	let returnBankDetails = {}
+	if (seller.bankDetails.beneficiaryName) {
+		// Seller bank details available
+		const {
+			editable,
+			verified,
+			beneficiaryName,
+			accountNumber,
+			ifscCode,
+			bankName,
+			accountType
+		} = bankDetails
+
+		returnBankDetails = {
+			editable,
+			verified,
+			beneficiaryName: crypto.decryptString(beneficiaryName),
+			accountNumber: crypto.decryptString(accountNumber),
+			ifscCode,
+			bankName,
+			accountType
+		}
+	}
+
+	return {
+		businessName,
+		businessCategory,
+		owner: `${firstName} ${lastName}`,
+		brand: name,
+		tagline,
+		brandImageUrl: imageUrl,
+		phone,
+		whatsapp,
+		email,
+		...returnBankDetails,
+		mid: seller.mid
+	}
+}
 
 export const postApartment = async (req, res, next) => {
 	try {
@@ -83,9 +132,15 @@ export const postNotificationSeller = async (req, res, next) => {
 
 export const getSellerDetails = async (req, res, next) => {
 	try {
-		const bankDetails = await findSellerByNumber(req.params.phone)
+		const seller = await findSellerByNumber(req.params.phone)
 
-		res.json(bankDetails)
+		res.json(sellerOrchestrator(seller))
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
