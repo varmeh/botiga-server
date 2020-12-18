@@ -198,8 +198,7 @@ export const postTestTransaction = async (req, res, next) => {
 
 export const getTransactionStatus = async (req, res, next) => {
 	try {
-		console.error(`transaction query: ${req.query}`)
-		const txnStatus = await payments.getTransactionStatus(req.query)
+		const txnStatus = await payments.getTransactionStatus(req.query.paymentId)
 
 		res.json(txnStatus)
 	} catch (error) {
