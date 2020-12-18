@@ -6,7 +6,10 @@ import {
 	regexAlphaSpaceDigitsValidator,
 	objectIdValidator,
 	paramPhoneValidator,
-	paramDateValidator
+	paramDateValidator,
+	boolOptionalValidator,
+	regexAlphaSpaceDigitsOptionalValidator,
+	phoneValidator
 } from '../../util'
 
 export const postApartmentValidator = [
@@ -33,7 +36,14 @@ export const postNotificationTopicValidator = [
 	emptyValidator('content')
 ]
 
-export const sellerPhoneValidator = paramPhoneValidator('phone')
+export const getSellerValidator = paramPhoneValidator('phone')
+
+export const patchSellerBankDetailsValidator = [
+	phoneValidator('phone'),
+	boolOptionalValidator('editable'),
+	boolOptionalValidator('verified'),
+	regexAlphaSpaceDigitsOptionalValidator('mid')
+]
 
 export const postPaymentUpdateValidator = emptyValidator('paymentId')
 

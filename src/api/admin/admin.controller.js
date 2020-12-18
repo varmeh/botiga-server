@@ -4,6 +4,7 @@ import { notifications, payments, aws, crypto } from '../../util'
 import {
 	createApartment,
 	findSellerByNumber,
+	updateSellerBankDetails,
 	findDeliveriesForSeller
 } from './admin.dao'
 
@@ -141,6 +142,17 @@ export const getSellerDetails = async (req, res, next) => {
 	}
 }
 
+export const patchSellerBankDetails = async (req, res, next) => {
+	const { phone, editable, verified, mid } = req.body
+	try {
+		const seller = await updateSellerBankDetails({
+			phone,
+			editable,
+			verified,
+			mid
+		})
+
+		res.json(sellerOrchestrator(seller))
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

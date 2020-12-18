@@ -1,3 +1,4 @@
+/* eslint-disable no-undefined */
 import CreateHttpError from 'http-errors'
 import { winston, moment } from '../../util'
 import { Apartment, Seller, Order } from '../../models'
@@ -43,6 +44,30 @@ export const findSellerByNumber = async phone => {
 		return seller
 	} catch (error) {
 		winston.debug('@error findSellerByNumber', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const updateSellerBankDetails = async ({
+	phone,
+	editable,
+	verified,
+	mid
+}) => {
+	try {
+		const seller = await findSellerByNumber(phone)
+
+		const { bankDetails } = seller
+
+		seller.mid = !mid ? seller.building : mid
+		bankDetails.editable =
+			editable !== undefined ? editable : bankDetails.editable
+		bankDetails.verified =
+			verified !== undefined ? verified : bankDetails.verified
+
+		return await seller.save()
+	} catch (error) {
+		winston.debug('@error updateSellerBankDetails', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

@@ -56,3 +56,10 @@ export const urlOptionalValidator = field =>
 			require_protocol: true
 		})
 		.withMessage(validationMessages.url)
+
+export const boolOptionalValidator = field =>
+	emptyOptionalValidator(field)
+		.isBoolean()
+		.withMessage(validationMessages.bool)
+		.bail()
+		.toBoolean(true)
