@@ -81,7 +81,7 @@ export const postNotificationSeller = async (req, res, next) => {
 	}
 }
 
-export const getSellerBankDetails = async (req, res, next) => {
+export const getSellerDetails = async (req, res, next) => {
 	try {
 		const bankDetails = await findSellerBankDetails(req.params.phone)
 

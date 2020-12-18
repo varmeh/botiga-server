@@ -33,7 +33,7 @@ export const postNotificationTopicValidator = [
 	emptyValidator('content')
 ]
 
-export const getSellerDetailsValidator = paramPhoneValidator('phone')
+export const sellerPhoneValidator = paramPhoneValidator('phone')
 
 export const postPaymentUpdateValidator = emptyValidator('paymentId')
 

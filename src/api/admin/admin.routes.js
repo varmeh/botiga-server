@@ -5,7 +5,7 @@ import {
 	postBusinessCategoryValidator,
 	postNotificationTopicValidator,
 	postNotificationUserValidator,
-	getSellerDetailsValidator,
+	sellerPhoneValidator,
 	postPaymentUpdateValidator,
 	getDeliveryValidator
 } from './admin.validator'
@@ -16,7 +16,7 @@ import {
 	postNotificationTopic,
 	postNotificationUser,
 	postNotificationSeller,
-	getSellerBankDetails,
+	getSellerDetails,
 	postPaymentUpdate,
 	getDeliveryXls,
 	testEmail
@@ -60,10 +60,10 @@ router.post(
 )
 
 router.get(
-	'/seller/bankdetails/:phone',
-	getSellerDetailsValidator,
+	'/seller/:phone',
+	sellerPhoneValidator,
 	validationMiddleware,
-	getSellerBankDetails
+	getSellerDetails
 )
 
 router.post(
