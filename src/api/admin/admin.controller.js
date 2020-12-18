@@ -3,7 +3,7 @@ import { createBusinessCategory, User, Seller } from '../../models'
 import { notifications, payments, aws } from '../../util'
 import {
 	createApartment,
-	findSellerBankDetails,
+	findSellerByNumber,
 	findDeliveriesForSeller
 } from './admin.dao'
 
@@ -83,7 +83,7 @@ export const postNotificationSeller = async (req, res, next) => {
 
 export const getSellerDetails = async (req, res, next) => {
 	try {
-		const bankDetails = await findSellerBankDetails(req.params.phone)
+		const bankDetails = await findSellerByNumber(req.params.phone)
 
 		res.json(bankDetails)
 	} catch (error) {

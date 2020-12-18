@@ -33,23 +33,19 @@ export const createApartment = async ({
 	}
 }
 
-export const findSellerByNumber = async phone => {
-	try {
-		return await Seller.findOne({ 'contact.phone': phone })
-	} catch (error) {
-		winston.debug('@error findSellerByNumber', { error })
-		return Promise.reject(new CreateHttpError[500]())
-	}
-}
+const sellerOrchestrator = seller => {
+	const {
+		businessName,
+		businessCategory,
+		owner: { firstName, lastName },
+		brand: { name, tagline, imageUrl },
+		contact: { phone, whatsapp, email },
+		bankDetails
+	} = seller
 
-export const findSellerBankDetails = async phone => {
-	try {
-		const seller = await findSellerByNumber(phone)
-
-		if (!seller) {
-			return Promise.reject(new CreateHttpError[404]('Seller not found'))
-		}
-
+	let returnBankDetails = {}
+	if (seller.bankDetails.beneficiaryName) {
+		// Seller bank details available
 		const {
 			editable,
 			verified,
@@ -58,37 +54,43 @@ export const findSellerBankDetails = async phone => {
 			ifscCode,
 			bankName,
 			accountType
-		} = seller.bankDetails
+		} = bankDetails
 
-		const {
-			businessName,
-			businessCategory,
-			owner: { firstName, lastName },
-			brand: { name, tagline, imageUrl },
-			contact: { whatsapp, email }
-		} = seller
-
-		return {
-			businessName,
-			businessCategory,
-			owner: `${firstName} ${lastName}`,
-			brand: name,
-			tagline,
-			brandImageUrl: imageUrl,
-			phone,
-			whatsapp,
-			email,
+		returnBankDetails = {
 			editable,
 			verified,
 			beneficiaryName: crypto.decryptString(beneficiaryName),
 			accountNumber: crypto.decryptString(accountNumber),
 			ifscCode,
 			bankName,
-			accountType,
-			mid: seller.mid
+			accountType
 		}
+	}
+
+	return {
+		businessName,
+		businessCategory,
+		owner: `${firstName} ${lastName}`,
+		brand: name,
+		tagline,
+		brandImageUrl: imageUrl,
+		phone,
+		whatsapp,
+		email,
+		...returnBankDetails,
+		mid: seller.mid
+	}
+}
+export const findSellerByNumber = async phone => {
+	try {
+		const seller = await Seller.findOne({ 'contact.phone': phone })
+		if (!seller) {
+			return Promise.reject(new CreateHttpError[404]('Seller not found'))
+		}
+
+		return sellerOrchestrator(seller)
 	} catch (error) {
-		winston.debug('@error findSellerBankDetails', { error })
+		winston.debug('@error findSellerByNumber', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }
