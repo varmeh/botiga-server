@@ -50,12 +50,6 @@ export const findSellerBankDetails = async phone => {
 			return Promise.reject(new CreateHttpError[404]('Seller not found'))
 		}
 
-		if (!seller.bankDetails.beneficiaryName) {
-			return Promise.reject(
-				new CreateHttpError[404]('Bank Details not available')
-			)
-		}
-
 		const {
 			editable,
 			verified,
