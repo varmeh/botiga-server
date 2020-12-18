@@ -31,20 +31,13 @@ const verifyCheckSumHelper = async (body, signature) => {
 	}
 }
 
-/**
- * Returns txnToken
- */
-const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
+const paytmInitiateTransaction = async (
+	paymentId,
+	txnAmount,
+	sellerMid,
+	customerId
+) => {
 	try {
-		// Required to ensure a unique id for payments
-		const paymentId = `${orderId}_${nanoid(6)}`
-
-		// Save payment id for future reference
-		const order = await Order.findById(orderId)
-		order.payment.status = PaymentStatus.initiated
-		order.payment.paymentId = paymentId
-		await order.save()
-
 		const paytmData = {
 			body: {
 				requestType: 'Payment',
@@ -68,7 +61,7 @@ const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
 				splitMethod: 'PERCENTAGE',
 				splitInfo: [
 					{
-						mid: order.seller.accountId,
+						mid: sellerMid,
 						percentage: '100.0'
 					}
 				]
@@ -96,6 +89,35 @@ const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
 			})
 			throw new Error('Paytm Gateway Down. Please try again')
 		}
+	} catch (error) {
+		winston.debug('@payment paytm initiate transaction failed', {
+			error,
+			msg: error.message
+		})
+		return Promise.reject(new Error(error.message))
+	}
+}
+
+/**
+ * Returns txnToken
+ */
+const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
+	try {
+		// Required to ensure a unique id for payments
+		const paymentId = `${orderId}_${nanoid(6)}`
+
+		// Save payment id for future reference
+		const order = await Order.findById(orderId)
+		order.payment.status = PaymentStatus.initiated
+		order.payment.paymentId = paymentId
+		await order.save()
+
+		return await paytmInitiateTransaction(
+			paymentId,
+			txnAmount,
+			order.seller.accountId,
+			customerId
+		)
 	} catch (error) {
 		winston.debug('@payment initiate transaction failed', {
 			error,
