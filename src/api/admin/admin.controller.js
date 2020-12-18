@@ -174,19 +174,34 @@ export const patchPaymentUpdate = async (req, res, next) => {
 	}
 }
 
-export const postTestPayment = async (req, res, next) => {
+export const postTestTransaction = async (req, res, next) => {
 	try {
 		const { phone, txnAmount } = req.body
 
 		const seller = await findSellerByNumber(phone)
-		const data = await payments.paytmInitiateTransaction(
-			nanoid(24),
+
+		const paymentId = nanoid(24)
+		const data = await payments.paytmInitiateTransaction({
+			paymentId,
 			txnAmount,
-			seller.mid,
-			phone
-		)
+			sellerMid: seller.mid,
+			customerId: phone,
+			callbackUrl: `${process.env.API_HOST_URL}/api/admin/transaction/status?paymentId=${paymentId}`
+		})
 
 		res.json(data)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getTransactionStatus = async (req, res, next) => {
+	try {
+		console.error(`transaction query: ${req.query}`)
+		const txnStatus = await payments.getTransactionStatus(req.query)
+
+		res.json(txnStatus)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

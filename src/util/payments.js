@@ -31,12 +31,13 @@ const verifyCheckSumHelper = async (body, signature) => {
 	}
 }
 
-const paytmInitiateTransaction = async (
+const paytmInitiateTransaction = async ({
 	paymentId,
 	txnAmount,
 	sellerMid,
-	customerId
-) => {
+	customerId,
+	callbackUrl
+}) => {
 	try {
 		const paytmData = {
 			body: {
@@ -44,7 +45,7 @@ const paytmInitiateTransaction = async (
 				mid: PAYTM_MID,
 				orderId: paymentId,
 				websiteName: PAYTM_WEBSITE,
-				callbackUrl: `${API_HOST_URL}/api/user/orders/transaction/status?paymentId=${paymentId}`,
+				callbackUrl,
 				txnAmount: {
 					value: txnAmount,
 					currency: 'INR'
@@ -112,12 +113,13 @@ const initiateTransaction = async ({ txnAmount, orderId, customerId }) => {
 		order.payment.paymentId = paymentId
 		await order.save()
 
-		return await paytmInitiateTransaction(
+		return await paytmInitiateTransaction({
 			paymentId,
 			txnAmount,
-			order.seller.accountId,
-			customerId
-		)
+			sellerMid: order.seller.accountId,
+			customerId,
+			callbackUrl: `${API_HOST_URL}/api/user/orders/transaction/status?paymentId=${paymentId}`
+		})
 	} catch (error) {
 		winston.debug('@payment initiate transaction failed', {
 			error,
@@ -269,5 +271,6 @@ export default {
 	initiateTransaction,
 	transactionStatus,
 	pendingStatusUpdate,
+	getTransactionStatus,
 	paytmInitiateTransaction
 }

@@ -8,7 +8,7 @@ import {
 	getSellerValidator,
 	patchSellerBankDetailsValidator,
 	patchPaymentUpdateValidator,
-	postPaymentTestValidator,
+	postTestTransactionValidator,
 	getDeliveryValidator
 } from './admin.validator'
 
@@ -21,7 +21,8 @@ import {
 	getSellerDetails,
 	patchSellerBankDetails,
 	patchPaymentUpdate,
-	postTestPayment,
+	postTestTransaction,
+	getTransactionStatus,
 	getDeliveryXls,
 	testEmail
 } from './admin.controller'
@@ -85,11 +86,13 @@ router.patch(
 )
 
 router.post(
-	'/payment/test',
-	postPaymentTestValidator,
+	'/transaction/test',
+	postTestTransactionValidator,
 	validationMiddleware,
-	postTestPayment
+	postTestTransaction
 )
+
+router.get('/transaction/status', getTransactionStatus)
 
 router.get(
 	'/delivery/:sellerPhone/:date',
