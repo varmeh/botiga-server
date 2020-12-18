@@ -1,4 +1,6 @@
 import CreateHttpError from 'http-errors'
+import { nanoid } from 'nanoid'
+
 import { createBusinessCategory, User, Seller } from '../../models'
 import { notifications, payments, aws, crypto } from '../../util'
 import {
@@ -166,6 +168,25 @@ export const patchPaymentUpdate = async (req, res, next) => {
 		const order = await payments.pendingStatusUpdate(paymentId)
 
 		res.json(order)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postTestPayment = async (req, res, next) => {
+	try {
+		const { phone, txnAmount } = req.body
+
+		const seller = await findSellerByNumber(phone)
+		const data = await payments.paytmInitiateTransaction(
+			nanoid(24),
+			txnAmount,
+			seller.mid,
+			phone
+		)
+
+		res.json(data)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

@@ -265,4 +265,9 @@ const transactionStatus = async ({ paymentId }) => {
 	}
 }
 
-export default { initiateTransaction, transactionStatus, pendingStatusUpdate }
+export default {
+	initiateTransaction,
+	transactionStatus,
+	pendingStatusUpdate,
+	paytmInitiateTransaction
+}
