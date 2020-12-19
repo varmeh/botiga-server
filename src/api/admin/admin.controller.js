@@ -200,6 +200,8 @@ export const getTransactionStatus = async (req, res, next) => {
 	try {
 		const txnStatus = await payments.getTransactionStatus(req.query.paymentId)
 
+		// TODO: send email to seller if successful
+
 		res.json(txnStatus)
 	} catch (error) {
 		const { status, message } = error

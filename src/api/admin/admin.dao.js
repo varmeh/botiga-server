@@ -59,7 +59,7 @@ export const updateSellerBankDetails = async ({
 
 		const { bankDetails } = seller
 
-		seller.mid = !mid ? seller.building : mid
+		seller.mid = !mid ? seller.mid : mid
 		bankDetails.editable =
 			editable !== undefined ? editable : bankDetails.editable
 		bankDetails.verified =
