@@ -180,7 +180,7 @@ export const postTestTransaction = async (req, res, next) => {
 
 		const seller = await findSellerByNumber(phone)
 
-		const paymentId = nanoid(24)
+		const paymentId = `${phone}_${nanoid(24)}`
 		const data = await payments.paytmInitiateTransaction({
 			paymentId,
 			txnAmount,
@@ -200,7 +200,7 @@ export const getTransactionStatus = async (req, res, next) => {
 	try {
 		const txnStatus = await payments.getTransactionStatus(req.query.paymentId)
 
-		// TODO: send email to seller if successful
+		console.error(txnStatus)
 
 		res.json(txnStatus)
 	} catch (error) {
