@@ -215,7 +215,7 @@ export const getTransactionStatus = async (req, res, next) => {
 					from: 'support@botiga.app',
 					to: email,
 					subject: `${seller.brand.name} - Botiga test payment acknowledgement`,
-					text: `Hello ${owner.firstName},\nTeam Botiga has successfully done a test transaction of amount ${txnStatus.txnAmount} to your account.\nTransactionId for this transaction is ${txnStatus.txnId}.\nPlease confirm once money is credited to your account.\nDo send us a screenshot of transaction from your bank account.\nOnly then, we would enable your account for community activations.\nThank you\nTeam Botiga`
+					text: `Hello ${owner.firstName},\r\nTeam Botiga has successfully done a test transaction of amount ${txnStatus.txnAmount} to your account.\r\nTransactionId for this transaction is ${txnStatus.txnId}.\r\nPlease confirm once money is credited to your account.\r\nDo send us a screenshot of transaction from your bank account.\r\nOnly then, we would enable your account for community activations.\r\nThank you\r\nTeam Botiga`
 				})
 			}
 		}
