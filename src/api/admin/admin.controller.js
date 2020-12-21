@@ -198,9 +198,27 @@ export const postTestTransaction = async (req, res, next) => {
 
 export const getTransactionStatus = async (req, res, next) => {
 	try {
-		const txnStatus = await payments.getTransactionStatus(req.query.paymentId)
+		const { paymentId } = req.query
+		const txnStatus = await payments.getTransactionStatus(paymentId)
 
-		console.error(txnStatus)
+		if (txnStatus.resultInfo.resultStatus === 'TXN_SUCCESS') {
+			const [phone] = paymentId.split('_')
+			const seller = await findSellerByNumber(phone)
+
+			const {
+				contact: { email },
+				owner
+			} = seller
+
+			if (email) {
+				aws.ses.sendMail({
+					from: 'support@botiga.app',
+					to: email,
+					subject: 'Acknowledge test payment',
+					Text: `Hello ${owner.firstName},\nTeam Botiga has successfully done a test transaction of amount ${txnStatus.txnAmount} to your account.\nTransactionId for this transaction is ${txnStatus.txnId}.\nPlease confirm once money is credited to your account.\nDo send us a screenshot of transaction from your bank account.\nOnly then, we would enable your account for community activations.\nThank you\nTeam Botiga`
+				})
+			}
+		}
 
 		res.json(txnStatus)
 	} catch (error) {
