@@ -52,6 +52,10 @@ const paytmInitiateTransaction = async ({
 				},
 				userInfo: {
 					custId: customerId
+				},
+				enablePaymentMode: {
+					mode: 'UPI',
+					channels: ['UPI', 'UPIPUSH', 'UPIPUSHEXPRESS']
 				}
 			},
 			head: { channelId: 'WAP' }
