@@ -68,10 +68,12 @@ const paytmInitiateTransaction = async ({
 				]
 			}
 
-			paytmData.body.enablePaymentMode = {
-				mode: 'UPI'
-				// channels: ['UPI', 'UPIPUSH', 'UPIPUSHEXPRESS']
-			}
+			paytmData.body.enablePaymentMode = [
+				{
+					mode: 'UPI',
+					channels: ['UPI', 'UPIPUSH', 'UPIPUSHEXPRESS']
+				}
+			]
 		}
 
 		paytmData.head.signature = await paytmChecksum.generateSignature(
