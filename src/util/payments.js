@@ -52,10 +52,6 @@ const paytmInitiateTransaction = async ({
 				},
 				userInfo: {
 					custId: customerId
-				},
-				enablePaymentMode: {
-					mode: 'UPI',
-					channels: ['UPI', 'UPIPUSH', 'UPIPUSHEXPRESS']
 				}
 			},
 			head: { channelId: 'WAP' }
@@ -70,6 +66,11 @@ const paytmInitiateTransaction = async ({
 						percentage: '100.0'
 					}
 				]
+			}
+
+			paytmData.body.enablePaymentMode = {
+				mode: 'UPI',
+				channels: ['UPI', 'UPIPUSH', 'UPIPUSHEXPRESS']
 			}
 		}
 
