@@ -6,7 +6,8 @@ import {
 	paginationData,
 	skipData,
 	notifications,
-	payments
+	payments,
+	rpayPayments
 } from '../../../util'
 
 import {
@@ -170,6 +171,20 @@ export const postTransaction = async (req, res, next) => {
 			txnAmount: order.order.totalAmount,
 			orderId: order._id,
 			customerId: `cust_${order.buyer.phone.substr(-6, 6)}`
+		})
+
+		res.json(data)
+	} catch ({ status, message }) {
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postTransactionRpay = async (req, res, next) => {
+	try {
+		const order = await Order.findById(req.body.orderId)
+		const data = await rpayPayments.initiateTransaction({
+			txnAmount: order.order.totalAmount,
+			orderId: order._id
 		})
 
 		res.json(data)

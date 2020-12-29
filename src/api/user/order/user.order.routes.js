@@ -16,6 +16,7 @@ import {
 	postCancelOrder,
 	getOrders,
 	postTransaction,
+	postTransactionRpay,
 	postTransactionStatus
 } from './user.order.controller'
 
@@ -61,6 +62,14 @@ router.post(
 	postTransactionValidator,
 	validationMiddleware,
 	postTransaction
+)
+
+router.post(
+	'/transaction/rpay',
+	token.authenticationMiddleware,
+	postTransactionValidator,
+	validationMiddleware,
+	postTransactionRpay
 )
 
 router.post('/transaction/status', postTransactionStatus) // API Callback from paytm payment webview
