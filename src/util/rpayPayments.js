@@ -55,11 +55,12 @@ const webhook = async data => {
 
 		if (event === 'payment.authorized') {
 			order.payment.status = PaymentStatus.success
-			order.payment.paymentId = entity.id
 		} else if (event === 'payment.failed') {
 			order.payment.status = PaymentStatus.failure
-			order.payment.paymentId = entity.id
 		}
+
+		order.payment.paymentId = entity.id
+		order.payment.paymentMode = entity.method
 		const updatedOrder = await order.save()
 		return updatedOrder
 	} catch (error) {
