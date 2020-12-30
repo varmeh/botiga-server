@@ -10,7 +10,6 @@ export const OrderStatus = {
 
 export const PaymentStatus = {
 	initiated: 'initiated',
-	pending: 'pending',
 	success: 'success',
 	failure: 'failure'
 }
@@ -107,31 +106,23 @@ const orderSchema = new Schema(
 			]
 		},
 		payment: {
+			orderId: String,
 			paymentId: String,
+			txnAmount: String,
 			status: {
 				type: String,
 				enum: [
 					PaymentStatus.initiated,
-					PaymentStatus.pending,
 					PaymentStatus.success,
 					PaymentStatus.failure
 				]
-			},
-			txnId: String,
-			txnDate: String,
-			paymentMode: String,
-			txnResponseMessage: String,
-			bankTxnId: String,
-			gatewayName: String,
-			bankName: String,
-			txnAmount: String
+			}
 		},
 		refund: {
 			status: {
 				type: String,
 				enum: [
 					PaymentStatus.initiated,
-					PaymentStatus.pending,
 					PaymentStatus.success,
 					PaymentStatus.failure
 				]
@@ -139,16 +130,6 @@ const orderSchema = new Schema(
 			id: String,
 			date: Date,
 			amount: String
-		},
-		rpayment: {
-			orderId: String,
-			paymentId: String,
-			signature: String,
-			status: {
-				type: String,
-				enum: []
-			},
-			txnAmount: String
 		}
 	},
 	{ timestamps: true }
