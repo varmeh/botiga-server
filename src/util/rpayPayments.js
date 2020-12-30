@@ -30,7 +30,6 @@ const initiateTransaction = async ({ txnAmount, orderId }) => {
 
 		order.payment.status = PaymentStatus.initiated
 		order.payment.orderId = data.id
-		order.payment.amount = txnAmount
 		await order.save()
 
 		return data
