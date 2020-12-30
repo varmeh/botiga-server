@@ -205,7 +205,7 @@ export const postTransactionStatus = async (req, res, next) => {
 
 export const postRpayTransactionWebhook = (req, res, next) => {
 	try {
-		console.error(req)
+		console.error(req.body)
 		res.json()
 	} catch ({ status, message }) {
 		next(new CreateHttpError(status, message))
