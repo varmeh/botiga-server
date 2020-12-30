@@ -139,6 +139,16 @@ const orderSchema = new Schema(
 			id: String,
 			date: Date,
 			amount: String
+		},
+		rpayment: {
+			orderId: String,
+			paymentId: String,
+			signature: String,
+			status: {
+				type: String,
+				enum: []
+			},
+			txnAmount: String
 		}
 	},
 	{ timestamps: true }

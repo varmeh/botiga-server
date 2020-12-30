@@ -179,7 +179,7 @@ export const postTransaction = async (req, res, next) => {
 	}
 }
 
-export const postTransactionRpay = async (req, res, next) => {
+export const postRpayTransaction = async (req, res, next) => {
 	try {
 		const order = await Order.findById(req.body.orderId)
 		const data = await rpayPayments.initiateTransaction({
@@ -198,6 +198,14 @@ export const postTransactionStatus = async (req, res, next) => {
 		const order = await payments.transactionStatus(req.query)
 
 		res.json(orderOrchestrator(order))
+	} catch ({ status, message }) {
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postRpayTransactionStatus = (req, res, next) => {
+	try {
+		res.json(orderOrchestrator(req))
 	} catch ({ status, message }) {
 		next(new CreateHttpError(status, message))
 	}
