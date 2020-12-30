@@ -203,7 +203,7 @@ export const postTransactionStatus = async (req, res, next) => {
 	}
 }
 
-export const postRpayTransactionStatus = (req, res, next) => {
+export const postRpayTransactionWebhook = (req, res, next) => {
 	try {
 		console.error(req)
 		res.json()

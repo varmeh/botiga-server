@@ -18,7 +18,7 @@ import {
 	postTransaction,
 	postTransactionStatus,
 	postRpayTransaction,
-	postRpayTransactionStatus
+	postRpayTransactionWebhook
 } from './user.order.controller'
 
 const router = Router()
@@ -75,6 +75,6 @@ router.post(
 
 router.post('/transaction/status', postTransactionStatus) // API Callback from paytm payment webview
 
-router.post('/transaction/rpay/status', postRpayTransactionStatus) // API Callback from paytm payment webview
+router.post('/transaction/webhook', postRpayTransactionWebhook) // API Callback from paytm payment webview
 
 export default router
