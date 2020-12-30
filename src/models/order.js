@@ -109,7 +109,7 @@ const orderSchema = new Schema(
 			orderId: String,
 			paymentId: String,
 			amount: String,
-			paymendMode: String,
+			paymentMode: String,
 			status: {
 				type: String,
 				enum: [
