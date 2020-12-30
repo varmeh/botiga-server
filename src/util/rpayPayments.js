@@ -53,7 +53,6 @@ const webhook = async data => {
 		} = data
 		const order = await Order.findById(entity.notes.orderId)
 
-		console.error(event, entity)
 		if (event === 'payment.authorized') {
 			order.payment.status = PaymentStatus.success
 			order.payment.paymentId = entity.id
