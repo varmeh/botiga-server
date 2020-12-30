@@ -17,7 +17,7 @@ const initiateTransaction = async ({ txnAmount, orderId }) => {
 		const { data } = await axios.post(
 			`${RPAY_HOST}/orders`,
 			{
-				amount: txnAmount,
+				amount: txnAmount * 100,
 				currency: 'INR',
 				notes: { orderId: order.id }
 			},
