@@ -45,8 +45,6 @@ export const patchSellerBankDetailsValidator = [
 	regexAlphaSpaceDigitsOptionalValidator('mid')
 ]
 
-export const patchPaymentUpdateValidator = emptyValidator('paymentId')
-
 export const postTestTransactionValidator = [
 	phoneValidator('phone'),
 	decimalValidator('txnAmount')

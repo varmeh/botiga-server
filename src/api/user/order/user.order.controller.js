@@ -6,7 +6,6 @@ import {
 	paginationData,
 	skipData,
 	notifications,
-	payments,
 	rpayPayments
 } from '../../../util'
 
@@ -154,37 +153,6 @@ export const postCancelOrder = async (req, res, next) => {
 		res.json({ message: 'cancelled', id: order._id })
 	} catch (error) {
 		const { status, message } = error
-		next(new CreateHttpError(status, message))
-	}
-}
-
-/**
- * Transaction APIs
- * 	- postTransaction
- * 	- postTransactionStatus - callback from paytm webview in flutter app
- */
-
-export const postTransaction = async (req, res, next) => {
-	try {
-		const order = await Order.findById(req.body.orderId)
-		const data = await payments.initiateTransaction({
-			txnAmount: order.order.totalAmount,
-			orderId: order._id,
-			customerId: `cust_${order.buyer.phone.substr(-6, 6)}`
-		})
-
-		res.json(data)
-	} catch ({ status, message }) {
-		next(new CreateHttpError(status, message))
-	}
-}
-
-export const postTransactionStatus = async (req, res, next) => {
-	try {
-		const order = await payments.transactionStatus(req.query)
-
-		res.json(orderOrchestrator(order))
-	} catch ({ status, message }) {
 		next(new CreateHttpError(status, message))
 	}
 }

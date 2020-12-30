@@ -1,8 +1,7 @@
 import CreateHttpError from 'http-errors'
-import { nanoid } from 'nanoid'
 
 import { createBusinessCategory, User, Seller } from '../../models'
-import { notifications, payments, aws, crypto } from '../../util'
+import { notifications, aws, crypto } from '../../util'
 import {
 	createApartment,
 	findSellerByNumber,
@@ -161,66 +160,14 @@ export const patchSellerBankDetails = async (req, res, next) => {
 	}
 }
 
-export const patchPaymentUpdate = async (req, res, next) => {
-	try {
-		const { paymentId } = req.body
-
-		const order = await payments.pendingStatusUpdate(paymentId)
-
-		res.json(order)
-	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
-	}
-}
-
 export const postTestTransaction = async (req, res, next) => {
 	try {
 		const { phone, txnAmount } = req.body
 
-		const seller = await findSellerByNumber(phone)
+		const _ = await findSellerByNumber(phone)
 
-		const paymentId = `${phone}_${nanoid(24)}`
-		const data = await payments.paytmInitiateTransaction({
-			paymentId,
-			txnAmount,
-			sellerMid: seller.mid,
-			customerId: phone,
-			callbackUrl: `${process.env.API_HOST_URL}/api/admin/transaction/status?paymentId=${paymentId}`
-		})
-
-		res.json(data)
-	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
-	}
-}
-
-export const getTransactionStatus = async (req, res, next) => {
-	try {
-		const { paymentId } = req.query
-		const txnStatus = await payments.getTransactionStatus(paymentId)
-
-		if (txnStatus.resultInfo.resultStatus === 'TXN_SUCCESS') {
-			const [phone] = paymentId.split('_')
-			const seller = await findSellerByNumber(phone)
-
-			const {
-				contact: { email },
-				owner
-			} = seller
-
-			if (email) {
-				aws.ses.sendMail({
-					from: 'support@botiga.app',
-					to: email,
-					subject: `${seller.brand.name} - Botiga test payment acknowledgement`,
-					text: `Hello ${owner.firstName},<br><br>Team Botiga has successfully done a test transaction of amount ${txnStatus.txnAmount} to your account.<br>TransactionId for this transaction is ${txnStatus.txnId}.<br><br>Please confirm once money is credited to your account.<br>Do send us a screenshot of transaction from your bank account.<br><br>Once confirm, you could go live into any community and start selling your amazing merchandise.<br><br>Thank you<br>Team Botiga`
-				})
-			}
-		}
-
-		res.json(txnStatus)
+		//
+		res.json()
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
