@@ -63,8 +63,6 @@ const webhook = async data => {
 		order.payment.paymentMode = entity.method
 		const updatedOrder = await order.save()
 
-		console.error(entity)
-		console.error(updatedOrder)
 		return updatedOrder
 	} catch (error) {
 		winston.debug('@payment webhook failed', {
