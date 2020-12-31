@@ -198,7 +198,7 @@ export const postTestTransactionNotify = async (req, res, next) => {
 			})
 		}
 
-		res.json()
+		res.status(204).json()
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
