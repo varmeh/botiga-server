@@ -32,7 +32,7 @@ const routeTransaction = async ({
 			payload.transfers = [
 				{
 					account: sellerMid,
-					amount: amountToBeTransfered * 100,
+					amount: Math.ceil(amountToBeTransfered * 100),
 					currency: 'INR'
 				}
 			]
