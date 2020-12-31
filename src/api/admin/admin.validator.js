@@ -1,5 +1,6 @@
 import {
 	emptyValidator,
+	emptyOptionalValidator,
 	addressValidator,
 	pincodeValidator,
 	decimalValidator,
@@ -8,7 +9,6 @@ import {
 	paramPhoneValidator,
 	paramDateValidator,
 	boolOptionalValidator,
-	regexAlphaSpaceDigitsOptionalValidator,
 	phoneValidator
 } from '../../util'
 
@@ -42,7 +42,7 @@ export const patchSellerBankDetailsValidator = [
 	phoneValidator('phone'),
 	boolOptionalValidator('editable'),
 	boolOptionalValidator('verified'),
-	regexAlphaSpaceDigitsOptionalValidator('mid')
+	emptyOptionalValidator('mid')
 ]
 
 export const postTestTransactionValidator = [
