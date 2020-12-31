@@ -89,8 +89,9 @@ const webhook = async data => {
 	try {
 		if (!entity.notes.orderId || entity.notes.orderId === TEST_TRANSACTION) {
 			winston.info('@payment webhook test transaction', {
+				domain: 'webhook',
 				event,
-				entity
+				paymentId: entity.id
 			})
 			return
 		}
@@ -120,8 +121,9 @@ const webhook = async data => {
 		)
 	} catch (error) {
 		winston.debug('@payment webhook failed', {
+			domain: 'webhook',
 			error,
-			msg: error.message,
+			errorMessage: error.message,
 			paymentId: entity.id,
 			event,
 			entity
