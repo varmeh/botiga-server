@@ -166,8 +166,38 @@ export const postTestTransaction = async (req, res, next) => {
 
 		const seller = await findSellerByNumber(phone)
 
-		const data = await rpayPayments.initiateTransaction({ txnAmount })
-		//
+		const data = await rpayPayments.routeTransaction({
+			txnAmount,
+			sellerMid: seller.mid
+		})
+
+		res.json(data)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postNotifySellerTestTransaction = async (req, res, next) => {
+	try {
+		const { phone, txnAmount, paymentId } = req.body
+
+		const seller = await findSellerByNumber(phone)
+
+		const {
+			contact: { email },
+			owner
+		} = seller
+
+		if (email) {
+			aws.ses.sendMail({
+				from: 'support@botiga.app',
+				to: email,
+				subject: `${seller.brand.name} - Botiga test payment acknowledgement`,
+				text: `Hello ${owner.firstName},<br><br>Team Botiga has successfully done a test transaction of amount ${txnAmount} to your account.<br>TransactionId for this transaction is ${paymentId}.<br><br>Please confirm once money is credited to your account.<br>Do send us a screenshot of transaction from your bank account.<br><br>Once confirm, you could go live into any community and start selling your amazing merchandise.<br><br>Thank you<br>Team Botiga`
+			})
+		}
+
 		res.json()
 	} catch (error) {
 		const { status, message } = error
