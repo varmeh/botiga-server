@@ -49,7 +49,9 @@ const routeTransaction = async ({
 			error,
 			msg: error.message
 		})
-		return Promise.reject(new Error(error.message))
+		return Promise.reject(
+			new Error('Payment Gateway down. Please try after some time')
+		)
 	}
 }
 
