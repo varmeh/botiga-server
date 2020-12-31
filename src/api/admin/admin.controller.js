@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 
 import { createBusinessCategory, User, Seller } from '../../models'
-import { notifications, aws, crypto } from '../../util'
+import { notifications, aws, crypto, rpayPayments } from '../../util'
 import {
 	createApartment,
 	findSellerByNumber,
@@ -164,8 +164,9 @@ export const postTestTransaction = async (req, res, next) => {
 	try {
 		const { phone, txnAmount } = req.body
 
-		const _ = await findSellerByNumber(phone)
+		const seller = await findSellerByNumber(phone)
 
+		const data = await rpayPayments.initiateTransaction({ txnAmount })
 		//
 		res.json()
 	} catch (error) {

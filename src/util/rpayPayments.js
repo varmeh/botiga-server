@@ -5,21 +5,37 @@ import { winston } from './winston.logger'
 
 const TEST_TRANSACTION = 'testTransaction'
 
+const MDR_CHARGES = 0.12
+
 const { RPAY_HOST, RPAY_ID, RPAY_SECRET } = process.env
 
 const authToken = Buffer.from(`${RPAY_ID}:${RPAY_SECRET}`, 'utf8').toString(
 	'base64'
 )
 
-const initiateTransaction = async ({ txnAmount, orderId }) => {
+const routeTransaction = async ({
+	txnAmount,
+	sellerMid,
+	orderId = TEST_TRANSACTION
+}) => {
 	try {
-		// Save payment id for future reference
-		const order = await Order.findById(orderId)
-
 		const payload = {
 			amount: txnAmount * 100,
 			currency: 'INR',
-			notes: { orderId: orderId ?? TEST_TRANSACTION }
+			notes: { orderId }
+		}
+
+		if (process.env.NODE_ENV === 'production' && sellerMid) {
+			// add routing logic
+			const mdrCharges = txnAmount * MDR_CHARGES
+			const amountToBeTransfered = txnAmount - mdrCharges
+			payload.transfers = [
+				{
+					account: sellerMid,
+					amount: amountToBeTransfered * 100,
+					currency: 'INR'
+				}
+			]
 		}
 
 		const { data } = await axios.post(`${RPAY_HOST}/orders`, payload, {
@@ -27,12 +43,30 @@ const initiateTransaction = async ({ txnAmount, orderId }) => {
 				Authorization: `Basic ${authToken}`
 			}
 		})
+		return data
+	} catch (error) {
+		winston.debug('@payment routeTransaction failed', {
+			error,
+			msg: error.message
+		})
+		return Promise.reject(new Error(error.message))
+	}
+}
 
-		if (orderId) {
-			order.payment.status = PaymentStatus.initiated
-			order.payment.orderId = data.id
-			await order.save()
-		}
+const initiateTransaction = async ({ txnAmount, orderId }) => {
+	try {
+		const order = await Order.findById(orderId)
+
+		const data = await routeTransaction({
+			txnAmount,
+			sellerMid: order.seller.accountId,
+			orderId: orderId
+		})
+
+		// Save razorpay orderId for future reference
+		order.payment.status = PaymentStatus.initiated
+		order.payment.orderId = data.id
+		await order.save()
 
 		return data
 	} catch (error) {
@@ -97,6 +131,7 @@ const webhook = async data => {
 }
 
 export default {
+	routeTransaction,
 	initiateTransaction,
 	webhook
 }
