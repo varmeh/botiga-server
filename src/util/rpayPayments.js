@@ -5,7 +5,7 @@ import { winston } from './winston.logger'
 
 const TEST_TRANSACTION = 'testTransaction'
 
-const MDR_CHARGES = 0.12
+const MDR_CHARGES = 0.12 / 100 // represents 0.12 %
 
 const { RPAY_HOST, RPAY_ID, RPAY_SECRET } = process.env
 
