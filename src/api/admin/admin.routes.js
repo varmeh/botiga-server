@@ -8,6 +8,7 @@ import {
 	getSellerValidator,
 	patchSellerBankDetailsValidator,
 	postTestTransactionValidator,
+	postTestTransactionNotifyValidator,
 	getDeliveryValidator
 } from './admin.validator'
 
@@ -20,6 +21,7 @@ import {
 	getSellerDetails,
 	patchSellerBankDetails,
 	postTestTransaction,
+	postTestTransactionNotify,
 	getDeliveryXls,
 	testEmail
 } from './admin.controller'
@@ -80,6 +82,13 @@ router.post(
 	postTestTransactionValidator,
 	validationMiddleware,
 	postTestTransaction
+)
+
+router.post(
+	'/transaction/test/notify',
+	postTestTransactionNotifyValidator,
+	validationMiddleware,
+	postTestTransactionNotify
 )
 
 router.get(

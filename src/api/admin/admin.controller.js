@@ -178,7 +178,7 @@ export const postTestTransaction = async (req, res, next) => {
 	}
 }
 
-export const postNotifySellerTestTransaction = async (req, res, next) => {
+export const postTestTransactionNotify = async (req, res, next) => {
 	try {
 		const { phone, txnAmount, paymentId } = req.body
 

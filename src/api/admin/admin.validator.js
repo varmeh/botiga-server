@@ -50,6 +50,11 @@ export const postTestTransactionValidator = [
 	decimalValidator('txnAmount')
 ]
 
+export const postTestTransactionNotifyValidator = [
+	...postTestTransactionValidator,
+	emptyValidator('paymentId')
+]
+
 export const getDeliveryValidator = [
 	paramPhoneValidator('sellerPhone'),
 	paramDateValidator('date')
