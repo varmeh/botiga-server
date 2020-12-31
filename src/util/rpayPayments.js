@@ -25,7 +25,7 @@ const routeTransaction = async ({
 			notes: { orderId }
 		}
 
-		if (process.env.NODE_ENV === 'production' && sellerMid) {
+		if (process.env.NODE_ENV === 'production') {
 			// add routing logic
 			const mdrCharges = txnAmount * MDR_CHARGES
 			const amountToBeTransfered = txnAmount - mdrCharges
