@@ -173,7 +173,8 @@ export const postRpayTransaction = async (req, res, next) => {
 
 export const postRpayTransactionWebhook = async (req, res) => {
 	try {
-		await rpayPayments.webhook(req.body)
+		const { body, headers } = req
+		await rpayPayments.webhook(body, headers['x-razorpay-signature'])
 		res.json()
 	} catch ({ status, message }) {
 		res.status(500).json()

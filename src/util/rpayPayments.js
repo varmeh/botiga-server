@@ -1,4 +1,6 @@
 import axios from 'axios'
+import CreateHttpError from 'http-errors'
+import Razorpay from 'razorpay'
 
 import { Order, PaymentStatus, User } from '../models'
 import { winston } from './winston.logger'
@@ -7,7 +9,7 @@ const TEST_TRANSACTION = 'testTransaction'
 
 const MDR_CHARGES = 0.12 / 100 // represents 0.12 %
 
-const { RPAY_HOST, RPAY_ID, RPAY_SECRET } = process.env
+const { RPAY_HOST, RPAY_ID, RPAY_SECRET, RPAY_WEBHOOK_SECRET } = process.env
 
 const authToken = Buffer.from(`${RPAY_ID}:${RPAY_SECRET}`, 'utf8').toString(
 	'base64'
@@ -80,7 +82,26 @@ const initiateTransaction = async ({ txnAmount, orderId }) => {
 	}
 }
 
-const webhook = async data => {
+const webhook = async (data, signature) => {
+	// Validate Webhook data
+	if (
+		!Razorpay.validateWebhookSignature(
+			JSON.stringify(data),
+			signature,
+			RPAY_WEBHOOK_SECRET
+		)
+	) {
+		// Webhook validation failure
+		winston.error('@payment webhook validation failed', {
+			domain: 'webhook',
+			data: JSON.stringify(data),
+			signature
+		})
+		return Promise.reject(
+			new CreateHttpError[500]('Webhook Validation Failure')
+		)
+	}
+
 	const {
 		event,
 		payload: {
@@ -95,7 +116,7 @@ const webhook = async data => {
 				event,
 				paymentId: entity.id
 			})
-			return
+			return null
 		}
 		const order = await Order.findById(entity.notes.orderId)
 
@@ -121,6 +142,7 @@ const webhook = async data => {
 					: 'failed. Any amount debited will be credited back to your account.'
 			}`
 		)
+		return null
 	} catch (error) {
 		winston.debug('@payment webhook failed', {
 			domain: 'webhook',
@@ -130,7 +152,10 @@ const webhook = async data => {
 			event,
 			entity
 		})
-		winston.error('@payment webhook failed', { paymentId: entity.id, event })
+		return winston.error('@payment webhook failed', {
+			paymentId: entity.id,
+			event
+		})
 	}
 }
 
