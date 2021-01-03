@@ -154,7 +154,7 @@ export const patchBankDetails = async (req, res, next) => {
 			from: 'support@botiga.app',
 			to: 'support@botiga.app',
 			subject: `${seller.brand.name} - Bank Details Updated`,
-			text: `Phone - ${seller.contact.phone}<br>Seller - ${seller.brand.name}`
+			text: `Phone - ${seller.contact.phone}<br>Seller - ${seller.businessName}<br>Category - ${seller.businessCategory}<br>Brand - ${seller.brand.name}`
 		})
 
 		res.json({
