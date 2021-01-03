@@ -141,13 +141,20 @@ export const patchBankDetails = async (req, res, next) => {
 	} = req.body
 
 	try {
-		await updateBankDetails({
+		const seller = await updateBankDetails({
 			sellerId: token.get(req),
 			beneficiaryName,
 			accountNumber,
 			ifscCode,
 			bankName,
 			accountType
+		})
+
+		aws.ses.sendMail({
+			from: 'support@botiga.app',
+			to: 'support@botiga.app',
+			subject: `${seller.brand.name} - Bank Details Updated`,
+			text: `Phone - ${seller.contact.phone}<br>Seller - ${seller.brand.name}`
 		})
 
 		res.json({
