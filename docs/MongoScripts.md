@@ -15,6 +15,14 @@ db.apartments.createIndex({name: 1, area: 1, city: 1, pincode: 1}, {unique: true
 db.apartments.createIndex({location: "2dsphere"})
 ```
 
+### HelperData Collection
+
+```
+db.createCollection('helperData')
+```
+
+-   Add a collection with array - `businessCategory`
+
 ### Sellers Collection
 
 -   Add `unique` index to _contact.phone_ field
