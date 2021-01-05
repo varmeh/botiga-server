@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 
-import { token, otp } from '../../../util'
+import { token, otp, aws } from '../../../util'
 import {
 	createSeller,
 	findSellerByNumber,
@@ -94,8 +94,23 @@ export const postSellerSignup = async (req, res, next) => {
 		// Add jwt token
 		token.set(res, seller._id)
 
+		// Notify team about new seller onboarding
+		aws.ses.sendMail({
+			from: 'support@botiga.app',
+			to: 'support@botiga.app',
+			subject: `New seller signup - success - ${brandName}`,
+			text: `Phone - ${phone}<br>Name - ${firstName} ${lastName}<br>Seller - ${businessName}<br>Category - ${businessCategory}<br>Brand - ${brandName}`
+		})
+
 		res.status(201).json({ id: seller._id })
 	} catch (error) {
+		aws.ses.sendMail({
+			from: 'support@botiga.app',
+			to: 'support@botiga.app',
+			subject: `New seller signup - failure - ${brandName}`,
+			text: `Phone - ${phone}<br>Name - ${firstName} ${lastName}<br>Seller - ${businessName}<br>Category - ${businessCategory}<br>Brand - ${brandName}`
+		})
+
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
 	}
