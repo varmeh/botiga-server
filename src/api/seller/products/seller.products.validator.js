@@ -1,6 +1,5 @@
 import {
 	emptyValidator,
-	regexAlphaSpaceDigitsValidator,
 	objectIdValidator,
 	decimalValidator,
 	numberValidator,
