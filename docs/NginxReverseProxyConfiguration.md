@@ -78,7 +78,7 @@ sudo ln -s /etc/nginx/sites-available/prod.botiga.app /etc/nginx/sites-enabled/
 
 ```
 sudo nginx -t
-sudo systemctl restart nginx
+sudo systemctl reload nginx
 ```
 
 ## [Secure Nginx with Let's Encrypt TLS](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04)

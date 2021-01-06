@@ -12,7 +12,7 @@ import {
 
 export const postProductValidator = [
 	objectIdValidator('categoryId'),
-	regexAlphaSpaceDigitsValidator('name'),
+	emptyValidator('name'),
 	decimalValidator('price'),
 	numberValidator('size.quantity'),
 	emptyValidator('size.unit')
