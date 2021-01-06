@@ -17,11 +17,6 @@ export const alphaNumericValidator = field =>
 		.isAlphanumeric()
 		.withMessage(validationMessages.alphanumeric)
 
-export const pinValidator = field =>
-	emptyValidator(field)
-		.matches(/^\d{4}$/)
-		.withMessage(validationMessages.length4)
-
 export const pincodeValidator = field =>
 	emptyValidator(field)
 		.matches(/^\d{6}$/)
@@ -42,11 +37,6 @@ export const decimalValidator = field =>
 		.isDecimal()
 		.withMessage(validationMessages.decimal)
 		.toFloat()
-
-export const regexAlphaSpaceDigitsValidator = field =>
-	emptyValidator(field)
-		.matches(/^[0-9a-zA-Z\s]*$/, 'i')
-		.withMessage(validationMessages.regexAlphaSpaceDigits)
 
 export const arrayValidator = field =>
 	body(field).isArray().withMessage(validationMessages.array)

@@ -9,11 +9,6 @@ export const emptyOptionalValidator = field =>
 		.withMessage(validationMessages.empty)
 		.bail()
 
-export const regexAlphaSpaceDigitsOptionalValidator = field =>
-	emptyOptionalValidator(field)
-		.matches(/^[0-9a-zA-Z\s]*$/, 'i')
-		.withMessage(validationMessages.regexAlphaSpaceDigits)
-
 export const phoneOptionalValidator = field =>
 	emptyOptionalValidator(field)
 		.matches(/^[5-9]\d{9}$/)

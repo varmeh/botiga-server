@@ -3,7 +3,6 @@ import {
 	emptyOptionalValidator,
 	pincodeValidator,
 	decimalValidator,
-	regexAlphaSpaceDigitsValidator,
 	objectIdValidator,
 	paramPhoneValidator,
 	paramDateValidator,
@@ -13,9 +12,9 @@ import {
 
 export const postApartmentValidator = [
 	emptyValidator('name'),
-	regexAlphaSpaceDigitsValidator('city'),
-	regexAlphaSpaceDigitsValidator('area'),
-	regexAlphaSpaceDigitsValidator('state'),
+	emptyValidator('city'),
+	emptyValidator('area'),
+	emptyValidator('state'),
 	pincodeValidator('pincode'),
 	decimalValidator('location.lat'),
 	decimalValidator('location.long')
