@@ -27,7 +27,7 @@ export const postProductValidator = [
 export const patchProductValidator = [
 	objectIdValidator('productId'),
 	objectIdValidator('categoryId'),
-	regexAlphaSpaceDigitsValidator('name'),
+	emptyValidator('name'),
 	decimalValidator('price'),
 	numberValidator('quantity'),
 	emptyValidator('unit')
