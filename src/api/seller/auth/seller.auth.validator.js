@@ -1,6 +1,5 @@
 import {
 	emptyValidator,
-	regexAlphaSpaceDigitsValidator,
 	paramPhoneValidator,
 	phoneValidator,
 	otpValidator,
@@ -21,7 +20,7 @@ export const postSignupValidator = [
 	emptyValidator('firstName'),
 	emptyValidator('lastName'),
 	emptyValidator('brandName'),
-	regexAlphaSpaceDigitsValidator('businessCategory'),
+	emptyValidator('businessCategory'),
 	urlOptionalValidator('brandUrl'),
 	emptyOptionalValidator('tagline'),
 	phoneValidator('phone'),

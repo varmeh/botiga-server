@@ -1,7 +1,6 @@
 import {
 	emptyValidator,
 	emptyOptionalValidator,
-	addressValidator,
 	pincodeValidator,
 	decimalValidator,
 	regexAlphaSpaceDigitsValidator,
@@ -13,7 +12,7 @@ import {
 } from '../../util'
 
 export const postApartmentValidator = [
-	addressValidator('name'),
+	emptyValidator('name'),
 	regexAlphaSpaceDigitsValidator('city'),
 	regexAlphaSpaceDigitsValidator('area'),
 	regexAlphaSpaceDigitsValidator('state'),

@@ -4,7 +4,6 @@ import {
 	paramPhoneValidator,
 	phoneValidator,
 	objectIdValidator,
-	addressValidator,
 	emailOptionalValidator,
 	phoneOptionalValidator,
 	paramObjectIdValidator
@@ -38,12 +37,12 @@ export const patchTokenRegisterValidator = [emptyValidator('token')]
 
 export const postAddressValidator = [
 	objectIdValidator('apartmentId'),
-	addressValidator('house')
+	emptyValidator('house')
 ]
 
 export const patchAddressValidator = [
 	objectIdValidator('id'),
-	addressValidator('house')
+	emptyValidator('house')
 ]
 
 export const deleteAddressValidator = [paramObjectIdValidator('id')]

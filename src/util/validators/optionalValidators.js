@@ -14,26 +14,10 @@ export const regexAlphaSpaceDigitsOptionalValidator = field =>
 		.matches(/^[0-9a-zA-Z\s]*$/, 'i')
 		.withMessage(validationMessages.regexAlphaSpaceDigits)
 
-export const decimalOptionalValidator = field =>
-	emptyOptionalValidator(field)
-		.isDecimal()
-		.withMessage(validationMessages.decimal)
-
-export const numberOptionalValidator = field =>
-	emptyOptionalValidator(field)
-		.isInt()
-		.withMessage(validationMessages.numeric)
-		.toInt()
-
 export const phoneOptionalValidator = field =>
 	emptyOptionalValidator(field)
 		.matches(/^[5-9]\d{9}$/)
 		.withMessage(validationMessages.phone)
-
-export const addressOptionalValidator = field =>
-	emptyOptionalValidator(field)
-		.matches(/^[a-zA-Z0-9\s,.-]*$/, 'i')
-		.withMessage(validationMessages.addressRegex)
 
 export const pincodeOptionalValidator = field =>
 	emptyOptionalValidator(field)
