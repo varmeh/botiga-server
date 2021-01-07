@@ -103,10 +103,11 @@ export const patchProduct = async (req, res, next) => {
 			updateImage
 		})
 
-		if (updateImage) {
+		if (updateImage && oldImageUrl) {
 			// User have uploaded a new image
 			// Delete the old image from s3 bucket
 			try {
+				winston.debug(`@aws s3 delete image with url: ${oldImageUrl}`)
 				await aws.s3.deleteImageUrl(oldImageUrl)
 			} catch (error) {
 				winston.error('@error patchProduct', {

@@ -40,7 +40,6 @@ export default {
 		try {
 			const arr = imageUrl.split('/')
 
-			console.debug(imageUrl, arr)
 			return await awsS3
 				.deleteObject({
 					Bucket: process.env.AWS_BUCKET_NAME,
