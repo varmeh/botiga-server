@@ -9,6 +9,7 @@ const awsS3 = new aws.S3({ apiVersion: '2006-03-01' })
 const getPredefinedUrl = async (fileName, contentType) => {
 	const { AWS_BUCKET_NAME, AWS_REGION } = process.env
 	try {
+		console.info(fileName, contentType)
 		const data = await awsS3.getSignedUrlPromise('putObject', {
 			Bucket: AWS_BUCKET_NAME,
 			Key: fileName,
