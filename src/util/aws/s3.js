@@ -36,6 +36,8 @@ const getPredefinedUrl = async (fileName, contentType) => {
 export default {
 	getPredefinedImageUrl: (fileName, imageType) =>
 		getPredefinedUrl(fileName, `image/${imageType}`),
+	getPredefinedPdfUrl: fileName =>
+		getPredefinedUrl(fileName, 'application/pdf'),
 	deleteImageUrl: async imageUrl => {
 		try {
 			const arr = imageUrl.split('/')

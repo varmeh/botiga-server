@@ -104,6 +104,17 @@ export const getBrandImageUrl = async (req, res, next) => {
 	}
 }
 
+export const getPdfUrl = async (_, res, next) => {
+	try {
+		const fileName = `${nanoid()}.pdf`
+		const data = await aws.s3.getPredefinedPdfUrl(fileName)
+		res.status(201).json(data)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
 export const postImageDelete = async (req, res, next) => {
 	try {
 		// First validate seller exists as only seller could delete image
