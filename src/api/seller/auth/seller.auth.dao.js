@@ -28,7 +28,6 @@ export const createSeller = async ({
 			fssaiValidityDate: moment(fssaiValidityDate, 'YYYY-MM-DD')
 				.endOf('day')
 				.toDate(),
-			fssaiCertificateUrl,
 			owner: { firstName, lastName },
 			brand: { name: brandName, tagline, imageUrl: brandUrl },
 			contact: {
@@ -36,6 +35,11 @@ export const createSeller = async ({
 				whatsapp: phone
 			}
 		})
+
+		if (fssaiCertificateUrl) {
+			seller.fssaiCertificateUrl.push(fssaiCertificateUrl)
+		}
+
 		return await seller.save()
 	} catch (error) {
 		winston.debug('@error createSeller', { error })

@@ -49,7 +49,7 @@ const sellerSchema = new Schema(
 		gstin: { type: String, required: true },
 		fssaiNumber: String,
 		fssaiValidityDate: Date,
-		fssaiCertificateUrl: String,
+		fssaiCertificateUrl: [String],
 		owner: {
 			firstName: {
 				type: String,

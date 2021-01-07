@@ -25,7 +25,11 @@ export const patchBusinessValidator = [
 	emptyValidator('brandName'),
 	emptyValidator('tagline'),
 	urlOptionalValidator('imageUrl'),
-	boolValidator('updateImage')
+	boolValidator('updateImage'),
+	emptyOptionalValidator('gstin'),
+	emptyOptionalValidator('fssaiNumber'),
+	emptyOptionalValidator('fssaiValidityDate'),
+	emptyOptionalValidator('fssaiCertificateUrl')
 ]
 
 export const patchBankDetailsValidator = [

@@ -1,3 +1,4 @@
+import moment from 'moment'
 import CreateHttpError from 'http-errors'
 import { winston, crypto } from '../../../util'
 import { Apartment, Seller } from '../../../models'
@@ -43,7 +44,16 @@ export const updateContactInformation = async (
 
 export const updateBusinessInformation = async (
 	sellerId,
-	{ brandName, tagline, imageUrl, updateImage }
+	{
+		brandName,
+		tagline,
+		imageUrl,
+		updateImage,
+		gstin,
+		fssaiNumber,
+		fssaiValidityDate,
+		fssaiCertificateUrl
+	}
 ) => {
 	try {
 		const seller = await Seller.findById(sellerId)
@@ -54,6 +64,18 @@ export const updateBusinessInformation = async (
 
 		brand.name = !brandName ? brand.name : brandName
 		brand.tagline = !tagline ? brand.tagline : tagline
+
+		brand.gstin = !gstin ? brand.gstin : gstin
+
+		if (fssaiNumber && fssaiValidityDate && fssaiCertificateUrl) {
+			seller.fssaiNumber = fssaiNumber
+			seller.fssaiValidityDate = moment(fssaiValidityDate, 'YYYY-MM-DD')
+				.endOf('day')
+				.toDate()
+			seller.fssaiValidityDate = seller.fssaiCertificateUrl.push(
+				fssaiCertificateUrl
+			)
+		}
 
 		if (updateImage) {
 			brand.imageUrl = imageUrl
