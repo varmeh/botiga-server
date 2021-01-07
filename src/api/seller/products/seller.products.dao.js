@@ -163,6 +163,8 @@ export const updateProduct = async ({
 		const updatedProduct = updatedSeller.categories
 			.id(categoryId)
 			.products.id(productId)
+
+		console.debug('oldImageUrl: ', oldImageUrl)
 		return [updatedProduct, oldImageUrl]
 	} catch (error) {
 		winston.debug('@error updateProduct', logDbError(error))
