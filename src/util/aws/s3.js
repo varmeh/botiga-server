@@ -6,14 +6,14 @@ import aws from './aws.config'
 
 const awsS3 = new aws.S3({ apiVersion: '2006-03-01' })
 
-const awsPredefinedImageUrl = async (fileName, imageType) => {
+const getPredefinedUrl = async (fileName, contentType) => {
 	const { AWS_BUCKET_NAME, AWS_REGION } = process.env
 	try {
 		const data = await awsS3.getSignedUrlPromise('putObject', {
 			Bucket: AWS_BUCKET_NAME,
 			Key: fileName,
 			Expires: 10 * 60,
-			ContentType: `image/${imageType}`,
+			ContentType: contentType,
 			ACL: 'public-read'
 		})
 
@@ -32,8 +32,10 @@ const awsPredefinedImageUrl = async (fileName, imageType) => {
 	}
 }
 
+// Filename should include file extension
 export default {
-	getPredefinedImageUrl: awsPredefinedImageUrl,
+	getPredefinedImageUrl: (fileName, imageType) =>
+		getPredefinedUrl(fileName, `image/${imageType}`),
 	deleteImageUrl: async imageUrl => {
 		try {
 			const arr = imageUrl.split('/')
