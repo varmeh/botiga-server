@@ -20,6 +20,11 @@ export const getProfileInformation = async (req, res, next) => {
 			owner: { firstName, lastName },
 			businessName,
 			businessCategory,
+			businessType,
+			gstin,
+			fssaiNumber,
+			fssaiValidityDate,
+			fssaiCertificateUrl,
 			brand,
 			contact,
 			apartments
@@ -30,6 +35,11 @@ export const getProfileInformation = async (req, res, next) => {
 			lastName,
 			businessName,
 			businessCategory,
+			businessType,
+			gstin,
+			fssaiNumber,
+			fssaiValidityDate,
+			fssaiCertificateUrl,
 			brand,
 			contact: getContactInfo(contact),
 			apartments
@@ -75,10 +85,28 @@ export const patchContactInformation = async (req, res, next) => {
 
 export const getBusinessInformation = async (req, res, next) => {
 	try {
-		const { businessName, businessCategory, owner, brand } = await findSeller(
-			token.get(req)
-		)
-		res.json({ businessName, businessCategory, owner, brand })
+		const {
+			businessName,
+			businessCategory,
+			businessType,
+			gstin,
+			fssaiNumber,
+			fssaiValidityDate,
+			fssaiCertificateUrl,
+			owner,
+			brand
+		} = await findSeller(token.get(req))
+		res.json({
+			businessName,
+			businessCategory,
+			businessType,
+			gstin,
+			fssaiNumber,
+			fssaiValidityDate,
+			fssaiCertificateUrl,
+			owner,
+			brand
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
@@ -87,7 +115,16 @@ export const getBusinessInformation = async (req, res, next) => {
 
 /* Could be expanded to accomodate update of other business information */
 export const patchBusinessInformation = async (req, res, next) => {
-	const { brandName, tagline, imageUrl, updateImage } = req.body
+	const {
+		brandName,
+		tagline,
+		imageUrl,
+		updateImage,
+		gstin,
+		fssaiNumber,
+		fssaiValidityDate,
+		fssaiCertificateUrl
+	} = req.body
 	try {
 		const [oldImageUrl, contact] = await updateBusinessInformation(
 			token.get(req),
@@ -95,7 +132,11 @@ export const patchBusinessInformation = async (req, res, next) => {
 				brandName,
 				tagline,
 				imageUrl,
-				updateImage
+				updateImage,
+				gstin,
+				fssaiNumber,
+				fssaiValidityDate,
+				fssaiCertificateUrl
 			}
 		)
 
