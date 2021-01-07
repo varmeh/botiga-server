@@ -67,14 +67,20 @@ export const updateBusinessInformation = async (
 
 		brand.gstin = !gstin ? brand.gstin : gstin
 
-		if (fssaiNumber && fssaiValidityDate && fssaiCertificateUrl) {
+		if (
+			fssaiNumber &&
+			fssaiValidityDate &&
+			fssaiCertificateUrl &&
+			fssaiNumber !== seller.fssaiNumber
+		) {
 			seller.fssaiNumber = fssaiNumber
 			seller.fssaiValidityDate = moment(fssaiValidityDate, 'YYYY-MM-DD')
 				.endOf('day')
 				.toDate()
-			seller.fssaiValidityDate = seller.fssaiCertificateUrl.push(
-				fssaiCertificateUrl
-			)
+
+			if (!seller.fssaiCertificateUrl.includes(fssaiCertificateUrl)) {
+				seller.fssaiCertificateUrl.push(fssaiCertificateUrl)
+			}
 		}
 
 		if (updateImage) {
