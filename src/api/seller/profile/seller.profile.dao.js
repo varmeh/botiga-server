@@ -71,15 +71,15 @@ export const updateBusinessInformation = async (
 			fssaiNumber &&
 			fssaiValidityDate &&
 			fssaiCertificateUrl &&
-			fssaiNumber !== seller.fssaiNumber
+			fssaiNumber !== seller.fssai.number
 		) {
-			seller.fssaiNumber = fssaiNumber
-			seller.fssaiValidityDate = moment(fssaiValidityDate, 'YYYY-MM-DD')
+			seller.fssai.number = fssaiNumber
+			seller.fssai.validity = moment(fssaiValidityDate, 'YYYY-MM-DD')
 				.endOf('day')
 				.toDate()
 
-			if (!seller.fssaiCertificateUrl.includes(fssaiCertificateUrl)) {
-				seller.fssaiCertificateUrl.push(fssaiCertificateUrl)
+			if (!seller.fssai.certificateUrls.includes(fssaiCertificateUrl)) {
+				seller.fssai.certificateUrls.push(fssaiCertificateUrl)
 			}
 		}
 

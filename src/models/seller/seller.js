@@ -47,9 +47,11 @@ const sellerSchema = new Schema(
 		businessCategory: { type: String, required: true },
 		businessType: { type: String, required: true },
 		gstin: { type: String, required: true },
-		fssaiNumber: String,
-		fssaiValidityDate: Date,
-		fssaiCertificateUrl: [String],
+		fssai: {
+			number: String,
+			validity: Date,
+			certificateUrls: [String]
+		},
 		owner: {
 			firstName: {
 				type: String,

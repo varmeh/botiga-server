@@ -33,11 +33,11 @@ export const createSeller = async ({
 		})
 
 		if (fssaiNumber && fssaiValidityDate && fssaiCertificateUrl) {
-			seller.fssaiNumber = fssaiNumber
-			seller.fssaiValidityDate = moment(fssaiValidityDate, 'YYYY-MM-DD')
+			seller.fssai.number = fssaiNumber
+			seller.fssai.validity = moment(fssaiValidityDate, 'YYYY-MM-DD')
 				.endOf('day')
 				.toDate()
-			seller.fssaiCertificateUrl.push(fssaiCertificateUrl)
+			seller.fssai.certificateUrls.push(fssaiCertificateUrl)
 		}
 
 		return await seller.save()

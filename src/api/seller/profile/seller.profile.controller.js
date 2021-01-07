@@ -14,35 +14,44 @@ const getContactInfo = contact => {
 	return { countryCode, phone, whatsapp, email, address }
 }
 
+const sellerBusinessInfoOrchestrator = seller => {
+	const {
+		businessName,
+		businessCategory,
+		businessType,
+		gstin,
+		fssai,
+		brand
+	} = seller
+
+	const data = {
+		businessName,
+		businessCategory,
+		businessType,
+		gstin,
+		brand
+	}
+
+	if (fssai) {
+		data.fssaiNumber = fssai.number
+		data.fssaiValidityDate = fssai.validity
+		data.fssaiCertificateUrl =
+			fssai.certificateUrls[fssai.certificateUrls.length - 1]
+	}
+
+	return data
+}
+
 export const getProfileInformation = async (req, res, next) => {
 	try {
-		const {
-			owner: { firstName, lastName },
-			businessName,
-			businessCategory,
-			businessType,
-			gstin,
-			fssaiNumber,
-			fssaiValidityDate,
-			fssaiCertificateUrl,
-			brand,
-			contact,
-			apartments
-		} = await findSeller(token.get(req))
+		const seller = await findSeller(token.get(req))
 
 		res.json({
-			firstName,
-			lastName,
-			businessName,
-			businessCategory,
-			businessType,
-			gstin,
-			fssaiNumber,
-			fssaiValidityDate,
-			fssaiCertificateUrl,
-			brand,
-			contact: getContactInfo(contact),
-			apartments
+			firstName: seller.owner.firstName,
+			lastName: seller.owner.lastName,
+			...sellerBusinessInfoOrchestrator(seller),
+			contact: getContactInfo(seller.contact),
+			apartments: seller.apartments
 		})
 	} catch (error) {
 		const { status, message } = error
@@ -85,28 +94,9 @@ export const patchContactInformation = async (req, res, next) => {
 
 export const getBusinessInformation = async (req, res, next) => {
 	try {
-		const {
-			businessName,
-			businessCategory,
-			businessType,
-			gstin,
-			fssaiNumber,
-			fssaiValidityDate,
-			fssaiCertificateUrl,
-			owner,
-			brand
-		} = await findSeller(token.get(req))
-		res.json({
-			businessName,
-			businessCategory,
-			businessType,
-			gstin,
-			fssaiNumber,
-			fssaiValidityDate,
-			fssaiCertificateUrl,
-			owner,
-			brand
-		})
+		const seller = await findSeller(token.get(req))
+
+		res.json(sellerBusinessInfoOrchestrator(seller))
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
