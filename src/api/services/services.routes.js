@@ -13,6 +13,7 @@ import {
 	getAreasForCity,
 	getImageUrl,
 	getBrandImageUrl,
+	getPdfUrl,
 	getApartmentsSearch,
 	getBusinessCategory,
 	postImageDelete
@@ -53,7 +54,7 @@ router.get(
 	getBrandImageUrl
 )
 
-router.get('/url/pdf', getBrandImageUrl)
+router.get('/url/pdf', getPdfUrl)
 
 router.get('/token/validate', token.authenticationMiddleware, (_, res) =>
 	res.status(204).json()
