@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { body } from 'express-validator'
 import { validationMessages } from './validationMessages'
 
@@ -42,3 +43,10 @@ export const boolOptionalValidator = field =>
 		.withMessage(validationMessages.bool)
 		.bail()
 		.toBoolean(true)
+
+export const dateOptionalValidator = field =>
+	emptyOptionalValidator(field).custom(value =>
+		moment(value, 'YYYY-MM-DD', true).isValid()
+			? true
+			: Promise.reject(validationMessages.date)
+	)

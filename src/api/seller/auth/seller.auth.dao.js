@@ -1,3 +1,4 @@
+import moment from 'moment'
 import CreateHttpError from 'http-errors'
 import { winston, notifications } from '../../../util'
 import { Seller } from '../../../models'
@@ -8,6 +9,11 @@ export const createSeller = async ({
 	lastName,
 	brandName,
 	businessCategory,
+	businessType,
+	gstin,
+	fssaiNumber,
+	fssaiValidityDate,
+	fssaiCertificateUrl,
 	brandUrl,
 	tagline,
 	phone
@@ -16,6 +22,13 @@ export const createSeller = async ({
 		const seller = new Seller({
 			businessName,
 			businessCategory,
+			businessType,
+			gstin,
+			fssaiNumber,
+			fssaiValidityDate: moment(fssaiValidityDate, 'YYYY-MM-DD')
+				.endOf('day')
+				.toDate(),
+			fssaiCertificateUrl,
 			owner: { firstName, lastName },
 			brand: { name: brandName, tagline, imageUrl: brandUrl },
 			contact: {

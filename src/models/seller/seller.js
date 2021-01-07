@@ -45,6 +45,11 @@ const sellerSchema = new Schema(
 	{
 		businessName: { type: String, required: true, immutable: true },
 		businessCategory: { type: String, required: true },
+		businessType: { type: String, required: true },
+		gstin: { type: String, required: true },
+		fssaiNumber: String,
+		fssaiValidityDate: Date,
+		fssaiCertificateUrl: String,
 		owner: {
 			firstName: {
 				type: String,

@@ -4,7 +4,8 @@ import {
 	phoneValidator,
 	otpValidator,
 	urlOptionalValidator,
-	emptyOptionalValidator
+	emptyOptionalValidator,
+	dateOptionalValidator
 } from '../../../util'
 
 export const getOtpValidator = paramPhoneValidator('phone')
@@ -21,6 +22,11 @@ export const postSignupValidator = [
 	emptyValidator('lastName'),
 	emptyValidator('brandName'),
 	emptyValidator('businessCategory'),
+	emptyValidator('businessType'),
+	emptyValidator('gstin'),
+	emptyOptionalValidator('fssaiNumber'),
+	dateOptionalValidator('fssaiValidityDate'),
+	emptyOptionalValidator('fssaiCertificateUrl'),
 	urlOptionalValidator('brandUrl'),
 	emptyOptionalValidator('tagline'),
 	phoneValidator('phone'),
