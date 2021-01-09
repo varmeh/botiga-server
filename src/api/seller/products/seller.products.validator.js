@@ -2,7 +2,6 @@ import {
 	emptyValidator,
 	objectIdValidator,
 	decimalValidator,
-	numberValidator,
 	emptyOptionalValidator,
 	boolValidator,
 	paramObjectIdValidator,
@@ -13,7 +12,7 @@ export const postProductValidator = [
 	objectIdValidator('categoryId'),
 	emptyValidator('name'),
 	decimalValidator('price'),
-	numberValidator('size.quantity'),
+	decimalValidator('size.quantity'),
 	emptyValidator('size.unit')
 		.matches(/^(gms|kg|ml|lt|piece|pieces)$/, 'i')
 		.withMessage(
@@ -28,7 +27,7 @@ export const patchProductValidator = [
 	objectIdValidator('categoryId'),
 	emptyValidator('name'),
 	decimalValidator('price'),
-	numberValidator('quantity'),
+	decimalValidator('quantity'),
 	emptyValidator('unit')
 		.matches(/^(gms|kg|ml|lt|piece|pieces)$/, 'i')
 		.withMessage(
