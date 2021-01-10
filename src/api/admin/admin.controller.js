@@ -6,7 +6,8 @@ import {
 	createApartment,
 	findSellerByNumber,
 	updateSellerBankDetails,
-	findDeliveriesForSeller
+	findDeliveriesForSeller,
+	removeSellerAllApartments
 } from './admin.dao'
 
 const sellerOrchestrator = seller => {
@@ -231,4 +232,15 @@ export const testEmail = (_, res) => {
 	})
 
 	res.json({ message: 'done' })
+}
+
+export const deleteSellerApartments = async (req, res, next) => {
+	try {
+		await removeSellerAllApartments(req.params.phone)
+
+		res.status(204).json()
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
 }

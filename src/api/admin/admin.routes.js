@@ -9,7 +9,8 @@ import {
 	patchSellerBankDetailsValidator,
 	postTestTransactionValidator,
 	postTestTransactionNotifyValidator,
-	getDeliveryValidator
+	getDeliveryValidator,
+	deleteSellerValidator
 } from './admin.validator'
 
 import {
@@ -23,7 +24,8 @@ import {
 	postTestTransaction,
 	postTestTransactionNotify,
 	getDeliveryXls,
-	testEmail
+	testEmail,
+	deleteSellerApartments
 } from './admin.controller'
 
 const router = Router()
@@ -68,6 +70,13 @@ router.get(
 	getSellerValidator,
 	validationMiddleware,
 	getSellerDetails
+)
+
+router.delete(
+	'/seller/:phone/apartments',
+	deleteSellerValidator,
+	validationMiddleware,
+	deleteSellerApartments
 )
 
 router.patch(

@@ -36,6 +36,8 @@ export const postNotificationTopicValidator = [
 
 export const getSellerValidator = paramPhoneValidator('phone')
 
+export const deleteSellerValidator = paramPhoneValidator('phone')
+
 export const patchSellerBankDetailsValidator = [
 	phoneValidator('phone'),
 	boolOptionalValidator('editable'),
