@@ -177,14 +177,14 @@ export const removeApartment = async (sellerId, apartmentId) => {
 		const seller = await Seller.findById(sellerId)
 		const apartment = await Apartment.findById(apartmentId)
 
-		let apartmentToBeRemoved = apartment.sellers.id(sellerId)
-		if (apartmentToBeRemoved) {
+		const sellerToBeRemoved = apartment.sellers.id(sellerId)
+		if (sellerToBeRemoved) {
 			// Remove seller from apartment
-			apartmentToBeRemoved.remove()
+			sellerToBeRemoved.remove()
 			await apartment.save()
 		}
 
-		apartmentToBeRemoved = seller.apartments.id(apartmentId)
+		const apartmentToBeRemoved = seller.apartments.id(apartmentId)
 		if (apartmentToBeRemoved) {
 			apartmentToBeRemoved.remove()
 			await seller.save()
