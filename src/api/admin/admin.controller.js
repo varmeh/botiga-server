@@ -17,7 +17,8 @@ const sellerOrchestrator = seller => {
 		owner: { firstName, lastName },
 		brand: { name, tagline, imageUrl },
 		contact: { phone, whatsapp, email },
-		bankDetails
+		bankDetails,
+		apartments
 	} = seller
 
 	let returnBankDetails = {}
@@ -55,7 +56,8 @@ const sellerOrchestrator = seller => {
 		whatsapp,
 		email,
 		...returnBankDetails,
-		mid: seller.mid
+		mid: seller.mid,
+		apartments
 	}
 }
 
