@@ -9,7 +9,7 @@ export const productSchema = new Schema({
 	description: {
 		type: String,
 		trim: true,
-		maxlength: 80
+		maxlength: 300
 	},
 	price: {
 		type: Number,
