@@ -15,6 +15,9 @@ const sellerOrchestrator = seller => {
 	const {
 		businessName,
 		businessCategory,
+		businessType,
+		gstin,
+		fssai,
 		owner: { firstName, lastName },
 		brand: { name, tagline, imageUrl },
 		contact: { phone, whatsapp, email },
@@ -22,7 +25,22 @@ const sellerOrchestrator = seller => {
 		apartments
 	} = seller
 
-	let returnBankDetails = {}
+	let data = {
+		businessName,
+		businessCategory,
+		businessType,
+		gstin,
+		owner: `${firstName} ${lastName}`,
+		brand: name,
+		tagline,
+		brandImageUrl: imageUrl,
+		phone,
+		whatsapp,
+		email,
+		mid: seller.mid,
+		apartments
+	}
+
 	if (seller.bankDetails.beneficiaryName) {
 		// Seller bank details available
 		const {
@@ -35,7 +53,8 @@ const sellerOrchestrator = seller => {
 			accountType
 		} = bankDetails
 
-		returnBankDetails = {
+		data = {
+			...data,
 			editable,
 			verified,
 			beneficiaryName: crypto.decryptString(beneficiaryName),
@@ -46,20 +65,14 @@ const sellerOrchestrator = seller => {
 		}
 	}
 
-	return {
-		businessName,
-		businessCategory,
-		owner: `${firstName} ${lastName}`,
-		brand: name,
-		tagline,
-		brandImageUrl: imageUrl,
-		phone,
-		whatsapp,
-		email,
-		...returnBankDetails,
-		mid: seller.mid,
-		apartments
+	if (fssai) {
+		data.fssaiNumber = fssai.number
+		data.fssaiValidityDate = fssai.validity
+		data.fssaiCertificateUrl =
+			fssai.certificateUrls[fssai.certificateUrls.length - 1]
 	}
+
+	return data
 }
 
 export const postApartment = async (req, res, next) => {
