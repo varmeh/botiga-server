@@ -3,7 +3,8 @@ import {
 	emptyValidator,
 	numberValidator,
 	objectIdValidator,
-	emailOptionalValidator
+	emailOptionalValidator,
+	paramObjectIdValidator
 } from '../../../util'
 
 export const postApartmentValidator = [
@@ -44,3 +45,5 @@ export const patchContactInfoValidator = [
 	phoneValidator('whatsapp'),
 	emailOptionalValidator('email')
 ]
+
+export const deleteApartmentValidator = [paramObjectIdValidator('apartmentId')]

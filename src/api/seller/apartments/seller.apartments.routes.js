@@ -5,7 +5,8 @@ import {
 	postApartmentValidator,
 	patchApartmentValidator,
 	patchDeliveryValidator,
-	patchContactInfoValidator
+	patchContactInfoValidator,
+	deleteApartmentValidator
 } from './seller.apartments.validator'
 
 import {
@@ -50,6 +51,13 @@ router.patch(
 	patchContactInfoValidator,
 	validationMiddleware,
 	patchContactInformation
+)
+
+router.delete(
+	'/apartment/:apartmentId',
+	token.authenticationMiddleware,
+	deleteApartmentValidator,
+	validationMiddleware
 )
 
 export default router

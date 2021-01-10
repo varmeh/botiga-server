@@ -171,3 +171,28 @@ export const updateApartmentContactInformation = async (
 		return promiseRejectServerError(error)
 	}
 }
+
+export const removeApartment = async (sellerId, apartmentId) => {
+	try {
+		const seller = await Seller.findById(sellerId)
+		const apartment = await Apartment.findById(apartmentId)
+
+		let apartmentToBeRemoved = apartment.sellers.id(sellerId)
+		if (apartmentToBeRemoved) {
+			// Remove seller from apartment
+			apartmentToBeRemoved.remove()
+			await apartment.save()
+		}
+
+		apartmentToBeRemoved = seller.apartments.id(apartmentId)
+		if (apartmentToBeRemoved) {
+			apartmentToBeRemoved.remove()
+			await seller.save()
+		}
+
+		return 'Apartment removed'
+	} catch (error) {
+		winston.debug('@error removeApartment', logDbError(error))
+		return promiseRejectServerError(error)
+	}
+}
