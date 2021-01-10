@@ -7,7 +7,8 @@ import {
 	findSellerByNumber,
 	updateSellerBankDetails,
 	findDeliveriesForSeller,
-	removeSellerAllApartments
+	removeSellerAllApartments,
+	removeSellerApartment
 } from './admin.dao'
 
 const sellerOrchestrator = seller => {
@@ -239,6 +240,18 @@ export const testEmail = (_, res) => {
 export const deleteSellerApartments = async (req, res, next) => {
 	try {
 		await removeSellerAllApartments(req.params.phone)
+
+		res.status(204).json()
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const deleteSellerApartmentsWithId = async (req, res, next) => {
+	try {
+		const { phone, apartmentId } = req.params
+		await removeSellerApartment(phone, apartmentId)
 
 		res.status(204).json()
 	} catch (error) {

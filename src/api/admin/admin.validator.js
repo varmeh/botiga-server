@@ -7,7 +7,8 @@ import {
 	paramPhoneValidator,
 	paramDateValidator,
 	boolOptionalValidator,
-	phoneValidator
+	phoneValidator,
+	paramObjectIdValidator
 } from '../../util'
 
 export const postApartmentValidator = [
@@ -36,7 +37,12 @@ export const postNotificationTopicValidator = [
 
 export const getSellerValidator = paramPhoneValidator('phone')
 
-export const deleteSellerValidator = paramPhoneValidator('phone')
+export const deleteSellerApartmentValidator = paramPhoneValidator('phone')
+
+export const deleteSellerApartmentWithIdValidator = [
+	paramPhoneValidator('phone'),
+	paramObjectIdValidator('apartmentId')
+]
 
 export const patchSellerBankDetailsValidator = [
 	phoneValidator('phone'),

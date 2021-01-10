@@ -10,7 +10,8 @@ import {
 	postTestTransactionValidator,
 	postTestTransactionNotifyValidator,
 	getDeliveryValidator,
-	deleteSellerValidator
+	deleteSellerApartmentValidator,
+	deleteSellerApartmentWithIdValidator
 } from './admin.validator'
 
 import {
@@ -25,7 +26,8 @@ import {
 	postTestTransactionNotify,
 	getDeliveryXls,
 	testEmail,
-	deleteSellerApartments
+	deleteSellerApartments,
+	deleteSellerApartmentsWithId
 } from './admin.controller'
 
 const router = Router()
@@ -73,8 +75,15 @@ router.get(
 )
 
 router.delete(
+	'/seller/:phone/apartments/:apartmentId',
+	deleteSellerApartmentWithIdValidator,
+	validationMiddleware,
+	deleteSellerApartmentsWithId
+)
+
+router.delete(
 	'/seller/:phone/apartments',
-	deleteSellerValidator,
+	deleteSellerApartmentValidator,
 	validationMiddleware,
 	deleteSellerApartments
 )
