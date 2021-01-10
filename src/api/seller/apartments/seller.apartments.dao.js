@@ -48,11 +48,17 @@ export const addApartment = async (
 			return Promise.reject(new CreateHttpError[409]('Duplicate Seller'))
 		}
 
+		if (process.env.NODE_ENV === 'production' && !seller.bankDetailsVerified) {
+			return Promise.reject(
+				new CreateHttpError[401](
+					'Apartment could be added only after your bank detail verification has been completed'
+				)
+			)
+		}
+
 		// Add seller information to apartment list
 		const { businessCategory, brand } = seller
 		const { name, tagline, imageUrl } = brand
-
-		const live = seller.bankDetailsVerified
 
 		apartment.sellers.push({
 			_id: sellerId,
@@ -60,7 +66,7 @@ export const addApartment = async (
 			tagline,
 			brandImageUrl: imageUrl,
 			businessCategory,
-			live: live,
+			live: true,
 			contact: { phone, whatsapp, email },
 			delivery: { type: deliveryType, day }
 		})
@@ -72,7 +78,7 @@ export const addApartment = async (
 			_id: apartmentId,
 			apartmentName: apartment.name,
 			apartmentArea: apartment.area,
-			live: live,
+			live: true,
 			contact: { phone, whatsapp, email },
 			deliveryMessage: apartment.sellers.id(sellerId).deliveryMessage
 		})
