@@ -48,7 +48,7 @@ export const addApartment = async (
 			return Promise.reject(new CreateHttpError[409]('Duplicate Seller'))
 		}
 
-		if (process.env.NODE_ENV === 'production' && !seller.bankDetailsVerified) {
+		if (!seller.bankDetailsVerified) {
 			return Promise.reject(
 				new CreateHttpError[401](
 					'Apartment could be added only after your bank detail verification has been completed'
