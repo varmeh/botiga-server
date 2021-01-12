@@ -51,7 +51,7 @@ export const addApartment = async (
 		if (!seller.bankDetailsVerified) {
 			return Promise.reject(
 				new CreateHttpError[401](
-					'Apartment could be added only after your bank detail verification has been completed'
+					'Apartment can be added only after your bank detail verification has been completed'
 				)
 			)
 		}
