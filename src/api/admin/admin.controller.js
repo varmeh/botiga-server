@@ -210,8 +210,8 @@ export const postTestTransactionNotify = async (req, res, next) => {
 			aws.ses.sendMail({
 				from: 'support@botiga.app',
 				to: email,
-				subject: `${seller.brand.name} - Botiga test payment acknowledgement`,
-				text: `Hello ${owner.firstName},<br><br>Team Botiga has successfully done a test transaction of amount ${txnAmount} to your account.<br>TransactionId for this transaction is ${paymentId}.<br><br>Please confirm once money is credited to your account.<br>Do send us a screenshot of transaction from your bank account.<br><br>Once confirm, you could go live into any community and start selling your amazing merchandise.<br><br>Thank you<br>Team Botiga`
+				subject: `${seller.brand.name} - Botiga test payment acknowledgement!!!`,
+				text: `Hello ${owner.firstName},<br><br>Team Botiga has successfully done a test transaction of amount ${txnAmount} to your account.<br>TransactionId for this transaction is <i>${paymentId}</i>.<br>Amount settlement takes <mark>T+2</mark> days<br><br><mark>Please reply with a screenshot of amount credit to your bank account.</mark><br><br>Once confirm, you could go live into any community and start selling your amazing merchandise.<br><br>Thank you<br>Team Botiga`
 			})
 		}
 
