@@ -1,7 +1,13 @@
 import CreateHttpError from 'http-errors'
 
 import { createBusinessCategory, User, Seller } from '../../models'
-import { notifications, aws, crypto, rpayPayments } from '../../util'
+import {
+	notifications,
+	aws,
+	crypto,
+	rpayPayments,
+	generateExcel
+} from '../../util'
 import {
 	createApartment,
 	findSellerByNumber,
@@ -230,6 +236,9 @@ export const getDeliveryXls = async (req, res, next) => {
 			sellerPhone,
 			dateString: date
 		})
+
+		generateExcel({ deliveryData: deliveries, date, phone: sellerPhone })
+
 		res.json(deliveries)
 	} catch (error) {
 		const { status, message } = error

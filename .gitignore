@@ -7,4 +7,5 @@ logs/
 # Files
 server.log
 .env*
-
+*.xls
+*.xlsx
