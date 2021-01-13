@@ -65,7 +65,7 @@ export const updateBusinessInformation = async (
 		brand.name = !brandName ? brand.name : brandName
 		brand.tagline = !tagline ? brand.tagline : tagline
 
-		brand.gstin = !gstin ? brand.gstin : gstin
+		seller.gstin = !gstin ? seller.gstin : gstin
 
 		if (
 			fssaiNumber &&
