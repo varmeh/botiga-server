@@ -19,7 +19,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"aws-sdk": "^2.751.0",
-		"axios": "^0.19.2",
+		"axios": "^0.21.1",
 		"bcrypt": "^5.0.0",
 		"chance": "^1.1.7",
 		"cls-hooked": "^4.2.2",
