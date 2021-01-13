@@ -234,7 +234,7 @@ export const getDeliveryXls = async (req, res, next) => {
 	const { sellerPhone, date } = req.params
 
 	try {
-		const deliveries = await findDeliveriesForSeller({
+		const [seller, deliveries] = await findDeliveriesForSeller({
 			sellerPhone,
 			dateString: date
 		})
@@ -247,7 +247,7 @@ export const getDeliveryXls = async (req, res, next) => {
 
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
-			to: 'varun@botiga.app',
+			to: seller.contact.email,
 			subject: `Delivery Sheet - ${sellerPhone} - ${date}`,
 			text: 'Your deliveries for the day!!!',
 			filename: fileName,

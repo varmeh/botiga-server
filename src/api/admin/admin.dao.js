@@ -128,7 +128,7 @@ export const findDeliveriesForSeller = async ({ sellerPhone, dateString }) => {
 			}
 		}
 
-		return deliveries
+		return [seller, deliveries]
 	} catch (error) {
 		winston.debug('@error findDeliveriesForSeller', {
 			error,
