@@ -1,3 +1,4 @@
+import fs from 'fs'
 import CreateHttpError from 'http-errors'
 
 import { createBusinessCategory, User, Seller } from '../../models'
@@ -6,7 +7,8 @@ import {
 	aws,
 	crypto,
 	rpayPayments,
-	generateExcel
+	generateExcel,
+	winston
 } from '../../util'
 import {
 	createApartment,
@@ -237,8 +239,27 @@ export const getDeliveryXls = async (req, res, next) => {
 			dateString: date
 		})
 
-		generateExcel({ deliveryData: deliveries, date, phone: sellerPhone })
+		const fileName = `${sellerPhone}_${date}.xlsx`
+		const xlsPath = await generateExcel({
+			deliveryData: deliveries,
+			fileName
+		})
 
+		await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: 'varun@botiga.app',
+			subject: `Delivery Sheet - ${sellerPhone} - ${date}`,
+			text: 'Your deliveries for the day!!!',
+			filename: fileName,
+			path: xlsPath
+		})
+
+		try {
+			winston.debug('@delivery file removal', { xlsPath })
+			fs.unlinkSync(xlsPath) //file removed
+		} catch (err) {
+			winston.debug('@delivery file removal failed', { xlsPath, err })
+		}
 		res.json(deliveries)
 	} catch (error) {
 		const { status, message } = error

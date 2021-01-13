@@ -40,5 +40,23 @@ export default {
 				})
 			}
 		)
+	},
+	sendMailPromise: async ({ from, to, subject, text, filename, path }) => {
+		const attachments = []
+		if (filename && path) {
+			attachments.push({
+				filename,
+				path
+			})
+		}
+
+		await transporter.sendMail({
+			from,
+			to,
+			subject,
+			html: text,
+			priority: 'normal',
+			attachments
+		})
 	}
 }

@@ -1,7 +1,8 @@
+import path from 'path'
 import Excel from 'exceljs'
 import { moment } from './date'
 
-const formatExcel = worksheet => {
+const formatWorksheet = worksheet => {
 	const insideColumns = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
 	//For Header Row
@@ -27,25 +28,13 @@ const aptAbbrevation = apartmentName => {
 	return newName
 }
 
-const generateExceForApartment = ({
-	workbook,
-	apartmentData,
-	phone,
-	date,
-	isOneExcel
-}) => {
+const generateSheetForApartment = ({ workbook, apartmentData }) => {
 	const { apartment: { apartmentName } = {}, deliveries = [] } = apartmentData
-
-	let newWorkbook
-	if (isOneExcel) {
-		newWorkbook = workbook
-	} else {
-		newWorkbook = new Excel.Workbook()
-	}
 
 	const worksheetName =
 		apartmentName.length > 30 ? aptAbbrevation(apartmentName) : apartmentName
-	const worksheet = newWorkbook.addWorksheet(worksheetName)
+
+	const worksheet = workbook.addWorksheet(worksheetName)
 
 	worksheet.columns = [
 		{ header: 'Name', key: 'name' },
@@ -89,34 +78,29 @@ const generateExceForApartment = ({
 				})
 			}
 		})
+		// Empty row between 2 product rows
 		worksheet.addRow({})
 	})
 
-	formatExcel(worksheet)
-
-	if (isOneExcel) {
-		//For Accumulated
-		newWorkbook.xlsx.writeFile(`${phone}_${date}.xlsx`)
-	} else {
-		//Replace with deliveryDate
-		newWorkbook.xlsx.writeFile(`${aptAbbrevation(apartmentName)}_${date}.xlsx`)
-	}
+	formatWorksheet(worksheet)
 }
 
-export const generateExcel = ({
-	deliveryData,
-	phone,
-	date,
-	isOneExcel = true
-}) => {
+export const generateExcel = async ({ deliveryData, fileName }) => {
+	const filePath = path.join(__dirname, fileName)
+
 	const workbook = new Excel.Workbook()
+	workbook.creator = 'Botiga'
+	workbook.created = new Date()
+	workbook.properties.date1904 = true
+
 	deliveryData.forEach(apartmentData =>
-		generateExceForApartment({
+		generateSheetForApartment({
 			workbook,
-			phone,
 			apartmentData,
-			isOneExcel,
-			date
+			filePath
 		})
 	)
+	await workbook.xlsx.writeFile(filePath)
+
+	return filePath
 }
