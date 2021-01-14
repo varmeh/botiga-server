@@ -75,7 +75,7 @@ export const getOrders = async (req, res, next) => {
 }
 
 const populateProductDetails = products => {
-	let details = '<br>'
+	let details = ''
 	products.forEach(product => {
 		details += `<br>${product.quantity} x ${product.name} ${
 			product.unitInfo
