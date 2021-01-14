@@ -222,3 +222,23 @@ export const postRpayTransactionWebhook = async (req, res) => {
 		res.status(500).json()
 	}
 }
+
+export const postRpayTransactionCancelled = async (req, res, next) => {
+	try {
+		const order = await Order.findById(req.body.orderId)
+		await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: order.seller.email,
+			subject: `Botiga - Payment Failed for Order #${order.order.number} - ${order.apartment.aptName} `,
+			text: `Order Details
+				<br>Please remind the customer to make the payment via Remind option in your order detail screen.
+				<br>Confirm the order before delivering. If users confirms the order, ask him to retry payment.
+				<br><br>Thank you
+				<br>Team Botiga`
+		})
+
+		res.status(204).json()
+	} catch ({ status, message }) {
+		next(new CreateHttpError(status, message))
+	}
+}

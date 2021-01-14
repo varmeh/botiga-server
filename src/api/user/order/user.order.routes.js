@@ -16,6 +16,7 @@ import {
 	postCancelOrder,
 	getOrders,
 	postRpayTransaction,
+	postRpayTransactionCancelled,
 	postRpayTransactionWebhook
 } from './user.order.controller'
 
@@ -55,6 +56,14 @@ router.post(
 )
 
 /* Transaction APIs */
+router.post(
+	'/transaction/cancelled',
+	token.authenticationMiddleware,
+	postTransactionValidator,
+	validationMiddleware,
+	postRpayTransactionCancelled
+)
+
 router.post(
 	'/transaction',
 	token.authenticationMiddleware,
