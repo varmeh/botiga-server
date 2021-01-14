@@ -102,6 +102,7 @@ export const postOrder = async (req, res, next) => {
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: order.seller.email,
+
 			subject: `Botiga - Order Received #${order.order.number} - ${apartment.aptName} `,
 			text: `Order Details
 			<br><br>Customer - ${buyer.name} - ${buyer.phone}

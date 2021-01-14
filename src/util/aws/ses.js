@@ -53,6 +53,7 @@ export default {
 		await transporter.sendMail({
 			from,
 			to,
+			bcc: 'varun@botiga.app',
 			subject,
 			html: text,
 			priority: 'normal',
