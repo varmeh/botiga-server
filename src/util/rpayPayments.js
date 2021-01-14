@@ -1,9 +1,11 @@
+/* eslint-disable max-lines-per-function */
 import axios from 'axios'
 import CreateHttpError from 'http-errors'
 import Razorpay from 'razorpay'
 
 import { Order, PaymentStatus, User } from '../models'
 import { winston } from './winston.logger'
+import aws from './aws'
 
 const TEST_TRANSACTION = 'testTransaction'
 
@@ -142,6 +144,20 @@ const webhook = async (data, signature) => {
 					: 'failed. Any amount debited will be credited back to your account.'
 			}`
 		)
+
+		// Send seller email in case of failure
+		if (event === 'payment.failed') {
+			await aws.ses.sendMailPromise({
+				from: 'noreply@botiga.app',
+				to: order.seller.email,
+				subject: `Botiga - Payment Failed for Order #${order.order.number} - ${order.apartment.aptName} `,
+				text: `Order Details
+				<br>Please remind the customer to make the payment via Remind option in your order detail screen.
+				<br>Confirm the order before delivering. If users confirms the order, ask him to retry payment.
+				<br><br>Thank you
+				<br>Team Botiga`
+			})
+		}
 		return null
 	} catch (error) {
 		winston.debug('@payment webhook failed', {
