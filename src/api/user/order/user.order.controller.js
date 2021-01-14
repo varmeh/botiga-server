@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { Seller, Order } from '../../../models'
+import { Seller, Order, PaymentStatus } from '../../../models'
 
 import {
 	token,
@@ -227,6 +227,9 @@ export const postRpayTransactionWebhook = async (req, res) => {
 export const postRpayTransactionCancelled = async (req, res, next) => {
 	try {
 		const order = await Order.findById(req.body.orderId)
+		order.payment.status = PaymentStatus.failure
+		await order.save()
+
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: order.seller.email,
