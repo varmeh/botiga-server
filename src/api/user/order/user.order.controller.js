@@ -104,7 +104,7 @@ export const postOrder = async (req, res, next) => {
 			to: order.seller.email,
 			subject: `Botiga - Order Received #${order.order.number} - ${apartment.aptName} `,
 			text: `Order Details
-			<br><br>${buyer.name} - ${buyer.contact}
+			<br><br>Customer - ${buyer.name} - ${buyer.phone}
 			<br>Delivery Address:
 			<br>Flat No - ${buyer.house}
 			<br>Apartment - ${apartment.aptName}, ${order.apartment.area}
@@ -185,7 +185,7 @@ export const postCancelOrder = async (req, res, next) => {
 			to: order.seller.email,
 			subject: `Botiga - Order Cancelled #${order.order.number} - ${apartment.aptName} `,
 			text: `Order Details
-			<br><br>${buyer.name} - ${buyer.contact}
+			<br><br>Customer - ${buyer.name} - ${buyer.phone}
 			<br>${populateProductDetails(order.order.products)} 
 			<br><br>Total Amount - ₹${order.order.totalAmount}
 			<br><br>Thank you
