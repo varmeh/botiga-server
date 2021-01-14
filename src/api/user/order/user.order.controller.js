@@ -74,6 +74,14 @@ export const getOrders = async (req, res, next) => {
 	}
 }
 
+const populateProductDetails = products => {
+	let details = ''
+	products.forEach(product => {
+		details += `<br>${product.quantity} X ${product.name} ${product.unitInfo} - ${product.price}`
+	})
+	return details
+}
+
 export const postOrder = async (req, res, next) => {
 	const { sellerId, addressId, totalAmount, products } = req.body
 
@@ -92,10 +100,11 @@ export const postOrder = async (req, res, next) => {
 			to: order.seller.email,
 			subject: `Botiga - Order Received #${order.number} - ${order.apartment.aptName} `,
 			text: `Order Details
-			<br><br>Apartment - ${order.buyer.house}, ${order.apartment.aptName}, ${order.apartment.area}
-			<br>Payment Status: ${order.order.payment.status}
-			<br>Razorpay Payment Id: ${order.order.payment.orderId}
-			<br>Total Amount - Rs ${order.order.totalAmount} 
+			<br><br>Apartment - ${order.buyer.house}, ${order.apartment.aptName}, ${
+				order.apartment.area
+			}
+			<br>${populateProductDetails(order.order.products)} 
+			<br>Total Amount - Rs ${order.order.totalAmount}
 			<br><br>Thank you
 			<br>Team Botiga`
 		})
