@@ -6,7 +6,8 @@ import {
 	paginationData,
 	skipData,
 	notifications,
-	rpayPayments
+	rpayPayments,
+	aws
 } from '../../../util'
 
 import {
@@ -84,6 +85,19 @@ export const postOrder = async (req, res, next) => {
 			addressId,
 			totalAmount,
 			products
+		})
+
+		await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: order.seller.email,
+			subject: `Botiga - Order Received #${order.number} - ${order.apartment.aptName} `,
+			text: `Order Details
+			<br><br>Apartment - ${order.buyer.house}, ${order.apartment.aptName}, ${order.apartment.area}
+			<br>Payment Status: ${order.order.payment.status}
+			<br>Razorpay Payment Id: ${order.order.payment.orderId}
+			<br>Total Amount - Rs ${order.order.totalAmount} 
+			<br><br>Thank you
+			<br>Team Botiga`
 		})
 
 		res.status(201).json(orderOrchestrator(order))
