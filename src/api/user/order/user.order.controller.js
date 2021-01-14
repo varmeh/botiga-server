@@ -97,14 +97,17 @@ export const postOrder = async (req, res, next) => {
 			products
 		})
 
+		const { buyer, apartment } = order
+
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: order.seller.email,
-			subject: `Botiga - Order Received #${order.order.number} - ${order.apartment.aptName} `,
+			subject: `Botiga - Order Received #${order.order.number} - ${apartment.aptName} `,
 			text: `Order Details
-			<br><br>Address - ${order.buyer.house}, ${order.apartment.aptName}, ${
-				order.apartment.area
-			}
+			<br><br>${buyer.name} - ${buyer.contact}
+			<br>Delivery Address:
+			<br>Flat No - ${buyer.house}
+			<br>Apartment - ${apartment.aptName}, ${order.apartment.area}
 			<br>${populateProductDetails(order.order.products)} 
 			<br><br>Total Amount - ₹${order.order.totalAmount}
 			<br><br>Thank you
@@ -174,6 +177,20 @@ export const postCancelOrder = async (req, res, next) => {
 				`Order #${order.order.number} has been cancelled`
 			)
 		)
+
+		// Send email to seller
+		const { buyer, apartment } = order
+		await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: order.seller.email,
+			subject: `Botiga - Order Cancelled #${order.order.number} - ${apartment.aptName} `,
+			text: `Order Details
+			<br><br>${buyer.name} - ${buyer.contact}
+			<br>${populateProductDetails(order.order.products)} 
+			<br><br>Total Amount - ₹${order.order.totalAmount}
+			<br><br>Thank you
+			<br>Team Botiga`
+		})
 
 		res.json({ message: 'cancelled', id: order._id })
 	} catch (error) {
