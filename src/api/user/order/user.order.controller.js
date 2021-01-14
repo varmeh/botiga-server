@@ -75,9 +75,11 @@ export const getOrders = async (req, res, next) => {
 }
 
 const populateProductDetails = products => {
-	let details = ''
+	let details = '<br>'
 	products.forEach(product => {
-		details += `<br>${product.quantity} X ${product.name} ${product.unitInfo} - ${product.price}`
+		details += `<br>${product.quantity} x ${product.name} ${
+			product.unitInfo
+		} - ₹${product.price * product.quantity}`
 	})
 	return details
 }
@@ -98,13 +100,13 @@ export const postOrder = async (req, res, next) => {
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: order.seller.email,
-			subject: `Botiga - Order Received #${order.number} - ${order.apartment.aptName} `,
+			subject: `Botiga - Order Received #${order.order.number} - ${order.apartment.aptName} `,
 			text: `Order Details
-			<br><br>Apartment - ${order.buyer.house}, ${order.apartment.aptName}, ${
+			<br><br>Address - ${order.buyer.house}, ${order.apartment.aptName}, ${
 				order.apartment.area
 			}
 			<br>${populateProductDetails(order.order.products)} 
-			<br>Total Amount - Rs ${order.order.totalAmount}
+			<br><br>Total Amount - ₹${order.order.totalAmount}
 			<br><br>Thank you
 			<br>Team Botiga`
 		})
