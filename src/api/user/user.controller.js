@@ -18,7 +18,8 @@ export const getSellersInApartment = async (req, res, next) => {
 		const sellersData = sellers.map(seller => {
 			const {
 				_id,
-				contact: { phone, whatsapp },
+				contact: { phone, whatsapp, address },
+				fssaiLicenseNumber,
 				live,
 				brandName,
 				businessCategory,
@@ -37,7 +38,9 @@ export const getSellersInApartment = async (req, res, next) => {
 				phone,
 				whatsapp,
 				deliveryMessage: apartmentVirtuals.deliveryMessage(type, day),
-				deliveryDate: apartmentVirtuals.deliveryDate(type, day)
+				deliveryDate: apartmentVirtuals.deliveryDate(type, day),
+				fssaiLicenseNumber,
+				address
 			}
 		})
 
