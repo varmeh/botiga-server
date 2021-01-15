@@ -57,7 +57,11 @@ export const addApartment = async (
 		}
 
 		// Add seller information to apartment list
-		const { businessCategory, brand } = seller
+		const {
+			businessCategory,
+			brand,
+			contact: { address }
+		} = seller
 		const { name, tagline, imageUrl } = brand
 
 		apartment.sellers.push({
@@ -67,7 +71,12 @@ export const addApartment = async (
 			brandImageUrl: imageUrl,
 			businessCategory,
 			live: true,
-			contact: { phone, whatsapp, email, address: seller.contact.address },
+			contact: {
+				phone,
+				whatsapp,
+				email,
+				address: `${address.building}, ${address.street}, ${address.area}, ${address.city}, ${address.state} - ${address.pincode}`
+			},
 			fssaiLicenseNumber: seller.fssai?.number,
 			delivery: { type: deliveryType, day }
 		})
