@@ -67,7 +67,8 @@ export const addApartment = async (
 			brandImageUrl: imageUrl,
 			businessCategory,
 			live: true,
-			contact: { phone, whatsapp, email },
+			contact: { phone, whatsapp, email, address: seller.contact.address },
+			fssaiLicenseNumber: seller.fssai?.number,
 			delivery: { type: deliveryType, day }
 		})
 

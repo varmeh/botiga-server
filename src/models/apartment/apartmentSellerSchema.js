@@ -19,8 +19,17 @@ export const apartmentSellerSchema = new Schema({
 			required: true,
 			match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number']
 		},
-		email: String
+		email: String,
+		address: {
+			building: String,
+			street: String,
+			area: String,
+			city: String,
+			state: String,
+			pincode: { type: String, match: [/^\d{6}/] }
+		}
 	},
+	fssaiLicenseNumber: String,
 	delivery: {
 		type: {
 			type: String,
