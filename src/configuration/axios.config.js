@@ -20,6 +20,13 @@ const logAxiosResponseError = (error, info) => {
 		data,
 		stack
 	})
+
+	logger.error('@axios response error', {
+		url,
+		method,
+		message,
+		info
+	})
 }
 
 axios.interceptors.request.use(
@@ -73,6 +80,14 @@ axios.interceptors.response.use(
 				statusText,
 				msg: error.message,
 				data
+			})
+
+			logger.error('@axios response error', {
+				url,
+				method,
+				statusCode: status,
+				statusText,
+				msg: error.message
 			})
 
 			// As error.response is returned & it does not have a message key,
