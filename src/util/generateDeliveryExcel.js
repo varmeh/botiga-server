@@ -40,10 +40,14 @@ const generateSheetForApartment = ({ workbook, apartmentData }) => {
 		{ header: 'Name', key: 'name' },
 		{ header: 'House', key: 'house' },
 		{ header: 'Contact', key: 'contact' },
+		{ header: 'Amount', key: 'amount' },
+		{ header: 'Order Status', key: 'orderedStatus' },
+		{ header: 'Payment Status', key: 'paymentStatus' },
+		{ header: 'Refund Status', key: 'refundStatus' },
+		{ header: 'Order Date', key: 'orderDate' },
 		{ header: 'Products', key: 'products' },
 		{ header: 'Unit', key: 'unit' },
-		{ header: 'Quantity', key: 'quantity' },
-		{ header: 'Ordered At', key: 'orderedAt' }
+		{ header: 'Quantity', key: 'quantity' }
 	]
 
 	// Have to take this approach because ExcelJS doesn't have an autofit property.
@@ -55,7 +59,9 @@ const generateSheetForApartment = ({ workbook, apartmentData }) => {
 		const {
 			buyer: { name, house = '', phone = '' },
 			createdAt,
-			order: { products = [] }
+			order: { status, totalAmount, products = [] },
+			payment,
+			refund
 		} = delivery
 
 		products.forEach((product, index) => {
@@ -68,7 +74,11 @@ const generateSheetForApartment = ({ workbook, apartmentData }) => {
 					products: productName,
 					unit: unitInfo,
 					quantity: quantity,
-					orderedAt: moment(createdAt).format('MMM Do, hh:mm a')
+					orderedStatus: status,
+					amount: totalAmount,
+					paymentStatus: payment.status,
+					refundStatus: refund.status,
+					orderDate: moment(createdAt).format('MMM Do, hh:mm a')
 				})
 			} else {
 				worksheet.addRow({
