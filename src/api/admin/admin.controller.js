@@ -248,7 +248,7 @@ export const getDeliveryXls = async (req, res, next) => {
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: seller.contact.email,
-			subject: `Delivery Sheet - ${sellerPhone} - ${date}`,
+			subject: `Botiga - Deliveries Today - ${sellerPhone} - ${date}`,
 			text: 'Your deliveries for the day!!!',
 			filename: fileName,
 			path: xlsPath
@@ -265,19 +265,6 @@ export const getDeliveryXls = async (req, res, next) => {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
 	}
-}
-
-export const testEmail = (_, res) => {
-	aws.ses.sendMail({
-		from: 'noreply@botiga.app',
-		to: 'varun@botiga.app',
-		subject: 'test subject',
-		text: 'hope it works!!!',
-		filename: 'test.xls',
-		path: '/Users/varunmehta/Desktop/premium.xls'
-	})
-
-	res.json({ message: 'done' })
 }
 
 export const deleteSellerApartments = async (req, res, next) => {

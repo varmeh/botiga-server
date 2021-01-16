@@ -25,7 +25,6 @@ import {
 	postTestTransaction,
 	postTestTransactionNotify,
 	getDeliveryXls,
-	testEmail,
 	deleteSellerApartments,
 	deleteSellerApartmentsWithId
 } from './admin.controller'
@@ -115,7 +114,5 @@ router.get(
 	validationMiddleware,
 	getDeliveryXls
 )
-
-router.get('/email', testEmail)
 
 export default router
