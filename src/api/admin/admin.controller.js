@@ -239,27 +239,36 @@ export const getDeliveryXls = async (req, res, next) => {
 			dateString: date
 		})
 
-		const fileName = `${sellerPhone}_${date}.xlsx`
-		const xlsPath = await generateExcel({
-			deliveryData: deliveries,
-			fileName
-		})
+		if (deliveries.length > 0) {
+			const fileName = `${sellerPhone}_${date}.xlsx`
+			const xlsPath = await generateExcel({
+				deliveryData: deliveries,
+				fileName
+			})
+			await aws.ses.sendMailPromise({
+				from: 'noreply@botiga.app',
+				to: seller.contact.email,
+				subject: `Botiga - Deliveries Today - ${sellerPhone} - ${date}`,
+				text: 'Your deliveries for the day!!!',
+				filename: fileName,
+				path: xlsPath
+			})
 
-		await aws.ses.sendMailPromise({
-			from: 'noreply@botiga.app',
-			to: seller.contact.email,
-			subject: `Botiga - Deliveries Today - ${sellerPhone} - ${date}`,
-			text: 'Your deliveries for the day!!!',
-			filename: fileName,
-			path: xlsPath
-		})
-
-		try {
-			winston.debug('@delivery file removal', { xlsPath })
-			fs.unlinkSync(xlsPath) //file removed
-		} catch (err) {
-			winston.debug('@delivery file removal failed', { xlsPath, err })
+			try {
+				winston.debug('@delivery file removal', { xlsPath })
+				fs.unlinkSync(xlsPath) //file removed
+			} catch (err) {
+				winston.debug('@delivery file removal failed', { xlsPath, err })
+			}
+		} else {
+			await aws.ses.sendMailPromise({
+				from: 'noreply@botiga.app',
+				to: seller.contact.email,
+				subject: `Botiga - Deliveries Today - ${sellerPhone} - ${date}`,
+				text: 'You have NO deliveries for the day!!!'
+			})
 		}
+
 		res.json(deliveries)
 	} catch (error) {
 		const { status, message } = error
