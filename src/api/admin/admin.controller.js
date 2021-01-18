@@ -240,7 +240,7 @@ export const getDeliveryXls = async (req, res, next) => {
 		})
 
 		if (deliveries.length > 0) {
-			const fileName = `${sellerPhone}_${date}.xlsx`
+			const fileName = `${seller.brand.name}_${date}.xlsx`
 			const xlsPath = await generateExcel({
 				deliveryData: deliveries,
 				fileName
@@ -248,8 +248,8 @@ export const getDeliveryXls = async (req, res, next) => {
 			await aws.ses.sendMailPromise({
 				from: 'noreply@botiga.app',
 				to: seller.contact.email,
-				subject: `Botiga - Deliveries Today - ${sellerPhone} - ${date}`,
-				text: 'Your deliveries for the day!!!',
+				subject: `Botiga - Deliveries Today - ${seller.brand.name} - ${date}`,
+				text: 'Your deliveries for the day.',
 				filename: fileName,
 				path: xlsPath
 			})
@@ -264,8 +264,8 @@ export const getDeliveryXls = async (req, res, next) => {
 			await aws.ses.sendMailPromise({
 				from: 'noreply@botiga.app',
 				to: seller.contact.email,
-				subject: `Botiga - Deliveries Today - ${sellerPhone} - ${date}`,
-				text: 'You have NO deliveries for the day!!!'
+				subject: `Botiga - Deliveries Today - ${seller.brand.name} - ${date}`,
+				text: 'NO deliveries today.'
 			})
 		}
 
