@@ -49,7 +49,7 @@ const routeTransaction = async ({
 		})
 		return data
 	} catch (error) {
-		winston.debug('@payment routeTransaction failed', {
+		winston.error('@payment routeTransaction failed', {
 			error,
 			msg: error.message
 		})
@@ -76,7 +76,7 @@ const initiateTransaction = async ({ txnAmount, orderId }) => {
 
 		return data
 	} catch (error) {
-		winston.debug('@payment initiate transaction failed', {
+		winston.error('@payment initiate transaction failed', {
 			error,
 			msg: error.message
 		})
@@ -147,6 +147,12 @@ const webhook = async (data, signature) => {
 
 		// Send seller email in case of failure
 		if (event === 'payment.failed') {
+			winston.error(`@webhook payment failure - ${entity.id}`, {
+				paymentId: entity.id,
+				orderNumber: order.order.number,
+				brand: order.seller.brandName
+			})
+
 			await aws.ses.sendMailPromise({
 				from: 'noreply@botiga.app',
 				to: order.seller.email,
@@ -156,6 +162,12 @@ const webhook = async (data, signature) => {
 				<br>Confirm the order before delivering. If users confirms the order, ask him to retry payment.
 				<br><br>Thank you
 				<br>Team Botiga`
+			})
+		} else {
+			winston.info(`@webhook payment success - ${entity.id}`, {
+				paymentId: entity.id,
+				orderNumber: order.order.number,
+				brand: order.seller.brandName
 			})
 		}
 		return null
