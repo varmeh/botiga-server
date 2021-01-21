@@ -16,7 +16,7 @@ export const logRequestMiddleware = (req, _res, next) => {
 	} = req
 	const { remoteAddress, remoteFamily } = socket
 
-	winston.info('@logger request', {
+	winston.info(`@api request - ${originalUrl}`, {
 		url: originalUrl,
 		method,
 		hostname,
@@ -29,7 +29,7 @@ export const logRequestMiddleware = (req, _res, next) => {
 
 	// Don't log body information for all auth calls - which holds crucial information like pin
 	const requestBodyData = originalUrl.includes('auth') ? 'Confidential' : body
-	winston.debug('@logger request details', {
+	winston.debug(`@api request - ${originalUrl}`, {
 		url: originalUrl,
 		method,
 		req: {
@@ -45,7 +45,7 @@ export const logRequestMiddleware = (req, _res, next) => {
  */
 export const logErrorMiddleware = (error, req, _res, next) => {
 	const { originalUrl, method, hostname, ip, protocol } = req
-	winston.error('@logger error', {
+	winston.error(`@api error - ${originalUrl}`, {
 		url: originalUrl,
 		method,
 		ip,
@@ -68,7 +68,7 @@ export const logResponseMiddleware = (req, res, next) => {
 
 		const { statusCode, statusMessage } = res
 
-		winston.info('@logger response', {
+		winston.info(`@api response - ${originalUrl}`, {
 			url: originalUrl,
 			method,
 			hostname,
