@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
 import axios from 'axios'
 import CreateHttpError from 'http-errors'
@@ -129,21 +130,11 @@ const webhook = async (data, signature) => {
 		}
 
 		order.payment.paymentId = entity.id
+		order.payment.orderId = entity.order_id
 		order.payment.paymentMode = entity.method
 		await order.save()
 
 		const user = await User.findById(order.buyer.id)
-
-		user.sendNotifications(
-			'Payment Update',
-			`Your payment of ${order.order.totalAmount} for order #${
-				order.order.number
-			} to ${order.seller.brandName} has ${
-				order.payment.status === PaymentStatus.success
-					? 'been successful'
-					: 'failed. Any amount debited will be credited back to your account.'
-			}`
-		)
 
 		// Send seller email in case of failure
 		if (event === 'payment.failed') {
@@ -153,12 +144,17 @@ const webhook = async (data, signature) => {
 				brand: order.seller.brandName
 			})
 
+			user.sendNotifications(
+				'Payment Failure',
+				`Your payment of ₹${order.order.totalAmount} for order #${order.order.number} to ${order.seller.brandName} has failed. Any amount debited will be credited back to your account.`
+			)
+
 			await aws.ses.sendMailPromise({
 				from: 'noreply@botiga.app',
 				to: order.seller.email,
-				subject: `Botiga - Payment Failed for Order #${order.order.number} - ${order.apartment.aptName} `,
-				text: `Order Details
-				<br>Please remind the customer to make the payment via Remind option in your order detail screen.
+				subject: `Botiga - Payment Failure - Order #${order.order.number} - ${order.apartment.aptName} `,
+				text: `RazorPay Payment Failure Notification
+				<br><br>Please remind the customer to make the payment via Remind option in your order detail screen.
 				<br>Confirm the order before delivering. If users confirms the order, ask him to retry payment.
 				<br><br>Thank you
 				<br>Team Botiga`
@@ -169,6 +165,11 @@ const webhook = async (data, signature) => {
 				orderNumber: order.order.number,
 				brand: order.seller.brandName
 			})
+
+			user.sendNotifications(
+				'Payment Success',
+				`Your payment of ₹${order.order.totalAmount} for order #${order.order.number} to ${order.seller.brandName} has been successful`
+			)
 		}
 		return null
 	} catch (error) {
