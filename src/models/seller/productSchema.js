@@ -16,6 +16,10 @@ export const productSchema = new Schema({
 		min: 0.0,
 		required: true
 	},
+	mrp: {
+		type: Number,
+		min: 0.0
+	},
 	size: {
 		quantity: {
 			type: String,
@@ -32,6 +36,11 @@ export const productSchema = new Schema({
 	available: {
 		type: Boolean,
 		default: true
+	},
+	tag: {
+		type: String,
+		enum: ['', 'BestSeller', 'New', 'Recommended'],
+		default: ''
 	},
 	imageUrl: {
 		type: String,

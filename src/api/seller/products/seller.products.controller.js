@@ -14,16 +14,20 @@ export const postProduct = async (req, res, next) => {
 			name,
 			description,
 			price,
+			mrp,
 			size: { quantity, unit },
-			imageUrl
+			imageUrl,
+			tag
 		} = req.body
 
 		const product = await createProduct(token.get(req), categoryId, {
 			name,
 			description,
 			price,
+			mrp,
 			size: { quantity, unit },
-			imageUrl
+			imageUrl,
+			tag
 		})
 
 		res.status(201).json({ id: product._id })
@@ -82,11 +86,13 @@ export const patchProduct = async (req, res, next) => {
 		name,
 		description,
 		price,
+		mrp,
 		quantity,
 		unit,
 		available,
 		imageUrl,
-		updateImage
+		updateImage,
+		tag
 	} = req.body
 	try {
 		const [updatedProduct, oldImageUrl] = await updateProduct({
@@ -96,11 +102,13 @@ export const patchProduct = async (req, res, next) => {
 			name,
 			description,
 			price,
+			mrp,
 			quantity,
 			unit,
 			available,
 			imageUrl,
-			updateImage
+			updateImage,
+			tag
 		})
 
 		if (updateImage && oldImageUrl) {

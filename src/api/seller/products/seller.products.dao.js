@@ -67,12 +67,20 @@ const sortProducts = async (sellerId, categoryId) => {
 export const createProduct = async (
 	sellerId,
 	categoryId,
-	{ name, description, price, size, imageUrl }
+	{ name, description, price, mrp, size, imageUrl, tag }
 ) => {
 	try {
 		const { seller, category } = await findCategoryHelper(sellerId, categoryId)
 
-		category.products.push({ name, description, price, size, imageUrl })
+		category.products.push({
+			name,
+			description,
+			price,
+			mrp,
+			size,
+			imageUrl,
+			tag
+		})
 
 		const updatedSeller = await seller.save()
 
@@ -125,11 +133,13 @@ export const updateProduct = async ({
 	name,
 	description,
 	price,
+	mrp,
 	quantity,
 	unit,
 	imageUrl,
 	available,
-	updateImage
+	updateImage,
+	tag
 }) => {
 	try {
 		const { seller, product } = await findProductHelper(
@@ -152,6 +162,9 @@ export const updateProduct = async ({
 			product.imageUrl = imageUrl
 		}
 		product.available = available
+
+		if (mrp) product.mrp = mrp
+		if (tag) product.tag = tag
 
 		const updatedSeller = await seller.save()
 

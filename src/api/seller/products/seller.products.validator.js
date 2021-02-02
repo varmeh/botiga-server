@@ -5,18 +5,25 @@ import {
 	emptyOptionalValidator,
 	boolValidator,
 	paramObjectIdValidator,
-	urlOptionalValidator
+	urlOptionalValidator,
+	decimalOptionalValidator
 } from '../../../util'
 
 export const postProductValidator = [
 	objectIdValidator('categoryId'),
 	emptyValidator('name'),
 	decimalValidator('price'),
+	decimalOptionalValidator('mrp'),
 	decimalValidator('size.quantity'),
 	emptyValidator('size.unit')
 		.matches(/^(gms|kg|ml|lt|piece|pieces)$/, 'i')
 		.withMessage(
 			'should be either of following - gms, kg, ml, lt, piece & pieces'
+		),
+	emptyOptionalValidator('tag')
+		.matches(/^(BestSeller|Recommended|New)$/, 'i')
+		.withMessage(
+			'should be either of following - BestSeller, New or Recommended'
 		),
 	emptyOptionalValidator('description'),
 	urlOptionalValidator('imageUrl')
@@ -27,6 +34,7 @@ export const patchProductValidator = [
 	objectIdValidator('categoryId'),
 	emptyValidator('name'),
 	decimalValidator('price'),
+	decimalOptionalValidator('mrp'),
 	decimalValidator('quantity'),
 	emptyValidator('unit')
 		.matches(/^(gms|kg|ml|lt|piece|pieces)$/, 'i')
@@ -35,6 +43,11 @@ export const patchProductValidator = [
 		),
 	boolValidator('available'),
 	emptyOptionalValidator('description'),
+	emptyOptionalValidator('tag')
+		.matches(/^(BestSeller|Recommended|New)$/, 'i')
+		.withMessage(
+			'should be either of following - BestSeller, New or Recommended'
+		),
 	urlOptionalValidator('imageUrl'),
 	boolValidator('updateImage')
 ]

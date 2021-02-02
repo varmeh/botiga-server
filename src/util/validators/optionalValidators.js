@@ -50,3 +50,9 @@ export const dateOptionalValidator = field =>
 			? true
 			: Promise.reject(validationMessages.date)
 	)
+
+export const decimalOptionalValidator = field =>
+	emptyOptionalValidator(field)
+		.isDecimal()
+		.withMessage(validationMessages.decimal)
+		.toFloat()
