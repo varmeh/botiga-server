@@ -10,6 +10,7 @@ import {
 	postTestTransactionValidator,
 	postTestTransactionNotifyValidator,
 	getDeliveryValidator,
+	postSellerApartmentValidator,
 	deleteSellerApartmentValidator,
 	deleteSellerApartmentWithIdValidator
 } from './admin.validator'
@@ -25,6 +26,7 @@ import {
 	postTestTransaction,
 	postTestTransactionNotify,
 	getDeliveryXls,
+	postSellerApartment,
 	deleteSellerApartments,
 	deleteSellerApartmentsWithId
 } from './admin.controller'
@@ -71,6 +73,13 @@ router.get(
 	getSellerValidator,
 	validationMiddleware,
 	getSellerDetails
+)
+
+router.post(
+	'/seller/apartment',
+	postSellerApartmentValidator,
+	validationMiddleware,
+	postSellerApartment
 )
 
 router.delete(

@@ -15,6 +15,7 @@ import {
 	findSellerByNumber,
 	updateSellerBankDetails,
 	findDeliveriesForSeller,
+	addSellerApartment,
 	removeSellerAllApartments,
 	removeSellerApartment
 } from './admin.dao'
@@ -281,6 +282,18 @@ export const deleteSellerApartments = async (req, res, next) => {
 		await removeSellerAllApartments(req.params.phone)
 
 		res.status(204).json()
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postSellerApartment = async (req, res, next) => {
+	try {
+		const { phone, apartmentId } = req.body
+		const [apartment] = await addSellerApartment(phone, apartmentId)
+
+		res.json(apartment)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

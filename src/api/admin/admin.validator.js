@@ -39,6 +39,11 @@ export const getSellerValidator = paramPhoneValidator('phone')
 
 export const deleteSellerApartmentValidator = paramPhoneValidator('phone')
 
+export const postSellerApartmentValidator = [
+	phoneValidator('phone'),
+	objectIdValidator('apartmentId')
+]
+
 export const deleteSellerApartmentWithIdValidator = [
 	paramPhoneValidator('phone'),
 	paramObjectIdValidator('apartmentId')
