@@ -64,12 +64,13 @@ export const patchApartmentLive = async (req, res, next) => {
 }
 
 export const patchDelierySchedule = async (req, res, next) => {
-	const { apartmentId, deliveryType, day } = req.body
+	const { apartmentId, deliveryType, day, slot } = req.body
 	try {
 		const apartment = await updateApartmentDeliverySchedule(token.get(req), {
 			apartmentId,
 			deliveryType,
-			day
+			day,
+			slot
 		})
 		res.json(apartment)
 	} catch (error) {

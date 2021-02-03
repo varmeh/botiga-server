@@ -34,7 +34,8 @@ export const apartmentSellerSchema = new Schema({
 			type: Number,
 			min: 1,
 			max: 7
-		}
+		},
+		slot: String
 	}
 })
 

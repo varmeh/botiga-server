@@ -132,14 +132,14 @@ export const updateApartmentLiveStatus = async (
 
 export const updateApartmentDeliverySchedule = async (
 	sellerId,
-	{ apartmentId, deliveryType, day }
+	{ apartmentId, deliveryType, day, slot }
 ) => {
 	try {
 		const seller = await Seller.findById(sellerId)
 
 		const apartment = await Apartment.findById(apartmentId)
 
-		apartment.sellers.id(sellerId).delivery = { type: deliveryType, day }
+		apartment.sellers.id(sellerId).delivery = { type: deliveryType, day, slot }
 
 		await apartment.save()
 
