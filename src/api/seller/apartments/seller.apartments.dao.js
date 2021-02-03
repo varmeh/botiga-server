@@ -147,6 +147,8 @@ export const updateApartmentDeliverySchedule = async (
 			sellerId
 		).deliveryMessage
 
+		seller.apartments.id(apartmentId).deliverySlot = slot
+
 		const updatedSeller = await seller.save()
 
 		return updatedSeller.apartments.id(apartmentId)

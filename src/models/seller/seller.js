@@ -38,7 +38,8 @@ export const sellerApartmentSchema = new Schema({
 		},
 		email: String
 	},
-	deliveryMessage: String
+	deliveryMessage: String,
+	deliverySlot: String
 })
 
 const sellerSchema = new Schema(
