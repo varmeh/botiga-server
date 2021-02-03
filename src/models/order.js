@@ -81,6 +81,7 @@ const orderSchema = new Schema(
 				type: Date,
 				required: true
 			},
+			deliverySlot: String,
 			completionDate: Date,
 			products: [
 				{

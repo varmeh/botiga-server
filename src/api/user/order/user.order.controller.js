@@ -27,6 +27,7 @@ const orderOrchestrator = order => {
 			status,
 			totalAmount,
 			expectedDeliveryDate,
+			deliverySlot,
 			completionDate,
 			products
 		},
@@ -44,6 +45,7 @@ const orderOrchestrator = order => {
 		totalAmount,
 		orderDate: createdAt,
 		expectedDeliveryDate,
+		deliverySlot,
 		completionDate,
 		products,
 		payment,

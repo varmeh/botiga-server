@@ -73,6 +73,7 @@ export const createOrder = async ({
 				status: 'open',
 				totalAmount,
 				expectedDeliveryDate: apartmentManager.deliveryDate,
+				deliverySlot: apartmentManager.slot,
 				products
 			}
 		})
