@@ -25,7 +25,7 @@ export const getSellersInApartment = async (req, res, next) => {
 				businessCategory,
 				brandImageUrl,
 				tagline,
-				delivery: { type, day }
+				delivery: { type, day, slot }
 			} = seller
 
 			return {
@@ -39,6 +39,7 @@ export const getSellersInApartment = async (req, res, next) => {
 				whatsapp,
 				deliveryMessage: apartmentVirtuals.deliveryMessage(type, day),
 				deliveryDate: apartmentVirtuals.deliveryDate(type, day),
+				deliverySlot: slot,
 				fssaiLicenseNumber,
 				address
 			}
