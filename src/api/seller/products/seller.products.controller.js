@@ -45,16 +45,27 @@ export const getProducts = async (req, res, next) => {
 			const { _id, name, products } = category
 
 			const flatProducts = products.map(product => {
-				const { _id, name, price, description, imageUrl, available } = product
+				const {
+					_id,
+					name,
+					price,
+					mrp,
+					description,
+					imageUrl,
+					available,
+					tag
+				} = product
 
 				return {
 					id: _id,
 					name,
 					price,
+					mrp,
 					available,
 					description,
 					imageUrl,
-					size: product.sizeInfo
+					size: product.sizeInfo,
+					tag
 				}
 			})
 			return { categoryId: _id, name, products: flatProducts }
