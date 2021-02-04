@@ -39,7 +39,7 @@ export const productSchema = new Schema({
 	},
 	tag: {
 		type: String,
-		enum: ['', 'BestSeller', 'New', 'Recommended'],
+		enum: ['', 'Bestseller', 'New'],
 		default: ''
 	},
 	imageUrl: {
