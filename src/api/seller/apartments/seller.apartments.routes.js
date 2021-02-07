@@ -2,7 +2,6 @@ import { Router } from 'express'
 import { validationMiddleware, token } from '../../../util'
 
 import {
-	postApartmentValidator,
 	patchApartmentValidator,
 	patchDeliveryValidator,
 	patchContactInfoValidator,
@@ -11,7 +10,6 @@ import {
 
 import {
 	getApartments,
-	postApartments,
 	patchApartmentLive,
 	patchDelierySchedule,
 	patchContactInformation
@@ -20,14 +18,6 @@ import {
 const router = Router()
 
 router.get('/', token.authenticationMiddleware, getApartments)
-
-router.post(
-	'/',
-	token.authenticationMiddleware,
-	postApartmentValidator,
-	validationMiddleware,
-	postApartments
-)
 
 router.patch(
 	'/live',
