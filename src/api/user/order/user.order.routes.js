@@ -17,7 +17,8 @@ import {
 	getOrders,
 	postRpayTransaction,
 	postRpayTransactionCancelled,
-	postRpayTransactionWebhook
+	postRpayTransactionWebhook,
+	postRpayDowntimeWebhook
 } from './user.order.controller'
 
 const router = Router()
@@ -73,5 +74,6 @@ router.post(
 )
 
 router.post('/transaction/webhook', postRpayTransactionWebhook) // API Callback from paytm payment webview
+router.post('/downtime/webhook', postRpayDowntimeWebhook)
 
 export default router

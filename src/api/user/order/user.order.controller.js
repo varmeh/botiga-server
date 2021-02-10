@@ -219,7 +219,17 @@ export const postRpayTransaction = async (req, res, next) => {
 export const postRpayTransactionWebhook = async (req, res) => {
 	try {
 		const { body, headers } = req
-		await rpayPayments.webhook(body, headers['x-razorpay-signature'])
+		await rpayPayments.paymentWebhook(body, headers['x-razorpay-signature'])
+		res.json()
+	} catch ({ status, message }) {
+		res.status(500).json()
+	}
+}
+
+export const postRpayDowntimeWebhook = async (req, res) => {
+	try {
+		const { body, headers } = req
+		await rpayPayments.downtimeWebhook(body, headers['x-razorpay-signature'])
 		res.json()
 	} catch ({ status, message }) {
 		res.status(500).json()
@@ -235,7 +245,7 @@ export const postRpayTransactionCancelled = async (req, res, next) => {
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: order.seller.email,
-			subject: `Botiga - Payment Failed for Order #${order.order.number} - ${order.apartment.aptName} `,
+			subject: `Botiga - App Payment Failure Notification for Order #${order.order.number} - ${order.apartment.aptName} `,
 			text: `Order Details
 				<br>Please remind the customer to make the payment via Remind option in your order detail screen.
 				<br>Confirm the order before delivering. If users confirms the order, ask him to retry payment.

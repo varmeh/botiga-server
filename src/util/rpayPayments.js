@@ -1,7 +1,5 @@
-/* eslint-disable max-statements */
-/* eslint-disable max-lines-per-function */
 import axios from 'axios'
-import CreateHttpError from 'http-errors'
+// import CreateHttpError from 'http-errors'
 import Razorpay from 'razorpay'
 
 import { Order, PaymentStatus, User } from '../models'
@@ -85,8 +83,7 @@ const initiateTransaction = async ({ txnAmount, orderId }) => {
 	}
 }
 
-const webhook = async (data, signature) => {
-	// Validate Webhook data
+const webhookSignatureVerification = (data, signature) => {
 	if (
 		!Razorpay.validateWebhookSignature(
 			JSON.stringify(data),
@@ -95,24 +92,26 @@ const webhook = async (data, signature) => {
 		)
 	) {
 		// Webhook validation failure
-		winston.error('@payment webhook validation failed', {
+		winston.error('@rpay webhook validation failed', {
 			domain: 'webhook',
-			data: JSON.stringify(data),
+			data,
 			signature
 		})
-		return Promise.reject(
-			new CreateHttpError[500]('Webhook Validation Failure')
-		)
+		throw new Error('Webhook Validation Failure')
 	}
+}
 
-	const {
-		event,
-		payload: {
-			payment: { entity }
-		}
-	} = data
-
+const paymentWebhook = async (data, signature) => {
 	try {
+		webhookSignatureVerification(data, signature)
+
+		const {
+			event,
+			payload: {
+				payment: { entity }
+			}
+		} = data
+
 		if (!entity.notes.orderId || entity.notes.orderId === TEST_TRANSACTION) {
 			winston.info('@payment webhook test transaction', {
 				domain: 'webhook',
@@ -152,8 +151,8 @@ const webhook = async (data, signature) => {
 			await aws.ses.sendMailPromise({
 				from: 'noreply@botiga.app',
 				to: order.seller.email,
-				subject: `Botiga - Payment Failure - Order #${order.order.number} - ${order.apartment.aptName} `,
-				text: `RazorPay Payment Failure Notification
+				subject: `Botiga - Server Payment Failure Notification - Order #${order.order.number} - ${order.apartment.aptName} `,
+				text: `Payment Failure Notification
 				<br><br>Please remind the customer to make the payment via Remind option in your order detail screen.
 				<br>Confirm the order before delivering. If users confirms the order, ask him to retry payment.
 				<br><br>Thank you
@@ -173,17 +172,43 @@ const webhook = async (data, signature) => {
 		}
 		return null
 	} catch (error) {
-		winston.debug('@payment webhook failed', {
+		return winston.error('@payment webhook failed', {
+			error,
+			errorMessage: error.message,
+			event: data.event,
+			data: data.payload
+		})
+	}
+}
+
+const downtimeWebhook = async (data, signature) => {
+	try {
+		webhookSignatureVerification(data, signature)
+
+		let downtimeStatus
+		if (data.event === 'payment.downtime.started') {
+			downtimeStatus = 'started'
+		} else if (data.event === 'payment.downtime.resolved') {
+			downtimeStatus = 'resolved'
+		}
+
+		return await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: 'varun@botiga.app',
+			subject: `Botiga - Downtime Webhook - ${downtimeStatus}`,
+			text: `RazorPay Downtime Notification
+				<br><br>Downtime Info:
+				<br>${data}`
+		})
+	} catch (error) {
+		winston.debug('@downtime webhook failure', {
 			domain: 'webhook',
 			error,
 			errorMessage: error.message,
-			paymentId: entity.id,
-			event,
-			entity
+			data
 		})
 		return winston.error('@payment webhook failed', {
-			paymentId: entity.id,
-			event
+			data
 		})
 	}
 }
@@ -191,5 +216,6 @@ const webhook = async (data, signature) => {
 export default {
 	routeTransaction,
 	initiateTransaction,
-	webhook
+	paymentWebhook,
+	downtimeWebhook
 }
