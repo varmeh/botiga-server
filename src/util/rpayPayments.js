@@ -201,14 +201,11 @@ const downtimeWebhook = async (data, signature) => {
 				<br>${data}`
 		})
 	} catch (error) {
-		winston.debug('@downtime webhook failure', {
-			domain: 'webhook',
+		return winston.error('@downtime webhook failed', {
 			error,
 			errorMessage: error.message,
-			data
-		})
-		return winston.error('@payment webhook failed', {
-			data
+			event: data.event,
+			data: data.payload
 		})
 	}
 }
