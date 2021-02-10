@@ -185,20 +185,25 @@ const downtimeWebhook = async (data, signature) => {
 	try {
 		webhookSignatureVerification(data, signature)
 
-		let downtimeStatus
-		if (data.event === 'payment.downtime.started') {
-			downtimeStatus = 'started'
-		} else if (data.event === 'payment.downtime.resolved') {
-			downtimeStatus = 'resolved'
-		}
+		const { event, payload } = data
+		winston.info('@downtime webhook data', {
+			event,
+			payload
+		})
 
+		const { entity } = payload['payment.downtime']
 		return await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: 'varun@botiga.app',
-			subject: `Botiga - Downtime Webhook - ${downtimeStatus}`,
+			subject: `Botiga - Downtime Webhook - ${entity.started}`,
 			text: `RazorPay Downtime Notification
 				<br><br>Downtime Info:
-				<br>${data}`
+				<br>Event - ${event}
+				<br>Id - ${entity.id}
+				<br>Method - ${entity.id}
+				<br>Status - ${entity.status}
+				<br>Instrument - ${entity.instrument}
+				`
 		})
 	} catch (error) {
 		return winston.error('@downtime webhook failed', {
