@@ -195,14 +195,16 @@ const downtimeWebhook = async (data, signature) => {
 		return await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: 'varun@botiga.app',
-			subject: `Botiga - Downtime Webhook - ${entity.started}`,
+			subject: `Botiga - Downtime Webhook - ${entity.status}`,
 			text: `RazorPay Downtime Notification
 				<br><br>Downtime Info:
 				<br>Event - ${event}
 				<br>Id - ${entity.id}
-				<br>Method - ${entity.id}
+				<br>Method - ${entity.method}
 				<br>Status - ${entity.status}
-				<br>Instrument - ${entity.instrument}
+				<br>Severity - ${entity.severity}
+				<br>Scheduled - ${entity.scheduled}
+				<br>Instrument - ${entity.instrument.issuer}
 				`
 		})
 	} catch (error) {
