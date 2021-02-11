@@ -209,6 +209,36 @@ export const addSellerApartment = async (phone, apartmentId) => {
 	}
 }
 
+export const updateApartmentLiveStatus = async (phone, apartmentId, live) => {
+	try {
+		const seller = await findSellerByNumber(phone)
+
+		// Check if seller has account has been verified
+		if (!seller.bankDetailsVerified) {
+			throw new CreateHttpError[401](
+				'Bank Details Not Verified. Contact Botiga customer care'
+			)
+		}
+
+		// If either seller or apartment does not exist, accessing their information will cause internal server error
+		const apartment = await Apartment.findById(apartmentId)
+		apartment.sellers.id(seller._id).live = live
+		await apartment.save()
+
+		seller.apartments.id(apartmentId).live = live
+		const updatedSeller = await seller.save()
+
+		return updatedSeller.apartments.id(apartmentId)
+	} catch (error) {
+		winston.debug('@error updateApartmentLiveStatus', {
+			error,
+			msg: error?.message
+		})
+		const { status, message } = error
+		return Promise.reject(new CreateHttpError[status ?? 500](message))
+	}
+}
+
 export const removeSellerApartment = async (phone, apartmentId) => {
 	try {
 		const seller = await findSellerByNumber(phone)

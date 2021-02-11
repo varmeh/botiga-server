@@ -11,6 +11,7 @@ import {
 	postTestTransactionNotifyValidator,
 	getDeliveryValidator,
 	postSellerApartmentValidator,
+	patchSellerApartmentLiveValidator,
 	deleteSellerApartmentValidator,
 	deleteSellerApartmentWithIdValidator
 } from './admin.validator'
@@ -27,6 +28,7 @@ import {
 	postTestTransactionNotify,
 	getDeliveryXls,
 	postSellerApartment,
+	patchApartmentLiveStatus,
 	deleteSellerApartments,
 	deleteSellerApartmentsWithId
 } from './admin.controller'
@@ -80,6 +82,13 @@ router.post(
 	postSellerApartmentValidator,
 	validationMiddleware,
 	postSellerApartment
+)
+
+router.patch(
+	'/seller/apartment/live',
+	patchSellerApartmentLiveValidator,
+	validationMiddleware,
+	patchApartmentLiveStatus
 )
 
 router.delete(
