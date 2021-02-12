@@ -21,6 +21,45 @@ import {
 	removeSellerApartment
 } from './admin.dao'
 
+const productsOrchestrator = categories => {
+	if (!categories) {
+		return []
+	}
+
+	const flatCategories = categories.map(category => {
+		const { _id, name, products } = category
+
+		const flatProducts = products.map(product => {
+			const {
+				_id,
+				name,
+				price,
+				mrp,
+				description,
+				imageUrl,
+				available,
+				tag
+			} = product
+
+			return {
+				id: _id,
+				name,
+				price,
+				mrp,
+				available,
+				description,
+				imageUrl,
+				size: product.sizeInfo,
+				tag
+			}
+		})
+
+		return { categoryId: _id, name, products: flatProducts }
+	})
+
+	return flatCategories
+}
+
 const sellerOrchestrator = seller => {
 	const {
 		businessName,
@@ -49,9 +88,10 @@ const sellerOrchestrator = seller => {
 		whatsapp,
 		email,
 		mid: seller.mid,
-		apartments,
-		categories
+		apartments
 	}
+
+	data.categories = productsOrchestrator(categories)
 
 	if (seller.bankDetails.beneficiaryName) {
 		// Seller bank details available
