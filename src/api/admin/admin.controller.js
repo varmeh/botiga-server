@@ -32,7 +32,8 @@ const sellerOrchestrator = seller => {
 		brand: { name, tagline, imageUrl },
 		contact: { phone, whatsapp, email },
 		bankDetails,
-		apartments
+		apartments,
+		categories
 	} = seller
 
 	let data = {
@@ -48,7 +49,8 @@ const sellerOrchestrator = seller => {
 		whatsapp,
 		email,
 		mid: seller.mid,
-		apartments
+		apartments,
+		categories
 	}
 
 	if (seller.bankDetails.beneficiaryName) {
