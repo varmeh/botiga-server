@@ -69,7 +69,7 @@ const sellerOrchestrator = seller => {
 		fssai,
 		owner: { firstName, lastName },
 		brand: { name, tagline, imageUrl },
-		contact: { phone, whatsapp, email },
+		contact: { phone, whatsapp, email, address },
 		bankDetails,
 		apartments,
 		categories
@@ -88,7 +88,8 @@ const sellerOrchestrator = seller => {
 		whatsapp,
 		email,
 		mid: seller.mid,
-		apartments
+		apartments,
+		address: `${address.building}, ${address.street}, ${address.area}, ${address.city}, ${address.state} - ${address.pincode}`
 	}
 
 	data.categories = productsOrchestrator(categories)
