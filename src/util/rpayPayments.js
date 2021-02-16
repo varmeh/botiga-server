@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import axios from 'axios'
 // import CreateHttpError from 'http-errors'
 import Razorpay from 'razorpay'
@@ -121,6 +122,12 @@ const paymentWebhook = async (data, signature) => {
 			return null
 		}
 		const order = await Order.findById(entity.notes.orderId)
+
+		// Check if payment status is already success
+		// As webhooks could be received in any order, failure webhooks could override success webhooks which is never the case in execution
+		if (order.payment.status === PaymentStatus.success) {
+			return null
+		}
 
 		if (event === 'payment.captured') {
 			order.payment.status = PaymentStatus.success
