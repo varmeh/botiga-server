@@ -172,7 +172,7 @@ export const updateProduct = async ({
 		product.price = price
 		product.size.quantity = quantity
 		product.size.unit = unit
-		if (updateImage && imageUrl && imageUrlLarge) {
+		if (updateImage) {
 			product.imageUrl = imageUrl
 			product.imageUrlLarge = imageUrlLarge
 		}
