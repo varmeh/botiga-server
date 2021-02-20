@@ -151,7 +151,9 @@ export const updateProduct = async ({
 	imageUrl,
 	available,
 	updateImage,
-	tag
+	tag,
+	imageUrlLarge,
+	secondaryImageUrls
 }) => {
 	try {
 		const { seller, product } = await findProductHelper(
@@ -170,13 +172,15 @@ export const updateProduct = async ({
 		product.price = price
 		product.size.quantity = quantity
 		product.size.unit = unit
-		if (updateImage) {
+		if (updateImage && imageUrl && imageUrlLarge) {
 			product.imageUrl = imageUrl
+			product.imageUrlLarge = imageUrlLarge
 		}
 		product.available = available
 
 		if (mrp) product.mrp = mrp
 		if (tag) product.tag = tag
+		if (secondaryImageUrls) product.secondaryImageUrls = secondaryImageUrls
 
 		const updatedSeller = await seller.save()
 

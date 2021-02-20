@@ -62,7 +62,9 @@ export const getProducts = async (req, res, next) => {
 					description,
 					imageUrl,
 					available,
-					tag
+					tag,
+					imageUrlLarge,
+					secondaryImageUrls
 				} = product
 
 				return {
@@ -74,7 +76,9 @@ export const getProducts = async (req, res, next) => {
 					description,
 					imageUrl,
 					size: product.sizeInfo,
-					tag
+					tag,
+					imageUrlLarge,
+					secondaryImageUrls
 				}
 			})
 			return { categoryId: _id, name, products: flatProducts }
@@ -112,7 +116,9 @@ export const patchProduct = async (req, res, next) => {
 		available,
 		imageUrl,
 		updateImage,
-		tag
+		tag,
+		imageUrlLarge,
+		secondaryImageUrls
 	} = req.body
 	try {
 		const [updatedProduct, oldImageUrl] = await updateProduct({
@@ -128,7 +134,9 @@ export const patchProduct = async (req, res, next) => {
 			available,
 			imageUrl,
 			updateImage,
-			tag
+			tag,
+			imageUrlLarge,
+			secondaryImageUrls
 		})
 
 		if (updateImage && oldImageUrl) {
