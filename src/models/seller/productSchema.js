@@ -45,7 +45,18 @@ export const productSchema = new Schema({
 	imageUrl: {
 		type: String,
 		trim: true
-	}
+	},
+	imageUrlCoverLarge: {
+		type: String,
+		trim: true
+	},
+	secondaryImageUrls: [String]
+})
+
+productSchema.pre('validate', function (next) {
+	if (this.secondaryImageUrls.length > 4)
+		throw new Error('exceeds maximum number of secondary images')
+	next()
 })
 
 productSchema.virtual('sizeInfo').get(function () {

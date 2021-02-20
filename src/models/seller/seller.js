@@ -120,10 +120,17 @@ const sellerSchema = new Schema(
 		},
 		mid: String, // paytm merchant id for split payments. Separated from bank details to avoid encryption
 		categories: [categorySchema],
-		apartments: [sellerApartmentSchema]
+		apartments: [sellerApartmentSchema],
+		banners: [String]
 	},
 	{ timestamps: true }
 )
+
+sellerSchema.pre('validate', function (next) {
+	if (this.banners.length > 3)
+		throw new Error('exceeds maximum number of banners allowed')
+	next()
+})
 
 sellerSchema.virtual('bankDetailsVerified').get(function () {
 	return !!this.bankDetails.verified
