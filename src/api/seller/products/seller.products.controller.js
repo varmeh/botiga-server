@@ -197,12 +197,12 @@ export const postProductImage = async (req, res, next) => {
 				.toBuffer()
 
 			const coverImageUrl = await aws.s3.uploadFile({
-				fileName: `${token.get(req)}_${imageUniqueId}_cover.${imageType}`,
+				fileName: `${token.get(req)}_${imageUniqueId}_small.${imageType}`,
 				contentType: image.mimetype,
 				file: buffer
 			})
 
-			res.json({ imageUrl: downloadUrl, imageUrlCover: coverImageUrl })
+			res.json({ imageUrl: downloadUrl, imageUrlSmall: coverImageUrl })
 		} else {
 			res.json({ imageUrl: downloadUrl })
 		}
