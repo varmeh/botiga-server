@@ -1,4 +1,7 @@
 import CreateHttpError from 'http-errors'
+import tinify from 'tinify'
+import { nanoid } from 'nanoid'
+
 import { token, aws, winston } from '../../../util'
 import {
 	createProduct,
@@ -6,6 +9,8 @@ import {
 	updateProduct,
 	removeProduct
 } from './seller.products.dao'
+
+tinify.key = process.env.TINY_PNG_SECRET
 
 export const postProduct = async (req, res, next) => {
 	try {
@@ -141,6 +146,54 @@ export const patchProduct = async (req, res, next) => {
 			productId: updatedProduct._id,
 			message: 'product updated'
 		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postProductImage = async (req, res, next) => {
+	try {
+		const image = req.file
+
+		if (!image) {
+			res.status(422).json({
+				message: 'Attached file should be an image of type - png/jpg/jpeg'
+			})
+		}
+
+		const [_, imageType] = image.mimetype.split('/')
+		const source = tinify
+			.fromBuffer(image.buffer)
+			.preserve('copyright', 'creation')
+
+		const imageUniqueId = nanoid(6)
+
+		let buffer = await source
+			.resize({ method: 'fit', width: 600, height: 600 })
+			.toBuffer()
+
+		const downloadUrl = await aws.s3.uploadFile({
+			fileName: `${token.get(req)}_${imageUniqueId}.${imageType}`,
+			contentType: image.mimetype,
+			file: buffer
+		})
+
+		if (req.body.isMainImage) {
+			buffer = await source
+				.resize({ method: 'fit', width: 180, height: 180 })
+				.toBuffer()
+
+			const coverImageUrl = await aws.s3.uploadFile({
+				fileName: `${token.get(req)}_${imageUniqueId}_cover.${imageType}`,
+				contentType: image.mimetype,
+				file: buffer
+			})
+
+			res.json({ imageUrl: downloadUrl, imageUrlCover: coverImageUrl })
+		} else {
+			res.json({ imageUrl: downloadUrl })
+		}
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

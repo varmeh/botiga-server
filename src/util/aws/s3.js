@@ -6,8 +6,9 @@ import aws from './aws.config'
 
 const awsS3 = new aws.S3({ apiVersion: '2006-03-01' })
 
+const { AWS_BUCKET_NAME, AWS_REGION } = process.env
+
 const getPredefinedUrl = async (fileName, contentType) => {
-	const { AWS_BUCKET_NAME, AWS_REGION } = process.env
 	try {
 		const data = await awsS3.getSignedUrlPromise('putObject', {
 			Bucket: AWS_BUCKET_NAME,
@@ -29,6 +30,28 @@ const getPredefinedUrl = async (fileName, contentType) => {
 		return Promise.reject(
 			new CreateHttpError[500]('Unable to generate image url')
 		)
+	}
+}
+
+const uploadFile = async ({ fileName, contentType, file }) => {
+	try {
+		const data = await awsS3
+			.upload({
+				Bucket: AWS_BUCKET_NAME,
+				Key: fileName,
+				ContentType: contentType,
+				Body: file,
+				ACL: 'public-read'
+			})
+			.promise()
+
+		return data.Location
+	} catch (error) {
+		winston.debug('@error awsUploadImage failed', {
+			error,
+			msg: error.message
+		})
+		return Promise.reject(new CreateHttpError[500]('Image upload failed'))
 	}
 }
 
@@ -57,5 +80,6 @@ export default {
 				new CreateHttpError[500]('Unable to generate image url')
 			)
 		}
-	}
+	},
+	uploadFile
 }

@@ -52,6 +52,8 @@ export const patchProductValidator = [
 	boolValidator('updateImage')
 ]
 
+export const postProductImageValidator = boolValidator('isMainImage')
+
 export const deleteProductValidator = [
 	paramObjectIdValidator('categoryId'),
 	paramObjectIdValidator('productId')

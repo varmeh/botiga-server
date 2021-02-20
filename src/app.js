@@ -2,6 +2,7 @@ import express from 'express'
 import rTracer from 'cls-rtracer'
 import cors from 'cors'
 import helmet from 'helmet'
+import multer from 'multer'
 
 import {
 	logErrorMiddleware,
@@ -26,6 +27,20 @@ app.use(
 		exposedHeaders: ['Authorization']
 	})
 )
+const fileFilter = (_, file, cb) => {
+	if (
+		file.mimetype === 'image/png' ||
+		file.mimetype === 'image/jpg' ||
+		file.mimetype === 'image/jpeg'
+	) {
+		cb(null, true)
+	} else {
+		// File not allowed
+		cb(null, false)
+	}
+}
+app.use(multer({ fileFilter }).single('image'))
+
 app.use('/*', express.json())
 
 /* Configure Logger */

@@ -4,14 +4,16 @@ import { validationMiddleware, token } from '../../../util'
 import {
 	postProductValidator,
 	patchProductValidator,
-	deleteProductValidator
+	deleteProductValidator,
+	postProductImageValidator
 } from './seller.products.validator'
 
 import {
 	postProduct,
 	getProducts,
 	deleteProduct,
-	patchProduct
+	patchProduct,
+	postProductImage
 } from './seller.products.controller'
 
 const router = Router()
@@ -38,6 +40,14 @@ router.delete(
 	deleteProductValidator,
 	validationMiddleware,
 	deleteProduct
+)
+
+router.post(
+	'/images',
+	token.authenticationMiddleware,
+	postProductImageValidator,
+	validationMiddleware,
+	postProductImage
 )
 
 export default router
