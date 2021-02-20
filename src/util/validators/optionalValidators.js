@@ -56,3 +56,23 @@ export const decimalOptionalValidator = field =>
 		.isDecimal()
 		.withMessage(validationMessages.decimal)
 		.toFloat()
+
+export const imageUrlArrayOptionalValidator = (field, maxLength) =>
+	body(field)
+		.optional({ nullable: true, checkFalsy: true })
+		.custom(arr => Array.isArray(arr))
+		.withMessage('should be an array')
+		.bail()
+		.custom(arr => arr.length <= maxLength)
+		.withMessage(`should have less than ${maxLength} images`)
+		.bail()
+		.custom(arr => {
+			let isValidArrayOfUrls = true
+			arr.forEach(val => {
+				if (!val.startsWith('https://')) {
+					isValidArrayOfUrls = false
+				}
+			})
+			return isValidArrayOfUrls
+		})
+		.withMessage('should have valid urls')

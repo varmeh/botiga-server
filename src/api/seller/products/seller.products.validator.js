@@ -1,5 +1,3 @@
-import { body } from 'express-validator'
-
 import {
 	emptyValidator,
 	objectIdValidator,
@@ -8,27 +6,9 @@ import {
 	boolValidator,
 	paramObjectIdValidator,
 	urlOptionalValidator,
-	decimalOptionalValidator
+	decimalOptionalValidator,
+	imageUrlArrayOptionalValidator
 } from '../../../util'
-
-const secondaryImageUrlsValidator = body('secondaryImageUrls')
-	.optional({ nullable: true, checkFalsy: true })
-	.custom(arr => Array.isArray(arr))
-	.withMessage('should be an array')
-	.bail()
-	.custom(arr => arr.length <= 4)
-	.withMessage('should have less than 4 secondary images')
-	.bail()
-	.custom(arr => {
-		let isValidArrayOfUrls = true
-		arr.forEach(val => {
-			if (!val.startsWith('https://')) {
-				isValidArrayOfUrls = false
-			}
-		})
-		return isValidArrayOfUrls
-	})
-	.withMessage('should have valid urls')
 
 export const postProductValidator = [
 	objectIdValidator('categoryId'),
@@ -49,7 +29,7 @@ export const postProductValidator = [
 	emptyOptionalValidator('description'),
 	urlOptionalValidator('imageUrl'),
 	urlOptionalValidator('imageUrlLarge'),
-	secondaryImageUrlsValidator
+	imageUrlArrayOptionalValidator('secondaryImageUrls', 4)
 ]
 
 export const patchProductValidator = [
@@ -74,7 +54,7 @@ export const patchProductValidator = [
 	urlOptionalValidator('imageUrl'),
 	boolValidator('updateImage'),
 	urlOptionalValidator('imageUrlLarge'),
-	secondaryImageUrlsValidator
+	imageUrlArrayOptionalValidator('secondaryImageUrls', 4)
 ]
 
 export const postProductImageValidator = boolValidator('isMainImage')
