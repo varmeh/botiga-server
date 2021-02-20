@@ -46,7 +46,7 @@ export const productSchema = new Schema({
 		type: String,
 		trim: true
 	},
-	imageUrlCoverLarge: {
+	imageUrlLarge: {
 		type: String,
 		trim: true
 	},

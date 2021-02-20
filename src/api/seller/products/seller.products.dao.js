@@ -67,7 +67,17 @@ const sortProducts = async (sellerId, categoryId) => {
 export const createProduct = async (
 	sellerId,
 	categoryId,
-	{ name, description, price, mrp, size, imageUrl, tag }
+	{
+		name,
+		description,
+		price,
+		mrp,
+		size,
+		imageUrl,
+		tag,
+		imageUrlLarge,
+		secondaryImageUrls
+	}
 ) => {
 	try {
 		const { seller, category } = await findCategoryHelper(sellerId, categoryId)
@@ -79,7 +89,9 @@ export const createProduct = async (
 			mrp,
 			size,
 			imageUrl,
-			tag
+			tag,
+			imageUrlLarge,
+			secondaryImageUrls
 		})
 
 		const updatedSeller = await seller.save()
