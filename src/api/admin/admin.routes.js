@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { validationMiddleware } from '../../util'
 import {
+	getApartmentValidator,
 	postApartmentValidator,
 	postBusinessCategoryValidator,
 	postNotificationTopicValidator,
@@ -17,6 +18,7 @@ import {
 } from './admin.validator'
 
 import {
+	getApartment,
 	postApartment,
 	postBusinessCategory,
 	postNotificationTopic,
@@ -34,6 +36,14 @@ import {
 } from './admin.controller'
 
 const router = Router()
+
+
+router.get(
+	'/apartments/:apartmentId',
+	getApartmentValidator,
+	validationMiddleware,
+	getApartment
+)
 
 router.post(
 	'/apartments',

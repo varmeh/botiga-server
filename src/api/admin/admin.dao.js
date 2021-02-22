@@ -3,6 +3,30 @@ import CreateHttpError from 'http-errors'
 import { winston, moment } from '../../util'
 import { Apartment, Seller, Order } from '../../models'
 
+export const findApartment = async apartmentId => {
+	try {
+		const apartments = await Apartment.find(
+			{ _id: apartmentId },
+			{
+				name: 1,
+				area: 1,
+				city: 1,
+				state: 1,
+				pincode: 1,
+				banners: 1,
+				sellers: 1
+			}
+		)
+		if (apartments.length === 0) {
+			return Promise.reject(new CreateHttpError[404]('Apartment not found'))
+		}
+		return apartments[0]
+	} catch (error) {
+		winston.debug('@error findApartment', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
 export const createApartment = async ({
 	name,
 	area,

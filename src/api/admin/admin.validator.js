@@ -12,6 +12,9 @@ import {
 	boolValidator
 } from '../../util'
 
+
+export const getApartmentValidator = paramObjectIdValidator('apartmentId')
+
 export const postApartmentValidator = [
 	emptyValidator('name'),
 	emptyValidator('city'),

@@ -11,6 +11,7 @@ import {
 	winston
 } from '../../util'
 import {
+	findApartment,
 	createApartment,
 	findSellerByNumber,
 	updateSellerBankDetails,
@@ -126,6 +127,17 @@ const sellerOrchestrator = seller => {
 	}
 
 	return data
+}
+
+
+export const getApartment = async (req, res, next) => {
+	try {
+		const apartment = await findApartment(req.params.apartmentId)
+		res.json(apartment)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
 }
 
 export const postApartment = async (req, res, next) => {
