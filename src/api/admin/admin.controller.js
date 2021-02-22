@@ -12,6 +12,7 @@ import {
 } from '../../util'
 import {
 	findApartment,
+	updateApartmentBanners,
 	createApartment,
 	findSellerByNumber,
 	updateSellerBankDetails,
@@ -129,7 +130,6 @@ const sellerOrchestrator = seller => {
 	return data
 }
 
-
 export const getApartment = async (req, res, next) => {
 	try {
 		const apartment = await findApartment(req.params.apartmentId)
@@ -144,6 +144,16 @@ export const postApartment = async (req, res, next) => {
 	try {
 		const areas = await createApartment(req.body)
 		res.json(areas)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchApartmentBanners = async (req, res, next) => {
+	try {
+		const apartment = await updateApartmentBanners(req.body)
+		res.json(apartment)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

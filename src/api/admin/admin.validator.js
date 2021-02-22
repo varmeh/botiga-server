@@ -9,9 +9,9 @@ import {
 	boolOptionalValidator,
 	phoneValidator,
 	paramObjectIdValidator,
-	boolValidator
+	boolValidator,
+	imageUrlArrayOptionalValidator
 } from '../../util'
-
 
 export const getApartmentValidator = paramObjectIdValidator('apartmentId')
 
@@ -23,6 +23,11 @@ export const postApartmentValidator = [
 	pincodeValidator('pincode'),
 	decimalValidator('location.lat'),
 	decimalValidator('location.long')
+]
+
+export const patchApartmentBannersValidator = [
+	objectIdValidator('apartmentId'),
+	imageUrlArrayOptionalValidator('banners', 7)
 ]
 
 export const postBusinessCategoryValidator = [emptyValidator('category')]

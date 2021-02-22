@@ -3,6 +3,7 @@ import { validationMiddleware } from '../../util'
 import {
 	getApartmentValidator,
 	postApartmentValidator,
+	patchApartmentBannersValidator,
 	postBusinessCategoryValidator,
 	postNotificationTopicValidator,
 	postNotificationUserValidator,
@@ -20,6 +21,7 @@ import {
 import {
 	getApartment,
 	postApartment,
+	patchApartmentBanners,
 	postBusinessCategory,
 	postNotificationTopic,
 	postNotificationUser,
@@ -37,7 +39,6 @@ import {
 
 const router = Router()
 
-
 router.get(
 	'/apartments/:apartmentId',
 	getApartmentValidator,
@@ -50,6 +51,13 @@ router.post(
 	postApartmentValidator,
 	validationMiddleware,
 	postApartment
+)
+
+router.patch(
+	'/apartments/banners',
+	patchApartmentBannersValidator,
+	validationMiddleware,
+	patchApartmentBanners
 )
 
 router.post(

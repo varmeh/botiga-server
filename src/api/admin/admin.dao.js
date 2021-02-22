@@ -58,6 +58,21 @@ export const createApartment = async ({
 	}
 }
 
+export const updateApartmentBanners = async ({ apartmentId, banners }) => {
+	try {
+		const apartment = await findApartment(apartmentId)
+
+		apartment.banners = banners
+
+		const updatedApartment = await apartment.save()
+
+		return updatedApartment
+	} catch (error) {
+		winston.debug('@error updateApartmentBanners', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
 export const findSellerByNumber = async phone => {
 	try {
 		const seller = await Seller.findOne({ 'contact.phone': phone })
