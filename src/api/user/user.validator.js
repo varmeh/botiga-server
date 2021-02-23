@@ -7,7 +7,7 @@ import {
 	arrayValidator
 } from '../../util'
 
-export const getSellerValidator = paramEmptyValidator('apartmentId')
+export const paramApartmentIdValidator = paramEmptyValidator('apartmentId')
 
 export const getProductsValidator = paramObjectIdValidator('sellerId')
 

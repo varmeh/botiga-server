@@ -4,6 +4,7 @@ import { token } from '../../util'
 import { apartmentVirtuals } from '../../models'
 import {
 	findSellersInApartment,
+	findApartmentInfo,
 	findProductsBySeller,
 	findCart,
 	updateCart
@@ -46,6 +47,16 @@ export const getSellersInApartment = async (req, res, next) => {
 		})
 
 		res.json(sellersData)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getApartmentData = async (req, res, next) => {
+	try {
+		const apartmentInfo = await findApartmentInfo(req.params.apartmentId)
+		res.json(apartmentInfo)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

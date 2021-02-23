@@ -6,7 +6,7 @@ import authRouter from './auth/user.auth.routes'
 import orderRouter from './order/user.order.routes'
 
 import {
-	getSellerValidator,
+	paramApartmentIdValidator,
 	getProductsValidator,
 	getCartValidator,
 	patchCartValidator
@@ -14,6 +14,7 @@ import {
 
 import {
 	getSellersInApartment,
+	getApartmentData,
 	getProductsOfSeller,
 	getUserCart,
 	patchUserCart
@@ -26,9 +27,16 @@ router.use('/orders', orderRouter)
 
 router.get(
 	'/sellers/:apartmentId',
-	getSellerValidator,
+	paramApartmentIdValidator,
 	validationMiddleware,
 	getSellersInApartment
+)
+
+router.get(
+	'/apartments/:apartmentId',
+	paramApartmentIdValidator,
+	validationMiddleware,
+	getApartmentData
 )
 
 router.get(

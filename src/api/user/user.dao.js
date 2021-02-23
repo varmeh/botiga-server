@@ -33,6 +33,24 @@ export const findSellersInApartment = async apartmentId => {
 	}
 }
 
+export const findApartmentInfo = async apartmentId => {
+	try {
+		const apartment = await Apartment.find(
+			{ _id: apartmentId },
+			{ name: 1, area: 1, city: 1, state: 1, pincode: 1, banners: 1 }
+		)
+
+		if (apartment.length > 0) {
+			return apartment[0]
+		} else {
+			return Promise.reject(new CreateHttpError[404]('Apartment Not Found'))
+		}
+	} catch (error) {
+		winston.debug('@error findApartmentInfo', { msg: error.message })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
 export const findProductsBySeller = async sellerId => {
 	try {
 		const seller = await Seller.findById(sellerId)
