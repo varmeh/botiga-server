@@ -70,7 +70,9 @@ export const getProductsOfSeller = async (req, res, next) => {
 					description,
 					imageUrl,
 					available,
-					tag
+					tag,
+					imageUrlLarge,
+					secondaryImageUrls
 				} = product
 
 				return {
@@ -82,7 +84,9 @@ export const getProductsOfSeller = async (req, res, next) => {
 					description,
 					imageUrl,
 					size: product.sizeInfo,
-					tag
+					tag,
+					imageUrlLarge,
+					secondaryImageUrls
 				}
 			})
 
