@@ -10,41 +10,47 @@ import {
 	updateCart
 } from './user.dao'
 
+const sellersOrchestrator = sellers => {
+	const sellersData = sellers.map(seller => {
+		const {
+			_id,
+			contact: { phone, whatsapp, address },
+			fssaiLicenseNumber,
+			live,
+			brandName,
+			businessCategory,
+			brandImageUrl,
+			tagline,
+			delivery: { type, day, slot }
+		} = seller
+
+		return {
+			id: _id,
+			brandName,
+			live,
+			businessCategory,
+			brandImageUrl,
+			tagline,
+			phone,
+			whatsapp,
+			deliveryMessage: apartmentVirtuals.deliveryMessage(type, day),
+			deliveryDate: apartmentVirtuals.deliveryDate(type, day),
+			deliverySlot: slot,
+			fssaiLicenseNumber,
+			address
+		}
+	})
+
+	return sellersData
+}
+
 export const getSellersInApartment = async (req, res, next) => {
 	const { apartmentId } = req.params
 
 	try {
 		const sellers = await findSellersInApartment(apartmentId)
 
-		const sellersData = sellers.map(seller => {
-			const {
-				_id,
-				contact: { phone, whatsapp, address },
-				fssaiLicenseNumber,
-				live,
-				brandName,
-				businessCategory,
-				brandImageUrl,
-				tagline,
-				delivery: { type, day, slot }
-			} = seller
-
-			return {
-				id: _id,
-				brandName,
-				live,
-				businessCategory,
-				brandImageUrl,
-				tagline,
-				phone,
-				whatsapp,
-				deliveryMessage: apartmentVirtuals.deliveryMessage(type, day),
-				deliveryDate: apartmentVirtuals.deliveryDate(type, day),
-				deliverySlot: slot,
-				fssaiLicenseNumber,
-				address
-			}
-		})
+		const sellersData = sellersOrchestrator(sellers)
 
 		res.json(sellersData)
 	} catch (error) {
@@ -55,8 +61,26 @@ export const getSellersInApartment = async (req, res, next) => {
 
 export const getApartmentData = async (req, res, next) => {
 	try {
-		const apartmentInfo = await findApartmentInfo(req.params.apartmentId)
-		res.json(apartmentInfo)
+		const { apartmentId } = req.params
+		const sellers = await findSellersInApartment(apartmentId)
+		const {
+			banners,
+			name,
+			area,
+			city,
+			state,
+			pincode
+		} = await findApartmentInfo(apartmentId)
+
+		res.json({
+			name,
+			area,
+			city,
+			state,
+			pincode,
+			banners,
+			sellers: sellersOrchestrator(sellers)
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
