@@ -5,7 +5,11 @@ import { Apartment, Seller } from '../../../models'
 
 export const findSeller = async sellerId => {
 	try {
-		return await Seller.findById(sellerId)
+		const seller = await Seller.findById(sellerId)
+		if (!seller) {
+			return Promise.reject(new CreateHttpError[404]('Seller Not Found'))
+		}
+		return seller
 	} catch (error) {
 		winston.debug('@error findSeller', { error })
 		return Promise.reject(new CreateHttpError[500]())
@@ -175,6 +179,19 @@ export const findBankDetails = async sellerId => {
 		}
 	} catch (error) {
 		winston.debug('@error getBankDetails', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const updateBanners = async (sellerId, banners) => {
+	try {
+		const seller = await findSeller(sellerId)
+
+		seller.banners = banners
+
+		return await seller.save()
+	} catch (error) {
+		winston.debug('@error updateBanners', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

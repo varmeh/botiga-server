@@ -6,7 +6,8 @@ import {
 	updateContactInformation,
 	updateBusinessInformation,
 	updateBankDetails,
-	findBankDetails
+	findBankDetails,
+	updateBanners
 } from './seller.profile.dao'
 
 const getContactInfo = contact => {
@@ -174,6 +175,31 @@ export const patchBankDetails = async (req, res, next) => {
 		res.json({
 			message:
 				'Bank details updated. Please contact support team for bank details validation'
+		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getBanners = async (req, res, next) => {
+	try {
+		const seller = await findSeller(token.get(req))
+
+		res.json({ banners: seller.banners })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchBanners = async (req, res, next) => {
+	try {
+		const seller = await updateBanners(token.get(req), req.body.banners)
+
+		res.json({
+			message: 'banners updated',
+			banners: seller.banners
 		})
 	} catch (error) {
 		const { status, message } = error

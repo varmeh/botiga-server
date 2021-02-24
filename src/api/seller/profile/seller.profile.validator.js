@@ -6,7 +6,8 @@ import {
 	boolValidator,
 	alphaNumericValidator,
 	emptyOptionalValidator,
-	urlOptionalValidator
+	urlOptionalValidator,
+	imageUrlArrayOptionalValidator
 } from '../../../util'
 
 export const patchContactValidator = [
@@ -40,4 +41,8 @@ export const patchBankDetailsValidator = [
 	emptyValidator('accountType')
 		.matches(/^(current|savings)$/, 'i')
 		.withMessage('should be either current or savings')
+]
+
+export const patchBannersValidator = [
+	imageUrlArrayOptionalValidator('banners', 3)
 ]

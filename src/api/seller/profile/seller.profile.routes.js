@@ -3,7 +3,8 @@ import { validationMiddleware, token } from '../../../util'
 import {
 	patchContactValidator,
 	patchBusinessValidator,
-	patchBankDetailsValidator
+	patchBankDetailsValidator,
+	patchBannersValidator
 } from './seller.profile.validator'
 import {
 	getProfileInformation,
@@ -12,7 +13,9 @@ import {
 	getBusinessInformation,
 	patchBusinessInformation,
 	getBankDetails,
-	patchBankDetails
+	patchBankDetails,
+	getBanners,
+	patchBanners
 } from './seller.profile.controller'
 
 const router = Router()
@@ -47,6 +50,16 @@ router.patch(
 	patchBankDetailsValidator,
 	validationMiddleware,
 	patchBankDetails
+)
+
+router.get('/banners', token.authenticationMiddleware, getBanners)
+
+router.patch(
+	'/banners',
+	token.authenticationMiddleware,
+	patchBannersValidator,
+	validationMiddleware,
+	patchBanners
 )
 
 export default router
