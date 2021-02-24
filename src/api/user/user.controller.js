@@ -5,7 +5,7 @@ import { apartmentVirtuals } from '../../models'
 import {
 	findSellersInApartment,
 	findApartmentInfo,
-	findProductsBySeller,
+	findSeller,
 	findCart,
 	updateCart
 } from './user.dao'
@@ -87,48 +87,65 @@ export const getApartmentData = async (req, res, next) => {
 	}
 }
 
+const categoryOrchestrator = categories => {
+	const flatCategories = categories.map(category => {
+		const { _id, name, products } = category
+
+		const flatProducts = products.map(product => {
+			const {
+				_id,
+				name,
+				price,
+				mrp,
+				description,
+				imageUrl,
+				available,
+				tag,
+				imageUrlLarge,
+				secondaryImageUrls
+			} = product
+
+			return {
+				id: _id,
+				name,
+				price,
+				mrp,
+				available,
+				description,
+				imageUrl,
+				size: product.sizeInfo,
+				tag,
+				imageUrlLarge,
+				secondaryImageUrls
+			}
+		})
+
+		return { categoryId: _id, name, products: flatProducts }
+	})
+
+	return flatCategories
+}
+
 export const getProductsOfSeller = async (req, res, next) => {
 	const { sellerId } = req.params
 
 	try {
-		const categories = await findProductsBySeller(sellerId)
+		const { categories } = await findSeller(sellerId)
 
-		const flatCategories = categories.map(category => {
-			const { _id, name, products } = category
+		res.json(categoryOrchestrator(categories))
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
 
-			const flatProducts = products.map(product => {
-				const {
-					_id,
-					name,
-					price,
-					mrp,
-					description,
-					imageUrl,
-					available,
-					tag,
-					imageUrlLarge,
-					secondaryImageUrls
-				} = product
+export const getSellerData = async (req, res, next) => {
+	const { sellerId } = req.params
 
-				return {
-					id: _id,
-					name,
-					price,
-					mrp,
-					available,
-					description,
-					imageUrl,
-					size: product.sizeInfo,
-					tag,
-					imageUrlLarge,
-					secondaryImageUrls
-				}
-			})
+	try {
+		const { banners, categories } = await findSeller(sellerId)
 
-			return { categoryId: _id, name, products: flatProducts }
-		})
-
-		res.json(flatCategories)
+		res.json({ banners, categories: categoryOrchestrator(categories) })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

@@ -51,7 +51,7 @@ export const findApartmentInfo = async apartmentId => {
 	}
 }
 
-export const findProductsBySeller = async sellerId => {
+export const findSeller = async sellerId => {
 	try {
 		const seller = await Seller.findById(sellerId)
 
@@ -59,9 +59,9 @@ export const findProductsBySeller = async sellerId => {
 			return Promise.reject(new CreateHttpError[404]('Seller Not Found'))
 		}
 
-		return seller.categories
+		return seller
 	} catch (error) {
-		winston.debug('@error findProductsBySeller', { msg: error.message })
+		winston.debug('@error findSeller', { msg: error.message })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

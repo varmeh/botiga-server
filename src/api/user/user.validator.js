@@ -9,7 +9,7 @@ import {
 
 export const paramApartmentIdValidator = paramEmptyValidator('apartmentId')
 
-export const getProductsValidator = paramObjectIdValidator('sellerId')
+export const paramSellerIdValidator = paramObjectIdValidator('sellerId')
 
 export const getCartValidator = paramObjectIdValidator('addressId')
 

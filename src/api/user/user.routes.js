@@ -7,7 +7,7 @@ import orderRouter from './order/user.order.routes'
 
 import {
 	paramApartmentIdValidator,
-	getProductsValidator,
+	paramSellerIdValidator,
 	getCartValidator,
 	patchCartValidator
 } from './user.validator'
@@ -16,6 +16,7 @@ import {
 	getSellersInApartment,
 	getApartmentData,
 	getProductsOfSeller,
+	getSellerData,
 	getUserCart,
 	patchUserCart
 } from './user.controller'
@@ -41,9 +42,16 @@ router.get(
 
 router.get(
 	'/products/:sellerId',
-	getProductsValidator,
+	paramSellerIdValidator,
 	validationMiddleware,
 	getProductsOfSeller
+)
+
+router.get(
+	'/sellers/data/:sellerId',
+	paramSellerIdValidator,
+	validationMiddleware,
+	getSellerData
 )
 
 router.get(
