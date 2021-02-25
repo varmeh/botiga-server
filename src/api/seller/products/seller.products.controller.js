@@ -182,7 +182,7 @@ export const postProductImage = async (req, res, next) => {
 		const imageUniqueId = nanoid(6)
 
 		let buffer = await source
-			.resize({ method: 'fit', width: 600, height: 600 })
+			.resize({ method: 'fit', width: 900, height: 900 })
 			.toBuffer()
 
 		const downloadUrl = await aws.s3.uploadFile({
@@ -193,7 +193,7 @@ export const postProductImage = async (req, res, next) => {
 
 		if (req.body.isMainImage) {
 			buffer = await source
-				.resize({ method: 'fit', width: 240, height: 240 })
+				.resize({ method: 'fit', width: 360, height: 360 })
 				.toBuffer()
 
 			const coverImageUrl = await aws.s3.uploadFile({
