@@ -193,7 +193,7 @@ export const postProductImage = async (req, res, next) => {
 
 		if (req.body.isMainImage) {
 			buffer = await source
-				.resize({ method: 'fit', width: 180, height: 180 })
+				.resize({ method: 'fit', width: 240, height: 240 })
 				.toBuffer()
 
 			const coverImageUrl = await aws.s3.uploadFile({
