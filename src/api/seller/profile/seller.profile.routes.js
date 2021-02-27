@@ -15,7 +15,8 @@ import {
 	getBankDetails,
 	patchBankDetails,
 	getBanners,
-	patchBanners
+	patchBanners,
+	patchBannerImage
 } from './seller.profile.controller'
 
 const router = Router()
@@ -53,6 +54,12 @@ router.patch(
 )
 
 router.get('/banners', token.authenticationMiddleware, getBanners)
+
+router.patch(
+	'/banners/images',
+	token.authenticationMiddleware,
+	patchBannerImage
+)
 
 router.patch(
 	'/banners',

@@ -1,6 +1,7 @@
 import CreateHttpError from 'http-errors'
 
-import { token, aws } from '../../../util'
+import { nanoid } from 'nanoid'
+import { token, aws, uploadTinifyImages } from '../../../util'
 import {
 	findSeller,
 	updateContactInformation,
@@ -201,6 +202,32 @@ export const patchBanners = async (req, res, next) => {
 			message: 'banners updated',
 			banners: seller.banners
 		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchBannerImage = async (req, res, next) => {
+	try {
+		const image = req.file
+
+		if (!image) {
+			res.status(422).json({
+				message: 'Attached file should be an image of type - png/jpg/jpeg'
+			})
+		}
+
+		const fileName = `${token.get(req)}_${nanoid(6)}`
+
+		const imageUrl = await uploadTinifyImages({
+			image,
+			fileNameToBeSavedInCloud: fileName,
+			width: 960,
+			height: 480
+		})
+
+		res.json({ imageUrl })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
