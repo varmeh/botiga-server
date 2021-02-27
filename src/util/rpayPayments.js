@@ -1,6 +1,7 @@
+/* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
 import axios from 'axios'
-// import CreateHttpError from 'http-errors'
+import CreateHttpError from 'http-errors'
 import Razorpay from 'razorpay'
 
 import { Order, PaymentStatus, User } from '../models'
@@ -138,7 +139,7 @@ const paymentWebhook = async (data, signature) => {
 		order.payment.paymentId = entity.id
 		order.payment.orderId = entity.order_id
 		order.payment.paymentMode = entity.method
-		await order.save()
+		const updatedOrder = await order.save()
 
 		const user = await User.findById(order.buyer.id)
 
@@ -166,6 +167,11 @@ const paymentWebhook = async (data, signature) => {
 				<br>Team Botiga`
 			})
 		} else {
+			// Payment Captured event was registered. If order payment status is not success, order payment update failed
+			if (updatedOrder.payment.status !== PaymentStatus.success) {
+				throw Error('Payment Order status Success not updated in db')
+			}
+
 			winston.info(`@webhook payment success - ${entity.id}`, {
 				paymentId: entity.id,
 				orderNumber: order.order.number,
@@ -179,12 +185,14 @@ const paymentWebhook = async (data, signature) => {
 		}
 		return null
 	} catch (error) {
-		return winston.error('@payment webhook failed', {
+		winston.error('@payment webhook failed', {
 			error,
 			errorMessage: error.message,
 			event: data.event,
 			data: data.payload
 		})
+
+		return Promise.reject(new CreateHttpError[500]('Payment Webhook Failure'))
 	}
 }
 
