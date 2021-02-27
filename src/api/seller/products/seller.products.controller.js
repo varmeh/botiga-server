@@ -1,16 +1,13 @@
 import CreateHttpError from 'http-errors'
-import tinify from 'tinify'
 import { nanoid } from 'nanoid'
 
-import { token, aws, winston } from '../../../util'
+import { token, aws, winston, uploadTinifyImages } from '../../../util'
 import {
 	createProduct,
 	findProducts,
 	updateProduct,
 	removeProduct
 } from './seller.products.dao'
-
-tinify.key = process.env.TINY_PNG_SECRET
 
 export const postProduct = async (req, res, next) => {
 	try {
@@ -174,32 +171,21 @@ export const postProductImage = async (req, res, next) => {
 			})
 		}
 
-		const [_, imageType] = image.mimetype.split('/')
-		const source = tinify
-			.fromBuffer(image.buffer)
-			.preserve('copyright', 'creation')
+		const fileName = `${token.get(req)}_${nanoid(6)}`
 
-		const imageUniqueId = nanoid(6)
-
-		let buffer = await source
-			.resize({ method: 'fit', width: 900, height: 900 })
-			.toBuffer()
-
-		const downloadUrl = await aws.s3.uploadFile({
-			fileName: `${token.get(req)}_${imageUniqueId}.${imageType}`,
-			contentType: image.mimetype,
-			file: buffer
+		const downloadUrl = await uploadTinifyImages({
+			image,
+			fileNameToBeSavedInCloud: fileName,
+			width: 900,
+			height: 900
 		})
 
 		if (req.body.isMainImage) {
-			buffer = await source
-				.resize({ method: 'fit', width: 360, height: 360 })
-				.toBuffer()
-
-			const coverImageUrl = await aws.s3.uploadFile({
-				fileName: `${token.get(req)}_${imageUniqueId}_small.${imageType}`,
-				contentType: image.mimetype,
-				file: buffer
+			const coverImageUrl = await uploadTinifyImages({
+				image,
+				fileNameToBeSavedInCloud: `${fileName}_small`,
+				width: 360,
+				height: 360
 			})
 
 			res.json({ imageUrl: downloadUrl, imageUrlSmall: coverImageUrl })
