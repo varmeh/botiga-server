@@ -40,7 +40,9 @@ const productsOrchestrator = categories => {
 				description,
 				imageUrl,
 				available,
-				tag
+				tag,
+				imageUrlLarge,
+				secondaryImageUrls
 			} = product
 
 			return {
@@ -52,7 +54,9 @@ const productsOrchestrator = categories => {
 				description,
 				imageUrl,
 				size: product.sizeInfo,
-				tag
+				tag,
+				imageUrlLarge,
+				secondaryImageUrls
 			}
 		})
 
