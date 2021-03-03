@@ -1,6 +1,5 @@
-import moment from 'moment'
 import CreateHttpError from 'http-errors'
-import { winston, crypto } from '../../../util'
+import { winston, crypto, moment } from '../../../util'
 import { Apartment, Seller } from '../../../models'
 
 export const findSeller = async sellerId => {
@@ -192,6 +191,109 @@ export const updateBanners = async (sellerId, banners) => {
 		return await seller.save()
 	} catch (error) {
 		winston.debug('@error updateBanners', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+/**********************************
+ * Coupons Db Access
+ *********************************/
+
+export const createCoupon = async (
+	sellerId,
+	{
+		couponCode,
+		discountType,
+		discountValue,
+		minimumOrderValue,
+		maxDiscountAmount,
+		expiryDate,
+		visibleToAllCustomers
+	}
+) => {
+	try {
+		const seller = await findSeller(sellerId)
+
+		seller.coupons.push({
+			couponCode,
+			discountType,
+			discountValue,
+			minimumOrderValue,
+			maxDiscountAmount,
+			expiryDate: moment(expiryDate, 'YYYY-MM-DD').endOf('day').toDate(),
+			visibleToAllCustomers
+		})
+
+		const updatedSeller = await seller.save()
+
+		return updatedSeller.coupons
+	} catch (error) {
+		winston.debug('@error createCoupon', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const updateCoupon = async (
+	sellerId,
+	{
+		couponId,
+		couponCode,
+		discountType,
+		discountValue,
+		minimumOrderValue,
+		maxDiscountAmount,
+		expiryDate,
+		visibleToAllCustomers
+	}
+) => {
+	try {
+		const seller = await findSeller(sellerId)
+
+		const coupon = seller.coupons.id(couponId)
+
+		if (!coupon) {
+			return Promise.reject(new CreateHttpError[404]('Coupon Not Found'))
+		}
+
+		coupon.couponCode = couponCode
+		coupon.discountType = discountType
+		coupon.discountValue = discountValue
+		coupon.minimumOrderValue = !minimumOrderValue
+			? coupon.minimumOrderValue
+			: minimumOrderValue
+		coupon.maxDiscountAmount = !maxDiscountAmount
+			? coupon.maxDiscountAmount
+			: maxDiscountAmount
+
+		coupon.expiryDate = moment(expiryDate, 'YYYY-MM-DD').endOf('day').toDate()
+
+		coupon.visibleToAllCustomers = visibleToAllCustomers ?? true
+
+		const updatedSeller = await seller.save()
+
+		return updatedSeller.coupons
+	} catch (error) {
+		winston.debug('@error updateCoupon', { error })
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const removeCoupon = async (sellerId, couponId) => {
+	try {
+		const seller = await findSeller(sellerId)
+
+		const coupon = seller.coupons.id(couponId)
+
+		if (!coupon) {
+			return Promise.reject(new CreateHttpError[404]('Coupon Not Found'))
+		}
+
+		coupon.remove()
+		const updatedSeller = await seller.save()
+
+		return updatedSeller.coupons
+	} catch (error) {
+		winston.debug('@error deleteCoupon', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

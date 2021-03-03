@@ -10,6 +10,13 @@ export const emptyOptionalValidator = field =>
 		.withMessage(validationMessages.empty)
 		.bail()
 
+export const numberOptionalValidator = field =>
+	emptyOptionalValidator(field)
+		.isInt()
+		.withMessage(validationMessages.numeric)
+		.bail()
+		.toInt()
+
 export const phoneOptionalValidator = field =>
 	emptyOptionalValidator(field)
 		.matches(/^[5-9]\d{9}$/)

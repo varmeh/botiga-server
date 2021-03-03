@@ -4,7 +4,10 @@ import {
 	patchContactValidator,
 	patchBusinessValidator,
 	patchBankDetailsValidator,
-	patchBannersValidator
+	patchBannersValidator,
+	postCouponsValidator,
+	patchCouponsValidator,
+	deleteCouponValidator
 } from './seller.profile.validator'
 import {
 	getProfileInformation,
@@ -16,7 +19,11 @@ import {
 	patchBankDetails,
 	getBanners,
 	patchBanners,
-	patchBannerImage
+	patchBannerImage,
+	getCoupons,
+	postCoupon,
+	patchCoupon,
+	deleteCoupon
 } from './seller.profile.controller'
 
 const router = Router()
@@ -67,6 +74,31 @@ router.patch(
 	patchBannersValidator,
 	validationMiddleware,
 	patchBanners
+)
+
+router.get('/coupons', token.authenticationMiddleware, getCoupons)
+router.delete(
+	'/coupons/:couponId',
+	token.authenticationMiddleware,
+	deleteCouponValidator,
+	validationMiddleware,
+	deleteCoupon
+)
+
+router.post(
+	'/coupons',
+	token.authenticationMiddleware,
+	postCouponsValidator,
+	validationMiddleware,
+	postCoupon
+)
+
+router.patch(
+	'/coupons',
+	token.authenticationMiddleware,
+	patchCouponsValidator,
+	validationMiddleware,
+	patchCoupon
 )
 
 export default router

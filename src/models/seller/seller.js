@@ -42,6 +42,50 @@ export const sellerApartmentSchema = new Schema({
 	deliverySlot: String
 })
 
+export const CouponDiscountType = {
+	percentage: 'percentage',
+	value: 'value'
+}
+
+const couponSchema = new Schema({
+	couponCode: { type: String, required: true },
+	discountType: {
+		type: String,
+		enum: [CouponDiscountType.percentage, CouponDiscountType.value],
+		required: true
+	},
+	discountValue: {
+		type: Number,
+		required: true
+	},
+	minimumOrderValue: {
+		type: Number,
+		max: 500,
+		default: 0
+	},
+	maxDiscountAmount: {
+		type: Number
+	},
+	expiryDate: {
+		type: Date,
+		required: true
+	},
+	visibleToAllCustomers: {
+		type: Boolean,
+		default: true
+	}
+})
+
+couponSchema.method('toJSON', function () {
+	const obj = this.toObject()
+
+	// Rename _id field
+	obj.couponId = obj._id
+	delete obj._id
+
+	return obj
+})
+
 const sellerSchema = new Schema(
 	{
 		businessName: { type: String, required: true, immutable: true },
@@ -121,7 +165,8 @@ const sellerSchema = new Schema(
 		mid: String, // paytm merchant id for split payments. Separated from bank details to avoid encryption
 		categories: [categorySchema],
 		apartments: [sellerApartmentSchema],
-		banners: [String]
+		banners: [String],
+		coupons: [couponSchema]
 	},
 	{ timestamps: true }
 )

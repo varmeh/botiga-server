@@ -8,7 +8,10 @@ import {
 	updateBusinessInformation,
 	updateBankDetails,
 	findBankDetails,
-	updateBanners
+	updateBanners,
+	createCoupon,
+	updateCoupon,
+	removeCoupon
 } from './seller.profile.dao'
 
 const getContactInfo = contact => {
@@ -183,6 +186,10 @@ export const patchBankDetails = async (req, res, next) => {
 	}
 }
 
+/**********************************
+ * Banners API
+ *********************************/
+
 export const getBanners = async (req, res, next) => {
 	try {
 		const seller = await findSeller(token.get(req))
@@ -228,6 +235,62 @@ export const patchBannerImage = async (req, res, next) => {
 		})
 
 		res.json({ imageUrl })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+/**********************************
+ * Coupons API
+ *********************************/
+export const getCoupons = async (req, res, next) => {
+	try {
+		const seller = await findSeller(token.get(req))
+
+		res.json({ coupons: seller.coupons })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postCoupon = async (req, res, next) => {
+	try {
+		const coupons = await createCoupon(token.get(req), req.body)
+
+		res.json({
+			message: 'coupon created',
+			coupons
+		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchCoupon = async (req, res, next) => {
+	try {
+		const coupons = await updateCoupon(token.get(req), req.body)
+
+		res.json({
+			message: 'coupon updated',
+			coupons
+		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const deleteCoupon = async (req, res, next) => {
+	try {
+		const coupons = await removeCoupon(token.get(req), req.params.couponId)
+
+		res.json({
+			message: 'coupon deleted',
+			coupons
+		})
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

@@ -7,7 +7,13 @@ import {
 	alphaNumericValidator,
 	emptyOptionalValidator,
 	urlOptionalValidator,
-	imageUrlArrayOptionalValidator
+	imageUrlArrayOptionalValidator,
+	objectIdValidator,
+	numberValidator,
+	numberOptionalValidator,
+	dateValidator,
+	boolOptionalValidator,
+	paramObjectIdValidator
 } from '../../../util'
 
 export const patchContactValidator = [
@@ -46,3 +52,22 @@ export const patchBankDetailsValidator = [
 export const patchBannersValidator = [
 	imageUrlArrayOptionalValidator('banners', 3)
 ]
+
+export const postCouponsValidator = [
+	emptyValidator('couponCode'),
+	emptyValidator('discountType')
+		.matches(/^(percentage|value)$/, 'i')
+		.withMessage('should be either percentage or value'),
+	numberValidator('discountValue'),
+	numberOptionalValidator('minimumOrderValue'),
+	numberOptionalValidator('maxDiscountAmount'),
+	dateValidator('expiryDate'),
+	boolOptionalValidator('visibleToAllCustomers')
+]
+
+export const patchCouponsValidator = [
+	objectIdValidator('couponId'),
+	...postCouponsValidator
+]
+
+export const deleteCouponValidator = paramObjectIdValidator('couponId')
