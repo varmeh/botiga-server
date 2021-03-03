@@ -143,9 +143,9 @@ export const getSellerData = async (req, res, next) => {
 	const { sellerId } = req.params
 
 	try {
-		const { banners, categories } = await findSeller(sellerId)
+		const { banners, categories, coupons } = await findSeller(sellerId)
 
-		res.json({ banners, categories: categoryOrchestrator(categories) })
+		res.json({ banners, coupons, categories: categoryOrchestrator(categories) })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
