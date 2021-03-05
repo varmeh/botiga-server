@@ -16,6 +16,8 @@ export const createOrder = async ({
 	sellerId,
 	addressId,
 	totalAmount,
+	discountAmount,
+	couponCode,
 	products
 }) => {
 	try {
@@ -72,6 +74,8 @@ export const createOrder = async ({
 				number: chance().integer({ min: 100000, max: 999999 }),
 				status: 'open',
 				totalAmount,
+				discountAmount,
+				couponCode,
 				expectedDeliveryDate: apartmentManager.deliveryDate,
 				deliverySlot: apartmentManager.delivery.slot,
 				products

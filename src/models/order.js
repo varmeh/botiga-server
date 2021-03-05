@@ -77,6 +77,11 @@ const orderSchema = new Schema(
 				type: Number,
 				required: true
 			},
+			discountAmount: {
+				type: Number,
+				default: 0
+			},
+			couponCode: String,
 			expectedDeliveryDate: {
 				type: Date,
 				required: true

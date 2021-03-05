@@ -26,6 +26,8 @@ const orderOrchestrator = order => {
 			number,
 			status,
 			totalAmount,
+			discountAmount,
+			couponCode,
 			expectedDeliveryDate,
 			deliverySlot,
 			completionDate,
@@ -43,6 +45,8 @@ const orderOrchestrator = order => {
 		number,
 		status,
 		totalAmount,
+		discountAmount,
+		couponCode,
 		orderDate: createdAt,
 		expectedDeliveryDate,
 		deliverySlot,
@@ -87,7 +91,14 @@ const populateProductDetails = products => {
 }
 
 export const postOrder = async (req, res, next) => {
-	const { sellerId, addressId, totalAmount, products } = req.body
+	const {
+		sellerId,
+		addressId,
+		totalAmount,
+		couponCode,
+		discountAmount,
+		products
+	} = req.body
 
 	try {
 		// Verify Seller Id
@@ -96,6 +107,8 @@ export const postOrder = async (req, res, next) => {
 			sellerId,
 			addressId,
 			totalAmount,
+			couponCode,
+			discountAmount,
 			products
 		})
 
