@@ -23,8 +23,6 @@ configureApp(app)
 app.use(rTracer.expressMiddleware())
 app.use(helmet())
 
-app.use(cors({ optionsSuccessStatus: 200 }))
-
 const fileFilter = (_, file, cb) => {
 	if (
 		file.mimetype === 'image/png' ||
@@ -40,6 +38,8 @@ const fileFilter = (_, file, cb) => {
 app.use(multer({ fileFilter }).single('image'))
 
 app.use('/*', express.json())
+
+app.use(cors({ origin: '*', optionsSuccessStatus: 200 }))
 
 /* Configure Logger */
 app.use(logRequestMiddleware)
