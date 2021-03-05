@@ -131,7 +131,8 @@ export const removeProduct = async (sellerId, categoryId, productId) => {
 		)
 
 		product.remove()
-		return await seller.save()
+		await seller.save()
+		return product
 	} catch (error) {
 		winston.debug('@error removeProduct', logDbError(error))
 		return promiseRejectServerError()

@@ -91,7 +91,32 @@ export const getProducts = async (req, res, next) => {
 export const deleteProduct = async (req, res, next) => {
 	const { categoryId, productId } = req.params
 	try {
-		await removeProduct(token.get(req), categoryId, productId)
+		const removedProduct = await removeProduct(
+			token.get(req),
+			categoryId,
+			productId
+		)
+
+		// Remove Images
+		try {
+			const { imageUrl, imageUrlLarge, secondaryImageUrls } = removedProduct
+			if (imageUrl) {
+				await aws.s3.deleteImageUrl(imageUrl)
+			}
+			if (imageUrlLarge) {
+				await aws.s3.deleteImageUrl(imageUrlLarge)
+			}
+			if (secondaryImageUrls.length > 0) {
+				for (let i = 0; i < secondaryImageUrls.length; i++) {
+					await aws.s3.deleteImageUrl(secondaryImageUrls[i])
+				}
+			}
+		} catch (error) {
+			winston.error('@error deleteProduct', {
+				error: error.message,
+				msg: 'image deletion failed'
+			})
+		}
 
 		res.status(204).json()
 	} catch (error) {
