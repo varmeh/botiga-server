@@ -35,7 +35,9 @@ const fileFilter = (_, file, cb) => {
 		cb(null, false)
 	}
 }
-app.use(multer({ fileFilter }).single('image'))
+app.use(
+	multer({ fileFilter, limits: { fileSize: 1024 * 1024 * 5 } }).single('image')
+)
 
 app.use('/*', express.json())
 
