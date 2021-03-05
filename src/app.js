@@ -22,11 +22,7 @@ configureApp(app)
 /* Configure Middlewares */
 app.use(rTracer.expressMiddleware())
 app.use(helmet())
-app.use(
-	cors({
-		exposedHeaders: ['Authorization']
-	})
-)
+app.use(cors())
 const fileFilter = (_, file, cb) => {
 	if (
 		file.mimetype === 'image/png' ||
