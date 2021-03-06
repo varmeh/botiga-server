@@ -27,7 +27,7 @@ export const postApartmentValidator = [
 
 export const patchApartmentBannersValidator = [
 	objectIdValidator('apartmentId'),
-	imageUrlArrayOptionalValidator('banners', 7)
+	imageUrlArrayOptionalValidator('banners', 5)
 ]
 
 export const postBusinessCategoryValidator = [emptyValidator('category')]
