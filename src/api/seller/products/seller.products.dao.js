@@ -163,8 +163,6 @@ export const updateProduct = async ({
 			productId
 		)
 
-		const oldImageUrl = product.imageUrl
-
 		const isNameUpdate = product.name !== name
 
 		// Update Product Information
@@ -194,7 +192,7 @@ export const updateProduct = async ({
 			.id(categoryId)
 			.products.id(productId)
 
-		return [updatedProduct, oldImageUrl]
+		return updatedProduct
 	} catch (error) {
 		winston.debug('@error updateProduct', logDbError(error))
 		return promiseRejectServerError()
