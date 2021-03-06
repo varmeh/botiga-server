@@ -21,11 +21,6 @@ export const postProductValidator = [
 		.withMessage(
 			'should be either of following - gms, kg, ml, lt, piece & pieces'
 		),
-	emptyOptionalValidator('tag')
-		.matches(/^(BestSeller|Recommended|New)$/, 'i')
-		.withMessage(
-			'should be either of following - BestSeller, New or Recommended'
-		),
 	emptyOptionalValidator('description'),
 	urlOptionalValidator('imageUrl'),
 	urlOptionalValidator('imageUrlLarge'),
@@ -46,11 +41,6 @@ export const patchProductValidator = [
 		),
 	boolValidator('available'),
 	emptyOptionalValidator('description'),
-	emptyOptionalValidator('tag')
-		.matches(/^(BestSeller|Recommended|New)$/, 'i')
-		.withMessage(
-			'should be either of following - BestSeller, New or Recommended'
-		),
 	urlOptionalValidator('imageUrl'),
 	boolValidator('updateImage'),
 	urlOptionalValidator('imageUrlLarge'),

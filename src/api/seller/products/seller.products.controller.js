@@ -19,7 +19,6 @@ export const postProduct = async (req, res, next) => {
 			mrp,
 			size: { quantity, unit },
 			imageUrl,
-			tag,
 			imageUrlLarge,
 			secondaryImageUrls
 		} = req.body
@@ -31,7 +30,6 @@ export const postProduct = async (req, res, next) => {
 			mrp,
 			size: { quantity, unit },
 			imageUrl,
-			tag,
 			imageUrlLarge,
 			secondaryImageUrls
 		})
@@ -59,7 +57,6 @@ export const getProducts = async (req, res, next) => {
 					description,
 					imageUrl,
 					available,
-					tag,
 					imageUrlLarge,
 					secondaryImageUrls
 				} = product
@@ -73,7 +70,6 @@ export const getProducts = async (req, res, next) => {
 					description,
 					imageUrl,
 					size: product.sizeInfo,
-					tag,
 					imageUrlLarge,
 					secondaryImageUrls
 				}
@@ -138,7 +134,6 @@ export const patchProduct = async (req, res, next) => {
 		available,
 		imageUrl,
 		updateImage,
-		tag,
 		imageUrlLarge,
 		secondaryImageUrls
 	} = req.body
@@ -156,7 +151,6 @@ export const patchProduct = async (req, res, next) => {
 			available,
 			imageUrl,
 			updateImage,
-			tag,
 			imageUrlLarge,
 			secondaryImageUrls
 		})
