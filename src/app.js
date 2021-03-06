@@ -41,7 +41,11 @@ app.use(
 
 app.use('/*', express.json())
 
-app.use(cors({ origin: '*', optionsSuccessStatus: 200 }))
+app.use(
+	cors({
+		exposedHeaders: ['Authorization']
+	})
+)
 
 /* Configure Logger */
 app.use(logRequestMiddleware)
