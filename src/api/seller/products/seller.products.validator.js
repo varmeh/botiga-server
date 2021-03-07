@@ -7,7 +7,8 @@ import {
 	paramObjectIdValidator,
 	urlOptionalValidator,
 	decimalOptionalValidator,
-	imageUrlArrayOptionalValidator
+	imageUrlArrayOptionalValidator,
+	imageUrlArrayValidator
 } from '../../../util'
 
 export const postProductValidator = [
@@ -43,7 +44,7 @@ export const patchProductValidator = [
 	emptyOptionalValidator('description'),
 	urlOptionalValidator('imageUrl'),
 	urlOptionalValidator('imageUrlLarge'),
-	imageUrlArrayOptionalValidator('secondaryImageUrls', 4)
+	imageUrlArrayValidator('secondaryImageUrls', 4)
 ]
 
 export const postProductImageValidator = boolValidator('isMainImage')
