@@ -2,6 +2,9 @@ import moment from 'moment'
 import { body } from 'express-validator'
 import { validationMessages } from './validationMessages'
 
+export const fieldExists = field =>
+	body(field).exists().withMessage(validationMessages.mandatoryField).bail()
+
 export const emptyValidator = field =>
 	body(field).trim().notEmpty().withMessage(validationMessages.empty).bail()
 

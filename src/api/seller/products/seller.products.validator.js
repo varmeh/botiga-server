@@ -5,10 +5,9 @@ import {
 	emptyOptionalValidator,
 	boolValidator,
 	paramObjectIdValidator,
-	urlOptionalValidator,
 	decimalOptionalValidator,
-	imageUrlArrayOptionalValidator,
-	imageUrlArrayValidator
+	imageUrlArrayValidator,
+	fieldExists
 } from '../../../util'
 
 export const postProductValidator = [
@@ -23,9 +22,9 @@ export const postProductValidator = [
 			'should be either of following - gms, kg, ml, lt, piece & pieces'
 		),
 	emptyOptionalValidator('description'),
-	urlOptionalValidator('imageUrl'),
-	urlOptionalValidator('imageUrlLarge'),
-	imageUrlArrayOptionalValidator('secondaryImageUrls', 4)
+	fieldExists('imageUrl'),
+	fieldExists('imageUrlLarge'),
+	imageUrlArrayValidator('secondaryImageUrls', 4)
 ]
 
 export const patchProductValidator = [
@@ -42,8 +41,8 @@ export const patchProductValidator = [
 		),
 	boolValidator('available'),
 	emptyOptionalValidator('description'),
-	urlOptionalValidator('imageUrl'),
-	urlOptionalValidator('imageUrlLarge'),
+	fieldExists('imageUrl'),
+	fieldExists('imageUrlLarge'),
 	imageUrlArrayValidator('secondaryImageUrls', 4)
 ]
 

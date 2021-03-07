@@ -1,4 +1,5 @@
 export const validationMessages = {
+	mandatoryField: 'mandatory field',
 	empty: 'should not be empty',
 	addressRegex:
 		'should have following characters - alphabets, numbers, comma, spaces, dot and hypen',
