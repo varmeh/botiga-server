@@ -42,7 +42,6 @@ export const patchProductValidator = [
 	boolValidator('available'),
 	emptyOptionalValidator('description'),
 	urlOptionalValidator('imageUrl'),
-	boolValidator('updateImage'),
 	urlOptionalValidator('imageUrlLarge'),
 	imageUrlArrayOptionalValidator('secondaryImageUrls', 4)
 ]

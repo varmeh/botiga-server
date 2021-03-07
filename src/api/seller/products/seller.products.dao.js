@@ -149,7 +149,6 @@ export const updateProduct = async ({
 	unit,
 	imageUrl,
 	available,
-	updateImage,
 	imageUrlLarge,
 	secondaryImageUrls
 }) => {
@@ -168,14 +167,13 @@ export const updateProduct = async ({
 		product.price = price
 		product.size.quantity = quantity
 		product.size.unit = unit
-		if (updateImage) {
-			product.imageUrl = imageUrl
-			product.imageUrlLarge = imageUrlLarge
-		}
 		product.available = available
 
 		if (mrp) product.mrp = mrp
-		if (secondaryImageUrls) product.secondaryImageUrls = secondaryImageUrls
+
+		product.imageUrl = imageUrl
+		product.imageUrlLarge = imageUrlLarge
+		product.secondaryImageUrls = secondaryImageUrls
 
 		const updatedSeller = await seller.save()
 

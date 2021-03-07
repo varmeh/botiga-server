@@ -133,7 +133,6 @@ export const patchProduct = async (req, res, next) => {
 		unit,
 		available,
 		imageUrl,
-		updateImage,
 		imageUrlLarge,
 		secondaryImageUrls
 	} = req.body
@@ -150,7 +149,6 @@ export const patchProduct = async (req, res, next) => {
 			unit,
 			available,
 			imageUrl,
-			updateImage,
 			imageUrlLarge,
 			secondaryImageUrls
 		})
