@@ -65,6 +65,7 @@ export const getApartmentData = async (req, res, next) => {
 		const sellers = await findSellersInApartment(apartmentId)
 		const {
 			banners,
+			marketingBanners,
 			name,
 			area,
 			city,
@@ -78,6 +79,7 @@ export const getApartmentData = async (req, res, next) => {
 			city,
 			state,
 			pincode,
+			marketingBanners,
 			banners,
 			sellers: sellersOrchestrator(sellers)
 		})

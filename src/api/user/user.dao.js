@@ -37,7 +37,15 @@ export const findApartmentInfo = async apartmentId => {
 	try {
 		const apartment = await Apartment.find(
 			{ _id: apartmentId },
-			{ name: 1, area: 1, city: 1, state: 1, pincode: 1, banners: 1 }
+			{
+				name: 1,
+				area: 1,
+				city: 1,
+				state: 1,
+				pincode: 1,
+				banners: 1,
+				marketingBanners: 1
+			}
 		)
 
 		if (apartment.length > 0) {
