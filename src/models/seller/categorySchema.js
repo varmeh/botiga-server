@@ -9,6 +9,10 @@ export const categorySchema = new Schema({
 		trim: true,
 		maxlength: 32
 	},
+	visible: {
+		type: Boolean,
+		default: true
+	},
 	products: [productSchema]
 })
 
