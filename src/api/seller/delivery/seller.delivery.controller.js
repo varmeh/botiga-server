@@ -2,7 +2,11 @@ import CreateHttpError from 'http-errors'
 import { token, paginationData, skipData } from '../../../util'
 import { OrderStatus, User } from '../../../models'
 
-import { updateOrder, findDeliveriesByApartment } from './seller.delivery.dao'
+import {
+	updateOrder,
+	findDeliveriesByApartment,
+	findAggregateDeliveries
+} from './seller.delivery.dao'
 
 export const patchDeliveryStatus = async (req, res, next) => {
 	const { orderId, status } = req.body
@@ -90,6 +94,20 @@ export const getDeliveryByApartment = async (req, res, next) => {
 			...paginationData({ limit, totalOrders, currentPage: page }),
 			deliveries: deliveryData
 		})
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getAggregateDelivery = async (req, res, next) => {
+	try {
+		const deliveries = await findAggregateDeliveries({
+			sellerId: token.get(req),
+			date: req.params.date
+		})
+
+		res.json(deliveries)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

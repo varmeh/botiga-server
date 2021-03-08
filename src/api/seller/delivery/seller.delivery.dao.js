@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 
 import { winston, moment } from '../../../util'
-import { Order, OrderStatus } from '../../../models'
+import { Order, OrderStatus, Seller } from '../../../models'
 
 export const updateOrder = async (
 	orderId,
@@ -81,6 +81,34 @@ export const findDeliveriesByApartment = async ({
 		return [count, deliveries]
 	} catch (error) {
 		winston.debug('@error findDeliveriesByApartment', {
+			error,
+			msg: error.message
+		})
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const findAggregateDeliveries = async ({ sellerId, date }) => {
+	try {
+		const seller = await Seller.findById(sellerId)
+		if (!seller) {
+			return Promise.reject(new CreateHttpError[404]('Seller not found'))
+		}
+
+		const deliveries = []
+		for (const apartment of seller.apartments) {
+			const [count, deliveryByApartment] = await findDeliveriesByApartment({
+				sellerId,
+				apartmentId: apartment._id,
+				dateString: date
+			})
+
+			deliveries.push({ count, apartment, deliveries: deliveryByApartment })
+		}
+
+		return deliveries
+	} catch (error) {
+		winston.debug('@error findAggregateDeliveries', {
 			error,
 			msg: error.message
 		})

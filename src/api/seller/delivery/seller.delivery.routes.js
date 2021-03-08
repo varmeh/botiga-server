@@ -5,13 +5,15 @@ import { token, validationMiddleware } from '../../../util'
 import {
 	patchDeliveryStatusValidator,
 	patchDeliveryDelayValidator,
-	getDeliveryValidator
+	getDeliveryValidator,
+	getAggregateDeliveryValidator
 } from './seller.delivery.validator'
 
 import {
 	patchDeliveryStatus,
 	patchDeliveryDelay,
-	getDeliveryByApartment
+	getDeliveryByApartment,
+	getAggregateDelivery
 } from './seller.delivery.controller'
 
 const router = Router()
@@ -30,6 +32,16 @@ router.patch(
 	patchDeliveryDelayValidator,
 	validationMiddleware,
 	patchDeliveryDelay
+)
+
+// Aggregate api should be on top of per apartment api
+// Else the per apartment delivery api being generic in nature would assume aggregate as a objectId parameter & throw a validation error
+router.get(
+	'/aggregate/:date',
+	token.authenticationMiddleware,
+	getAggregateDeliveryValidator,
+	validationMiddleware,
+	getAggregateDelivery
 )
 
 router.get(

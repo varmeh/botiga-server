@@ -25,3 +25,5 @@ export const getDeliveryValidator = [
 	queryNumberValidator('limit'),
 	queryNumberValidator('page')
 ]
+
+export const getAggregateDeliveryValidator = paramDateValidator('date')
