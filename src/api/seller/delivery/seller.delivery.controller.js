@@ -8,6 +8,24 @@ import {
 	findAggregateDeliveries
 } from './seller.delivery.dao'
 
+const deliveryStatusUpdate = async (orderId, orderStatus) => {
+	const order = await updateOrder(orderId, orderStatus)
+
+	const user = await User.findById(order.buyer.id)
+	if (orderStatus === OrderStatus.outForDelivery) {
+		user.sendNotifications(
+			'Order in delivery',
+			`Your order #${order.order.number} from ${order.seller.brandName} is out for delivery`
+		)
+	} else {
+		user.sendNotifications(
+			'Order delivered',
+			`Your order #${order.order.number} from ${order.seller.brandName} has been delivered`
+		)
+	}
+	return order
+}
+
 export const patchDeliveryStatus = async (req, res, next) => {
 	const { orderId, status } = req.body
 
@@ -15,22 +33,39 @@ export const patchDeliveryStatus = async (req, res, next) => {
 		const orderStatus =
 			status === 'out' ? OrderStatus.outForDelivery : OrderStatus.delivered
 
-		const order = await updateOrder(orderId, token.get(req), orderStatus)
-
-		const user = await User.findById(order.buyer.id)
-		if (orderStatus === OrderStatus.outForDelivery) {
-			user.sendNotifications(
-				'Order in delivery',
-				`Your order #${order.order.number} from ${order.seller.brandName} is out for delivery`
-			)
-		} else {
-			user.sendNotifications(
-				'Order delivered',
-				`Your order #${order.order.number} from ${order.seller.brandName} has been delivered`
-			)
-		}
+		const order = await deliveryStatusUpdate(orderId, orderStatus)
 
 		res.json({ message: status, id: order._id })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchBatchDeliveryStatus = async (req, res, next) => {
+	const { orderIdList, status } = req.body
+
+	try {
+		const orderStatus =
+			status === 'out' ? OrderStatus.outForDelivery : OrderStatus.delivered
+
+		const orderIdStatusList = []
+		for (let i = 0; i < orderIdList.length; i++) {
+			try {
+				const { order } = await deliveryStatusUpdate(
+					orderIdList[i],
+					orderStatus
+				)
+				orderIdStatusList.push({
+					orderId: orderIdList[i],
+					status: order.status
+				})
+			} catch (_) {
+				// Do nothing
+			}
+		}
+
+		res.json(orderIdStatusList)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

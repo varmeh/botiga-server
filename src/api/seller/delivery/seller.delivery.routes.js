@@ -6,11 +6,13 @@ import {
 	patchDeliveryStatusValidator,
 	patchDeliveryDelayValidator,
 	getDeliveryValidator,
-	getAggregateDeliveryValidator
+	getAggregateDeliveryValidator,
+	patchBatchDeliveryStatusValidator
 } from './seller.delivery.validator'
 
 import {
 	patchDeliveryStatus,
+	patchBatchDeliveryStatus,
 	patchDeliveryDelay,
 	getDeliveryByApartment,
 	getAggregateDelivery
@@ -24,6 +26,14 @@ router.patch(
 	patchDeliveryStatusValidator,
 	validationMiddleware,
 	patchDeliveryStatus
+)
+
+router.patch(
+	'/batch/status',
+	token.authenticationMiddleware,
+	patchBatchDeliveryStatusValidator,
+	validationMiddleware,
+	patchBatchDeliveryStatus
 )
 
 router.patch(

@@ -3,17 +3,9 @@ import CreateHttpError from 'http-errors'
 import { winston, moment } from '../../../util'
 import { Order, OrderStatus, Seller } from '../../../models'
 
-export const updateOrder = async (
-	orderId,
-	sellerId,
-	status,
-	newDate = null
-) => {
+export const updateOrder = async (orderId, status, newDate = null) => {
 	try {
-		const order = await Order.findOne({
-			_id: orderId,
-			'seller.id': sellerId
-		})
+		const order = await Order.findById(orderId)
 
 		if (!order) {
 			return Promise.reject(new CreateHttpError[404]('Order Not Found'))

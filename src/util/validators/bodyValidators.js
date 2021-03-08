@@ -75,7 +75,7 @@ export const urlValidator = field =>
 export const imageUrlArrayValidator = (field, maxLength) =>
 	body(field)
 		.custom(arr => Array.isArray(arr))
-		.withMessage('should be an array')
+		.withMessage(validationMessages.array)
 		.bail()
 		.custom(arr => arr.length <= maxLength)
 		.withMessage(`should have less than ${maxLength} images`)
@@ -90,3 +90,17 @@ export const imageUrlArrayValidator = (field, maxLength) =>
 			return isValidArrayOfUrls
 		})
 		.withMessage('should have valid urls')
+
+export const objectIdArrayValidator = field =>
+	arrayValidator(field)
+		.bail()
+		.custom(arr => {
+			let isValidArrayOfObjectIds = true
+			arr.forEach(val => {
+				if (!val.match(/^[0-9a-fA-F]{24}$/g)) {
+					isValidArrayOfObjectIds = false
+				}
+			})
+			return isValidArrayOfObjectIds
+		})
+		.withMessage('should have valid ObjectIds')

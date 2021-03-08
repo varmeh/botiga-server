@@ -4,7 +4,8 @@ import {
 	paramObjectIdValidator,
 	paramDateValidator,
 	dateValidator,
-	queryNumberValidator
+	queryNumberValidator,
+	objectIdArrayValidator
 } from '../../../util'
 
 export const patchDeliveryStatusValidator = [
@@ -27,3 +28,10 @@ export const getDeliveryValidator = [
 ]
 
 export const getAggregateDeliveryValidator = paramDateValidator('date')
+
+export const patchBatchDeliveryStatusValidator = [
+	emptyValidator('status')
+		.matches(/^(out|delivered)$/, 'i')
+		.withMessage('valid status options - out and delayed'),
+	objectIdArrayValidator('orderIdList')
+]
