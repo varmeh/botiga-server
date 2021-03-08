@@ -91,7 +91,7 @@ export const getApartmentData = async (req, res, next) => {
 
 const categoryOrchestrator = categories => {
 	const flatCategories = categories.map(category => {
-		const { _id, name, products } = category
+		const { _id, name, products, visible } = category
 
 		const flatProducts = products.map(product => {
 			const {
@@ -122,7 +122,7 @@ const categoryOrchestrator = categories => {
 			}
 		})
 
-		return { categoryId: _id, name, products: flatProducts }
+		return { categoryId: _id, name, visible, products: flatProducts }
 	})
 
 	return flatCategories
