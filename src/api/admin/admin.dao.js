@@ -14,7 +14,8 @@ export const findApartment = async apartmentId => {
 				state: 1,
 				pincode: 1,
 				banners: 1,
-				sellers: 1
+				sellers: 1,
+				marketingBanners: 1
 			}
 		)
 		if (apartments.length === 0) {
@@ -58,17 +59,59 @@ export const createApartment = async ({
 	}
 }
 
-export const updateApartmentBanners = async ({ apartmentId, banners }) => {
+export const addApartmentBanner = async ({
+	apartmentId,
+	bannerUrl,
+	sellerId,
+	position
+}) => {
+	try {
+		// The condition marketingBanners.4 ensures that only 5 banners could be added
+		// Once marketingBanners[4] exist is true, filter fails
+		await Apartment.updateOne(
+			{ _id: apartmentId, 'marketingBanners.4': { $exists: false } },
+			{
+				$push: {
+					marketingBanners: {
+						$each: [{ url: bannerUrl, sellerId }],
+						$position: position - 1
+					}
+				}
+			},
+			{ upsert: true }
+		)
+
+		const { marketingBanners } = await findApartment(apartmentId)
+
+		return marketingBanners
+	} catch (error) {
+		winston.debug('@error addApartmentBanner', { error })
+		if (error.code === 11000) {
+			// Apartment in area already exists
+			return Promise.reject(
+				new CreateHttpError[409]('max 5 marketing banners allowed')
+			)
+		}
+		return Promise.reject(new CreateHttpError[500]())
+	}
+}
+
+export const removeApartmentBanner = async (apartmentId, bannerId) => {
 	try {
 		const apartment = await findApartment(apartmentId)
 
-		apartment.banners = banners
+		const banner = apartment.marketingBanners.id(bannerId)
 
-		const updatedApartment = await apartment.save()
+		if (!banner) {
+			return Promise.reject(new CreateHttpError[404]('Banner Not Found'))
+		}
 
-		return updatedApartment
+		banner.remove()
+
+		const { marketingBanners } = await apartment.save()
+		return marketingBanners
 	} catch (error) {
-		winston.debug('@error updateApartmentBanners', { error })
+		winston.debug('@error removeApartmentBanner', { error })
 		return Promise.reject(new CreateHttpError[500]())
 	}
 }

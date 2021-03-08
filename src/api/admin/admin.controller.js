@@ -12,7 +12,8 @@ import {
 } from '../../util'
 import {
 	findApartment,
-	updateApartmentBanners,
+	addApartmentBanner,
+	removeApartmentBanner,
 	createApartment,
 	findSellerByNumber,
 	updateSellerBankDetails,
@@ -154,10 +155,21 @@ export const postApartment = async (req, res, next) => {
 	}
 }
 
-export const patchApartmentBanners = async (req, res, next) => {
+export const postApartmentBanner = async (req, res, next) => {
 	try {
-		const apartment = await updateApartmentBanners(req.body)
-		res.json(apartment)
+		const banners = await addApartmentBanner(req.body)
+		res.json(banners)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const deleteApartmentBanner = async (req, res, next) => {
+	try {
+		const { apartmentId, bannerId } = req.params
+		const banners = await removeApartmentBanner(apartmentId, bannerId)
+		res.json(banners)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

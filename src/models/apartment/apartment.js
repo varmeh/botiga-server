@@ -1,6 +1,24 @@
 import { Schema, model } from 'mongoose'
 import { apartmentSellerSchema } from './apartmentSellerSchema'
 
+const marketingBannerSchema = new Schema({
+	url: {
+		type: String,
+		required: true
+	},
+	sellerId: { type: Schema.Types.ObjectId, ref: 'seller' }
+})
+
+marketingBannerSchema.method('toJSON', function () {
+	const obj = this.toObject()
+
+	// Rename _id field
+	obj.id = obj._id
+	delete obj._id
+
+	return obj
+})
+
 const apartmentSchema = new Schema(
 	{
 		name: {
@@ -34,7 +52,8 @@ const apartmentSchema = new Schema(
 			}
 		},
 		sellers: [apartmentSellerSchema],
-		banners: [String]
+		banners: [String],
+		marketingBanners: [marketingBannerSchema]
 	},
 	{ timestamps: true }
 )

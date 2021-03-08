@@ -3,6 +3,7 @@ import {
 	emptyOptionalValidator,
 	pincodeValidator,
 	decimalValidator,
+	urlValidator,
 	objectIdValidator,
 	paramPhoneValidator,
 	paramDateValidator,
@@ -10,7 +11,7 @@ import {
 	phoneValidator,
 	paramObjectIdValidator,
 	boolValidator,
-	imageUrlArrayOptionalValidator
+	numberValidator
 } from '../../util'
 
 export const getApartmentValidator = paramObjectIdValidator('apartmentId')
@@ -25,9 +26,19 @@ export const postApartmentValidator = [
 	decimalValidator('location.long')
 ]
 
-export const patchApartmentBannersValidator = [
+export const postApartmentBannerValidator = [
 	objectIdValidator('apartmentId'),
-	imageUrlArrayOptionalValidator('banners', 5)
+	urlValidator('bannerUrl'),
+	objectIdValidator('sellerId'),
+	numberValidator('position')
+		.bail()
+		.custom(val => val >= 1 && val <= 5)
+		.withMessage('position should be in range 1 to 5')
+]
+
+export const deleteApartmentBannerValidator = [
+	paramObjectIdValidator('apartmentId'),
+	paramObjectIdValidator('bannerId')
 ]
 
 export const postBusinessCategoryValidator = [emptyValidator('category')]

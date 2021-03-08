@@ -3,7 +3,8 @@ import { validationMiddleware } from '../../util'
 import {
 	getApartmentValidator,
 	postApartmentValidator,
-	patchApartmentBannersValidator,
+	postApartmentBannerValidator,
+	deleteApartmentBannerValidator,
 	postBusinessCategoryValidator,
 	postNotificationTopicValidator,
 	postNotificationUserValidator,
@@ -21,7 +22,8 @@ import {
 import {
 	getApartment,
 	postApartment,
-	patchApartmentBanners,
+	postApartmentBanner,
+	deleteApartmentBanner,
 	postBusinessCategory,
 	postNotificationTopic,
 	postNotificationUser,
@@ -53,11 +55,18 @@ router.post(
 	postApartment
 )
 
-router.patch(
+router.post(
 	'/apartments/banners',
-	patchApartmentBannersValidator,
+	postApartmentBannerValidator,
 	validationMiddleware,
-	patchApartmentBanners
+	postApartmentBanner
+)
+
+router.delete(
+	'/apartments/:apartmentId/banners/:bannerId',
+	deleteApartmentBannerValidator,
+	validationMiddleware,
+	deleteApartmentBanner
 )
 
 router.post(
