@@ -16,7 +16,8 @@ import {
 	postSellerApartmentValidator,
 	patchSellerApartmentLiveValidator,
 	deleteSellerApartmentValidator,
-	deleteSellerApartmentWithIdValidator
+	deleteSellerApartmentWithIdValidator,
+	deleteImageValidator
 } from './admin.validator'
 
 import {
@@ -37,7 +38,8 @@ import {
 	patchApartmentLiveStatus,
 	deleteSellerApartments,
 	deleteSellerApartmentsWithId,
-	postBannerImage
+	postBannerImage,
+	postImageDelete
 } from './admin.controller'
 
 const router = Router()
@@ -71,6 +73,13 @@ router.delete(
 )
 
 router.post('/banners/image', postBannerImage)
+
+router.post(
+	'/image/delete',
+	deleteImageValidator,
+	validationMiddleware,
+	postImageDelete
+)
 
 router.post(
 	'/businessCategory',

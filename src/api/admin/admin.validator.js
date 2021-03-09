@@ -41,6 +41,8 @@ export const deleteApartmentBannerValidator = [
 	paramObjectIdValidator('bannerId')
 ]
 
+export const deleteImageValidator = urlValidator('imageUrl')
+
 export const postBusinessCategoryValidator = [emptyValidator('category')]
 
 export const postNotificationUserValidator = [
