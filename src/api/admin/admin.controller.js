@@ -431,3 +431,13 @@ export const postBannerImage = async (req, res, next) => {
 		next(new CreateHttpError(status, message))
 	}
 }
+
+export const postImageDelete = async (req, res, next) => {
+	try {
+		await aws.s3.deleteImageUrl(req.body.imageUrl)
+		res.status(204).json()
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
