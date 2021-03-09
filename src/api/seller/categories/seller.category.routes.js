@@ -4,14 +4,16 @@ import { validationMiddleware, token } from '../../../util'
 import {
 	postCategoryValidator,
 	deleteCategoryValidator,
-	patchCategoryValidator
+	patchCategoryValidator,
+	patchCategoryVisibilityValidator
 } from './seller.category.validator'
 
 import {
 	postCategory,
 	getCategories,
 	deleteCategory,
-	patchCategory
+	patchCategory,
+	patchCategoryVisibility
 } from './seller.category.controller'
 
 const router = Router()
@@ -38,6 +40,14 @@ router.delete(
 	deleteCategoryValidator,
 	validationMiddleware,
 	deleteCategory
+)
+
+router.patch(
+	'/visible',
+	token.authenticationMiddleware,
+	patchCategoryVisibilityValidator,
+	validationMiddleware,
+	patchCategoryVisibility
 )
 
 export default router

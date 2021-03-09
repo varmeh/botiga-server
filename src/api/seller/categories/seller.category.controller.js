@@ -4,7 +4,8 @@ import {
 	createCategory,
 	findCategories,
 	removeCategory,
-	updateCategory
+	updateCategory,
+	updateCategoryVisibility
 } from './seller.category.dao'
 
 export const postCategory = async (req, res, next) => {
@@ -22,7 +23,9 @@ export const getCategories = async (req, res, next) => {
 	try {
 		const categories = await findCategories(token.get(req))
 
-		res.json(categories.map(({ _id, name }) => ({ id: _id, name })))
+		res.json(
+			categories.map(({ _id, name, visible }) => ({ id: _id, name, visible }))
+		)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
@@ -46,6 +49,22 @@ export const patchCategory = async (req, res, next) => {
 		const category = await updateCategory(token.get(req), name, categoryId)
 
 		res.json({ id: category._id, newCategoryName: category.name })
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchCategoryVisibility = async (req, res, next) => {
+	const { categoryId, visible } = req.body
+	try {
+		const category = await updateCategoryVisibility({
+			sellerId: token.get(req),
+			categoryId,
+			visible
+		})
+
+		res.json({ categoryId: category._id, categoryName: category.name, visible })
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

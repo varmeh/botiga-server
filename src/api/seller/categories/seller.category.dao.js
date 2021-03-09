@@ -3,8 +3,12 @@ import { winston } from '../../../util'
 import { Seller } from '../../../models'
 
 const logDbError = error => ({ error, msg: error?.message })
-const promiseRejectServerError = () =>
-	Promise.reject(new CreateHttpError[500]())
+const promiseRejectServerError = error => {
+	if (error.status && error.message) {
+		return Promise.reject(new CreateHttpError[error.status](error.message))
+	}
+	return Promise.reject(new CreateHttpError[500]())
+}
 
 const sortCategory = async sellerId => {
 	try {
@@ -18,7 +22,7 @@ const sortCategory = async sellerId => {
 		)
 	} catch (error) {
 		winston.debug('@error sortCategory', logDbError(error))
-		return promiseRejectServerError()
+		return promiseRejectServerError(error)
 	}
 }
 
@@ -35,7 +39,7 @@ export const createCategory = async (sellerId, categoryName) => {
 		)[0]
 	} catch (error) {
 		winston.debug('@error createCategory', logDbError(error))
-		return promiseRejectServerError()
+		return promiseRejectServerError(error)
 	}
 }
 
@@ -50,7 +54,7 @@ const findCategoryHelper = async (sellerId, categoryId) => {
 		return [seller, category]
 	} catch (error) {
 		winston.debug('@error findCategoryHelper', logDbError(error))
-		return promiseRejectServerError()
+		return promiseRejectServerError(error)
 	}
 }
 
@@ -68,7 +72,7 @@ export const removeCategory = async (sellerId, categoryId) => {
 		return await seller.save()
 	} catch (error) {
 		winston.debug('@error removeCategory', logDbError(error))
-		return promiseRejectServerError()
+		return promiseRejectServerError(error)
 	}
 }
 
@@ -90,12 +94,31 @@ export const updateCategory = async (sellerId, categoryName, categoryId) => {
 	}
 }
 
+export const updateCategoryVisibility = async ({
+	sellerId,
+	categoryId,
+	visible
+}) => {
+	try {
+		const [seller, category] = await findCategoryHelper(sellerId, categoryId)
+
+		category.visible = visible
+
+		const updatedSeller = await seller.save()
+
+		return updatedSeller.categories.id(categoryId)
+	} catch (error) {
+		winston.debug('@error updateCategoryVisibility', logDbError(error))
+		return promiseRejectServerError(error)
+	}
+}
+
 export const findCategories = async sellerId => {
 	try {
 		const { categories } = await Seller.findById(sellerId)
 		return categories
 	} catch (error) {
 		winston.debug('@error findProduct', logDbError(error))
-		return promiseRejectServerError()
+		return promiseRejectServerError(error)
 	}
 }

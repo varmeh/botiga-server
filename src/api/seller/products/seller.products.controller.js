@@ -46,7 +46,7 @@ export const getProducts = async (req, res, next) => {
 		const categories = await findProducts(token.get(req))
 
 		const flatCategories = categories.map(category => {
-			const { _id, name, products } = category
+			const { _id, name, products, visible } = category
 
 			const flatProducts = products.map(product => {
 				const {
@@ -74,7 +74,7 @@ export const getProducts = async (req, res, next) => {
 					secondaryImageUrls
 				}
 			})
-			return { categoryId: _id, name, products: flatProducts }
+			return { categoryId: _id, name, visible, products: flatProducts }
 		})
 
 		res.json(flatCategories)
