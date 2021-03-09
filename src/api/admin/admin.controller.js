@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { nanoid } from 'nanoid'
 import CreateHttpError from 'http-errors'
 
 import { createBusinessCategory, User, Seller } from '../../models'
@@ -8,7 +9,8 @@ import {
 	crypto,
 	rpayPayments,
 	generateExcel,
-	winston
+	winston,
+	uploadTinifyImages
 } from '../../util'
 import {
 	findApartment,
@@ -400,6 +402,30 @@ export const deleteSellerApartmentsWithId = async (req, res, next) => {
 		await removeSellerApartment(phone, apartmentId)
 
 		res.status(204).json()
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const postBannerImage = async (req, res, next) => {
+	try {
+		const image = req.file
+
+		if (!image) {
+			res.status(422).json({
+				message: 'Attached file should be an image of type - png/jpg/jpeg'
+			})
+		} else {
+			const imageUrl = await uploadTinifyImages({
+				image,
+				fileNameToBeSavedInCloud: nanoid(24),
+				width: 960,
+				height: 480
+			})
+
+			res.json({ imageUrl })
+		}
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

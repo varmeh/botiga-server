@@ -36,7 +36,8 @@ import {
 	postSellerApartment,
 	patchApartmentLiveStatus,
 	deleteSellerApartments,
-	deleteSellerApartmentsWithId
+	deleteSellerApartmentsWithId,
+	postBannerImage
 } from './admin.controller'
 
 const router = Router()
@@ -68,6 +69,8 @@ router.delete(
 	validationMiddleware,
 	deleteApartmentBanner
 )
+
+router.post('/banners/image', postBannerImage)
 
 router.post(
 	'/businessCategory',
