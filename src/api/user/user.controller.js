@@ -21,7 +21,7 @@ const sellersOrchestrator = sellers => {
 			businessCategory,
 			brandImageUrl,
 			tagline,
-			delivery: { type, day, slot }
+			delivery: { type, day, slot, fee, minOrder }
 		} = seller
 
 		return {
@@ -36,6 +36,8 @@ const sellersOrchestrator = sellers => {
 			deliveryMessage: apartmentVirtuals.deliveryMessage(type, day),
 			deliveryDate: apartmentVirtuals.deliveryDate(type, day),
 			deliverySlot: slot,
+			deliveryFee: fee ?? 0,
+			deliveryMinOrder: minOrder ?? 0,
 			fssaiLicenseNumber,
 			address
 		}
