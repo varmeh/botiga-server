@@ -39,7 +39,15 @@ export const sellerApartmentSchema = new Schema({
 		email: String
 	},
 	deliveryMessage: String,
-	deliverySlot: String
+	deliverySlot: String,
+	deliveryFee: {
+		type: Number,
+		default: 0
+	},
+	deliveryMinOrder: {
+		type: Number,
+		default: 0
+	}
 })
 
 export const CouponDiscountType = {

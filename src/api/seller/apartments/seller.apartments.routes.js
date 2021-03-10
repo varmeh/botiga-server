@@ -5,14 +5,16 @@ import {
 	patchApartmentValidator,
 	patchDeliveryValidator,
 	patchContactInfoValidator,
-	deleteApartmentValidator
+	deleteApartmentValidator,
+	patchDeliveryFeeValidator
 } from './seller.apartments.validator'
 
 import {
 	getApartments,
 	patchApartmentLive,
 	patchDelierySchedule,
-	patchContactInformation
+	patchContactInformation,
+	patchDeliveryFee
 } from './seller.apartments.controller'
 
 const router = Router()
@@ -41,6 +43,14 @@ router.patch(
 	patchContactInfoValidator,
 	validationMiddleware,
 	patchContactInformation
+)
+
+router.patch(
+	'/deliveryfee',
+	token.authenticationMiddleware,
+	patchDeliveryFeeValidator,
+	validationMiddleware,
+	patchDeliveryFee
 )
 
 router.delete(

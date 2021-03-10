@@ -81,6 +81,41 @@ export const updateApartmentDeliverySchedule = async (
 	}
 }
 
+export const updateApartmentDeliveryFee = async ({
+	sellerId,
+	apartmentId,
+	deliveryMinOrder,
+	deliveryFee
+}) => {
+	try {
+		const seller = await Seller.findById(sellerId)
+		if (!seller) {
+			return Promise.reject(new CreateHttpError[404]('Seller not found'))
+		}
+
+		// Update Apartment Document with seller fee data
+		const apartment = await Apartment.findById(apartmentId)
+		const sellerInApartmentSchema = apartment.sellers.id(sellerId)
+
+		sellerInApartmentSchema.delivery.minOrder = deliveryMinOrder
+		sellerInApartmentSchema.delivery.fee = deliveryFee
+
+		await apartment.save()
+
+		// Update Seller Document
+		const apartmentInSellerSchema = seller.apartments.id(apartmentId)
+		apartmentInSellerSchema.deliveryFee = deliveryFee
+		apartmentInSellerSchema.deliveryMinOrder = deliveryMinOrder
+
+		const updatedSeller = await seller.save()
+
+		return updatedSeller.apartments.id(apartmentId)
+	} catch (error) {
+		winston.debug('@error updateApartmentDeliveryFee', logDbError(error))
+		return promiseRejectServerError(error)
+	}
+}
+
 export const updateApartmentContactInformation = async (
 	sellerId,
 	{ apartmentId, phone, whatsapp, email }

@@ -5,7 +5,8 @@ import {
 	updateApartmentLiveStatus,
 	updateApartmentDeliverySchedule,
 	updateApartmentContactInformation,
-	removeApartment
+	removeApartment,
+	updateApartmentDeliveryFee
 } from './seller.apartments.dao'
 
 export const getApartments = async (req, res, next) => {
@@ -71,6 +72,22 @@ export const deleteApartment = async (req, res, next) => {
 		await removeApartment(token.get(req), req.params.apartmentId)
 
 		res.status(204).json()
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchDeliveryFee = async (req, res, next) => {
+	const { apartmentId, deliveryMinOrder, deliveryFee } = req.body
+	try {
+		const apartment = await updateApartmentDeliveryFee({
+			sellerId: token.get(req),
+			apartmentId,
+			deliveryMinOrder,
+			deliveryFee
+		})
+		res.json(apartment)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

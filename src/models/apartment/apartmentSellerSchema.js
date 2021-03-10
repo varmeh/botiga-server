@@ -35,7 +35,17 @@ export const apartmentSellerSchema = new Schema({
 			min: 1,
 			max: 7
 		},
-		slot: String
+		slot: String,
+		minOrder: {
+			type: Number,
+			default: 0,
+			max: 500
+		},
+		fee: {
+			type: Number,
+			default: 0,
+			max: 30
+		}
 	}
 })
 
