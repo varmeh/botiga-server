@@ -48,3 +48,8 @@ export const dbErrorHandler = (error, origin) => {
 	}
 	return Promise.reject(new CreateHttpError[500]('Internal Server Error'))
 }
+
+export const controllerErroHandler = (error, next) => {
+	const { status, message } = error
+	next(new CreateHttpError(status, message))
+}
