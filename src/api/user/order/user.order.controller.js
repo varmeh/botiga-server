@@ -97,6 +97,7 @@ export const postOrder = async (req, res, next) => {
 		totalAmount,
 		couponCode,
 		discountAmount,
+		deliveryFee,
 		products
 	} = req.body
 
@@ -108,6 +109,7 @@ export const postOrder = async (req, res, next) => {
 			addressId,
 			totalAmount,
 			couponCode,
+			deliveryFee,
 			discountAmount,
 			products
 		})

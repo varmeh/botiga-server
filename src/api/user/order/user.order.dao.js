@@ -18,6 +18,7 @@ export const createOrder = async ({
 	totalAmount,
 	discountAmount,
 	couponCode,
+	deliveryFee,
 	products
 }) => {
 	try {
@@ -76,6 +77,7 @@ export const createOrder = async ({
 				totalAmount,
 				discountAmount,
 				couponCode,
+				deliveryFee,
 				expectedDeliveryDate: apartmentManager.deliveryDate,
 				deliverySlot: apartmentManager.delivery.slot,
 				products
