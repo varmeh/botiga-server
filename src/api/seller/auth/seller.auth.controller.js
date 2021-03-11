@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 
-import { token, otp, aws } from '../../../util'
+import { token, otp, aws, controllerErroHandler } from '../../../util'
 import {
 	createSeller,
 	findSellerByNumber,
@@ -54,8 +54,7 @@ export const postVerifyOtp = async (req, res, next) => {
 			whatsapp: contact.whatsapp
 		})
 	} catch (error) {
-		const { status, message } = error
-		return next(new CreateHttpError(status, message))
+		return controllerErroHandler(error, next)
 	}
 }
 
@@ -121,8 +120,7 @@ export const postSellerSignup = async (req, res, next) => {
 			text: `Phone - ${phone}<br>Name - ${firstName} ${lastName}<br>Seller - ${businessName}<br>Category - ${businessCategory}<br>Brand - ${brandName}`
 		})
 
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -131,8 +129,7 @@ export const postSellerSignout = (_, res, next) => {
 		// TODO: Invalidate token on signout
 		res.status(204).json()
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -142,7 +139,6 @@ export const patchPushToken = async (req, res, next) => {
 
 		res.json({ message })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }

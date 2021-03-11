@@ -1,5 +1,4 @@
-import CreateHttpError from 'http-errors'
-import { token } from '../../../util'
+import { token, controllerErroHandler } from '../../../util'
 import {
 	findApartments,
 	updateApartmentLiveStatus,
@@ -15,8 +14,7 @@ export const getApartments = async (req, res, next) => {
 
 		res.json(apartments)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -30,8 +28,7 @@ export const patchApartmentLive = async (req, res, next) => {
 		})
 		res.json(apartment)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -46,8 +43,7 @@ export const patchDelierySchedule = async (req, res, next) => {
 		})
 		res.json(apartment)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -62,8 +58,7 @@ export const patchContactInformation = async (req, res, next) => {
 		})
 		res.json(apartment)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -73,8 +68,7 @@ export const deleteApartment = async (req, res, next) => {
 
 		res.status(204).json()
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -89,7 +83,6 @@ export const patchDeliveryFee = async (req, res, next) => {
 		})
 		res.json(apartment)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
