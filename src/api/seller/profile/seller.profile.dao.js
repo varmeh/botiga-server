@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { winston, crypto, moment } from '../../../util'
+import { crypto, moment, dbErrorHandler } from '../../../util'
 import { Apartment, Seller } from '../../../models'
 
 export const findSeller = async sellerId => {
@@ -10,8 +10,7 @@ export const findSeller = async sellerId => {
 		}
 		return seller
 	} catch (error) {
-		winston.debug('@error findSeller', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findSeller')
 	}
 }
 
@@ -40,8 +39,7 @@ export const updateContactInformation = async (
 		const updatedSeller = await seller.save()
 		return updatedSeller.contact
 	} catch (error) {
-		winston.debug('@error updateContactInformation', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateContactInformation')
 	}
 }
 
@@ -103,8 +101,7 @@ export const updateBusinessInformation = async (
 		const updatedSeller = await seller.save()
 		return [oldImageUrl, updatedSeller.brand]
 	} catch (error) {
-		winston.debug('@error updateBusinessInformation', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateBusinessInformation')
 	}
 }
 
@@ -138,8 +135,7 @@ export const updateBankDetails = async ({
 
 		return await seller.save()
 	} catch (error) {
-		winston.debug('@error updateBankDetails', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateBankDetails')
 	}
 }
 
@@ -177,8 +173,7 @@ export const findBankDetails = async sellerId => {
 			accountType
 		}
 	} catch (error) {
-		winston.debug('@error getBankDetails', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'getBankDetails')
 	}
 }
 
@@ -190,8 +185,7 @@ export const updateBanners = async (sellerId, banners) => {
 
 		return await seller.save()
 	} catch (error) {
-		winston.debug('@error updateBanners', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateBanners')
 	}
 }
 
@@ -228,8 +222,7 @@ export const createCoupon = async (
 
 		return updatedSeller.coupons
 	} catch (error) {
-		winston.debug('@error createCoupon', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'createCoupon')
 	}
 }
 
@@ -273,8 +266,7 @@ export const updateCoupon = async (
 
 		return updatedSeller.coupons
 	} catch (error) {
-		winston.debug('@error updateCoupon', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateCoupon')
 	}
 }
 
@@ -293,7 +285,6 @@ export const removeCoupon = async (sellerId, couponId) => {
 
 		return updatedSeller.coupons
 	} catch (error) {
-		winston.debug('@error deleteCoupon', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'deleteCoupon')
 	}
 }

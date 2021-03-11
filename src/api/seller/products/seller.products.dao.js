@@ -1,10 +1,6 @@
 import CreateHttpError from 'http-errors'
-import { winston } from '../../../util'
+import { dbErrorHandler } from '../../../util'
 import { Seller } from '../../../models'
-
-const logDbError = error => ({ error, msg: error?.message })
-const promiseRejectServerError = () =>
-	Promise.reject(new CreateHttpError[500]())
 
 /* Helper Methods */
 const findCategoryHelper = async (sellerId, categoryId) => {
@@ -22,8 +18,7 @@ const findCategoryHelper = async (sellerId, categoryId) => {
 
 		return { seller, category }
 	} catch (error) {
-		winston.debug('@error findCategoryHelper', logDbError(error))
-		return promiseRejectServerError()
+		return dbErrorHandler(error, 'findCategoryHelper')
 	}
 }
 
@@ -38,8 +33,7 @@ const findProductHelper = async (sellerId, categoryId, productId) => {
 
 		return { seller, product }
 	} catch (error) {
-		winston.debug('@error findProductHelper', logDbError(error))
-		return promiseRejectServerError()
+		return dbErrorHandler(error, 'findProductHelper')
 	}
 }
 
@@ -59,8 +53,7 @@ const sortProducts = async (sellerId, categoryId) => {
 			{ arrayFilters: [{ 'element._id': categoryId }] }
 		)
 	} catch (error) {
-		winston.debug('@error sortProducts', logDbError(error))
-		return promiseRejectServerError()
+		return dbErrorHandler(error, 'sortProducts')
 	}
 }
 
@@ -100,8 +93,7 @@ export const createProduct = async (
 		const { products } = updatedSeller.categories.id(categoryId)
 		return products[products.length - 1]
 	} catch (error) {
-		winston.debug('@error createProduct', logDbError(error))
-		return promiseRejectServerError()
+		return dbErrorHandler(error, 'createProduct')
 	}
 }
 
@@ -115,8 +107,7 @@ export const findProducts = async sellerId => {
 
 		return seller.categories
 	} catch (error) {
-		winston.debug('@error findProduct', logDbError(error))
-		return promiseRejectServerError()
+		return dbErrorHandler(error, 'findProduct')
 	}
 }
 
@@ -132,8 +123,7 @@ export const removeProduct = async (sellerId, categoryId, productId) => {
 		await seller.save()
 		return product
 	} catch (error) {
-		winston.debug('@error removeProduct', logDbError(error))
-		return promiseRejectServerError()
+		return dbErrorHandler(error, 'removeProduct')
 	}
 }
 
@@ -188,7 +178,6 @@ export const updateProduct = async ({
 
 		return updatedProduct
 	} catch (error) {
-		winston.debug('@error updateProduct', logDbError(error))
-		return promiseRejectServerError()
+		return dbErrorHandler(error, 'updateProduct')
 	}
 }
