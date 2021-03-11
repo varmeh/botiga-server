@@ -47,7 +47,8 @@ export const sellerApartmentSchema = new Schema({
 	deliveryMinOrder: {
 		type: Number,
 		default: 0
-	}
+	},
+	filters: [String]
 })
 
 export const CouponDiscountType = {

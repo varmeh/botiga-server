@@ -8,6 +8,7 @@ export const apartmentSellerSchema = new Schema({
 	brandImageUrl: String,
 	businessCategory: { type: String, required: true },
 	live: { type: Boolean, default: false },
+	filters: [String],
 	contact: {
 		phone: {
 			type: String,

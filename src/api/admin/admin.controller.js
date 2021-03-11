@@ -23,7 +23,8 @@ import {
 	addSellerApartment,
 	updateApartmentLiveStatus,
 	removeSellerAllApartments,
-	removeSellerApartment
+	removeSellerApartment,
+	updateSellerFilters
 } from './admin.dao'
 
 const productsOrchestrator = categories => {
@@ -81,7 +82,8 @@ const sellerOrchestrator = seller => {
 		contact: { phone, whatsapp, email, address },
 		bankDetails,
 		apartments,
-		categories
+		categories,
+		filters
 	} = seller
 
 	let data = {
@@ -97,6 +99,7 @@ const sellerOrchestrator = seller => {
 		whatsapp,
 		email,
 		mid: seller.mid,
+		filters,
 		apartments,
 		address: `${address.building}, ${address.street}, ${address.area}, ${address.city}, ${address.state} - ${address.pincode}`
 	}
@@ -161,6 +164,19 @@ export const postApartmentBanner = async (req, res, next) => {
 	try {
 		const banners = await addApartmentBanner(req.body)
 		res.json(banners)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const patchSellerFilters = async (req, res, next) => {
+	try {
+		const { phone, filters } = req.body
+
+		const seller = await updateSellerFilters(phone, filters)
+
+		res.json(sellerOrchestrator(seller))
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))
