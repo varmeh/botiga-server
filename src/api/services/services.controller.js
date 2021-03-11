@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 import { nanoid } from 'nanoid'
 import { token, aws } from '../../util'
-import { findBusinessCategory, Seller } from '../../models'
+import { findHelperData, Seller } from '../../models'
 import {
 	findApartment,
 	findCities,
@@ -72,8 +72,18 @@ export const getApartmentsSearch = async (req, res, next) => {
 
 export const getBusinessCategory = async (_, res, next) => {
 	try {
-		const data = await findBusinessCategory()
-		res.json(data)
+		const { businessCategory } = await findHelperData()
+		res.json(businessCategory)
+	} catch (error) {
+		const { status, message } = error
+		next(new CreateHttpError(status, message))
+	}
+}
+
+export const getSellerFilters = async (_, res, next) => {
+	try {
+		const { sellerFilters } = await findHelperData()
+		res.json(sellerFilters)
 	} catch (error) {
 		const { status, message } = error
 		next(new CreateHttpError(status, message))

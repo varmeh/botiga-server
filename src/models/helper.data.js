@@ -3,15 +3,15 @@ import { Schema, model } from 'mongoose'
 import { winston } from '../util'
 
 const helperDataSchema = new Schema({
-	businessCategory: [String]
+	businessCategory: [String],
+	sellerFilters: [{ key: String, val: String }]
 })
 
 export const HelperData = model('helperData', helperDataSchema, 'helperData')
 
-export const findBusinessCategory = async () => {
+export const findHelperData = async () => {
 	try {
-		const helperData = await HelperData.findOne()
-		return helperData.businessCategory
+		return await HelperData.findOne()
 	} catch (error) {
 		winston.debug('@error getBusinessCategories', {
 			error,
