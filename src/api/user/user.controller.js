@@ -84,7 +84,7 @@ export const getApartmentData = async (req, res, next) => {
 			pincode,
 			filters: sellerFilters ?? [],
 			marketingBanners: marketingBanners ?? [],
-			banners: [],
+			banners: [], // keeping this empty banner to avoid crashes
 			sellers: sellersOrchestrator(sellers)
 		})
 	} catch (error) {
