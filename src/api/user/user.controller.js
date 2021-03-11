@@ -1,6 +1,4 @@
-import CreateHttpError from 'http-errors'
-
-import { token } from '../../util'
+import { token, controllerErroHandler } from '../../util'
 import { apartmentVirtuals, findHelperData } from '../../models'
 import {
 	findSellersInApartment,
@@ -56,8 +54,7 @@ export const getSellersInApartment = async (req, res, next) => {
 
 		res.json(sellersData)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -88,8 +85,7 @@ export const getApartmentData = async (req, res, next) => {
 			sellers: sellersOrchestrator(sellers)
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -140,8 +136,7 @@ export const getProductsOfSeller = async (req, res, next) => {
 
 		res.json(categoryOrchestrator(categories))
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -153,8 +148,7 @@ export const getSellerData = async (req, res, next) => {
 
 		res.json({ banners, coupons, categories: categoryOrchestrator(categories) })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -164,8 +158,7 @@ export const getUserCart = async (req, res, next) => {
 
 		res.json({ ...cart })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -181,7 +174,6 @@ export const patchUserCart = async (req, res, next) => {
 
 		res.json({ message: 'cart updated' })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }

@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 import chance from 'chance'
-import { winston, moment } from '../../../util'
+import { moment, dbErrorHandler } from '../../../util'
 
 import {
 	Order,
@@ -86,8 +86,7 @@ export const createOrder = async ({
 
 		return await order.save()
 	} catch (error) {
-		winston.debug('@error createOrder', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'createOrder')
 	}
 }
 
@@ -100,11 +99,7 @@ export const findCategoryProducts = async sellerId => {
 
 		return seller.categories
 	} catch (error) {
-		winston.debug('@error findCategoryProducts', {
-			error,
-			msg: error.message
-		})
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findCategoryProducts')
 	}
 }
 
@@ -126,8 +121,7 @@ export const cancelOrder = async (orderId, userId) => {
 
 		return order.save()
 	} catch (error) {
-		winston.debug('@error cancelOrder', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'cancelOrder')
 	}
 }
 
@@ -146,7 +140,6 @@ export const findOrders = async ({ userId, skip, limit }) => {
 
 		return [count, orders]
 	} catch (error) {
-		winston.debug('@error findOrder', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findOrder')
 	}
 }

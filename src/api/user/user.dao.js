@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 import { Types } from 'mongoose'
 
-import { winston } from '../../util'
+import { dbErrorHandler } from '../../util'
 import { Apartment, Seller, User } from '../../models'
 
 export const findSellersInApartment = async apartmentId => {
@@ -28,8 +28,7 @@ export const findSellersInApartment = async apartmentId => {
 
 		return data
 	} catch (error) {
-		winston.debug('@error findSellersInApartment', { msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findSellersInApartment')
 	}
 }
 
@@ -53,8 +52,7 @@ export const findApartmentInfo = async apartmentId => {
 			return Promise.reject(new CreateHttpError[404]('Apartment Not Found'))
 		}
 	} catch (error) {
-		winston.debug('@error findApartmentInfo', { msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findApartmentInfo')
 	}
 }
 
@@ -68,8 +66,7 @@ export const findSeller = async sellerId => {
 
 		return seller
 	} catch (error) {
-		winston.debug('@error findSeller', { msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findSeller')
 	}
 }
 
@@ -85,8 +82,7 @@ export const findCart = async (userId, addressId) => {
 		await user.save()
 		return address.cart
 	} catch (error) {
-		winston.debug('@error findCart', { msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findCart')
 	}
 }
 
@@ -102,7 +98,6 @@ export const updateCart = async ({ userId, sellerId, addressId, products }) => {
 
 		return await user.save()
 	} catch (error) {
-		winston.debug('@error updateCart', { msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateCart')
 	}
 }

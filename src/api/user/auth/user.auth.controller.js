@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 
-import { token, otp } from '../../../util'
+import { token, otp, controllerErroHandler } from '../../../util'
 import {
 	createUser,
 	findUserByNumber,
@@ -92,8 +92,7 @@ export const postVerifyOtp = async (req, res, next) => {
 
 		return res.json(extractUserProfile(user))
 	} catch (error) {
-		const { status, message } = error
-		return next(new CreateHttpError(status, message))
+		return controllerErroHandler(error, next)
 	}
 }
 
@@ -123,8 +122,7 @@ export const postUserSignup = async (req, res, next) => {
 			.status(201)
 			.json({ message: 'user created', ...extractUserProfile(user) })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -133,8 +131,7 @@ export const postUserSignout = (_, res, next) => {
 		// TODO: Invalidate token on signout
 		res.status(204).json()
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -143,8 +140,7 @@ export const getUserProfile = async (req, res, next) => {
 		const user = await findUser(token.get(req))
 		res.json(extractUserProfile(user))
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -165,8 +161,7 @@ export const patchUserProfile = async (req, res, next) => {
 			whatsapp: user.whatsapp
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -176,8 +171,7 @@ export const patchUserPushToken = async (req, res, next) => {
 
 		res.json({ message })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -187,8 +181,7 @@ export const getUserAddress = async (req, res, next) => {
 
 		res.json(extractUserAddress(user))
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -199,8 +192,7 @@ export const postUserAddress = async (req, res, next) => {
 
 		res.status(201).json({ message: 'address created' })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -210,8 +202,7 @@ export const deleteUserAddress = async (req, res, next) => {
 
 		res.status(204).json()
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -224,7 +215,6 @@ export const patchUserAddress = async (req, res, next) => {
 			message: 'updated address'
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
