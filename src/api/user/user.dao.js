@@ -43,7 +43,6 @@ export const findApartmentInfo = async apartmentId => {
 				city: 1,
 				state: 1,
 				pincode: 1,
-				banners: 1,
 				marketingBanners: 1
 			}
 		)

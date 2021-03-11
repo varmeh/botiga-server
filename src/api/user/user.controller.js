@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 
 import { token } from '../../util'
-import { apartmentVirtuals } from '../../models'
+import { apartmentVirtuals, findHelperData } from '../../models'
 import {
 	findSellersInApartment,
 	findApartmentInfo,
@@ -66,7 +66,6 @@ export const getApartmentData = async (req, res, next) => {
 		const { apartmentId } = req.params
 		const sellers = await findSellersInApartment(apartmentId)
 		const {
-			banners,
 			marketingBanners,
 			name,
 			area,
@@ -75,14 +74,16 @@ export const getApartmentData = async (req, res, next) => {
 			pincode
 		} = await findApartmentInfo(apartmentId)
 
+		const { sellerFilters } = await findHelperData()
+
 		res.json({
 			name,
 			area,
 			city,
 			state,
 			pincode,
+			filters: sellerFilters,
 			marketingBanners,
-			banners,
 			sellers: sellersOrchestrator(sellers)
 		})
 	} catch (error) {
