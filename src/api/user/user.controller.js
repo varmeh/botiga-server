@@ -82,8 +82,9 @@ export const getApartmentData = async (req, res, next) => {
 			city,
 			state,
 			pincode,
-			filters: sellerFilters,
-			marketingBanners,
+			filters: sellerFilters ?? [],
+			marketingBanners: marketingBanners ?? [],
+			banners: [],
 			sellers: sellersOrchestrator(sellers)
 		})
 	} catch (error) {
