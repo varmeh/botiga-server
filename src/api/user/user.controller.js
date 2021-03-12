@@ -19,7 +19,8 @@ const sellersOrchestrator = sellers => {
 			businessCategory,
 			brandImageUrl,
 			tagline,
-			delivery: { type, day, slot, fee, minOrder }
+			delivery: { type, day, slot, fee, minOrder },
+			filters
 		} = seller
 
 		return {
@@ -37,7 +38,8 @@ const sellersOrchestrator = sellers => {
 			deliveryFee: fee ?? 0,
 			deliveryMinOrder: minOrder ?? 0,
 			fssaiLicenseNumber,
-			address
+			address,
+			filters
 		}
 	})
 
