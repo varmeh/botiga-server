@@ -253,7 +253,8 @@ export const addSellerApartment = async (phone, apartmentId) => {
 		const {
 			businessCategory,
 			brand,
-			contact: { address, whatsapp, email }
+			contact: { address, whatsapp, email },
+			filters
 		} = seller
 		const { name, tagline, imageUrl } = brand
 
@@ -271,7 +272,8 @@ export const addSellerApartment = async (phone, apartmentId) => {
 				address: `${address.building}, ${address.street}, ${address.area}, ${address.city}, ${address.state} - ${address.pincode}`
 			},
 			fssaiLicenseNumber: seller.fssai?.number,
-			delivery: { type: 'day', day: 3 }
+			delivery: { type: 'day', day: 3 },
+			filters
 		})
 
 		await apartment.save()
