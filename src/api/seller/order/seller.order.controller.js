@@ -1,5 +1,9 @@
-import CreateHttpError from 'http-errors'
-import { token, paginationData, skipData } from '../../../util'
+import {
+	token,
+	paginationData,
+	skipData,
+	controllerErroHandler
+} from '../../../util'
 import { OrderStatus, User } from '../../../models'
 
 import {
@@ -26,8 +30,7 @@ export const postCancelOrder = async (req, res, next) => {
 
 		res.json({ message: 'cancelled', id: order._id, refund: order.refund })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -48,8 +51,7 @@ export const patchRefundCompleted = async (req, res, next) => {
 			refund: order.refund
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -87,8 +89,7 @@ export const getOrdersByApartmentDate = async (req, res, next) => {
 			orders: orderData
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -107,7 +108,6 @@ export const getOrdersAggregate = async (req, res, next) => {
 		})
 		res.json({ totalRevenue, totalOrders, apartmentWiseBreakup })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }

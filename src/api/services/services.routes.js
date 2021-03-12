@@ -16,6 +16,7 @@ import {
 	getPdfUrl,
 	getApartmentsSearch,
 	getBusinessCategory,
+	getSellerFilters,
 	postImageDelete
 } from './services.controller'
 
@@ -38,6 +39,8 @@ router.get('/cities', getCities)
 router.get('/areas/:city', getAreasForCity)
 
 router.get('/businessCategory', getBusinessCategory)
+
+router.get('/sellerFilters', getSellerFilters)
 
 router.get(
 	'/imageurls/:imageType',

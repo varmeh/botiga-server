@@ -1,6 +1,6 @@
 import moment from 'moment'
 import CreateHttpError from 'http-errors'
-import { winston, notifications } from '../../../util'
+import { notifications, dbErrorHandler } from '../../../util'
 import { Seller } from '../../../models'
 
 export const createSeller = async ({
@@ -42,14 +42,13 @@ export const createSeller = async ({
 
 		return await seller.save()
 	} catch (error) {
-		winston.debug('@error createSeller', { error })
 		if (error.code === 11000 && error.keyValue['contact.phone'] === phone) {
 			// Phone number already used.
 			return Promise.reject(
 				new CreateHttpError[409]('Phone number already taken')
 			)
 		}
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'createSeller')
 	}
 }
 
@@ -59,8 +58,7 @@ export const findSellerByNumber = async number => {
 			'contact.phone': number
 		})
 	} catch (error) {
-		winston.debug('@error findSellerByNumber', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findSellerByNumber')
 	}
 }
 
@@ -82,7 +80,6 @@ export const updateToken = async (sellerId, token) => {
 		// Register user to apartment topic for notifications
 		return 'token added'
 	} catch (error) {
-		winston.debug('@error updateToken', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateToken')
 	}
 }

@@ -1,7 +1,10 @@
-import CreateHttpError from 'http-errors'
-
 import { nanoid } from 'nanoid'
-import { token, aws, uploadTinifyImages } from '../../../util'
+import {
+	token,
+	aws,
+	uploadTinifyImages,
+	controllerErroHandler
+} from '../../../util'
 import {
 	findSeller,
 	updateContactInformation,
@@ -59,8 +62,7 @@ export const getProfileInformation = async (req, res, next) => {
 			apartments: seller.apartments
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -69,8 +71,7 @@ export const getContactInformation = async (req, res, next) => {
 		const seller = await findSeller(token.get(req))
 		res.json(getContactInfo(seller.contact))
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -92,8 +93,7 @@ export const patchContactInformation = async (req, res, next) => {
 
 		res.json(getContactInfo(contact))
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -103,8 +103,7 @@ export const getBusinessInformation = async (req, res, next) => {
 
 		res.json(sellerBusinessInfoOrchestrator(seller))
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -134,8 +133,7 @@ export const patchBusinessInformation = async (req, res, next) => {
 
 		res.json(contact)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -145,8 +143,7 @@ export const getBankDetails = async (req, res, next) => {
 
 		res.json(bankDetails)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -181,8 +178,7 @@ export const patchBankDetails = async (req, res, next) => {
 				'Bank details updated. Please contact support team for bank details validation'
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -196,8 +192,7 @@ export const getBanners = async (req, res, next) => {
 
 		res.json({ banners: seller.banners })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -210,8 +205,7 @@ export const patchBanners = async (req, res, next) => {
 			banners: seller.banners
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -236,8 +230,7 @@ export const patchBannerImage = async (req, res, next) => {
 
 		res.json({ imageUrl })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -250,8 +243,7 @@ export const getCoupons = async (req, res, next) => {
 
 		res.json({ coupons: seller.coupons })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -264,8 +256,7 @@ export const postCoupon = async (req, res, next) => {
 			coupons
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -278,8 +269,7 @@ export const patchCoupon = async (req, res, next) => {
 			coupons
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -292,7 +282,6 @@ export const deleteCoupon = async (req, res, next) => {
 			coupons
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }

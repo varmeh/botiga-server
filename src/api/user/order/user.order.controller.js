@@ -1,4 +1,3 @@
-import CreateHttpError from 'http-errors'
 import { Seller, Order, PaymentStatus } from '../../../models'
 
 import {
@@ -7,7 +6,8 @@ import {
 	skipData,
 	notifications,
 	rpayPayments,
-	aws
+	aws,
+	controllerErroHandler
 } from '../../../util'
 
 import {
@@ -28,6 +28,7 @@ const orderOrchestrator = order => {
 			totalAmount,
 			discountAmount,
 			couponCode,
+			deliveryFee,
 			expectedDeliveryDate,
 			deliverySlot,
 			completionDate,
@@ -47,6 +48,7 @@ const orderOrchestrator = order => {
 		totalAmount,
 		discountAmount,
 		couponCode,
+		deliveryFee,
 		orderDate: createdAt,
 		expectedDeliveryDate,
 		deliverySlot,
@@ -75,8 +77,7 @@ export const getOrders = async (req, res, next) => {
 			orders: filteredOrderedData
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -97,6 +98,7 @@ export const postOrder = async (req, res, next) => {
 		totalAmount,
 		couponCode,
 		discountAmount,
+		deliveryFee,
 		products
 	} = req.body
 
@@ -108,6 +110,7 @@ export const postOrder = async (req, res, next) => {
 			addressId,
 			totalAmount,
 			couponCode,
+			deliveryFee,
 			discountAmount,
 			products
 		})
@@ -132,8 +135,7 @@ export const postOrder = async (req, res, next) => {
 
 		res.status(201).json(orderOrchestrator(order))
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -173,8 +175,7 @@ export const postProductsValidate = async (req, res, next) => {
 
 		res.json({ totalAmount, products: validateList })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -210,8 +211,7 @@ export const postCancelOrder = async (req, res, next) => {
 
 		res.json({ message: 'cancelled', id: order._id })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -224,28 +224,28 @@ export const postRpayTransaction = async (req, res, next) => {
 		})
 
 		res.json(data)
-	} catch ({ status, message }) {
-		next(new CreateHttpError(status, message))
+	} catch (error) {
+		controllerErroHandler(error, next)
 	}
 }
 
-export const postRpayTransactionWebhook = async (req, res) => {
+export const postRpayTransactionWebhook = async (req, res, next) => {
 	try {
 		const { body, headers } = req
 		await rpayPayments.paymentWebhook(body, headers['x-razorpay-signature'])
 		res.json()
-	} catch ({ status, message }) {
-		res.status(500).json()
+	} catch (error) {
+		controllerErroHandler(error, next)
 	}
 }
 
-export const postRpayDowntimeWebhook = async (req, res) => {
+export const postRpayDowntimeWebhook = async (req, res, next) => {
 	try {
 		const { body, headers } = req
 		await rpayPayments.downtimeWebhook(body, headers['x-razorpay-signature'])
 		res.json()
-	} catch ({ status, message }) {
-		res.status(500).json()
+	} catch (error) {
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -267,7 +267,7 @@ export const postRpayTransactionCancelled = async (req, res, next) => {
 		})
 
 		res.status(204).json()
-	} catch ({ status, message }) {
-		next(new CreateHttpError(status, message))
+	} catch (error) {
+		controllerErroHandler(error, next)
 	}
 }

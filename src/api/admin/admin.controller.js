@@ -10,7 +10,8 @@ import {
 	rpayPayments,
 	generateExcel,
 	winston,
-	uploadTinifyImages
+	uploadTinifyImages,
+	controllerErroHandler
 } from '../../util'
 import {
 	findApartment,
@@ -23,7 +24,8 @@ import {
 	addSellerApartment,
 	updateApartmentLiveStatus,
 	removeSellerAllApartments,
-	removeSellerApartment
+	removeSellerApartment,
+	updateSellerFilters
 } from './admin.dao'
 
 const productsOrchestrator = categories => {
@@ -81,7 +83,8 @@ const sellerOrchestrator = seller => {
 		contact: { phone, whatsapp, email, address },
 		bankDetails,
 		apartments,
-		categories
+		categories,
+		filters
 	} = seller
 
 	let data = {
@@ -97,6 +100,7 @@ const sellerOrchestrator = seller => {
 		whatsapp,
 		email,
 		mid: seller.mid,
+		filters,
 		apartments,
 		address: `${address.building}, ${address.street}, ${address.area}, ${address.city}, ${address.state} - ${address.pincode}`
 	}
@@ -142,8 +146,7 @@ export const getApartment = async (req, res, next) => {
 		const apartment = await findApartment(req.params.apartmentId)
 		res.json(apartment)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -152,8 +155,7 @@ export const postApartment = async (req, res, next) => {
 		const areas = await createApartment(req.body)
 		res.json(areas)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -162,8 +164,19 @@ export const postApartmentBanner = async (req, res, next) => {
 		const banners = await addApartmentBanner(req.body)
 		res.json(banners)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
+	}
+}
+
+export const patchSellerFilters = async (req, res, next) => {
+	try {
+		const { phone, filters } = req.body
+
+		const seller = await updateSellerFilters(phone, filters)
+
+		res.json(sellerOrchestrator(seller))
+	} catch (error) {
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -173,8 +186,7 @@ export const deleteApartmentBanner = async (req, res, next) => {
 		const banners = await removeApartmentBanner(apartmentId, bannerId)
 		res.json(banners)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -184,8 +196,7 @@ export const postBusinessCategory = async (req, res, next) => {
 
 		res.status(201).json()
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -197,8 +208,7 @@ export const postNotificationTopic = (req, res, next) => {
 			message: `notification send to topic - ${topic}`
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -217,8 +227,7 @@ export const postNotificationUser = async (req, res, next) => {
 
 		res.json({ message: 'notification send to user devices' })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -237,8 +246,7 @@ export const postNotificationSeller = async (req, res, next) => {
 
 		res.json({ message: 'notification send to seller devices' })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -248,8 +256,7 @@ export const getSellerDetails = async (req, res, next) => {
 
 		res.json(sellerOrchestrator(seller))
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -265,8 +272,7 @@ export const patchSellerBankDetails = async (req, res, next) => {
 
 		res.json(sellerOrchestrator(seller))
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -283,8 +289,7 @@ export const postTestTransaction = async (req, res, next) => {
 
 		res.json(data)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -310,8 +315,7 @@ export const postTestTransactionNotify = async (req, res, next) => {
 
 		res.status(204).json()
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -356,8 +360,7 @@ export const getDeliveryXls = async (req, res, next) => {
 
 		res.json(deliveries)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -367,8 +370,7 @@ export const deleteSellerApartments = async (req, res, next) => {
 
 		res.status(204).json()
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -379,8 +381,7 @@ export const postSellerApartment = async (req, res, next) => {
 
 		res.json(apartment)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -391,8 +392,7 @@ export const patchApartmentLiveStatus = async (req, res, next) => {
 
 		res.json(apartment)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -403,8 +403,7 @@ export const deleteSellerApartmentsWithId = async (req, res, next) => {
 
 		res.status(204).json()
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -427,8 +426,7 @@ export const postBannerImage = async (req, res, next) => {
 			res.json({ imageUrl })
 		}
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -437,7 +435,6 @@ export const postImageDelete = async (req, res, next) => {
 		await aws.s3.deleteImageUrl(req.body.imageUrl)
 		res.status(204).json()
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }

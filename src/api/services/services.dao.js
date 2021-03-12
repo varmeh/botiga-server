@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { winston } from '../../util'
+import { dbErrorHandler } from '../../util'
 import { Apartment } from '../../models'
 
 export const findApartment = async apartmenId => {
@@ -10,8 +10,7 @@ export const findApartment = async apartmenId => {
 		}
 		return apartment
 	} catch (error) {
-		winston.debug('@error findApartment', { msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findApartment')
 	}
 }
 
@@ -20,8 +19,7 @@ export const findCities = async () => {
 		const data = await Apartment.distinct('city').sort()
 		return data
 	} catch (error) {
-		winston.debug('@error findCities', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findCities')
 	}
 }
 
@@ -30,8 +28,7 @@ export const findAreaByCity = async city => {
 		const data = await Apartment.distinct('area', { city }).sort()
 		return data
 	} catch (error) {
-		winston.debug('@error findAreaByCity', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findAreaByCity')
 	}
 }
 
@@ -52,8 +49,7 @@ export const findApartmentsSearch = async (searchText = '') => {
 			.sort({ name: 1 })
 		return data
 	} catch (error) {
-		winston.debug('@error findApartmentsByCityAndArea', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findApartmentsByCityAndArea')
 	}
 }
 
@@ -73,7 +69,6 @@ export const findApartmentsByLocation = async (lat, long) => {
 		).sort({ name: 1 })
 		return data
 	} catch (error) {
-		winston.debug('@error findApartmentsByLocation', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findApartmentsByLocation')
 	}
 }

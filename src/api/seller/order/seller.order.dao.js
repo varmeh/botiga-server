@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 import { Types } from 'mongoose'
 
-import { winston, moment } from '../../../util'
+import { moment, dbErrorHandler } from '../../../util'
 import { Order, OrderStatus, PaymentStatus } from '../../../models'
 
 export const updateOrder = async (
@@ -50,8 +50,7 @@ export const updateOrder = async (
 
 		return await order.save()
 	} catch (error) {
-		winston.debug('@error updateOrder', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateOrder')
 	}
 }
 
@@ -71,8 +70,7 @@ export const updateRefund = async (orderId, sellerId) => {
 
 		return await order.save()
 	} catch (error) {
-		winston.debug('@error updateRefund', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateRefund')
 	}
 }
 
@@ -113,8 +111,7 @@ export const findOrdersByApartment = async ({
 
 		return [count, orders]
 	} catch (error) {
-		winston.debug('@error findOrdersByApartment', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findOrdersByApartment')
 	}
 }
 
@@ -156,10 +153,6 @@ export const findSellerAggregatedData = async (sellerId, dateString) => {
 
 		return data
 	} catch (error) {
-		winston.debug('@error findSellerAggregatedData', {
-			error,
-			msg: error.message
-		})
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findSellerAggregatedData')
 	}
 }

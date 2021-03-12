@@ -1,6 +1,6 @@
 /* eslint-disable no-undefined */
 import CreateHttpError from 'http-errors'
-import { winston, moment } from '../../util'
+import { winston, moment, dbErrorHandler } from '../../util'
 import { Apartment, Seller, Order } from '../../models'
 
 export const findApartment = async apartmentId => {
@@ -23,8 +23,7 @@ export const findApartment = async apartmentId => {
 		}
 		return apartments[0]
 	} catch (error) {
-		winston.debug('@error findApartment', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findApartment')
 	}
 }
 
@@ -111,8 +110,7 @@ export const removeApartmentBanner = async (apartmentId, bannerId) => {
 		const { marketingBanners } = await apartment.save()
 		return marketingBanners
 	} catch (error) {
-		winston.debug('@error removeApartmentBanner', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'removeApartmentBanner')
 	}
 }
 
@@ -125,8 +123,27 @@ export const findSellerByNumber = async phone => {
 
 		return seller
 	} catch (error) {
-		winston.debug('@error findSellerByNumber', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findSellerByNumber')
+	}
+}
+
+export const updateSellerFilters = async (phone, filters) => {
+	try {
+		const seller = await findSellerByNumber(phone)
+
+		// Iterate over seller apartments & add filters one by one
+		for (const apt of seller.apartments) {
+			const apartment = await findApartment(apt._id)
+			apartment.sellers.id(seller._id).filters = filters
+			await apartment.save()
+		}
+
+		seller.filters = filters
+		const updatedSeller = await seller.save()
+
+		return updatedSeller
+	} catch (error) {
+		return dbErrorHandler(error, 'updateSellerFilters')
 	}
 }
 
@@ -149,8 +166,7 @@ export const updateSellerBankDetails = async ({
 
 		return await seller.save()
 	} catch (error) {
-		winston.debug('@error updateSellerBankDetails', { error })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateSellerBankDetails')
 	}
 }
 
@@ -179,20 +195,13 @@ export const findDeliveriesByApartment = async ({
 
 		return [count, deliveries]
 	} catch (error) {
-		winston.debug('@error findDeliveriesByApartment', {
-			error,
-			msg: error.message
-		})
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findDeliveriesByApartment')
 	}
 }
 
 export const findDeliveriesForSeller = async ({ sellerPhone, dateString }) => {
 	try {
-		const seller = await Seller.findOne({ 'contact.phone': sellerPhone })
-		if (!seller) {
-			return Promise.reject(new CreateHttpError[404]('Seller not found'))
-		}
+		const seller = await findSellerByNumber(sellerPhone)
 
 		const deliveries = []
 		for (const apartment of seller.apartments) {
@@ -208,11 +217,7 @@ export const findDeliveriesForSeller = async ({ sellerPhone, dateString }) => {
 
 		return [seller, deliveries]
 	} catch (error) {
-		winston.debug('@error findDeliveriesForSeller', {
-			error,
-			msg: error.message
-		})
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findDeliveriesForSeller')
 	}
 }
 
@@ -285,9 +290,7 @@ export const addSellerApartment = async (phone, apartmentId) => {
 
 		return [updatedSeller.apartments.id(apartmentId), updatedSeller]
 	} catch (error) {
-		winston.debug('@error addApartment', { error, msg: error?.message })
-		const { status, message } = error
-		return Promise.reject(new CreateHttpError[status ?? 500](message))
+		return dbErrorHandler(error, 'addSellerApartment')
 	}
 }
 
@@ -312,12 +315,7 @@ export const updateApartmentLiveStatus = async (phone, apartmentId, live) => {
 
 		return updatedSeller.apartments.id(apartmentId)
 	} catch (error) {
-		winston.debug('@error updateApartmentLiveStatus', {
-			error,
-			msg: error?.message
-		})
-		const { status, message } = error
-		return Promise.reject(new CreateHttpError[status ?? 500](message))
+		return dbErrorHandler(error, 'updateApartmentLiveStatus')
 	}
 }
 
@@ -341,13 +339,7 @@ export const removeSellerApartment = async (phone, apartmentId) => {
 		}
 		return 'removed'
 	} catch (error) {
-		winston.debug('@error removeSellerApartment', {
-			error,
-			msg: error.message,
-			phone,
-			apartmentId
-		})
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'removeSellerApartment')
 	}
 }
 
@@ -365,10 +357,6 @@ export const removeSellerAllApartments = async phone => {
 		}
 		return 'removed'
 	} catch (error) {
-		winston.debug('@error removeSellerAllApartments', {
-			error,
-			msg: error.message
-		})
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'removeSellerAllApartments')
 	}
 }

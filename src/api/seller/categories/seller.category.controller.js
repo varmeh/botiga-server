@@ -1,5 +1,4 @@
-import CreateHttpError from 'http-errors'
-import { token } from '../../../util'
+import { token, controllerErroHandler } from '../../../util'
 import {
 	createCategory,
 	findCategories,
@@ -14,8 +13,7 @@ export const postCategory = async (req, res, next) => {
 
 		res.status(201).json({ id: _id, name })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -27,8 +25,7 @@ export const getCategories = async (req, res, next) => {
 			categories.map(({ _id, name, visible }) => ({ id: _id, name, visible }))
 		)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -38,8 +35,7 @@ export const deleteCategory = async (req, res, next) => {
 
 		res.status(204).json()
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -50,8 +46,7 @@ export const patchCategory = async (req, res, next) => {
 
 		res.json({ id: category._id, newCategoryName: category.name })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -66,7 +61,6 @@ export const patchCategoryVisibility = async (req, res, next) => {
 
 		res.json({ categoryId: category._id, categoryName: category.name, visible })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }

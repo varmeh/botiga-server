@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 import { nanoid } from 'nanoid'
-import { token, aws } from '../../util'
-import { findBusinessCategory, Seller } from '../../models'
+import { token, aws, controllerErroHandler } from '../../util'
+import { findHelperData, Seller } from '../../models'
 import {
 	findApartment,
 	findCities,
@@ -20,8 +20,7 @@ export const getApartmentById = async (req, res, next) => {
 		const apartment = await findApartment(req.params.apartmentId)
 		res.json(extractApartmentInfo(apartment))
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -34,8 +33,7 @@ export const getApartmentsByLocation = async (req, res, next) => {
 		const data = await findApartmentsByLocation(lat, long)
 		res.json(data)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -45,8 +43,7 @@ export const getCities = async (_, res, next) => {
 		const cities = await findCities()
 		res.json(cities)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -55,8 +52,7 @@ export const getAreasForCity = async (req, res, next) => {
 		const areas = await findAreaByCity(req.params.city)
 		res.json(areas)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -65,18 +61,25 @@ export const getApartmentsSearch = async (req, res, next) => {
 		const apartments = await findApartmentsSearch(req.query.text)
 		res.json(apartments)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
 export const getBusinessCategory = async (_, res, next) => {
 	try {
-		const data = await findBusinessCategory()
-		res.json(data)
+		const { businessCategory } = await findHelperData()
+		res.json(businessCategory)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
+	}
+}
+
+export const getSellerFilters = async (_, res, next) => {
+	try {
+		const { sellerFilters } = await findHelperData()
+		res.json(sellerFilters)
+	} catch (error) {
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -87,8 +90,7 @@ export const getImageUrl = async (req, res, next) => {
 		const data = await aws.s3.getPredefinedImageUrl(fileName, imageType)
 		res.status(201).json(data)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -99,8 +101,7 @@ export const getBrandImageUrl = async (req, res, next) => {
 		const data = await aws.s3.getPredefinedImageUrl(fileName, imageType)
 		res.status(201).json(data)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -110,8 +111,7 @@ export const getPdfUrl = async (_, res, next) => {
 		const data = await aws.s3.getPredefinedPdfUrl(fileName)
 		res.status(201).json(data)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -127,7 +127,6 @@ export const postImageDelete = async (req, res, next) => {
 		await aws.s3.deleteImageUrl(req.body.imageUrl)
 		res.status(204).json()
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }

@@ -52,16 +52,8 @@ const apartmentSchema = new Schema(
 			}
 		},
 		sellers: [apartmentSellerSchema],
-		banners: [String],
 		marketingBanners: [marketingBannerSchema]
 	},
 	{ timestamps: true }
 )
-
-apartmentSchema.pre('validate', function (next) {
-	if (this.banners.length > 7)
-		throw new Error('exceeds maximum number of banners allowed')
-	next()
-})
-
 export const Apartment = model('apartment', apartmentSchema)

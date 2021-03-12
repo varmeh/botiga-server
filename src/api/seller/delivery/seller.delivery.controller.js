@@ -1,5 +1,9 @@
-import CreateHttpError from 'http-errors'
-import { token, paginationData, skipData } from '../../../util'
+import {
+	token,
+	paginationData,
+	skipData,
+	controllerErroHandler
+} from '../../../util'
 import { OrderStatus, User } from '../../../models'
 
 import {
@@ -37,8 +41,7 @@ export const patchDeliveryStatus = async (req, res, next) => {
 
 		res.json({ message: status, id: order._id })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -67,8 +70,7 @@ export const patchBatchDeliveryStatus = async (req, res, next) => {
 
 		res.json(orderIdStatusList)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -92,8 +94,7 @@ export const patchDeliveryDelay = async (req, res, next) => {
 
 		res.json({ message: `delivery date changed to ${newDate}`, id: order._id })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -130,8 +131,7 @@ export const getDeliveryByApartment = async (req, res, next) => {
 			deliveries: deliveryData
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -144,7 +144,6 @@ export const getAggregateDelivery = async (req, res, next) => {
 
 		res.json(deliveries)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }

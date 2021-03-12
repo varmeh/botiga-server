@@ -1,20 +1,13 @@
 import CreateHttpError from 'http-errors'
 
-import { winston } from '../../../util'
+import { dbErrorHandler } from '../../../util'
 import { Seller, Apartment } from '../../../models'
-
-const logDbError = error => ({ error, msg: error?.message })
-const promiseRejectServerError = error => {
-	const { status, message } = error
-	return Promise.reject(new CreateHttpError[status ?? 500](message))
-}
 
 export const findApartments = async sellerId => {
 	try {
 		return await Seller.findById(sellerId, 'apartments')
 	} catch (error) {
-		winston.debug('@error findApartments', logDbError(error))
-		return promiseRejectServerError(error)
+		return dbErrorHandler(error, 'findApartments')
 	}
 }
 
@@ -48,8 +41,7 @@ export const updateApartmentLiveStatus = async (
 
 		return updatedSeller.apartments.id(apartmentId)
 	} catch (error) {
-		winston.debug('@error updateApartmentLiveStatus', logDbError(error))
-		return promiseRejectServerError(error)
+		return dbErrorHandler(error, 'updateApartmentLiveStatus')
 	}
 }
 
@@ -76,8 +68,41 @@ export const updateApartmentDeliverySchedule = async (
 
 		return updatedSeller.apartments.id(apartmentId)
 	} catch (error) {
-		winston.debug('@error updateApartmentDeliverySchedule', logDbError(error))
-		return promiseRejectServerError(error)
+		return dbErrorHandler(error, 'updateApartmentDeliverySchedule')
+	}
+}
+
+export const updateApartmentDeliveryFee = async ({
+	sellerId,
+	apartmentId,
+	deliveryMinOrder,
+	deliveryFee
+}) => {
+	try {
+		const seller = await Seller.findById(sellerId)
+		if (!seller) {
+			return Promise.reject(new CreateHttpError[404]('Seller not found'))
+		}
+
+		// Update Apartment Document with seller fee data
+		const apartment = await Apartment.findById(apartmentId)
+		const sellerInApartmentSchema = apartment.sellers.id(sellerId)
+
+		sellerInApartmentSchema.delivery.minOrder = deliveryMinOrder
+		sellerInApartmentSchema.delivery.fee = deliveryFee
+
+		await apartment.save()
+
+		// Update Seller Document
+		const apartmentInSellerSchema = seller.apartments.id(apartmentId)
+		apartmentInSellerSchema.deliveryFee = deliveryFee
+		apartmentInSellerSchema.deliveryMinOrder = deliveryMinOrder
+
+		const updatedSeller = await seller.save()
+
+		return updatedSeller.apartments.id(apartmentId)
+	} catch (error) {
+		return dbErrorHandler(error, 'updateApartmentDeliveryFee')
 	}
 }
 
@@ -102,8 +127,7 @@ export const updateApartmentContactInformation = async (
 
 		return updatedSeller.apartments.id(apartmentId)
 	} catch (error) {
-		winston.debug('@error updateApartmentContactInformation', logDbError(error))
-		return promiseRejectServerError(error)
+		return dbErrorHandler(error, 'updateApartmentContactInformation')
 	}
 }
 
@@ -127,7 +151,6 @@ export const removeApartment = async (sellerId, apartmentId) => {
 
 		return 'Apartment removed'
 	} catch (error) {
-		winston.debug('@error removeApartment', logDbError(error))
-		return promiseRejectServerError(error)
+		return dbErrorHandler(error, 'removeApartment')
 	}
 }

@@ -1,7 +1,12 @@
-import CreateHttpError from 'http-errors'
 import { nanoid } from 'nanoid'
 
-import { token, aws, winston, uploadTinifyImages } from '../../../util'
+import {
+	token,
+	aws,
+	winston,
+	uploadTinifyImages,
+	controllerErroHandler
+} from '../../../util'
 import {
 	createProduct,
 	findProducts,
@@ -36,8 +41,7 @@ export const postProduct = async (req, res, next) => {
 
 		res.status(201).json({ id: product._id })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -79,8 +83,7 @@ export const getProducts = async (req, res, next) => {
 
 		res.json(flatCategories)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -116,8 +119,7 @@ export const deleteProduct = async (req, res, next) => {
 
 		res.status(204).json()
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -158,8 +160,7 @@ export const patchProduct = async (req, res, next) => {
 			message: 'product updated'
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -195,7 +196,6 @@ export const postProductImage = async (req, res, next) => {
 			res.json({ imageUrl: downloadUrl })
 		}
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }

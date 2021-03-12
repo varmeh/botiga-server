@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 
-import { winston, moment } from '../../../util'
+import { moment, dbErrorHandler } from '../../../util'
 import { Order, OrderStatus, Seller } from '../../../models'
 
 export const updateOrder = async (orderId, status, newDate = null) => {
@@ -31,8 +31,7 @@ export const updateOrder = async (orderId, status, newDate = null) => {
 
 		return await order.save()
 	} catch (error) {
-		winston.debug('@error updateOrder', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'sortCategory')
 	}
 }
 
@@ -72,11 +71,7 @@ export const findDeliveriesByApartment = async ({
 
 		return [count, deliveries]
 	} catch (error) {
-		winston.debug('@error findDeliveriesByApartment', {
-			error,
-			msg: error.message
-		})
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'sortCategory')
 	}
 }
 
@@ -100,10 +95,6 @@ export const findAggregateDeliveries = async ({ sellerId, date }) => {
 
 		return deliveries
 	} catch (error) {
-		winston.debug('@error findAggregateDeliveries', {
-			error,
-			msg: error.message
-		})
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findAggregateDeliveries')
 	}
 }

@@ -33,4 +33,16 @@ export const patchContactInfoValidator = [
 	emailOptionalValidator('email')
 ]
 
+export const patchDeliveryFeeValidator = [
+	objectIdValidator('apartmentId'),
+	numberValidator('deliveryMinOrder')
+		.bail()
+		.custom(val => val <= 400)
+		.withMessage('should be at max ₹400'),
+	numberValidator('deliveryFee')
+		.bail()
+		.custom(val => val <= 20)
+		.withMessage('should be at max 20')
+]
+
 export const deleteApartmentValidator = [paramObjectIdValidator('apartmentId')]

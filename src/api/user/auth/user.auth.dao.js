@@ -1,5 +1,5 @@
 import CreateHttpError from 'http-errors'
-import { winston, notifications } from '../../../util'
+import { notifications, dbErrorHandler } from '../../../util'
 import { User, Apartment } from '../../../models'
 
 export const createUser = async ({
@@ -21,14 +21,13 @@ export const createUser = async ({
 		})
 		return await user.save()
 	} catch (error) {
-		winston.debug('@error createUser', { error, msg: error.message })
 		if (error.code === 11000) {
 			// Phone number already used.
 			return Promise.reject(
 				new CreateHttpError[409]('Phone number already taken')
 			)
 		}
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'createUser')
 	}
 }
 
@@ -36,8 +35,7 @@ export const findUser = async userId => {
 	try {
 		return await User.findById(userId)
 	} catch (error) {
-		winston.debug('@error findUser', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findUser')
 	}
 }
 
@@ -47,8 +45,7 @@ export const findUserByNumber = async number => {
 			'contact.phone': number
 		})
 	} catch (error) {
-		winston.debug('@error findUserByNumber', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'findUserByNumber')
 	}
 }
 
@@ -66,8 +63,7 @@ export const updateUserProfile = async (
 
 		return await user.save()
 	} catch (error) {
-		winston.debug('@error updateUser', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateUser')
 	}
 }
 
@@ -89,8 +85,7 @@ export const updateToken = async (userId, token) => {
 		// Register user to apartment topic for notifications
 		return 'token added'
 	} catch (error) {
-		winston.debug('@error updateToken', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateToken')
 	}
 }
 
@@ -119,8 +114,7 @@ export const createAddress = async (userId, house, apartmentId) => {
 
 		return await user.save()
 	} catch (error) {
-		winston.debug('@error createUserAddress', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'createUserAddress')
 	}
 }
 
@@ -138,8 +132,7 @@ export const updateAddress = async (userId, house, id) => {
 
 		return await user.save()
 	} catch (error) {
-		winston.debug('@error updateUserAddress', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'updateUserAddress')
 	}
 }
 
@@ -156,7 +149,6 @@ export const deleteAddress = async (userId, id) => {
 
 		return await user.save()
 	} catch (error) {
-		winston.debug('@error deleteUserAddress', { error, msg: error.message })
-		return Promise.reject(new CreateHttpError[500]())
+		return dbErrorHandler(error, 'deleteUserAddress')
 	}
 }

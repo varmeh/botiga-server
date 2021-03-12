@@ -8,6 +8,7 @@ import {
 	postBusinessCategoryValidator,
 	postNotificationTopicValidator,
 	postNotificationUserValidator,
+	patchSellerFiltesValidator,
 	getSellerValidator,
 	patchSellerBankDetailsValidator,
 	postTestTransactionValidator,
@@ -39,7 +40,8 @@ import {
 	deleteSellerApartments,
 	deleteSellerApartmentsWithId,
 	postBannerImage,
-	postImageDelete
+	postImageDelete,
+	patchSellerFilters
 } from './admin.controller'
 
 const router = Router()
@@ -73,6 +75,13 @@ router.delete(
 )
 
 router.post('/banners/image', postBannerImage)
+
+router.patch(
+	'/seller/filters',
+	patchSellerFiltesValidator,
+	validationMiddleware,
+	patchSellerFilters
+)
 
 router.post(
 	'/image/delete',

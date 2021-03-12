@@ -1,4 +1,6 @@
+import CreateHttpError from 'http-errors'
 import { validationResult } from 'express-validator'
+
 import { winston } from './winston.logger'
 
 /* Send Error Response to client */
@@ -37,4 +39,17 @@ export const validationMiddleware = (req, _res, next) => {
 		)
 	}
 	next()
+}
+
+export const dbErrorHandler = (error, origin) => {
+	winston.debug(`@error ${origin}`, { error, msg: error?.message })
+	if (error.status && error.message) {
+		return Promise.reject(new CreateHttpError[error.status](error.message))
+	}
+	return Promise.reject(new CreateHttpError[500]('Internal Server Error'))
+}
+
+export const controllerErroHandler = (error, next) => {
+	const { status, message } = error
+	next(new CreateHttpError(status, message))
 }

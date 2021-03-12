@@ -11,7 +11,8 @@ import {
 	phoneValidator,
 	paramObjectIdValidator,
 	boolValidator,
-	numberValidator
+	numberValidator,
+	arrayValidator
 } from '../../util'
 
 export const getApartmentValidator = paramObjectIdValidator('apartmentId')
@@ -39,6 +40,11 @@ export const postApartmentBannerValidator = [
 export const deleteApartmentBannerValidator = [
 	paramObjectIdValidator('apartmentId'),
 	paramObjectIdValidator('bannerId')
+]
+
+export const patchSellerFiltesValidator = [
+	phoneValidator('phone'),
+	arrayValidator('filters')
 ]
 
 export const deleteImageValidator = urlValidator('imageUrl')

@@ -1,7 +1,5 @@
-import CreateHttpError from 'http-errors'
-
-import { token } from '../../util'
-import { apartmentVirtuals } from '../../models'
+import { token, controllerErroHandler } from '../../util'
+import { apartmentVirtuals, findHelperData } from '../../models'
 import {
 	findSellersInApartment,
 	findApartmentInfo,
@@ -21,7 +19,7 @@ const sellersOrchestrator = sellers => {
 			businessCategory,
 			brandImageUrl,
 			tagline,
-			delivery: { type, day, slot }
+			delivery: { type, day, slot, fee, minOrder }
 		} = seller
 
 		return {
@@ -36,6 +34,8 @@ const sellersOrchestrator = sellers => {
 			deliveryMessage: apartmentVirtuals.deliveryMessage(type, day),
 			deliveryDate: apartmentVirtuals.deliveryDate(type, day),
 			deliverySlot: slot,
+			deliveryFee: fee ?? 0,
+			deliveryMinOrder: minOrder ?? 0,
 			fssaiLicenseNumber,
 			address
 		}
@@ -54,8 +54,7 @@ export const getSellersInApartment = async (req, res, next) => {
 
 		res.json(sellersData)
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -64,7 +63,6 @@ export const getApartmentData = async (req, res, next) => {
 		const { apartmentId } = req.params
 		const sellers = await findSellersInApartment(apartmentId)
 		const {
-			banners,
 			marketingBanners,
 			name,
 			area,
@@ -73,19 +71,21 @@ export const getApartmentData = async (req, res, next) => {
 			pincode
 		} = await findApartmentInfo(apartmentId)
 
+		const { sellerFilters } = await findHelperData()
+
 		res.json({
 			name,
 			area,
 			city,
 			state,
 			pincode,
-			marketingBanners,
-			banners,
+			filters: sellerFilters ?? [],
+			marketingBanners: marketingBanners ?? [],
+			banners: [], // keeping this empty banner to avoid crashes
 			sellers: sellersOrchestrator(sellers)
 		})
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -136,8 +136,7 @@ export const getProductsOfSeller = async (req, res, next) => {
 
 		res.json(categoryOrchestrator(categories))
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -149,8 +148,7 @@ export const getSellerData = async (req, res, next) => {
 
 		res.json({ banners, coupons, categories: categoryOrchestrator(categories) })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -160,8 +158,7 @@ export const getUserCart = async (req, res, next) => {
 
 		res.json({ ...cart })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
 
@@ -177,7 +174,6 @@ export const patchUserCart = async (req, res, next) => {
 
 		res.json({ message: 'cart updated' })
 	} catch (error) {
-		const { status, message } = error
-		next(new CreateHttpError(status, message))
+		controllerErroHandler(error, next)
 	}
 }
