@@ -39,7 +39,7 @@ const sellersOrchestrator = sellers => {
 			deliveryMinOrder: minOrder ?? 0,
 			fssaiLicenseNumber,
 			address,
-			filters
+			filters: filters ?? []
 		}
 	})
 
