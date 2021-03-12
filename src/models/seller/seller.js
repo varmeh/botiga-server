@@ -47,8 +47,7 @@ export const sellerApartmentSchema = new Schema({
 	deliveryMinOrder: {
 		type: Number,
 		default: 0
-	},
-	filters: [String]
+	}
 })
 
 export const CouponDiscountType = {
@@ -172,6 +171,7 @@ const sellerSchema = new Schema(
 			bankName: String
 		},
 		mid: String, // paytm merchant id for split payments. Separated from bank details to avoid encryption
+		filters: [String],
 		categories: [categorySchema],
 		apartments: [sellerApartmentSchema],
 		banners: [String],
