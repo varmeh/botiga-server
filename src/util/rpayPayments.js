@@ -1,5 +1,4 @@
 /* eslint-disable max-statements */
-/* eslint-disable max-lines-per-function */
 import axios from 'axios'
 import CreateHttpError from 'http-errors'
 import Razorpay from 'razorpay'
@@ -114,6 +113,15 @@ const paymentWebhook = async (data, signature) => {
 			}
 		} = data
 
+		await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: 'support@botiga.app',
+			subject: `Botiga - Payment Event - ${event}`,
+			text: `Payment Failure Notification
+				<br><br>${entity}
+				<br><br>Team Botiga`
+		})
+
 		if (!entity.notes.orderId || entity.notes.orderId === TEST_TRANSACTION) {
 			winston.info('@payment webhook test transaction', {
 				domain: 'webhook',
@@ -141,6 +149,10 @@ const paymentWebhook = async (data, signature) => {
 		order.payment.paymentMode = entity.method
 		const updatedOrder = await order.save()
 
+		winston.debug('@webhook updated order data', {
+			updatedOrder
+		})
+
 		const user = await User.findById(order.buyer.id)
 
 		// Send seller email in case of failure
@@ -158,7 +170,7 @@ const paymentWebhook = async (data, signature) => {
 
 			await aws.ses.sendMailPromise({
 				from: 'noreply@botiga.app',
-				to: order.seller.email,
+				to: 'support@botiga.app',
 				subject: `Botiga - Server Payment Failure Notification - Order #${order.order.number} - ${order.apartment.aptName} `,
 				text: `Payment Failure Notification
 				<br><br>Please remind the customer to make the payment via Remind option in your order detail screen.
@@ -169,7 +181,7 @@ const paymentWebhook = async (data, signature) => {
 		} else {
 			// Payment Captured event was registered. If order payment status is not success, order payment update failed
 			if (updatedOrder.payment.status !== PaymentStatus.success) {
-				throw Error('Payment Order status Success not updated in db')
+				throw new Error('Payment Order status Success not updated in db')
 			}
 
 			winston.info(`@webhook payment success - ${entity.id}`, {
