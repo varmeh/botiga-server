@@ -149,11 +149,6 @@ const paymentWebhook = async (data, signature) => {
 		order.payment.paymentMode = entity.method
 		const updatedOrder = await order.save()
 
-		winston.debug('@webhook updated order payment status', {
-			order: updatedOrder.order,
-			paymentStatus: updatedOrder.payment
-		})
-
 		const user = await User.findById(order.buyer.id)
 
 		// Send seller email in case of failure
@@ -161,7 +156,8 @@ const paymentWebhook = async (data, signature) => {
 			winston.error(`@webhook payment failure - ${entity.id}`, {
 				paymentId: entity.id,
 				orderNumber: order.order.number,
-				brand: order.seller.brandName
+				brand: order.seller.brandName,
+				paymentStatus: updatedOrder.payment
 			})
 
 			user.sendNotifications(
@@ -188,7 +184,8 @@ const paymentWebhook = async (data, signature) => {
 			winston.info(`@webhook payment success - ${entity.id}`, {
 				paymentId: entity.id,
 				orderNumber: order.order.number,
-				brand: order.seller.brandName
+				brand: order.seller.brandName,
+				paymentStatus: updatedOrder.payment
 			})
 
 			user.sendNotifications(
