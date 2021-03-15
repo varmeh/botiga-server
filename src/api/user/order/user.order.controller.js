@@ -14,7 +14,8 @@ import {
 	createOrder,
 	findCategoryProducts,
 	cancelOrder,
-	findOrders
+	findOrders,
+	findOrderById
 } from './user.order.dao'
 
 const orderOrchestrator = order => {
@@ -76,6 +77,16 @@ export const getOrders = async (req, res, next) => {
 			...paginationData({ limit, totalOrders, currentPage: page }),
 			orders: filteredOrderedData
 		})
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const getOrderWithId = async (req, res, next) => {
+	try {
+		const order = await findOrderById(req.params.orderId)
+
+		res.json(orderOrchestrator(order))
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}

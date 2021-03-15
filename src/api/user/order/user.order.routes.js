@@ -7,6 +7,7 @@ import {
 	postProductsValidator,
 	postCancelOrderValidator,
 	getOrdersValidator,
+	getOrderWithIdValidator,
 	postTransactionValidator
 } from './user.order.validator'
 
@@ -15,6 +16,7 @@ import {
 	postProductsValidate,
 	postCancelOrder,
 	getOrders,
+	getOrderWithId,
 	postRpayTransaction,
 	postRpayTransactionCancelled,
 	postRpayTransactionWebhook,
@@ -29,6 +31,14 @@ router.get(
 	getOrdersValidator,
 	validationMiddleware,
 	getOrders
+)
+
+router.get(
+	'/:orderId',
+	token.authenticationMiddleware,
+	getOrderWithIdValidator,
+	validationMiddleware,
+	getOrderWithId
 )
 
 // Create a new order & initiate transaction

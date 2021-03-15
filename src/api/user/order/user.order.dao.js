@@ -143,3 +143,17 @@ export const findOrders = async ({ userId, skip, limit }) => {
 		return dbErrorHandler(error, 'findOrder')
 	}
 }
+
+export const findOrderById = async orderId => {
+	try {
+		const order = await Order.findById(orderId)
+
+		if (!order) {
+			return Promise.reject(new CreateHttpError[404]('Order does not exist'))
+		}
+
+		return order
+	} catch (error) {
+		return dbErrorHandler(error, 'findOrderBytId')
+	}
+}

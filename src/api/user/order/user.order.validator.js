@@ -7,7 +7,8 @@ import {
 	objectIdValidator,
 	queryNumberValidator,
 	decimalOptionalValidator,
-	emptyOptionalValidator
+	emptyOptionalValidator,
+	paramObjectIdValidator
 } from '../../../util'
 
 export const postOrderValidator = [
@@ -37,5 +38,7 @@ export const getOrdersValidator = [
 	queryNumberValidator('limit'),
 	queryNumberValidator('page')
 ]
+
+export const getOrderWithIdValidator = [paramObjectIdValidator('orderId')]
 
 export const postTransactionValidator = [objectIdValidator('orderId')]
