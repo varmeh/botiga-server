@@ -21,7 +21,8 @@ const sendToUser = (token, title, body, orderId) => {
 			body,
 			clickAction: 'FLUTTER_NOTIFICATION_CLICK',
 			sound: 'default'
-		}
+		},
+		data: {}
 	}
 	if (orderId) {
 		notificationPayload.data.orderId = orderId
