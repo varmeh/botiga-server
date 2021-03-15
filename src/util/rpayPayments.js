@@ -113,15 +113,6 @@ const paymentWebhook = async (data, signature) => {
 			}
 		} = data
 
-		await aws.ses.sendMailPromise({
-			from: 'noreply@botiga.app',
-			to: 'support@botiga.app',
-			subject: `Botiga - Payment Event - ${event}`,
-			text: `Payment Failure Notification
-				<br><br>${entity}
-				<br><br>Team Botiga`
-		})
-
 		if (!entity.notes.orderId || entity.notes.orderId === TEST_TRANSACTION) {
 			winston.info('@payment webhook test transaction', {
 				domain: 'webhook',
@@ -150,6 +141,15 @@ const paymentWebhook = async (data, signature) => {
 		const updatedOrder = await order.save()
 
 		const user = await User.findById(order.buyer.id)
+
+		await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: 'support@botiga.app',
+			subject: `Botiga - Payment Event - ${order.seller.brandName} - ${order.order.number} - ${event}`,
+			text: `Payment Database Status
+				<br><br>${updatedOrder.payment}
+				<br><br>Team Botiga`
+		})
 
 		// Send seller email in case of failure
 		if (event === 'payment.failed') {
