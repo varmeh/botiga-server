@@ -149,8 +149,9 @@ const paymentWebhook = async (data, signature) => {
 		order.payment.paymentMode = entity.method
 		const updatedOrder = await order.save()
 
-		winston.debug('@webhook updated order data', {
-			updatedOrder
+		winston.debug('@webhook updated order payment status', {
+			order: updatedOrder.order,
+			paymentStatus: updatedOrder.payment
 		})
 
 		const user = await User.findById(order.buyer.id)
