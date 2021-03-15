@@ -31,7 +31,7 @@ export const updateOrder = async (orderId, status, newDate = null) => {
 
 		return await order.save()
 	} catch (error) {
-		return dbErrorHandler(error, 'sortCategory')
+		return dbErrorHandler(error, 'updateOrder')
 	}
 }
 
@@ -71,7 +71,7 @@ export const findDeliveriesByApartment = async ({
 
 		return [count, deliveries]
 	} catch (error) {
-		return dbErrorHandler(error, 'sortCategory')
+		return dbErrorHandler(error, 'findDeliveriesByApartment')
 	}
 }
 

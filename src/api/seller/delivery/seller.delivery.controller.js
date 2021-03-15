@@ -80,12 +80,7 @@ export const patchDeliveryDelay = async (req, res, next) => {
 	const { orderId, newDate } = req.body
 
 	try {
-		const order = await updateOrder(
-			orderId,
-			token.get(req),
-			OrderStatus.delayed,
-			newDate
-		)
+		const order = await updateOrder(orderId, OrderStatus.delayed, newDate)
 
 		const user = await User.findById(order.buyer.id)
 
