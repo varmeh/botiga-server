@@ -1,5 +1,4 @@
 /* eslint-disable max-statements */
-/* eslint-disable max-lines-per-function */
 import axios from 'axios'
 import CreateHttpError from 'http-errors'
 import Razorpay from 'razorpay'
@@ -143,12 +142,22 @@ const paymentWebhook = async (data, signature) => {
 
 		const user = await User.findById(order.buyer.id)
 
+		await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: 'support@botiga.app',
+			subject: `Botiga - Payment Event - ${order.seller.brandName} - ${order.order.number} - ${event}`,
+			text: `Payment Database Status
+				<br><br>${updatedOrder.payment}
+				<br><br>Team Botiga`
+		})
+
 		// Send seller email in case of failure
 		if (event === 'payment.failed') {
 			winston.error(`@webhook payment failure - ${entity.id}`, {
 				paymentId: entity.id,
 				orderNumber: order.order.number,
-				brand: order.seller.brandName
+				brand: order.seller.brandName,
+				payment: updatedOrder.payment
 			})
 
 			user.sendNotifications(
@@ -158,7 +167,7 @@ const paymentWebhook = async (data, signature) => {
 
 			await aws.ses.sendMailPromise({
 				from: 'noreply@botiga.app',
-				to: order.seller.email,
+				to: 'support@botiga.app',
 				subject: `Botiga - Server Payment Failure Notification - Order #${order.order.number} - ${order.apartment.aptName} `,
 				text: `Payment Failure Notification
 				<br><br>Please remind the customer to make the payment via Remind option in your order detail screen.
@@ -169,13 +178,14 @@ const paymentWebhook = async (data, signature) => {
 		} else {
 			// Payment Captured event was registered. If order payment status is not success, order payment update failed
 			if (updatedOrder.payment.status !== PaymentStatus.success) {
-				throw Error('Payment Order status Success not updated in db')
+				throw new Error('Payment Order status Success not updated in db')
 			}
 
 			winston.info(`@webhook payment success - ${entity.id}`, {
 				paymentId: entity.id,
 				orderNumber: order.order.number,
-				brand: order.seller.brandName
+				brand: order.seller.brandName,
+				payment: updatedOrder.payment
 			})
 
 			user.sendNotifications(
