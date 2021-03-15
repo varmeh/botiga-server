@@ -15,8 +15,9 @@ import {
 
 export const postCancelOrder = async (req, res, next) => {
 	try {
+		const { orderId } = req.body
 		const order = await updateOrder(
-			req.body.orderId,
+			orderId,
 			token.get(req),
 			OrderStatus.cancelled
 		)
@@ -25,7 +26,8 @@ export const postCancelOrder = async (req, res, next) => {
 
 		user.sendNotifications(
 			'Order Cancelled',
-			`Your order #${order.order.number} from ${order.seller.brandName} has been cancelled`
+			`Your order #${order.order.number} from ${order.seller.brandName} has been cancelled`,
+			orderId
 		)
 
 		res.json({ message: 'cancelled', id: order._id, refund: order.refund })
@@ -36,18 +38,20 @@ export const postCancelOrder = async (req, res, next) => {
 
 export const patchRefundCompleted = async (req, res, next) => {
 	try {
-		const order = await updateRefund(req.body.orderId, token.get(req))
+		const { orderId } = req.body
+		const order = await updateRefund(orderId, token.get(req))
 
 		const user = await User.findById(order.buyer.id)
 
 		user.sendNotifications(
 			'Refund Completed',
-			`Your refund for order #${order.order.number} from ${order.seller.brandName} has been completed`
+			`Your refund for order #${order.order.number} from ${order.seller.brandName} has been completed`,
+			orderId
 		)
 
 		res.json({
 			message: 'refund completed',
-			id: order._id,
+			id: orderId,
 			refund: order.refund
 		})
 	} catch (error) {

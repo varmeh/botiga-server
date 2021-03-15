@@ -202,7 +202,8 @@ export const postCancelOrder = async (req, res, next) => {
 			notifications.sendToUser(
 				token,
 				'Order Cancelled',
-				`Order #${order.order.number} has been cancelled`
+				`Order #${order.order.number} has been cancelled`,
+				order._id
 			)
 		)
 

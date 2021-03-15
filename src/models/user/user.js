@@ -74,9 +74,9 @@ userSchema.virtual('name').get(function () {
 	return `${this.firstName} ${this.lastName}`
 })
 
-userSchema.methods.sendNotifications = function (title, body) {
+userSchema.methods.sendNotifications = function (title, body, orderId) {
 	this.contact.pushTokens.forEach(token =>
-		notifications.sendToUser(token, title, body)
+		notifications.sendToUser(token, title, body, orderId)
 	)
 }
 

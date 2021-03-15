@@ -162,7 +162,8 @@ const paymentWebhook = async (data, signature) => {
 
 			user.sendNotifications(
 				'Payment Failure',
-				`Your payment of ₹${order.order.totalAmount} for order #${order.order.number} to ${order.seller.brandName} has failed. Any amount debited will be credited back to your account.`
+				`Your payment of ₹${order.order.totalAmount} for order #${order.order.number} to ${order.seller.brandName} has failed. Any amount debited will be credited back to your account.`,
+				entity.notes.orderId
 			)
 
 			await aws.ses.sendMailPromise({
@@ -190,7 +191,8 @@ const paymentWebhook = async (data, signature) => {
 
 			user.sendNotifications(
 				'Payment Success',
-				`Your payment of ₹${order.order.totalAmount} for order #${order.order.number} to ${order.seller.brandName} has been successful`
+				`Your payment of ₹${order.order.totalAmount} for order #${order.order.number} to ${order.seller.brandName} has been successful`,
+				entity.notes.orderId
 			)
 		}
 		return null

@@ -14,8 +14,8 @@ const messagingOptions = {
 	contentAvailable: true
 }
 
-const sendToUser = (token, title, body) => {
-	const data = {
+const sendToUser = (token, title, body, orderId) => {
+	const notificationPayload = {
 		notification: {
 			title,
 			body,
@@ -23,7 +23,10 @@ const sendToUser = (token, title, body) => {
 			sound: 'default'
 		}
 	}
-	admin.messaging().sendToDevice(token, data, messagingOptions)
+	if (orderId) {
+		notificationPayload.data.orderId = orderId
+	}
+	admin.messaging().sendToDevice(token, notificationPayload, messagingOptions)
 }
 
 const sendToTopic = ({ topic, title, body, imageUrl, sellerId }) => {
@@ -49,9 +52,7 @@ const sendToTopic = ({ topic, title, body, imageUrl, sellerId }) => {
 				}
 			}
 		},
-		data: {
-			orderId: 'testOrderId'
-		},
+		data: {},
 		topic
 	}
 

@@ -19,12 +19,14 @@ const deliveryStatusUpdate = async (orderId, orderStatus) => {
 	if (orderStatus === OrderStatus.outForDelivery) {
 		user.sendNotifications(
 			'Order in delivery',
-			`Your order #${order.order.number} from ${order.seller.brandName} is out for delivery`
+			`Your order #${order.order.number} from ${order.seller.brandName} is out for delivery`,
+			orderId
 		)
 	} else {
 		user.sendNotifications(
 			'Order delivered',
-			`Your order #${order.order.number} from ${order.seller.brandName} has been delivered`
+			`Your order #${order.order.number} from ${order.seller.brandName} has been delivered`,
+			orderId
 		)
 	}
 	return order
@@ -89,7 +91,8 @@ export const patchDeliveryDelay = async (req, res, next) => {
 
 		user.sendNotifications(
 			'Order delivery date changed',
-			`Your order #${order.order.number} from ${order.seller.brandName}, delivery date has been changed to ${newDate}`
+			`Your order #${order.order.number} from ${order.seller.brandName}, delivery date has been changed to ${newDate}`,
+			orderId
 		)
 
 		res.json({ message: `delivery date changed to ${newDate}`, id: order._id })
