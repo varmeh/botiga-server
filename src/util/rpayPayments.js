@@ -157,7 +157,7 @@ const paymentWebhook = async (data, signature) => {
 				paymentId: entity.id,
 				orderNumber: order.order.number,
 				brand: order.seller.brandName,
-				paymentStatus: updatedOrder.payment
+				payment: updatedOrder.payment
 			})
 
 			user.sendNotifications(
@@ -185,7 +185,7 @@ const paymentWebhook = async (data, signature) => {
 				paymentId: entity.id,
 				orderNumber: order.order.number,
 				brand: order.seller.brandName,
-				paymentStatus: updatedOrder.payment
+				payment: updatedOrder.payment
 			})
 
 			user.sendNotifications(
