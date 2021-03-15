@@ -7,8 +7,15 @@ const configure = () => {
 	})
 }
 
-const notificationPayload = (title, body) => {
-	return {
+const messagingOptions = {
+	timeToLive: 4 * 60 * 60, // 4hrs
+	priority: 'high',
+	mutableContent: true,
+	contentAvailable: true
+}
+
+const sendToUser = (token, title, body) => {
+	const data = {
 		notification: {
 			title,
 			body,
@@ -16,20 +23,47 @@ const notificationPayload = (title, body) => {
 			sound: 'default'
 		}
 	}
+	admin.messaging().sendToDevice(token, data, messagingOptions)
 }
 
-const messagingOptions = { timeToLive: 4 * 60 * 60 } //4 Hrs TTL
+const sendToTopic = ({ topic, title, body, imageUrl, sellerId }) => {
+	const notificationPayload = {
+		notification: {
+			title,
+			body
+		},
+		android: {
+			priority: 'high',
+			ttl: 4 * 60 * 60,
+			notification: {
+				sound: 'default',
+				defaultSound: true,
+				clickAction: 'FLUTTER_NOTIFICATION_CLICK'
+			}
+		},
+		apns: {
+			payload: {
+				aps: {
+					sound: 'default',
+					mutableContent: true
+				}
+			}
+		},
+		data: {
+			orderId: 'testOrderId'
+		},
+		topic
+	}
 
-const sendToUser = (token, title, body) => {
-	admin
-		.messaging()
-		.sendToDevice(token, notificationPayload(title, body), messagingOptions)
-}
+	if (imageUrl) {
+		notificationPayload.notification.imageUrl = imageUrl
+	}
 
-const sendToTopic = (topic, title, body) => {
-	admin
-		.messaging()
-		.sendToTopic(topic, notificationPayload(title, body), messagingOptions)
+	if (sellerId) {
+		notificationPayload.data.sellerId = sellerId
+	}
+
+	admin.messaging().send(notificationPayload)
 }
 
 const apartment = {

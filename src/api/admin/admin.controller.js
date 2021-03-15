@@ -201,9 +201,15 @@ export const postBusinessCategory = async (req, res, next) => {
 }
 
 export const postNotificationTopic = (req, res, next) => {
-	const { topic, title, content } = req.body
+	const { topic, title, content, imageUrl, sellerId } = req.body
 	try {
-		notifications.sendToTopic(topic, title, content)
+		notifications.sendToTopic({
+			topic,
+			title,
+			body: content,
+			imageUrl,
+			sellerId
+		})
 		res.json({
 			message: `notification send to topic - ${topic}`
 		})

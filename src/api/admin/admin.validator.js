@@ -12,7 +12,9 @@ import {
 	paramObjectIdValidator,
 	boolValidator,
 	numberValidator,
-	arrayValidator
+	arrayValidator,
+	urlOptionalValidator,
+	objectIdOptionalValidator
 } from '../../util'
 
 export const getApartmentValidator = paramObjectIdValidator('apartmentId')
@@ -60,7 +62,9 @@ export const postNotificationUserValidator = [
 export const postNotificationTopicValidator = [
 	emptyValidator('topic'),
 	emptyValidator('title'),
-	emptyValidator('content')
+	emptyValidator('content'),
+	urlOptionalValidator('imageUrl'),
+	objectIdOptionalValidator('sellerId')
 ]
 
 export const getSellerValidator = paramPhoneValidator('phone')
