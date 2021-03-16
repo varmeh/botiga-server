@@ -7,27 +7,36 @@ const configure = () => {
 	})
 }
 
-const messagingOptions = {
-	timeToLive: 4 * 60 * 60, // 4hrs
-	priority: 'high',
-	mutableContent: true,
-	contentAvailable: true
-}
-
 const sendToUser = (token, title, body, orderId) => {
 	const notificationPayload = {
 		notification: {
 			title,
-			body,
-			clickAction: 'FLUTTER_NOTIFICATION_CLICK',
-			sound: 'default'
+			body
 		},
-		data: {}
+		android: {
+			priority: 'high',
+			ttl: 4 * 60 * 60,
+			notification: {
+				sound: 'default',
+				defaultSound: true,
+				clickAction: 'FLUTTER_NOTIFICATION_CLICK'
+			}
+		},
+		apns: {
+			payload: {
+				aps: {
+					sound: 'default'
+				}
+			}
+		},
+		data: {},
+		token
 	}
+
 	if (orderId) {
 		notificationPayload.data.orderId = orderId
 	}
-	admin.messaging().sendToDevice(token, notificationPayload, messagingOptions)
+	admin.messaging().send(notificationPayload)
 }
 
 const sendToTopic = ({ topic, title, body, imageUrl, sellerId }) => {
