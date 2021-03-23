@@ -39,8 +39,8 @@ export const findDeliveriesByApartment = async ({
 	sellerId,
 	apartmentId,
 	dateString,
-	skip,
-	limit
+	skip = 0,
+	limit = 100
 }) => {
 	try {
 		const date = moment(dateString, 'YYYY-MM-DD').startOf('day')
