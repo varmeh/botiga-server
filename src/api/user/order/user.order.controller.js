@@ -1,4 +1,4 @@
-import { Seller, Order, PaymentStatus } from '../../../models'
+import { Seller, Order } from '../../../models'
 
 import {
 	token,
@@ -264,16 +264,12 @@ export const postRpayDowntimeWebhook = async (req, res, next) => {
 export const postRpayTransactionCancelled = async (req, res, next) => {
 	try {
 		const order = await Order.findById(req.body.orderId)
-		order.payment.status = PaymentStatus.failure
-		await order.save()
 
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
-			to: order.seller.email,
-			subject: `Botiga - App Payment Failure Notification for Order #${order.order.number} - ${order.apartment.aptName} `,
-			text: `Order Details
-				<br>Please remind the customer to make the payment via Remind option in your order detail screen.
-				<br>Confirm the order before delivering. If users confirms the order, ask him to retry payment.
+			to: 'support@botiga.app',
+			subject: `Botiga - App Payment Cancellation Notification for Order #${order.order.number} - ${order.apartment.aptName} `,
+			text: `Order Cancelled From App by User
 				<br><br>Thank you
 				<br>Team Botiga`
 		})
