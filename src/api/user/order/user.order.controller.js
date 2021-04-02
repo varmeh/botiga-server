@@ -1,4 +1,4 @@
-import { Seller, Order } from '../../../models'
+import { Seller, Order, PaymentStatus } from '../../../models'
 
 import {
 	token,
@@ -234,7 +234,9 @@ export const postRpayDowntimeWebhook = async (req, res, next) => {
 
 export const postRpayTransactionCancelled = async (req, res, next) => {
 	try {
-		const order = await Order.findById(req.body.orderId)
+		const { orderId } = req.body
+
+		const order = await Order.findById(orderId)
 
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
@@ -244,6 +246,12 @@ export const postRpayTransactionCancelled = async (req, res, next) => {
 				<br><br>Thank you
 				<br>Team Botiga`
 		})
+
+		if (order.payment.status !== PaymentStatus.success) {
+			// If user cancels payment from App
+			// Change order status to cancel
+			await cancelOrder(orderId, token.get(req))
+		}
 
 		res.status(204).json()
 	} catch (error) {
