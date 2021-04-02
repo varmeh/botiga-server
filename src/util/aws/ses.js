@@ -45,7 +45,8 @@ export default {
 		)
 	},
 	sendMailPromise: async ({ from, to, subject, text, filename, path }) => {
-		if (process.env.NODE_ENV !== 'production') return
+		//TODO: revert following change
+		// if (process.env.NODE_ENV !== 'production') return
 
 		const attachments = []
 		if (filename && path) {
