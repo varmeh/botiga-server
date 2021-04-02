@@ -92,16 +92,6 @@ export const getOrderWithId = async (req, res, next) => {
 	}
 }
 
-const populateProductDetails = products => {
-	let details = ''
-	products.forEach(product => {
-		details += `<br>${product.quantity} x ${product.name} ${
-			product.unitInfo
-		} - ₹${product.price * product.quantity}`
-	})
-	return details
-}
-
 export const postOrder = async (req, res, next) => {
 	const {
 		sellerId,
@@ -124,24 +114,6 @@ export const postOrder = async (req, res, next) => {
 			deliveryFee,
 			discountAmount,
 			products
-		})
-
-		const { buyer, apartment } = order
-
-		await aws.ses.sendMailPromise({
-			from: 'noreply@botiga.app',
-			to: order.seller.email,
-
-			subject: `Botiga - Order Received #${order.order.number} - ${apartment.aptName} `,
-			text: `Order Details
-			<br><br>Customer - ${buyer.name} - ${buyer.phone}
-			<br>Delivery Address:
-			<br>Flat No - ${buyer.house}
-			<br>Apartment - ${apartment.aptName}, ${order.apartment.area}
-			<br>${populateProductDetails(order.order.products)} 
-			<br><br>Total Amount - ₹${order.order.totalAmount}
-			<br><br>Thank you
-			<br>Team Botiga`
 		})
 
 		res.status(201).json(orderOrchestrator(order))
@@ -215,7 +187,6 @@ export const postCancelOrder = async (req, res, next) => {
 			subject: `Botiga - Order Cancelled #${order.order.number} - ${apartment.aptName} `,
 			text: `Order Details
 			<br><br>Customer - ${buyer.name} - ${buyer.phone}
-			<br>${populateProductDetails(order.order.products)} 
 			<br><br>Total Amount - ₹${order.order.totalAmount}
 			<br><br>Thank you
 			<br>Team Botiga`
@@ -269,7 +240,7 @@ export const postRpayTransactionCancelled = async (req, res, next) => {
 			from: 'noreply@botiga.app',
 			to: 'support@botiga.app',
 			subject: `Botiga - App Payment Cancellation Notification for Order #${order.order.number} - ${order.apartment.aptName} `,
-			text: `Order Cancelled From App by User
+			text: `Payment Cancelled by User
 				<br><br>Thank you
 				<br>Team Botiga`
 		})

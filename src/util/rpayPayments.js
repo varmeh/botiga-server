@@ -1,9 +1,8 @@
-/* eslint-disable max-statements */
 import axios from 'axios'
 import CreateHttpError from 'http-errors'
 import Razorpay from 'razorpay'
 
-import { Order, PaymentStatus, User } from '../models'
+import { Order, OrderStatus, PaymentStatus, User } from '../models'
 import { winston } from './winston.logger'
 import aws from './aws'
 
@@ -102,6 +101,51 @@ const webhookSignatureVerification = (data, signature) => {
 	}
 }
 
+const updateDbPaymentStatus = async ({ event, entity, order }) => {
+	try {
+		// Cancel Order if payment failed
+		order.order.status =
+			event === 'payment.captured' ? OrderStatus.open : OrderStatus.cancelled
+
+		order.payment.status =
+			event === 'payment.captured'
+				? PaymentStatus.success
+				: PaymentStatus.failure
+
+		order.payment.paymentId = entity.id
+		order.payment.orderId = entity.order_id
+		order.payment.paymentMode = entity.method
+		const updatedOrder = await order.save()
+
+		await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: 'support@botiga.app',
+			subject: `Botiga - Payment Event - ${order.seller.brandName} - ${order.order.number} - ${event}`,
+			text: `Payment Database Status
+				<br><br>${updatedOrder.payment}
+				<br><br>Team Botiga`
+		})
+
+		return updatedOrder
+	} catch (error) {
+		winston.error('@payment updateDbPaymentStatus failed', {
+			error,
+			msg: error.message
+		})
+		return Promise.reject(new Error(error.message))
+	}
+}
+
+const populateProductDetails = products => {
+	let details = ''
+	products.forEach(product => {
+		details += `<br>${product.quantity} x ${product.name} ${
+			product.unitInfo
+		} - ₹${product.price * product.quantity}`
+	})
+	return details
+}
+
 const paymentWebhook = async (data, signature) => {
 	try {
 		webhookSignatureVerification(data, signature)
@@ -121,38 +165,60 @@ const paymentWebhook = async (data, signature) => {
 			})
 			return null
 		}
+
 		const order = await Order.findById(entity.notes.orderId)
 
 		// Check if payment status is already success
-		// As webhooks could be received in any order, failure webhooks could override success webhooks which is never the case in execution
+		// Payment webhooks could be received in any order, so, older failure webhooks could override success status
 		if (order.payment.status === PaymentStatus.success) {
 			return null
 		}
 
-		if (event === 'payment.captured') {
-			order.payment.status = PaymentStatus.success
-		} else if (event === 'payment.failed') {
-			order.payment.status = PaymentStatus.failure
-		}
-
-		order.payment.paymentId = entity.id
-		order.payment.orderId = entity.order_id
-		order.payment.paymentMode = entity.method
-		const updatedOrder = await order.save()
+		const updatedOrder = await updateDbPaymentStatus({
+			event,
+			entity,
+			order
+		})
 
 		const user = await User.findById(order.buyer.id)
 
-		await aws.ses.sendMailPromise({
-			from: 'noreply@botiga.app',
-			to: 'support@botiga.app',
-			subject: `Botiga - Payment Event - ${order.seller.brandName} - ${order.order.number} - ${event}`,
-			text: `Payment Database Status
-				<br><br>${updatedOrder.payment}
-				<br><br>Team Botiga`
-		})
+		if (event === 'payment.captured') {
+			// Payment Captured event was registered. If order payment status is not success, order payment update failed
+			if (updatedOrder.payment.status !== PaymentStatus.success) {
+				throw new Error('DB Payment Update Failure')
+			}
 
-		// Send seller email in case of failure
-		if (event === 'payment.failed') {
+			winston.info(`@webhook payment success - ${entity.id}`, {
+				paymentId: entity.id,
+				orderNumber: order.order.number,
+				brand: order.seller.brandName,
+				payment: updatedOrder.payment
+			})
+
+			user.sendNotifications(
+				'Payment Success',
+				`Your payment of ₹${order.order.totalAmount} for order #${order.order.number} to ${order.seller.brandName} has been successful`,
+				entity.notes.orderId
+			)
+
+			// Send seller message that order has been created
+			const { buyer, apartment } = order
+			await aws.ses.sendMailPromise({
+				from: 'noreply@botiga.app',
+				to: order.seller.email,
+
+				subject: `Botiga - Order Received #${order.order.number} - ${apartment.aptName} `,
+				text: `Order Details
+				<br><br>Customer - ${buyer.name} - ${buyer.phone}
+				<br>Delivery Address:
+				<br>Flat No - ${buyer.house}
+				<br>Apartment - ${apartment.aptName}, ${order.apartment.area}
+				<br>${populateProductDetails(order.order.products)} 
+				<br><br>Total Amount - ₹${order.order.totalAmount}
+				<br><br>Thank you
+				<br>Team Botiga`
+			})
+		} else if (event === 'payment.failed') {
 			winston.error(`@webhook payment failure - ${entity.id}`, {
 				paymentId: entity.id,
 				orderNumber: order.order.number,
@@ -171,29 +237,11 @@ const paymentWebhook = async (data, signature) => {
 				to: 'support@botiga.app',
 				subject: `Botiga - Server Payment Failure Notification - Order #${order.order.number} - ${order.apartment.aptName} `,
 				text: `Payment Failure Notification
-				<br><br>Please remind the customer to make the payment via Remind option in your order detail screen.
-				<br>Confirm the order before delivering. If users confirms the order, ask him to retry payment.
+				<br><br>Customer - ${order.buyer.name} - ${order.$isDeletedbuyer.phone}
+				<br><br>Total Amount - ₹${order.order.totalAmount}
 				<br><br>Thank you
 				<br>Team Botiga`
 			})
-		} else {
-			// Payment Captured event was registered. If order payment status is not success, order payment update failed
-			if (updatedOrder.payment.status !== PaymentStatus.success) {
-				throw new Error('Payment Order status Success not updated in db')
-			}
-
-			winston.info(`@webhook payment success - ${entity.id}`, {
-				paymentId: entity.id,
-				orderNumber: order.order.number,
-				brand: order.seller.brandName,
-				payment: updatedOrder.payment
-			})
-
-			user.sendNotifications(
-				'Payment Success',
-				`Your payment of ₹${order.order.totalAmount} for order #${order.order.number} to ${order.seller.brandName} has been successful`,
-				entity.notes.orderId
-			)
 		}
 		return null
 	} catch (error) {
