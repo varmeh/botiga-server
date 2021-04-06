@@ -166,7 +166,7 @@ export const postCancelOrder = async (req, res, next) => {
 	const { orderId } = req.body
 
 	try {
-		const order = await cancelOrder(orderId, token.get(req))
+		const order = await cancelOrder(orderId)
 
 		// Send notification to seller devices
 		const seller = await Seller.findById(order.seller.id)
@@ -250,7 +250,7 @@ export const postRpayTransactionCancelled = async (req, res, next) => {
 		if (order.payment.status !== PaymentStatus.success) {
 			// If user cancels payment from App
 			// Change order status to cancel
-			await cancelOrder(orderId, token.get(req))
+			await cancelOrder(orderId)
 		}
 
 		res.status(204).json()

@@ -103,9 +103,9 @@ export const findCategoryProducts = async sellerId => {
 	}
 }
 
-export const cancelOrder = async (orderId, userId) => {
+export const cancelOrder = async orderId => {
 	try {
-		const order = await Order.findOne({ _id: orderId, 'buyer.id': userId })
+		const order = await Order.findById(orderId)
 		if (!order) {
 			return Promise.reject(new CreateHttpError[404]('Order Not Found'))
 		}
