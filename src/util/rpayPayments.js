@@ -195,7 +195,7 @@ const paymentWebhook = async (data, signature) => {
 				payment: updatedOrder.payment
 			})
 
-			user.sendNotifications(
+			await user.sendNotifications(
 				'Payment Success',
 				`Your payment of ₹${order.order.totalAmount} for order #${order.order.number} to ${order.seller.brandName} has been successful`,
 				entity.notes.orderId
@@ -226,7 +226,7 @@ const paymentWebhook = async (data, signature) => {
 				payment: updatedOrder.payment
 			})
 
-			user.sendNotifications(
+			await user.sendNotifications(
 				'Payment Failure',
 				`Your payment of ₹${order.order.totalAmount} for order #${order.order.number} to ${order.seller.brandName} has failed. Any amount debited will be credited back to your account.`,
 				entity.notes.orderId
