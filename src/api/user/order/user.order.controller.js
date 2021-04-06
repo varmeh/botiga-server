@@ -170,14 +170,16 @@ export const postCancelOrder = async (req, res, next) => {
 
 		// Send notification to seller devices
 		const seller = await Seller.findById(order.seller.id)
-		seller.contact.pushTokens.forEach(token =>
-			notifications.sendToUser(
-				token,
+
+		const tokens = seller.contact.pushTokens
+		for (let i = 0; i < tokens.length; i++) {
+			await notifications.sendToDevice(
+				tokens[i],
 				'Order Cancelled',
 				`Order #${order.order.number} has been cancelled`,
 				order._id
 			)
-		)
+		}
 
 		// Send email to seller
 		const { buyer, apartment } = order

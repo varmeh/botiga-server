@@ -1,4 +1,5 @@
 import admin from 'firebase-admin'
+import { winston } from './winston.logger'
 
 const configure = () => {
 	const serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS
@@ -14,7 +15,7 @@ const messagingOptions = {
 	contentAvailable: true
 }
 
-const sendToUser = (token, title, body, orderId) => {
+const sendToDevice = async (token, title, body, orderId) => {
 	const notificationPayload = {
 		notification: {
 			title,
@@ -26,13 +27,22 @@ const sendToUser = (token, title, body, orderId) => {
 	}
 
 	if (orderId) {
-		notificationPayload.data.orderId = orderId
+		notificationPayload.data.orderId = `${orderId}`
 	}
 
-	admin.messaging().sendToDevice(token, notificationPayload, messagingOptions)
+	try {
+		await admin
+			.messaging()
+			.sendToDevice(token, notificationPayload, messagingOptions)
+	} catch (error) {
+		winston.error('@firebase notification error', {
+			notificationPayload,
+			error
+		})
+	}
 }
 
-const sendToTopic = ({ topic, title, body, imageUrl, sellerId }) => {
+const sendToTopic = async ({ topic, title, body, imageUrl, sellerId }) => {
 	const notificationPayload = {
 		notification: {
 			title,
@@ -60,14 +70,21 @@ const sendToTopic = ({ topic, title, body, imageUrl, sellerId }) => {
 	}
 
 	if (imageUrl) {
-		notificationPayload.notification.imageUrl = imageUrl
+		notificationPayload.notification.imageUrl = `${imageUrl}`
 	}
 
 	if (sellerId) {
-		notificationPayload.data.sellerId = sellerId
+		notificationPayload.data.sellerId = `${sellerId}`
 	}
 
-	admin.messaging().send(notificationPayload)
+	try {
+		await admin.messaging().send(notificationPayload)
+	} catch (error) {
+		winston.error('@firebase notification error', {
+			notificationPayload,
+			error
+		})
+	}
 }
 
 const apartment = {
@@ -79,4 +96,4 @@ const apartment = {
 	}
 }
 
-export default { configure, sendToUser, sendToTopic, apartment }
+export default { configure, sendToDevice, sendToTopic, apartment }

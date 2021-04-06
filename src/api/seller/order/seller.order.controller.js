@@ -24,7 +24,7 @@ export const postCancelOrder = async (req, res, next) => {
 
 		const user = await User.findById(order.buyer.id)
 
-		user.sendNotifications(
+		await user.sendNotifications(
 			'Order Cancelled',
 			`Your order #${order.order.number} from ${order.seller.brandName} has been cancelled`,
 			orderId
@@ -43,7 +43,7 @@ export const patchRefundCompleted = async (req, res, next) => {
 
 		const user = await User.findById(order.buyer.id)
 
-		user.sendNotifications(
+		await user.sendNotifications(
 			'Refund Completed',
 			`Your refund for order #${order.order.number} from ${order.seller.brandName} has been completed`,
 			orderId

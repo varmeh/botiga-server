@@ -200,10 +200,10 @@ export const postBusinessCategory = async (req, res, next) => {
 	}
 }
 
-export const postNotificationTopic = (req, res, next) => {
+export const postNotificationTopic = async (req, res, next) => {
 	const { topic, title, content, imageUrl, sellerId } = req.body
 	try {
-		notifications.sendToTopic({
+		await notifications.sendToTopic({
 			topic,
 			title,
 			body: content,
@@ -227,9 +227,10 @@ export const postNotificationUser = async (req, res, next) => {
 			throw new CreateHttpError[404]('User Not Found')
 		}
 
-		user.contact.pushTokens.forEach(token =>
-			notifications.sendToUser(token, title, content)
-		)
+		const tokens = user.contact.pushTokens
+		for (let i = 0; i < tokens.length; i++) {
+			await notifications.sendToDevice(tokens[i], title, content)
+		}
 
 		res.json({ message: 'notification send to user devices' })
 	} catch (error) {
@@ -246,9 +247,10 @@ export const postNotificationSeller = async (req, res, next) => {
 			throw new CreateHttpError[404]('Seller Not Found')
 		}
 
-		seller.contact.pushTokens.forEach(token =>
-			notifications.sendToUser(token, title, content)
-		)
+		const tokens = seller.contact.pushTokens
+		for (let i = 0; i < tokens.length; i++) {
+			await notifications.sendToDevice(tokens[i], title, content)
+		}
 
 		res.json({ message: 'notification send to seller devices' })
 	} catch (error) {
