@@ -327,6 +327,21 @@ export const postTestTransactionNotify = async (req, res, next) => {
 	}
 }
 
+export const getDelivery = async (req, res, next) => {
+	const { sellerPhone, date } = req.params
+
+	try {
+		const [_, deliveries] = await findDeliveriesForSeller({
+			sellerPhone,
+			dateString: date
+		})
+
+		res.json(deliveries)
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
 export const getDeliveryXls = async (req, res, next) => {
 	const { sellerPhone, date } = req.params
 

@@ -34,6 +34,7 @@ import {
 	patchSellerBankDetails,
 	postTestTransaction,
 	postTestTransactionNotify,
+	getDelivery,
 	getDeliveryXls,
 	postSellerApartment,
 	patchApartmentLiveStatus,
@@ -176,6 +177,13 @@ router.post(
 
 router.get(
 	'/delivery/:sellerPhone/:date',
+	getDeliveryValidator,
+	validationMiddleware,
+	getDelivery
+)
+
+router.get(
+	'/deliveryxls/:sellerPhone/:date',
 	getDeliveryValidator,
 	validationMiddleware,
 	getDeliveryXls
