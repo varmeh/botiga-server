@@ -173,7 +173,7 @@ export const postCancelOrder = async (req, res, next) => {
 
 		const tokens = seller.contact.pushTokens
 		for (let i = 0; i < tokens.length; i++) {
-			await notifications.sendToDevice(
+			notifications.sendToDevice(
 				tokens[i],
 				'Order Cancelled',
 				`Order #${order.order.number} has been cancelled`,

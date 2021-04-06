@@ -74,11 +74,10 @@ userSchema.virtual('name').get(function () {
 	return `${this.firstName} ${this.lastName}`
 })
 
-userSchema.methods.sendNotifications = async function (title, body, orderId) {
-	const tokens = this.contact.pushTokens
-	for (let i = 0; i < tokens.length; i++) {
-		await notifications.sendToDevice(tokens[i], title, body, orderId)
-	}
+userSchema.methods.sendNotifications = function (title, body, orderId) {
+	this.contact.pushTokens.forEach(token =>
+		notifications.sendToDevice(token, title, body, orderId)
+	)
 }
 
 export const User = model('user', userSchema)

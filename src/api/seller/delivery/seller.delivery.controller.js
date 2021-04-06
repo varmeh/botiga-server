@@ -17,13 +17,13 @@ const deliveryStatusUpdate = async (orderId, orderStatus) => {
 
 	const user = await User.findById(order.buyer.id)
 	if (orderStatus === OrderStatus.outForDelivery) {
-		await user.sendNotifications(
+		user.sendNotifications(
 			'Order in delivery',
 			`Your order #${order.order.number} from ${order.seller.brandName} is out for delivery`,
 			orderId
 		)
 	} else {
-		await user.sendNotifications(
+		user.sendNotifications(
 			'Order delivered',
 			`Your order #${order.order.number} from ${order.seller.brandName} has been delivered`,
 			orderId
@@ -84,7 +84,7 @@ export const patchDeliveryDelay = async (req, res, next) => {
 
 		const user = await User.findById(order.buyer.id)
 
-		await user.sendNotifications(
+		user.sendNotifications(
 			'Order delivery date changed',
 			`Your order #${order.order.number} from ${order.seller.brandName}, delivery date has been changed to ${newDate}`,
 			orderId

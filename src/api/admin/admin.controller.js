@@ -200,10 +200,10 @@ export const postBusinessCategory = async (req, res, next) => {
 	}
 }
 
-export const postNotificationTopic = async (req, res, next) => {
+export const postNotificationTopic = (req, res, next) => {
 	const { topic, title, content, imageUrl, sellerId } = req.body
 	try {
-		await notifications.sendToTopic({
+		notifications.sendToTopic({
 			topic,
 			title,
 			body: content,
@@ -229,7 +229,7 @@ export const postNotificationUser = async (req, res, next) => {
 
 		const tokens = user.contact.pushTokens
 		for (let i = 0; i < tokens.length; i++) {
-			await notifications.sendToDevice(tokens[i], title, content)
+			notifications.sendToDevice(tokens[i], title, content)
 		}
 
 		res.json({ message: 'notification send to user devices' })
@@ -249,7 +249,7 @@ export const postNotificationSeller = async (req, res, next) => {
 
 		const tokens = seller.contact.pushTokens
 		for (let i = 0; i < tokens.length; i++) {
-			await notifications.sendToDevice(tokens[i], title, content)
+			notifications.sendToDevice(tokens[i], title, content)
 		}
 
 		res.json({ message: 'notification send to seller devices' })
