@@ -36,6 +36,7 @@ import {
 	postTestTransactionNotify,
 	getDelivery,
 	getDeliveryXls,
+	getDeliveryXlsToCustomerSupport,
 	postSellerApartment,
 	patchApartmentLiveStatus,
 	deleteSellerApartments,
@@ -180,6 +181,13 @@ router.get(
 	getDeliveryValidator,
 	validationMiddleware,
 	getDelivery
+)
+
+router.get(
+	'/deliveryxls/cs/:sellerPhone/:date',
+	getDeliveryValidator,
+	validationMiddleware,
+	getDeliveryXlsToCustomerSupport
 )
 
 router.get(
