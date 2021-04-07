@@ -370,13 +370,44 @@ export const getDeliveryXls = async (req, res, next) => {
 			} catch (err) {
 				winston.debug('@delivery file removal failed', { xlsPath, err })
 			}
-		} else {
+		}
+
+		res.json(deliveries)
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const getDeliveryXlsToCustomerSupport = async (req, res, next) => {
+	const { sellerPhone, date } = req.params
+
+	try {
+		const [seller, deliveries] = await findDeliveriesForSeller({
+			sellerPhone,
+			dateString: date
+		})
+
+		if (deliveries.length > 0) {
+			const fileName = `${seller.brand.name}_${date}.xlsx`
+			const xlsPath = await generateExcel({
+				deliveryData: deliveries,
+				fileName
+			})
 			await aws.ses.sendMailPromise({
 				from: 'noreply@botiga.app',
-				to: seller.contact.email,
+				to: 'cs@botiga.app',
 				subject: `Botiga - Deliveries Today - ${seller.brand.name} - ${date}`,
-				text: 'NO deliveries today.'
+				text: 'Your deliveries for the day.',
+				filename: fileName,
+				path: xlsPath
 			})
+
+			try {
+				winston.debug('@delivery file removal', { xlsPath })
+				fs.unlinkSync(xlsPath) //file removed
+			} catch (err) {
+				winston.debug('@delivery file removal failed', { xlsPath, err })
+			}
 		}
 
 		res.json(deliveries)
