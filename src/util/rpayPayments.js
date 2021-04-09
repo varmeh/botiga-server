@@ -18,17 +18,14 @@ const authToken = Buffer.from(`${RPAY_ID}:${RPAY_SECRET}`, 'utf8').toString(
 
 const initiateTestTransaction = async ({ txnAmount, sellerMid }) => {
 	try {
+		const mdrCharges = txnAmount * ROUTE_CHARGES
+		const amountToBeTransfered = txnAmount - mdrCharges
+
 		const payload = {
 			amount: txnAmount * 100,
 			currency: 'INR',
-			notes: { orderId: TEST_TRANSACTION }
-		}
-
-		if (process.env.NODE_ENV === 'production') {
-			// add routing logic
-			const mdrCharges = txnAmount * ROUTE_CHARGES
-			const amountToBeTransfered = txnAmount - mdrCharges
-			payload.transfers = [
+			notes: { orderId: TEST_TRANSACTION },
+			transfers: [
 				{
 					account: sellerMid,
 					amount: Math.ceil(amountToBeTransfered * 100),
