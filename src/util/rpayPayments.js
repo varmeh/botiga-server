@@ -58,10 +58,16 @@ const initiateTransaction = async ({ txnAmount, orderId }) => {
 	try {
 		const order = await Order.findById(orderId)
 
-		const data = await routeTransaction({
-			txnAmount,
-			sellerMid: order.seller.accountId,
-			orderId: orderId
+		const payload = {
+			amount: txnAmount * 100,
+			currency: 'INR',
+			notes: { orderId, orderNumber: order.order.number }
+		}
+
+		const { data } = await axios.post(`${RPAY_HOST}/orders`, payload, {
+			headers: {
+				Authorization: `Basic ${authToken}`
+			}
 		})
 
 		// Save razorpay orderId for future reference
@@ -97,20 +103,35 @@ const webhookSignatureVerification = (data, signature) => {
 	}
 }
 
-const updateDbPaymentStatus = async ({ event, entity, order }) => {
+const dbStatusUpdate = async ({ event, entity, order }) => {
 	try {
-		// Cancel Order if payment failed
-		order.order.status =
-			event === 'payment.captured' ? OrderStatus.open : OrderStatus.cancelled
+		const { payment } = order
 
-		order.payment.status =
-			event === 'payment.captured'
-				? PaymentStatus.success
-				: PaymentStatus.failure
+		payment.paymentId = entity.id
+		payment.orderId = entity.order_id
+		payment.paymentMode = entity.method
 
-		order.payment.paymentId = entity.id
-		order.payment.orderId = entity.order_id
-		order.payment.paymentMode = entity.method
+		if (entity.method === 'card') {
+			const { card } = entity
+			payment.paymentMode = card.type // debit or credit
+			payment.description = `${card.network} ${card.last4}`
+		} else if (entity.method === 'netbanking') {
+			payment.description = entity.bank
+		}
+
+		if (event === 'payment.captured') {
+			order.order.status = OrderStatus.open
+			payment.status = PaymentStatus.success
+
+			payment.transferAmount = entity.amount / 100
+			payment.fee = entity.fee / 100
+			payment.tax = entity.tax / 100
+		} else {
+			// Cancel Order if payment failed
+			order.order.status = OrderStatus.cancelled
+			payment.status = PaymentStatus.failure
+		}
+
 		const updatedOrder = await order.save()
 
 		await aws.ses.sendMailPromise({
@@ -124,7 +145,7 @@ const updateDbPaymentStatus = async ({ event, entity, order }) => {
 
 		return updatedOrder
 	} catch (error) {
-		winston.error('@payment updateDbPaymentStatus failed', {
+		winston.error('@payment dbStatusUpdate failed', {
 			error,
 			msg: error.message
 		})
@@ -142,8 +163,44 @@ const populateProductDetails = products => {
 	return details
 }
 
+const routePayment = async order => {
+	try {
+		const { payment } = order
+		const routeCharges = payment.transferAmount * ROUTE_CHARGES
+		const amountToBeTransfered = payment.transferAmount - routeCharges
+		const payload = {
+			transfers: [
+				{
+					account: order.seller.accountId,
+					amount: Math.ceil(amountToBeTransfered * 100),
+					currency: 'INR'
+				}
+			]
+		}
+
+		const { data } = await axios.post(
+			`${RPAY_HOST}/payments/${order.payment.id}/transfers`,
+			payload,
+			{
+				headers: {
+					Authorization: `Basic ${authToken}`
+				}
+			}
+		)
+
+		return data
+	} catch (error) {
+		winston.error('@payment routePayment failed', {
+			error,
+			msg: error.message
+		})
+		return Promise.reject(new Error(error.message))
+	}
+}
+
 const paymentWebhook = async (data, signature) => {
 	try {
+		// 1. Verify if it's a call from Razorpay server only
 		webhookSignatureVerification(data, signature)
 
 		const {
@@ -153,6 +210,7 @@ const paymentWebhook = async (data, signature) => {
 			}
 		} = data
 
+		// 2. Return if it's a test transaction
 		if (!entity.notes.orderId || entity.notes.orderId === TEST_TRANSACTION) {
 			winston.info('@payment webhook test transaction', {
 				domain: 'webhook',
@@ -170,7 +228,8 @@ const paymentWebhook = async (data, signature) => {
 			return null
 		}
 
-		const updatedOrder = await updateDbPaymentStatus({
+		// 3. Update database for payment info
+		const updatedOrder = await dbStatusUpdate({
 			event,
 			entity,
 			order
@@ -183,6 +242,9 @@ const paymentWebhook = async (data, signature) => {
 			if (updatedOrder.payment.status !== PaymentStatus.success) {
 				throw new Error('DB Payment Update Failure')
 			}
+
+			// Route Payment
+			await routePayment(updatedOrder)
 
 			winston.info(`@webhook payment success - ${entity.id}`, {
 				paymentId: entity.id,
@@ -289,7 +351,7 @@ const downtimeWebhook = async (data, signature) => {
 }
 
 export default {
-	routeTransaction,
+	initiateTestTransaction,
 	initiateTransaction,
 	paymentWebhook,
 	downtimeWebhook

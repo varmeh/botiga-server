@@ -126,6 +126,22 @@ const orderSchema = new Schema(
 					PaymentStatus.success,
 					PaymentStatus.failure
 				]
+			},
+			description: {
+				type: String,
+				default: ''
+			},
+			transferAmount: {
+				type: Number,
+				default: 0
+			},
+			fee: {
+				type: Number,
+				default: 0
+			},
+			taxes: {
+				type: Number,
+				default: 0
 			}
 		},
 		refund: {
