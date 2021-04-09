@@ -8,7 +8,7 @@ import aws from './aws'
 
 const TEST_TRANSACTION = 'testTransaction'
 
-const MDR_CHARGES = 0.12 / 100 // represents 0.12 %
+const ROUTE_CHARGES = 0.12 / 100 // represents 0.12 %
 
 const { RPAY_HOST, RPAY_ID, RPAY_SECRET, RPAY_WEBHOOK_SECRET } = process.env
 
@@ -16,21 +16,17 @@ const authToken = Buffer.from(`${RPAY_ID}:${RPAY_SECRET}`, 'utf8').toString(
 	'base64'
 )
 
-const routeTransaction = async ({
-	txnAmount,
-	sellerMid,
-	orderId = TEST_TRANSACTION
-}) => {
+const initiateTestTransaction = async ({ txnAmount, sellerMid }) => {
 	try {
 		const payload = {
 			amount: txnAmount * 100,
 			currency: 'INR',
-			notes: { orderId }
+			notes: { orderId: TEST_TRANSACTION }
 		}
 
 		if (process.env.NODE_ENV === 'production') {
 			// add routing logic
-			const mdrCharges = txnAmount * MDR_CHARGES
+			const mdrCharges = txnAmount * ROUTE_CHARGES
 			const amountToBeTransfered = txnAmount - mdrCharges
 			payload.transfers = [
 				{
@@ -48,7 +44,7 @@ const routeTransaction = async ({
 		})
 		return data
 	} catch (error) {
-		winston.error('@payment routeTransaction failed', {
+		winston.error('@payment initiateTestTransaction failed', {
 			error,
 			msg: error.message
 		})

@@ -290,7 +290,7 @@ export const postTestTransaction = async (req, res, next) => {
 
 		const seller = await findSellerByNumber(phone)
 
-		const data = await rpayPayments.routeTransaction({
+		const data = await rpayPayments.initiateTestTransaction({
 			txnAmount,
 			sellerMid: seller.mid
 		})
