@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 export default {
 	sendMail: ({ from, to, subject, text, filename, path }) => {
-		if (process.env.NODE_ENV !== 'production') return
+		if (process.env.EMAIL_NOTIFICATONS_ENABLED === 'false') return
 
 		const attachments = []
 		if (filename && path) {
@@ -45,7 +45,7 @@ export default {
 		)
 	},
 	sendMailPromise: async ({ from, to, subject, text, filename, path }) => {
-		if (process.env.NODE_ENV !== 'production') return
+		if (process.env.EMAIL_NOTIFICATONS_ENABLED === 'false') return
 
 		const attachments = []
 		if (filename && path) {
