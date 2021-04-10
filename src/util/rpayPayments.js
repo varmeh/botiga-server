@@ -1,3 +1,4 @@
+import { hostname } from 'os'
 import axios from 'axios'
 import CreateHttpError from 'http-errors'
 import Razorpay from 'razorpay'
@@ -15,6 +16,8 @@ const { RPAY_HOST, RPAY_ID, RPAY_SECRET, RPAY_WEBHOOK_SECRET } = process.env
 const authToken = Buffer.from(`${RPAY_ID}:${RPAY_SECRET}`, 'utf8').toString(
 	'base64'
 )
+
+const host = hostname()
 
 const initiateTestTransaction = async ({ txnAmount, sellerMid }) => {
 	try {
@@ -100,18 +103,24 @@ const webhookSignatureVerification = (data, signature) => {
 	}
 }
 
-const dbStatusUpdate = async ({ event, entity, order }) => {
-	try {
-		const { payment } = order
+const dbWebhookUpdate = async ({ event, entity, order }) => {
+	const {
+		payment,
+		seller,
+		order: { number }
+	} = order
 
+	try {
 		payment.paymentId = entity.id
 		payment.orderId = entity.order_id
 		payment.paymentMode = entity.method
 
 		if (entity.method === 'card') {
 			const { card } = entity
-			payment.paymentMode = card.type // debit or credit
-			payment.description = `${card.network} ${card.last4}`
+			if (card) {
+				payment.paymentMode = card.type // debit or credit
+				payment.description = `${card.network} ${card.last4}`
+			}
 		} else if (entity.method === 'netbanking') {
 			payment.description = entity.bank
 		}
@@ -120,13 +129,17 @@ const dbStatusUpdate = async ({ event, entity, order }) => {
 			order.order.status = OrderStatus.open
 			payment.status = PaymentStatus.success
 
-			payment.transferAmount = entity.amount / 100
-			payment.fee = entity.fee / 100
-			payment.tax = entity.tax / 100
+			const amountToBeTransferedInPaise =
+				entity.amount -
+				Math.ceil(entity.fee * 1.18) -
+				Math.ceil(entity.amount * ROUTE_CHARGES)
+
+			payment.transferredAmount = amountToBeTransferedInPaise / 100
 		} else {
 			// Cancel Order if payment failed
 			order.order.status = OrderStatus.cancelled
 			payment.status = PaymentStatus.failure
+			payment.transferredAmount = 0
 		}
 
 		const updatedOrder = await order.save()
@@ -134,49 +147,52 @@ const dbStatusUpdate = async ({ event, entity, order }) => {
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: 'support@botiga.app',
-			subject: `Botiga - Payment Event - ${order.seller.brandName} - ${order.order.number} - ${event}`,
+			subject: `Botiga - Payment Event - ${seller.brandName} - ${number} - ${event}`,
 			text: `Payment Database Status
+				<br><br>Hostname: ${host}
 				<br><br>${updatedOrder.payment}
 				<br><br>Team Botiga`
 		})
 
 		return updatedOrder
 	} catch (error) {
-		winston.error('@payment dbStatusUpdate failed', {
+		winston.error('@payment dbWebhookUpdate failed', {
 			error,
 			msg: error.message
+		})
+
+		await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: 'support@botiga.app',
+			subject: `Botiga - Webhook Db Update Failed - ${seller.brandName} - ${number} - ${event}`,
+			text: `
+				<br><br>Hostname: ${host}
+				<br><br>${payment}
+				<br><br>Team Botiga`
 		})
 		return Promise.reject(new Error(error.message))
 	}
 }
 
-const populateProductDetails = products => {
-	let details = ''
-	products.forEach(product => {
-		details += `<br>${product.quantity} x ${product.name} ${
-			product.unitInfo
-		} - ₹${product.price * product.quantity}`
-	})
-	return details
-}
-
 const routePayment = async order => {
+	const {
+		payment,
+		seller,
+		order: { number }
+	} = order
 	try {
-		const { payment } = order
-		const routeCharges = payment.transferAmount * ROUTE_CHARGES
-		const amountToBeTransfered = payment.transferAmount - routeCharges
 		const payload = {
 			transfers: [
 				{
-					account: order.seller.accountId,
-					amount: Math.ceil(amountToBeTransfered * 100),
+					account: seller.accountId,
+					amount: payment.transferredAmount * 100, // converting into paise
 					currency: 'INR'
 				}
 			]
 		}
 
 		const { data } = await axios.post(
-			`${RPAY_HOST}/payments/${order.payment.id}/transfers`,
+			`${RPAY_HOST}/payments/${payment.id}/transfers`,
 			payload,
 			{
 				headers: {
@@ -191,7 +207,93 @@ const routePayment = async order => {
 			error,
 			msg: error.message
 		})
+
+		await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: 'support@botiga.app',
+			subject: `Botiga - Payment Routing Failed - ${seller.brandName} - ${number}`,
+			text: `Routing Failure Info
+				<br><br>Hostname: ${host}
+				<br><br>Failure Reason: ${error.message}
+				<br><br>Team Botiga`
+		})
+
 		return Promise.reject(new Error(error.message))
+	}
+}
+
+const notificationsHelper = async ({ event, entity, order }) => {
+	const user = await User.findById(order.buyer.id)
+
+	const {
+		buyer,
+		apartment,
+		order: { number, products, totalAmount },
+		seller,
+		payment
+	} = order
+
+	if (event === 'payment.captured') {
+		winston.info(`@webhook payment success - ${entity.id}`, {
+			paymentId: entity.id,
+			orderNumber: number,
+			brand: seller.brandName,
+			payment
+		})
+
+		user.sendNotifications(
+			'Payment Success',
+			`Your payment of ₹${totalAmount} for order #${number} to ${seller.brandName} has been successful`,
+			entity.notes.orderId
+		)
+
+		// Send seller message that order has been created
+		let productDetails = ''
+		products.forEach(product => {
+			productDetails += `<br>${product.quantity} x ${product.name} ${
+				product.unitInfo
+			} - ₹${product.price * product.quantity}`
+		})
+
+		await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: order.seller.email,
+			subject: `Botiga - Order Received #${number} - ${apartment.aptName} `,
+			text: `Order Details
+				<br><br>Customer - ${buyer.name} - ${buyer.phone}
+				<br>Delivery Address:
+				<br>Flat No - ${buyer.house}
+				<br>Apartment - ${apartment.aptName}, ${apartment.area}
+				<br>${productDetails} 
+				<br><br>Total Amount - ₹${totalAmount}
+				<br><br>Thank you
+				<br>Team Botiga`
+		})
+	} else if (event === 'payment.failed') {
+		winston.error(`@webhook payment failure - ${entity.id}`, {
+			paymentId: entity.id,
+			orderNumber: number,
+			brand: order.seller.brandName,
+			payment: order.payment
+		})
+
+		user.sendNotifications(
+			'Payment Failure',
+			`Your payment of ₹${totalAmount} for order #${number} to ${order.seller.brandName} has failed. Any amount debited will be credited back to your account.`,
+			entity.notes.orderId
+		)
+
+		await aws.ses.sendMailPromise({
+			from: 'noreply@botiga.app',
+			to: 'support@botiga.app',
+			subject: `Botiga - Server Payment Failure Notification - Order #${number} - ${order.apartment.aptName} `,
+			text: `Payment Failure Notification
+				<br><br>Hostname: ${host}
+				<br><br>Customer - ${order.buyer.name} - ${order.$isDeletedbuyer.phone}
+				<br><br>Total Amount - ₹${totalAmount}
+				<br><br>Thank you
+				<br>Team Botiga`
+		})
 	}
 }
 
@@ -219,85 +321,30 @@ const paymentWebhook = async (data, signature) => {
 
 		const order = await Order.findById(entity.notes.orderId)
 
-		// Check if payment status is already success
-		// Payment webhooks could be received in any order, so, older failure webhooks could override success status
+		// Payment webhooks order is not guaranteed. So, older failure webhooks could WRONGLY override success status
 		if (order.payment.status === PaymentStatus.success) {
 			return null
 		}
 
 		// 3. Update database for payment info
-		const updatedOrder = await dbStatusUpdate({
+		const updatedOrder = await dbWebhookUpdate({
 			event,
 			entity,
 			order
 		})
 
-		const user = await User.findById(order.buyer.id)
+		await notificationsHelper({ event, entity, order: updatedOrder })
 
 		if (event === 'payment.captured') {
 			// Payment Captured event was registered. If order payment status is not success, order payment update failed
-			if (updatedOrder.payment.status !== PaymentStatus.success) {
-				throw new Error('DB Payment Update Failure')
-			}
+			// if (updatedOrder.payment.status !== PaymentStatus.success) {
+			// 	throw new Error('DB Payment Update Failure')
+			// }
 
 			// Route Payment
 			await routePayment(updatedOrder)
-
-			winston.info(`@webhook payment success - ${entity.id}`, {
-				paymentId: entity.id,
-				orderNumber: order.order.number,
-				brand: order.seller.brandName,
-				payment: updatedOrder.payment
-			})
-
-			user.sendNotifications(
-				'Payment Success',
-				`Your payment of ₹${order.order.totalAmount} for order #${order.order.number} to ${order.seller.brandName} has been successful`,
-				entity.notes.orderId
-			)
-
-			// Send seller message that order has been created
-			const { buyer, apartment } = order
-			await aws.ses.sendMailPromise({
-				from: 'noreply@botiga.app',
-				to: order.seller.email,
-
-				subject: `Botiga - Order Received #${order.order.number} - ${apartment.aptName} `,
-				text: `Order Details
-				<br><br>Customer - ${buyer.name} - ${buyer.phone}
-				<br>Delivery Address:
-				<br>Flat No - ${buyer.house}
-				<br>Apartment - ${apartment.aptName}, ${order.apartment.area}
-				<br>${populateProductDetails(order.order.products)} 
-				<br><br>Total Amount - ₹${order.order.totalAmount}
-				<br><br>Thank you
-				<br>Team Botiga`
-			})
-		} else if (event === 'payment.failed') {
-			winston.error(`@webhook payment failure - ${entity.id}`, {
-				paymentId: entity.id,
-				orderNumber: order.order.number,
-				brand: order.seller.brandName,
-				payment: updatedOrder.payment
-			})
-
-			user.sendNotifications(
-				'Payment Failure',
-				`Your payment of ₹${order.order.totalAmount} for order #${order.order.number} to ${order.seller.brandName} has failed. Any amount debited will be credited back to your account.`,
-				entity.notes.orderId
-			)
-
-			await aws.ses.sendMailPromise({
-				from: 'noreply@botiga.app',
-				to: 'support@botiga.app',
-				subject: `Botiga - Server Payment Failure Notification - Order #${order.order.number} - ${order.apartment.aptName} `,
-				text: `Payment Failure Notification
-				<br><br>Customer - ${order.buyer.name} - ${order.$isDeletedbuyer.phone}
-				<br><br>Total Amount - ₹${order.order.totalAmount}
-				<br><br>Thank you
-				<br>Team Botiga`
-			})
 		}
+
 		return null
 	} catch (error) {
 		winston.error('@payment webhook failed', {

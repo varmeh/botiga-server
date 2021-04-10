@@ -131,15 +131,7 @@ const orderSchema = new Schema(
 				type: String,
 				default: ''
 			},
-			transferAmount: {
-				type: Number,
-				default: 0
-			},
-			fee: {
-				type: Number,
-				default: 0
-			},
-			taxes: {
+			transferredAmount: {
 				type: Number,
 				default: 0
 			}
