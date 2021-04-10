@@ -323,6 +323,11 @@ const paymentWebhook = async (data, signature) => {
 
 		// Payment webhooks order is not guaranteed. So, older failure webhooks could WRONGLY override success status
 		if (order.payment.status === PaymentStatus.success) {
+			winston.info('@payment webhook status success already', {
+				domain: 'webhook',
+				event,
+				paymentId: entity.id
+			})
 			return null
 		}
 
