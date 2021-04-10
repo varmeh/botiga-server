@@ -192,7 +192,7 @@ const routePayment = async order => {
 		}
 
 		const { data } = await axios.post(
-			`${RPAY_HOST}/payments/${payment.id}/transfers`,
+			`${RPAY_HOST}/payments/${payment.paymentId}/transfers`,
 			payload,
 			{
 				headers: {
