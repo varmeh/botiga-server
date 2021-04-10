@@ -44,7 +44,7 @@ const initiateTestTransaction = async ({ txnAmount, sellerMid }) => {
 		})
 		return data
 	} catch (error) {
-		winston.error('@payment initiateTestTransaction failed', {
+		winston.error('@payment initiateTestTransaction error', {
 			error,
 			msg: error.message
 		})
@@ -77,7 +77,7 @@ const initiateTransaction = async ({ txnAmount, orderId }) => {
 
 		return data
 	} catch (error) {
-		winston.error('@payment initiate transaction failed', {
+		winston.error('@payment initiate transaction error', {
 			error,
 			msg: error.message
 		})
@@ -203,7 +203,7 @@ const routePayment = async order => {
 
 		return data
 	} catch (error) {
-		winston.error('@payment routePayment failed', {
+		winston.error('@payment routePayment error', {
 			error,
 			msg: error.message
 		})
@@ -212,7 +212,7 @@ const routePayment = async order => {
 			from: 'noreply@botiga.app',
 			to: 'support@botiga.app',
 			subject: `Botiga - Payment Routing Failed - ${seller.brandName} - ${number}`,
-			text: `Routing Failure Info
+			text: `Routing Failure Error
 				<br><br>Hostname: ${host}
 				<br><br>Failure Reason: ${error.message}
 				<br><br>Team Botiga`
@@ -289,7 +289,7 @@ const notificationsHelper = async ({ event, entity, order }) => {
 			subject: `Botiga - Server Payment Failure Notification - Order #${number} - ${order.apartment.aptName} `,
 			text: `Payment Failure Notification
 				<br><br>Hostname: ${host}
-				<br><br>Customer - ${order.buyer.name} - ${order.$isDeletedbuyer.phone}
+				<br><br>Customer - ${order.buyer.name} - ${order.buyer.phone}
 				<br><br>Total Amount - ₹${totalAmount}
 				<br><br>Thank you
 				<br>Team Botiga`
@@ -347,7 +347,7 @@ const paymentWebhook = async (data, signature) => {
 
 		return null
 	} catch (error) {
-		winston.error('@payment webhook failed', {
+		winston.error('@payment webhook error', {
 			error,
 			errorMessage: error.message,
 			event: data.event,
