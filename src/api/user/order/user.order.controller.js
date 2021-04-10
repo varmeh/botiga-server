@@ -224,16 +224,6 @@ export const postRpayTransactionWebhook = async (req, res, next) => {
 	}
 }
 
-export const postRpayDowntimeWebhook = async (req, res, next) => {
-	try {
-		const { body, headers } = req
-		await rpayPayments.downtimeWebhook(body, headers['x-razorpay-signature'])
-		res.json()
-	} catch (error) {
-		controllerErroHandler(error, next)
-	}
-}
-
 export const postRpayTransactionCancelled = async (req, res, next) => {
 	try {
 		const { orderId } = req.body
