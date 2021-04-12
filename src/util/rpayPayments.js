@@ -131,8 +131,7 @@ const dbWebhookUpdate = async ({ event, entity, order }) => {
 
 			const amountToBeTransferedInPaise =
 				entity.amount -
-				Math.ceil(entity.fee * 1.18) -
-				Math.ceil(entity.amount * ROUTE_CHARGES)
+				(entity.fee + entity.tax + Math.ceil(entity.amount * ROUTE_CHARGES))
 
 			payment.transferredAmount = amountToBeTransferedInPaise / 100
 		} else {
