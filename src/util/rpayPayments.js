@@ -228,16 +228,14 @@ const notificationsHelper = async ({ event, entity, order }) => {
 		buyer,
 		apartment,
 		order: { number, products, totalAmount },
-		seller,
-		payment
+		seller
 	} = order
 
 	if (event === 'payment.captured') {
-		winston.info(`@webhook payment success - ${entity.id}`, {
+		winston.info(`@webhook payment success - ${number}`, {
 			paymentId: entity.id,
 			orderNumber: number,
-			brand: seller.brandName,
-			payment
+			brand: seller.brandName
 		})
 
 		user.sendNotifications(
@@ -269,16 +267,15 @@ const notificationsHelper = async ({ event, entity, order }) => {
 				<br>Team Botiga`
 		})
 	} else if (event === 'payment.failed') {
-		winston.error(`@webhook payment failure - ${entity.id}`, {
+		winston.error(`@webhook payment failure - ${number}`, {
 			paymentId: entity.id,
 			orderNumber: number,
-			brand: order.seller.brandName,
-			payment: order.payment
+			brand: seller.brandName
 		})
 
 		user.sendNotifications(
 			'Payment Failure',
-			`Your payment of ₹${totalAmount} for order #${number} to ${order.seller.brandName} has failed. Any amount debited will be credited back to your account.`,
+			`Your payment of ₹${totalAmount} for order #${number} to ${seller.brandName} has failed. Any amount debited will be credited back to your account.`,
 			entity.notes.orderId
 		)
 
