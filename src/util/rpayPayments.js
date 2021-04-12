@@ -130,8 +130,7 @@ const dbWebhookUpdate = async ({ event, entity, order }) => {
 			payment.status = PaymentStatus.success
 
 			const amountToBeTransferedInPaise =
-				entity.amount -
-				(entity.fee + entity.tax + Math.ceil(entity.amount * ROUTE_CHARGES))
+				entity.amount - (entity.fee + Math.ceil(entity.amount * ROUTE_CHARGES)) // Fee is inclusive of GST charge
 
 			payment.transferredAmount = amountToBeTransferedInPaise / 100
 		} else {
