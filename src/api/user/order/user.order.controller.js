@@ -233,9 +233,11 @@ export const postRpayTransactionCancelled = async (req, res, next) => {
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: 'support@botiga.app',
-			subject: `Botiga - App Payment Cancellation Notification for Order #${order.order.number} - ${order.apartment.aptName} `,
+			subject: `Botiga - App Payment Cancellation Notification for Order #${order.order.number}`,
 			text: `Payment Cancelled by User
-				<br><br>Thank you
+				<br><br>Apartment - ${order.apartment.aptName}
+				<br><br>Buyer Info - ${order.buyer}
+				<br><br>Payment Info - ${order.payment}
 				<br>Team Botiga`
 		})
 
