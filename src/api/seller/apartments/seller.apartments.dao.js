@@ -119,7 +119,11 @@ export const updateApartmentContactInformation = async (
 
 		const apartment = await Apartment.findById(apartmentId)
 
-		apartment.sellers.id(sellerId).contact = { phone, whatsapp, email }
+		const sellerInApartmentSchema = apartment.sellers.id(sellerId)
+
+		sellerInApartmentSchema.contact.phone = phone
+		sellerInApartmentSchema.contact.whatsapp = whatsapp
+		sellerInApartmentSchema.contact.email = email
 
 		await apartment.save()
 
