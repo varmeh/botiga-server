@@ -54,7 +54,11 @@ export const updateApartmentDeliverySchedule = async (
 
 		const apartment = await Apartment.findById(apartmentId)
 
-		apartment.sellers.id(sellerId).delivery = { type: deliveryType, day, slot }
+		const sellerApartmentdelivery = apartment.sellers.id(sellerId).delivery
+
+		sellerApartmentdelivery.type = deliveryType
+		sellerApartmentdelivery.day = day
+		sellerApartmentdelivery.slot = slot
 
 		await apartment.save()
 
