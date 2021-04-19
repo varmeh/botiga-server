@@ -142,15 +142,15 @@ const dbWebhookUpdate = async ({ event, entity, order }) => {
 
 		const updatedOrder = await order.save()
 
-		await aws.ses.sendMailPromise({
-			from: 'noreply@botiga.app',
-			to: 'support@botiga.app',
-			subject: `Botiga - Payment Event - ${seller.brandName} - ${number} - ${event}`,
-			text: `Payment Database Status
-				<br><br>Hostname: ${host}
-				<br><br>${updatedOrder.payment}
-				<br><br>Team Botiga`
-		})
+		// await aws.ses.sendMailPromise({
+		// 	from: 'noreply@botiga.app',
+		// 	to: 'support@botiga.app',
+		// 	subject: `Botiga - Payment Event - ${seller.brandName} - ${number} - ${event}`,
+		// 	text: `Payment Database Status
+		// 		<br><br>Hostname: ${host}
+		// 		<br><br>${updatedOrder.payment}
+		// 		<br><br>Team Botiga`
+		// })
 
 		return updatedOrder
 	} catch (error) {
@@ -226,8 +226,9 @@ const notificationsHelper = async ({ event, entity, order }) => {
 	const {
 		buyer,
 		apartment,
-		order: { number, products, totalAmount },
-		seller
+		order: { number, products, totalAmount, status },
+		seller,
+		payment
 	} = order
 
 	if (event === 'payment.captured') {
@@ -260,8 +261,10 @@ const notificationsHelper = async ({ event, entity, order }) => {
 				<br>Delivery Address:
 				<br>Flat No - ${buyer.house}
 				<br>Apartment - ${apartment.aptName}, ${apartment.area}
+				<br><br>Seller - ${seller.brandName}
 				<br>${productDetails} 
-				<br><br>Total Amount - ₹${totalAmount}
+				<br>Total Amount - ₹${totalAmount}
+				<br><br>Payment Mode - ${payment.paymentMode}
 				<br><br>Thank you
 				<br>Team Botiga`
 		})
@@ -284,8 +287,12 @@ const notificationsHelper = async ({ event, entity, order }) => {
 			subject: `Botiga - Server Payment Failure Notification - Order #${number} - ${order.apartment.aptName} `,
 			text: `Payment Failure Notification
 				<br><br>Hostname: ${host}
-				<br><br>Customer - ${order.buyer.name} - ${order.buyer.phone}
-				<br><br>Total Amount - ₹${totalAmount}
+				<br><br>Customer - ${buyer.name} - ${buyer.phone}
+				<br>Flat No - ${buyer.house}
+				<br>Order Status - ${status}
+				<br>Total Amount - ₹${totalAmount}
+				<br><br>Seller - ${seller.brandName}
+				<br><br>Payment Status - ${payment}
 				<br><br>Thank you
 				<br>Team Botiga`
 		})
