@@ -259,7 +259,7 @@ const notificationsHelper = async ({ event, entity, order }) => {
 			text: `Order Details
 				<br><br>Customer - ${buyer.name} - ${buyer.phone}
 				<br>Delivery Address:
-				<br>Flat No - ${buyer.house}
+				<br>House No - ${buyer.house}
 				<br>Apartment - ${apartment.aptName}, ${apartment.area}
 				<br><br>Seller - ${seller.brandName}
 				<br>${productDetails} 
@@ -284,11 +284,11 @@ const notificationsHelper = async ({ event, entity, order }) => {
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: 'support@botiga.app',
-			subject: `Botiga - Server Payment Failure Notification - Order #${number} - ${order.apartment.aptName} `,
+			subject: `Botiga - Server Payment Failure Notification - Order #${number}`,
 			text: `Payment Failure Notification
 				<br><br>Hostname: ${host}
 				<br><br>Customer - ${buyer.name} - ${buyer.phone}
-				<br>Flat No - ${buyer.house}
+				<br>Address - ${buyer.house} - ${apartment.aptName} 
 				<br>Order Status - ${status}
 				<br>Total Amount - ₹${totalAmount}
 				<br><br>Seller - ${seller.brandName}

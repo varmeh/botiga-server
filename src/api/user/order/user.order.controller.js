@@ -242,7 +242,7 @@ export const postRpayTransactionCancelled = async (req, res, next) => {
 			subject: `Botiga - App Payment Cancellation Notification for Order #${number}`,
 			text: `Payment Cancelled by User
 				<br><br>Customer - ${buyer.name} - ${buyer.phone}
-				<br>House Info - ${buyer.house} - ${apartment.aptName}
+				<br>Address - ${buyer.house} - ${apartment.aptName}
 				<br>Order Status - ${status}
 				<br><br>Seller - ${seller.brandName}
 				<br>Total Amount - ${totalAmount}
