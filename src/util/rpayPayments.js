@@ -289,13 +289,50 @@ const notificationsHelper = async ({ event, entity, order }) => {
 				<br><br>Hostname: ${host}
 				<br><br>Customer - ${buyer.name} - ${buyer.phone}
 				<br>Address - ${buyer.house} - ${apartment.aptName} 
-				<br>Order Status - ${status}
-				<br>Total Amount - ₹${totalAmount}
 				<br><br>Seller - ${seller.brandName}
-				<br><br>Payment Status - ${payment}
+				<br>Order Status - ${status}
+				<br>Payment Status - ${payment}
+				<br>Total Amount - ₹${totalAmount}
 				<br><br>Thank you
 				<br>Team Botiga`
 		})
+	}
+}
+
+const removeFailedOrder = async orderId => {
+	const order = await Order.findById(orderId)
+
+	if (order) {
+		if (
+			order.order.status === OrderStatus.cancelled &&
+			order.payment.status === PaymentStatus.failure
+		) {
+			await order.remove()
+
+			const {
+				buyer,
+				apartment,
+				order: { number, totalAmount, status },
+				seller,
+				payment
+			} = order
+
+			await aws.ses.sendMailPromise({
+				from: 'noreply@botiga.app',
+				to: 'support@botiga.app',
+				subject: `Botiga - Order Removed - #${number}`,
+				text: `Order removed due to payment failure
+				<br><br>Hostname: ${host}
+				<br><br>Customer - ${buyer.name} - ${buyer.phone}
+				<br>Address - ${buyer.house} - ${apartment.aptName} 
+				<br><br>Seller - ${seller.brandName}
+				<br>Order Status - ${status}
+				<br>Payment Status - ${payment}
+				<br>Total Amount - ₹${totalAmount}
+				<br><br>Thank you
+				<br>Team Botiga`
+			})
+		}
 	}
 }
 
@@ -343,13 +380,9 @@ const paymentWebhook = async (data, signature) => {
 		await notificationsHelper({ event, entity, order: updatedOrder })
 
 		if (event === 'payment.captured') {
-			// Payment Captured event was registered. If order payment status is not success, order payment update failed
-			// if (updatedOrder.payment.status !== PaymentStatus.success) {
-			// 	throw new Error('DB Payment Update Failure')
-			// }
-
-			// Route Payment
 			await routePayment(updatedOrder)
+		} else if (event === 'payment.failed') {
+			setTimeout(() => removeFailedOrder(entity.notes.orderId), 5 * 60 * 1000) // remove order after 5 mins
 		}
 
 		return null
