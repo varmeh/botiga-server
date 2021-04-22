@@ -288,11 +288,11 @@ const notificationsHelper = async ({ event, entity, order }) => {
 			text: `Payment Failure Notification
 				<br><br>Hostname: ${host}
 				<br><br>Customer - ${buyer.name} - ${buyer.phone}
-				<br>Address - ${buyer.house} - ${apartment.aptName} 
+				<br>Address - ${buyer.house} - ${apartment.aptName}
 				<br><br>Seller - ${seller.brandName}
 				<br>Order Status - ${status}
-				<br>Payment Status - ${payment}
 				<br>Total Amount - ₹${totalAmount}
+				<br><br>Payment Status - ${payment}
 				<br><br>Thank you
 				<br>Team Botiga`
 		})
@@ -300,6 +300,11 @@ const notificationsHelper = async ({ event, entity, order }) => {
 }
 
 const removeFailedOrder = async orderId => {
+	winston.info(`@removeFailedOrder - ${orderId}`, {
+		domain: 'webhook',
+		orderId
+	})
+
 	const order = await Order.findById(orderId)
 
 	if (order) {
@@ -308,6 +313,11 @@ const removeFailedOrder = async orderId => {
 			order.payment.status === PaymentStatus.failure
 		) {
 			await order.remove()
+
+			winston.info(`@removeFailedOrder - ${orderId} Removed`, {
+				domain: 'webhook',
+				orderId
+			})
 
 			const {
 				buyer,
@@ -327,8 +337,8 @@ const removeFailedOrder = async orderId => {
 				<br>Address - ${buyer.house} - ${apartment.aptName} 
 				<br><br>Seller - ${seller.brandName}
 				<br>Order Status - ${status}
-				<br>Payment Status - ${payment}
 				<br>Total Amount - ₹${totalAmount}
+				<br><br>Payment Status - ${payment}
 				<br><br>Thank you
 				<br>Team Botiga`
 			})

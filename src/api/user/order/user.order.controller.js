@@ -243,11 +243,11 @@ export const postRpayTransactionCancelled = async (req, res, next) => {
 			text: `Payment Cancelled by User
 				<br><br>Customer - ${buyer.name} - ${buyer.phone}
 				<br>Address - ${buyer.house} - ${apartment.aptName}
-				<br>Order Status - ${status}
 				<br><br>Seller - ${seller.brandName}
+				<br>Order Status - ${status}
 				<br>Total Amount - ${totalAmount}
 				<br><br>Payment Status - ${payment}
-				<br>Team Botiga`
+				<br><br>Team Botiga`
 		})
 
 		if (payment.status !== PaymentStatus.success) {
