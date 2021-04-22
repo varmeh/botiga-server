@@ -299,10 +299,11 @@ const notificationsHelper = async ({ event, entity, order }) => {
 	}
 }
 
-const removeFailedOrder = async orderId => {
-	winston.info(`@removeFailedOrder - ${orderId}`, {
+const removeFailedOrder = async (orderId, orderNumber) => {
+	winston.info(`@removeFailedOrder - ${orderNumber}`, {
 		domain: 'webhook',
-		orderId
+		orderId,
+		orderNumber
 	})
 
 	const order = await Order.findById(orderId)
@@ -314,11 +315,6 @@ const removeFailedOrder = async orderId => {
 		) {
 			await order.remove()
 
-			winston.info(`@removeFailedOrder - ${orderId} Removed`, {
-				domain: 'webhook',
-				orderId
-			})
-
 			const {
 				buyer,
 				apartment,
@@ -326,6 +322,12 @@ const removeFailedOrder = async orderId => {
 				seller,
 				payment
 			} = order
+
+			winston.info(`@removeFailedOrder - ${orderNumber} Removed`, {
+				domain: 'webhook',
+				orderId,
+				orderNumber
+			})
 
 			await aws.ses.sendMailPromise({
 				from: 'noreply@botiga.app',
@@ -392,7 +394,10 @@ const paymentWebhook = async (data, signature) => {
 		if (event === 'payment.captured') {
 			await routePayment(updatedOrder)
 		} else if (event === 'payment.failed') {
-			setTimeout(() => removeFailedOrder(entity.notes.orderId), 5 * 60 * 1000) // remove order after 5 mins
+			setTimeout(
+				() => removeFailedOrder(entity.notes.orderId, order.order.number),
+				5 * 60 * 1000
+			) // remove order after 5 mins
 		}
 
 		return null
