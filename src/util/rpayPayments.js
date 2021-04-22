@@ -396,8 +396,8 @@ const paymentWebhook = async (data, signature) => {
 		} else if (event === 'payment.failed') {
 			setTimeout(
 				() => removeFailedOrder(entity.notes.orderId, order.order.number),
-				5 * 60 * 1000
-			) // remove order after 5 mins
+				60 * 60 * 1000
+			) // remove order after 1 hour
 		}
 
 		return null
