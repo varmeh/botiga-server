@@ -41,6 +41,7 @@ const generateSheetForApartment = ({ workbook, apartmentData }) => {
 		{ header: 'House', key: 'house' },
 		{ header: 'Contact', key: 'contact' },
 		{ header: 'Amount', key: 'amount' },
+		{ header: 'Order Number', key: 'orderNumber' },
 		{ header: 'Order Status', key: 'orderedStatus' },
 		{ header: 'Payment Status', key: 'paymentStatus' },
 		{ header: 'Refund Status', key: 'refundStatus' },
@@ -59,7 +60,7 @@ const generateSheetForApartment = ({ workbook, apartmentData }) => {
 		const {
 			buyer: { name, house = '', phone = '' },
 			createdAt,
-			order: { status, totalAmount, products = [] },
+			order: { number, status, totalAmount, products = [] },
 			payment,
 			refund
 		} = delivery
@@ -71,6 +72,7 @@ const generateSheetForApartment = ({ workbook, apartmentData }) => {
 					name,
 					house,
 					contact: phone,
+					orderNumber: number,
 					products: productName,
 					unit: unitInfo,
 					quantity: quantity,
