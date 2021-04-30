@@ -254,6 +254,11 @@ export const postRpayTransactionCancelled = async (req, res, next) => {
 			// If user cancels payment from App
 			// Change order status to cancel
 			await cancelOrder(orderId)
+
+			setTimeout(
+				() => rpayPayments.removeCancelledOrder(orderId, number),
+				60 * 60 * 1000
+			)
 		}
 
 		res.status(204).json()

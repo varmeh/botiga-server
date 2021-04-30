@@ -299,8 +299,8 @@ const notificationsHelper = async ({ event, entity, order }) => {
 	}
 }
 
-const removeFailedOrder = async (orderId, orderNumber) => {
-	winston.info(`@removeFailedOrder - ${orderNumber}`, {
+const removeCancelledOrder = async (orderId, orderNumber) => {
+	winston.info(`@removeCancelledOrder - ${orderNumber}`, {
 		domain: 'webhook',
 		orderId,
 		orderNumber
@@ -311,7 +311,7 @@ const removeFailedOrder = async (orderId, orderNumber) => {
 	if (order) {
 		if (
 			order.order.status === OrderStatus.cancelled &&
-			order.payment.status === PaymentStatus.failure
+			order.payment.status !== PaymentStatus.success
 		) {
 			await order.remove()
 
@@ -323,7 +323,7 @@ const removeFailedOrder = async (orderId, orderNumber) => {
 				payment
 			} = order
 
-			winston.info(`@removeFailedOrder - ${orderNumber} Removed`, {
+			winston.info(`@removeCancelledOrder - ${orderNumber} Removed`, {
 				domain: 'webhook',
 				orderId,
 				orderNumber
@@ -395,7 +395,7 @@ const paymentWebhook = async (data, signature) => {
 			await routePayment(updatedOrder)
 		} else if (event === 'payment.failed') {
 			setTimeout(
-				() => removeFailedOrder(entity.notes.orderId, order.order.number),
+				() => removeCancelledOrder(entity.notes.orderId, order.order.number),
 				60 * 60 * 1000
 			) // remove order after 1 hour
 		}
@@ -416,5 +416,6 @@ const paymentWebhook = async (data, signature) => {
 export default {
 	initiateTestTransaction,
 	initiateTransaction,
-	paymentWebhook
+	paymentWebhook,
+	removeCancelledOrder
 }
