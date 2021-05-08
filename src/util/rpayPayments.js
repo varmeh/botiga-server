@@ -177,10 +177,9 @@ const routePayment = async order => {
 					amount: payment.transferredAmount * 100, // converting into paise
 					currency: 'INR',
 					notes: {
-						orderId: number,
 						orderNumber: number
 					},
-					linked_account_notes: ['orderId', 'orderNumber']
+					linked_account_notes: ['orderNumber']
 				}
 			]
 		}
@@ -195,6 +194,7 @@ const routePayment = async order => {
 			}
 		)
 
+		winston.info('transfer data', { data })
 		return data
 	} catch (error) {
 		winston.error('@payment routePayment error', {

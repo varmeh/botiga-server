@@ -134,6 +134,10 @@ const orderSchema = new Schema(
 			transferredAmount: {
 				type: Number,
 				default: 0
+			},
+			transferId: {
+				type: String,
+				default: ''
 			}
 		},
 		refund: {
