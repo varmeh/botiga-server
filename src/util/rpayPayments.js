@@ -142,16 +142,6 @@ const dbWebhookUpdate = async ({ event, entity, order }) => {
 
 		const updatedOrder = await order.save()
 
-		// await aws.ses.sendMailPromise({
-		// 	from: 'noreply@botiga.app',
-		// 	to: 'support@botiga.app',
-		// 	subject: `Botiga - Payment Event - ${seller.brandName} - ${number} - ${event}`,
-		// 	text: `Payment Database Status
-		// 		<br><br>Hostname: ${host}
-		// 		<br><br>${updatedOrder.payment}
-		// 		<br><br>Team Botiga`
-		// })
-
 		return updatedOrder
 	} catch (error) {
 		winston.error('@payment dbWebhookUpdate failed', {
@@ -184,7 +174,10 @@ const routePayment = async order => {
 				{
 					account: seller.accountId,
 					amount: payment.transferredAmount * 100, // converting into paise
-					currency: 'INR'
+					currency: 'INR',
+					notes: {
+						orderNumber: number
+					}
 				}
 			]
 		}
