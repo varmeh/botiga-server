@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { hostname } from 'os'
 import axios from 'axios'
 import CreateHttpError from 'http-errors'
@@ -178,7 +179,8 @@ const routePayment = async order => {
 					notes: {
 						orderId: number,
 						orderNumber: number
-					}
+					},
+					linked_account_notes: ['orderId', 'orderNumber']
 				}
 			]
 		}
