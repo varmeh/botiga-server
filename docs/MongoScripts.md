@@ -83,3 +83,9 @@ db.orders.createIndex({"seller.id": 1, "createdAt": -1, "apartment.id": 1})
 ```
 db.orders.createIndex({"seller.id": 1, "order.expectedDeliveryDate": -1, "apartment.id": 1})
 ```
+
+-   `Scenario 3`: Search Orders based on Order Number or Customer Phone Number
+
+```
+db.orders.createIndex({"seller.id": 1, "buyer.phone": 1, "order.number": 1, "createdAt": -1})
+```

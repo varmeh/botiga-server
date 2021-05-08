@@ -2,7 +2,9 @@ import {
 	objectIdValidator,
 	paramObjectIdValidator,
 	paramDateValidator,
-	queryNumberValidator
+	queryNumberValidator,
+	paramPhoneValidator,
+	paramNumberValidator
 } from '../../../util'
 
 export const postCancelOrderValidator = [objectIdValidator('orderId')]
@@ -17,3 +19,7 @@ export const getOrdersValidator = [
 	queryNumberValidator('limit'),
 	queryNumberValidator('page')
 ]
+
+export const getOrdersByPhoneValidator = [paramPhoneValidator('number')]
+
+export const getOrdersByOrderNumberValidator = [paramNumberValidator('number')]

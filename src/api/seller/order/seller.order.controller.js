@@ -1,3 +1,4 @@
+import CreateHttpError from 'http-errors'
 import {
 	token,
 	paginationData,
@@ -10,8 +11,52 @@ import {
 	updateOrder,
 	updateRefund,
 	findOrdersByApartment,
-	findSellerAggregatedData
+	findSellerAggregatedData,
+	findOrdersByOrderNumber,
+	findOrdersByPhoneNumber
 } from './seller.order.dao'
+
+const orderOrchestrator = order => {
+	const {
+		apartment,
+		buyer,
+		order: {
+			number,
+			status,
+			totalAmount,
+			discountAmount,
+			couponCode,
+			deliveryFee,
+			expectedDeliveryDate,
+			deliverySlot,
+			completionDate,
+			products
+		},
+		createdAt,
+		_id,
+		payment,
+		refund
+	} = order
+
+	return {
+		id: _id,
+		number,
+		status,
+		totalAmount,
+		discountAmount,
+		couponCode,
+		deliveryFee,
+		orderDate: createdAt,
+		expectedDeliveryDate,
+		deliverySlot,
+		completionDate,
+		products,
+		payment,
+		refund,
+		house: buyer.house,
+		apartment: apartment.aptName
+	}
+}
 
 export const postCancelOrder = async (req, res, next) => {
 	try {
@@ -111,6 +156,41 @@ export const getOrdersAggregate = async (req, res, next) => {
 			return { id: _id, apartmentName, orders, revenue }
 		})
 		res.json({ totalRevenue, totalOrders, apartmentWiseBreakup })
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const getOrderByOrderNumber = async (req, res, next) => {
+	try {
+		const orders = await findOrdersByOrderNumber(
+			token.get(req),
+			req.params.number
+		)
+
+		if (orders.length > 0) {
+			const orderList = orders.map(order => orderOrchestrator(order))
+			res.json({ count: orderList.length, orders: orderList })
+		} else {
+			throw new CreateHttpError[404]('Order Not Found')
+		}
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const getOrdersByPhoneNumber = async (req, res, next) => {
+	try {
+		const orders = await findOrdersByPhoneNumber(
+			token.get(req),
+			req.params.number
+		)
+		if (orders.length > 0) {
+			const orderList = orders.map(order => orderOrchestrator(order))
+			res.json({ count: orderList.length, orders: orderList })
+		} else {
+			throw new CreateHttpError[404]('Customer Not Found')
+		}
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}

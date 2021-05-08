@@ -156,3 +156,28 @@ export const findSellerAggregatedData = async (sellerId, dateString) => {
 		return dbErrorHandler(error, 'findSellerAggregatedData')
 	}
 }
+
+export const findOrdersByOrderNumber = async (sellerId, number) => {
+	try {
+		return await Order.find({
+			'seller.id': sellerId,
+			'order.number': number
+		}).sort({
+			createdAt: -1
+		})
+	} catch (error) {
+		return dbErrorHandler(error, 'findOrderByOrderNumber')
+	}
+}
+
+export const findOrdersByPhoneNumber = async (sellerId, phone) => {
+	try {
+		return await Order.find({ 'seller.id': sellerId, 'buyer.phone': phone })
+			.sort({
+				createdAt: -1
+			})
+			.limit(25)
+	} catch (error) {
+		return dbErrorHandler(error, 'findOrdersByPhoneNumber')
+	}
+}

@@ -6,14 +6,18 @@ import {
 	postCancelOrderValidator,
 	patchRefundCompletedValidator,
 	getOrdersValidator,
-	getOrdersAggregateValidator
+	getOrdersAggregateValidator,
+	getOrdersByOrderNumberValidator,
+	getOrdersByPhoneValidator
 } from './seller.order.validator'
 
 import {
 	postCancelOrder,
 	patchRefundCompleted,
 	getOrdersByApartmentDate,
-	getOrdersAggregate
+	getOrdersAggregate,
+	getOrderByOrderNumber,
+	getOrdersByPhoneNumber
 } from './seller.order.controller'
 
 const router = Router()
@@ -44,6 +48,22 @@ router.get(
 	getOrdersAggregateValidator,
 	validationMiddleware,
 	getOrdersAggregate
+)
+
+router.get(
+	'/order/:number',
+	token.authenticationMiddleware,
+	getOrdersByOrderNumberValidator,
+	validationMiddleware,
+	getOrderByOrderNumber
+)
+
+router.get(
+	'/phone/:number',
+	token.authenticationMiddleware,
+	getOrdersByPhoneValidator,
+	validationMiddleware,
+	getOrdersByPhoneNumber
 )
 
 router.get(
