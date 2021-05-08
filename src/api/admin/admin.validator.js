@@ -7,6 +7,7 @@ import {
 	objectIdValidator,
 	paramPhoneValidator,
 	paramDateValidator,
+	paramNumberValidator,
 	boolOptionalValidator,
 	phoneValidator,
 	paramObjectIdValidator,
@@ -107,3 +108,7 @@ export const getDeliveryValidator = [
 	paramPhoneValidator('sellerPhone'),
 	paramDateValidator('date')
 ]
+
+export const getOrdersByPhoneValidator = [paramPhoneValidator('number')]
+
+export const getOrdersByOrderNumberValidator = [paramNumberValidator('number')]

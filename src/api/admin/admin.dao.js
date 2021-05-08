@@ -362,3 +362,25 @@ export const removeSellerAllApartments = async phone => {
 		return dbErrorHandler(error, 'removeSellerAllApartments')
 	}
 }
+
+export const findOrdersByOrderNumber = async number => {
+	try {
+		return await Order.find({ 'order.number': number }).sort({
+			createdAt: -1
+		})
+	} catch (error) {
+		return dbErrorHandler(error, 'findOrderByOrderNumber')
+	}
+}
+
+export const findOrdersByPhoneNumber = async number => {
+	try {
+		return await Order.find({ 'buyer.phone': number })
+			.sort({
+				createdAt: -1
+			})
+			.limit(50)
+	} catch (error) {
+		return dbErrorHandler(error, 'findOrdersByPhoneNumber')
+	}
+}

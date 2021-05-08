@@ -25,7 +25,9 @@ import {
 	updateApartmentLiveStatus,
 	removeSellerAllApartments,
 	removeSellerApartment,
-	updateSellerFilters
+	updateSellerFilters,
+	findOrdersByOrderNumber,
+	findOrdersByPhoneNumber
 } from './admin.dao'
 
 const productsOrchestrator = categories => {
@@ -139,6 +141,50 @@ const sellerOrchestrator = seller => {
 	}
 
 	return data
+}
+
+const orderOrchestrator = order => {
+	const {
+		seller,
+		apartment,
+		buyer,
+		order: {
+			number,
+			status,
+			totalAmount,
+			discountAmount,
+			couponCode,
+			deliveryFee,
+			expectedDeliveryDate,
+			deliverySlot,
+			completionDate,
+			products
+		},
+		createdAt,
+		_id,
+		payment,
+		refund
+	} = order
+
+	return {
+		id: _id,
+		seller,
+		number,
+		status,
+		totalAmount,
+		discountAmount,
+		couponCode,
+		deliveryFee,
+		orderDate: createdAt,
+		expectedDeliveryDate,
+		deliverySlot,
+		completionDate,
+		products,
+		payment,
+		refund,
+		house: buyer.house,
+		apartment: apartment.aptName
+	}
 }
 
 export const getApartment = async (req, res, next) => {
@@ -488,6 +534,35 @@ export const postImageDelete = async (req, res, next) => {
 	try {
 		await aws.s3.deleteImageUrl(req.body.imageUrl)
 		res.status(204).json()
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const getOrderByOrderNumber = async (req, res, next) => {
+	try {
+		const orders = await findOrdersByOrderNumber(req.params.number)
+
+		if (orders.length > 0) {
+			const orderList = orders.map(order => orderOrchestrator(order))
+			res.json({ count: orderList.length, orders: orderList })
+		} else {
+			throw new CreateHttpError[404]('Order Not Found')
+		}
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const getOrdersByPhoneNumber = async (req, res, next) => {
+	try {
+		const orders = await findOrdersByPhoneNumber(req.params.number)
+		if (orders.length > 0) {
+			const orderList = orders.map(order => orderOrchestrator(order))
+			res.json({ count: orderList.length, orders: orderList })
+		} else {
+			throw new CreateHttpError[404]('Customer Not Found')
+		}
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}

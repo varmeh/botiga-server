@@ -18,7 +18,9 @@ import {
 	patchSellerApartmentLiveValidator,
 	deleteSellerApartmentValidator,
 	deleteSellerApartmentWithIdValidator,
-	deleteImageValidator
+	deleteImageValidator,
+	getOrdersByPhoneValidator,
+	getOrdersByOrderNumberValidator
 } from './admin.validator'
 
 import {
@@ -43,7 +45,9 @@ import {
 	deleteSellerApartmentsWithId,
 	postBannerImage,
 	postImageDelete,
-	patchSellerFilters
+	patchSellerFilters,
+	getOrderByOrderNumber,
+	getOrdersByPhoneNumber
 } from './admin.controller'
 
 const router = Router()
@@ -174,6 +178,20 @@ router.post(
 	postTestTransactionNotifyValidator,
 	validationMiddleware,
 	postTestTransactionNotify
+)
+
+router.get(
+	'/orders/order/:number',
+	getOrdersByOrderNumberValidator,
+	validationMiddleware,
+	getOrderByOrderNumber
+)
+
+router.get(
+	'/orders/phone/:number',
+	getOrdersByPhoneValidator,
+	validationMiddleware,
+	getOrdersByPhoneNumber
 )
 
 router.get(

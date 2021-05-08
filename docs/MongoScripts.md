@@ -59,6 +59,10 @@ To cater this scenario, just add an index on `buyer.id`
 db.orders.createIndex({"buyer.id": 1, "createdAt": -1})
 ```
 
+```
+db.orders.createIndex({"buyer.phone": 1, "order.number": 1, "createdAt": -1})
+```
+
 ### Seller Scenario:
 
 -   `Scenario 1`: Find all orders placed to seller by date

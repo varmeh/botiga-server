@@ -22,3 +22,6 @@ export const paramPhoneValidator = field =>
 	paramEmptyValidator(field)
 		.matches(/^[5-9]\d{9}$/)
 		.withMessage(validationMessages.phone)
+
+export const paramNumberValidator = field =>
+	paramEmptyValidator(field).isInt().withMessage(validationMessages.numeric)
