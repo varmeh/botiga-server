@@ -40,6 +40,13 @@ const orderOrchestrator = order => {
 
 	return {
 		id: _id,
+		buyer: {
+			name,
+			house,
+			apartment: apartment.aptName,
+			phone,
+			whatsapp
+		},
 		number,
 		status,
 		totalAmount,
@@ -52,14 +59,7 @@ const orderOrchestrator = order => {
 		completionDate,
 		products,
 		payment,
-		refund,
-		buyer: {
-			name,
-			house,
-			apartment: apartment.aptName,
-			phone,
-			whatsapp
-		}
+		refund
 	}
 }
 

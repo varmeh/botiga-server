@@ -168,7 +168,13 @@ const orderOrchestrator = order => {
 
 	return {
 		id: _id,
-		seller,
+		buyer: {
+			name,
+			house,
+			apartment: apartment.aptName,
+			phone,
+			whatsapp
+		},
 		number,
 		status,
 		totalAmount,
@@ -179,16 +185,10 @@ const orderOrchestrator = order => {
 		expectedDeliveryDate,
 		deliverySlot,
 		completionDate,
+		seller,
 		products,
 		payment,
-		refund,
-		buyer: {
-			name,
-			house,
-			apartment: apartment.aptName,
-			phone,
-			whatsapp
-		}
+		refund
 	}
 }
 
