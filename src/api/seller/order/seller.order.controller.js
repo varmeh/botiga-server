@@ -59,8 +59,7 @@ const orderOrchestrator = order => {
 			apartment: apartment.aptName,
 			phone,
 			whatsapp
-		},
-		apartment: apartment.aptName
+		}
 	}
 }
 
