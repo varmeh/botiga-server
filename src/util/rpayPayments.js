@@ -176,6 +176,7 @@ const routePayment = async order => {
 					amount: payment.transferredAmount * 100, // converting into paise
 					currency: 'INR',
 					notes: {
+						orderId: number,
 						orderNumber: number
 					}
 				}
