@@ -194,14 +194,6 @@ const routePayment = async order => {
 			}
 		)
 
-		if (data.items !== null && data.items.length > 0) {
-			order.payment.transferId = data.items[0].id
-			await order.save()
-		}
-
-		winston.info('transfer data', {
-			data
-		})
 		return data
 	} catch (error) {
 		winston.error('@payment routePayment error', {
@@ -268,6 +260,7 @@ const notificationsHelper = async ({ event, entity, order }) => {
 				<br>${productDetails} 
 				<br>Total Amount - ₹${totalAmount}
 				<br><br>Payment Mode - ${payment.paymentMode}
+				<br>Razorpay Reconcilation Id - ${payment.transferId}
 				<br><br>Thank you
 				<br>Team Botiga`
 		})
@@ -386,22 +379,27 @@ const paymentWebhook = async (data, signature) => {
 		}
 
 		// 3. Update database for payment info
-		const updatedOrder = await dbWebhookUpdate({
+		let updatedOrder = await dbWebhookUpdate({
 			event,
 			entity,
 			order
 		})
 
-		await notificationsHelper({ event, entity, order: updatedOrder })
-
 		if (event === 'payment.captured') {
-			await routePayment(updatedOrder)
+			const data = await routePayment(updatedOrder)
+
+			if (data.items !== null && data.items.length > 0) {
+				updatedOrder.payment.transferId = data.items[0].id
+				updatedOrder = await updatedOrder.save()
+			}
 		} else if (event === 'payment.failed') {
 			setTimeout(
 				() => removeCancelledOrder(entity.notes.orderId, order.order.number),
 				60 * 60 * 1000
 			) // remove order after 1 hour
 		}
+
+		await notificationsHelper({ event, entity, order: updatedOrder })
 
 		return null
 	} catch (error) {
