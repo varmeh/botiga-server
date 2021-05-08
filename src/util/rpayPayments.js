@@ -194,7 +194,14 @@ const routePayment = async order => {
 			}
 		)
 
-		winston.info('transfer data', { data })
+		if (data.items !== null && data.items.length > 0) {
+			order.payment.transferId = data.items[0].id
+			await order.save()
+		}
+
+		winston.info('transfer data', {
+			data
+		})
 		return data
 	} catch (error) {
 		winston.error('@payment routePayment error', {
