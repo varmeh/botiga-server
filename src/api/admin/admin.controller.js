@@ -147,7 +147,7 @@ const orderOrchestrator = order => {
 	const {
 		seller,
 		apartment,
-		buyer,
+		buyer: { name, house, phone, whatsapp },
 		order: {
 			number,
 			status,
@@ -182,8 +182,13 @@ const orderOrchestrator = order => {
 		products,
 		payment,
 		refund,
-		house: buyer.house,
-		apartment: apartment.aptName
+		buyer: {
+			name,
+			house,
+			apartment: apartment.aptName,
+			phone,
+			whatsapp
+		}
 	}
 }
 
