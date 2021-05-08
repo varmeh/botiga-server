@@ -19,7 +19,7 @@ import {
 const orderOrchestrator = order => {
 	const {
 		apartment,
-		buyer,
+		buyer: { name, house, phone, whatsapp },
 		order: {
 			number,
 			status,
@@ -53,7 +53,13 @@ const orderOrchestrator = order => {
 		products,
 		payment,
 		refund,
-		house: buyer.house,
+		buyer: {
+			name,
+			house,
+			apartment: apartment.aptName,
+			phone,
+			whatsapp
+		},
 		apartment: apartment.aptName
 	}
 }
