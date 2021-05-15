@@ -1,5 +1,8 @@
 import { Router } from 'express'
 import { validationMiddleware } from '../../util'
+
+import sellerAdminRouter from './seller/seller.admin.routes'
+
 import {
 	getApartmentValidator,
 	postApartmentValidator,
@@ -8,16 +11,8 @@ import {
 	postBusinessCategoryValidator,
 	postNotificationTopicValidator,
 	postNotificationUserValidator,
-	patchSellerFiltesValidator,
-	getSellerValidator,
-	patchSellerBankDetailsValidator,
 	postTestTransactionValidator,
 	postTestTransactionNotifyValidator,
-	getDeliveryValidator,
-	postSellerApartmentValidator,
-	patchSellerApartmentLiveValidator,
-	deleteSellerApartmentValidator,
-	deleteSellerApartmentWithIdValidator,
 	deleteImageValidator,
 	getOrdersByPhoneValidator,
 	getOrdersByOrderNumberValidator
@@ -32,25 +27,17 @@ import {
 	postNotificationTopic,
 	postNotificationUser,
 	postNotificationSeller,
-	getSellerDetails,
-	patchSellerBankDetails,
 	postTestTransaction,
 	postTestTransactionNotify,
-	getDelivery,
-	getDeliveryXls,
-	getDeliveryXlsToCustomerSupport,
-	postSellerApartment,
-	patchApartmentLiveStatus,
-	deleteSellerApartments,
-	deleteSellerApartmentsWithId,
 	postBannerImage,
 	postImageDelete,
-	patchSellerFilters,
 	getOrderByOrderNumber,
 	getOrdersByPhoneNumber
 } from './admin.controller'
 
 const router = Router()
+
+router.use('/seller', sellerAdminRouter)
 
 router.get(
 	'/apartments/:apartmentId',
@@ -81,13 +68,6 @@ router.delete(
 )
 
 router.post('/banners/image', postBannerImage)
-
-router.patch(
-	'/seller/filters',
-	patchSellerFiltesValidator,
-	validationMiddleware,
-	patchSellerFilters
-)
 
 router.post(
 	'/image/delete',
@@ -124,48 +104,6 @@ router.post(
 	postNotificationSeller
 )
 
-router.get(
-	'/seller/:phone',
-	getSellerValidator,
-	validationMiddleware,
-	getSellerDetails
-)
-
-router.post(
-	'/seller/apartment',
-	postSellerApartmentValidator,
-	validationMiddleware,
-	postSellerApartment
-)
-
-router.patch(
-	'/seller/apartment/live',
-	patchSellerApartmentLiveValidator,
-	validationMiddleware,
-	patchApartmentLiveStatus
-)
-
-router.delete(
-	'/seller/:phone/apartments/:apartmentId',
-	deleteSellerApartmentWithIdValidator,
-	validationMiddleware,
-	deleteSellerApartmentsWithId
-)
-
-router.delete(
-	'/seller/:phone/apartments',
-	deleteSellerApartmentValidator,
-	validationMiddleware,
-	deleteSellerApartments
-)
-
-router.patch(
-	'/seller/bankdetails',
-	patchSellerBankDetailsValidator,
-	validationMiddleware,
-	patchSellerBankDetails
-)
-
 router.post(
 	'/transaction/test',
 	postTestTransactionValidator,
@@ -192,27 +130,6 @@ router.get(
 	getOrdersByPhoneValidator,
 	validationMiddleware,
 	getOrdersByPhoneNumber
-)
-
-router.get(
-	'/delivery/:sellerPhone/:date',
-	getDeliveryValidator,
-	validationMiddleware,
-	getDelivery
-)
-
-router.get(
-	'/deliveryxls/cs/:sellerPhone/:date',
-	getDeliveryValidator,
-	validationMiddleware,
-	getDeliveryXlsToCustomerSupport
-)
-
-router.get(
-	'/deliveryxls/:sellerPhone/:date',
-	getDeliveryValidator,
-	validationMiddleware,
-	getDeliveryXls
 )
 
 export default router

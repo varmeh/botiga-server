@@ -1,19 +1,14 @@
 import {
 	emptyValidator,
-	emptyOptionalValidator,
 	pincodeValidator,
 	decimalValidator,
 	urlValidator,
 	objectIdValidator,
 	paramPhoneValidator,
-	paramDateValidator,
 	paramNumberValidator,
-	boolOptionalValidator,
 	phoneValidator,
 	paramObjectIdValidator,
-	boolValidator,
 	numberValidator,
-	arrayValidator,
 	urlOptionalValidator,
 	objectIdOptionalValidator
 } from '../../util'
@@ -45,11 +40,6 @@ export const deleteApartmentBannerValidator = [
 	paramObjectIdValidator('bannerId')
 ]
 
-export const patchSellerFiltesValidator = [
-	phoneValidator('phone'),
-	arrayValidator('filters')
-]
-
 export const deleteImageValidator = urlValidator('imageUrl')
 
 export const postBusinessCategoryValidator = [emptyValidator('category')]
@@ -68,32 +58,6 @@ export const postNotificationTopicValidator = [
 	objectIdOptionalValidator('sellerId')
 ]
 
-export const getSellerValidator = paramPhoneValidator('phone')
-
-export const deleteSellerApartmentValidator = paramPhoneValidator('phone')
-
-export const postSellerApartmentValidator = [
-	phoneValidator('phone'),
-	objectIdValidator('apartmentId')
-]
-
-export const patchSellerApartmentLiveValidator = [
-	...postSellerApartmentValidator,
-	boolValidator('live')
-]
-
-export const deleteSellerApartmentWithIdValidator = [
-	paramPhoneValidator('phone'),
-	paramObjectIdValidator('apartmentId')
-]
-
-export const patchSellerBankDetailsValidator = [
-	phoneValidator('phone'),
-	boolOptionalValidator('editable'),
-	boolOptionalValidator('verified'),
-	emptyOptionalValidator('mid')
-]
-
 export const postTestTransactionValidator = [
 	phoneValidator('phone'),
 	decimalValidator('txnAmount')
@@ -102,11 +66,6 @@ export const postTestTransactionValidator = [
 export const postTestTransactionNotifyValidator = [
 	...postTestTransactionValidator,
 	emptyValidator('paymentId')
-]
-
-export const getDeliveryValidator = [
-	paramPhoneValidator('sellerPhone'),
-	paramDateValidator('date')
 ]
 
 export const getOrdersByPhoneValidator = [paramPhoneValidator('number')]
