@@ -1,5 +1,6 @@
 import {
 	emptyOptionalValidator,
+	numberValidator,
 	objectIdValidator,
 	paramPhoneValidator,
 	boolOptionalValidator,
@@ -15,6 +16,19 @@ export const getSellerValidator = paramPhoneValidator('phone')
 export const getDeliveryValidator = [
 	paramPhoneValidator('sellerPhone'),
 	paramDateValidator('date')
+]
+
+export const patchDeliveryFeeValidator = [
+	phoneValidator('phone'),
+	objectIdValidator('apartmentId'),
+	numberValidator('deliveryMinOrder')
+		.bail()
+		.custom(val => val <= 1000)
+		.withMessage('should be at max ₹1000'),
+	numberValidator('deliveryFee')
+		.bail()
+		.custom(val => val <= 50)
+		.withMessage('should be at max 50')
 ]
 
 export const patchSellerFiltesValidator = [

@@ -275,3 +275,34 @@ export const removeSellerAllApartments = async phone => {
 		return dbErrorHandler(error, 'removeSellerAllApartments')
 	}
 }
+
+export const updateApartmentDeliveryFee = async ({
+	phone,
+	apartmentId,
+	deliveryMinOrder,
+	deliveryFee
+}) => {
+	try {
+		const seller = await findSellerByNumber(phone)
+
+		// Update Apartment Document with seller fee data
+		const apartment = await Apartment.findById(apartmentId)
+		const sellerInApartmentSchema = apartment.sellers.id(seller._id)
+
+		sellerInApartmentSchema.delivery.minOrder = deliveryMinOrder
+		sellerInApartmentSchema.delivery.fee = deliveryFee
+
+		await apartment.save()
+
+		// Update Seller Document
+		const apartmentInSellerSchema = seller.apartments.id(apartmentId)
+		apartmentInSellerSchema.deliveryFee = deliveryFee
+		apartmentInSellerSchema.deliveryMinOrder = deliveryMinOrder
+
+		const updatedSeller = await seller.save()
+
+		return updatedSeller.apartments.id(apartmentId)
+	} catch (error) {
+		return dbErrorHandler(error, 'updateApartmentDeliveryFee')
+	}
+}

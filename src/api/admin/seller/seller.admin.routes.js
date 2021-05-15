@@ -5,6 +5,7 @@ import {
 	getSellerValidator,
 	getDeliveryValidator,
 	patchSellerFiltesValidator,
+	patchDeliveryFeeValidator,
 	patchSellerBankDetailsValidator,
 	postSellerApartmentValidator,
 	patchSellerApartmentLiveValidator,
@@ -15,13 +16,14 @@ import {
 import {
 	getSellerDetails,
 	getDelivery,
+	patchSellerFilters,
+	patchDeliveryFee,
 	getDeliveryXlsToCustomerSupport,
 	patchSellerBankDetails,
 	postSellerApartment,
 	patchApartmentLiveStatus,
 	deleteSellerApartments,
-	deleteSellerApartmentsWithId,
-	patchSellerFilters
+	deleteSellerApartmentsWithId
 } from './seller.admin.controller'
 
 const router = Router()
@@ -52,6 +54,13 @@ router.patch(
 	patchSellerFiltesValidator,
 	validationMiddleware,
 	patchSellerFilters
+)
+
+router.patch(
+	'/deliveryfee',
+	patchDeliveryFeeValidator,
+	validationMiddleware,
+	patchDeliveryFee
 )
 
 router.post(

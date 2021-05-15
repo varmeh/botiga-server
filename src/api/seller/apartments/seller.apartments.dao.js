@@ -62,9 +62,8 @@ export const updateApartmentDeliverySchedule = async (
 
 		await apartment.save()
 
-		seller.apartments.id(apartmentId).deliveryMessage = apartment.sellers.id(
-			sellerId
-		).deliveryMessage
+		seller.apartments.id(apartmentId).deliveryMessage =
+			apartment.sellers.id(sellerId).deliveryMessage
 
 		seller.apartments.id(apartmentId).deliverySlot = slot
 
@@ -127,9 +126,8 @@ export const updateApartmentContactInformation = async (
 
 		await apartment.save()
 
-		seller.apartments.id(apartmentId).contact = apartment.sellers.id(
-			sellerId
-		).contact
+		seller.apartments.id(apartmentId).contact =
+			apartment.sellers.id(sellerId).contact
 
 		const updatedSeller = await seller.save()
 
