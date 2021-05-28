@@ -306,3 +306,36 @@ export const updateApartmentDeliveryFee = async ({
 		return dbErrorHandler(error, 'updateApartmentDeliveryFee')
 	}
 }
+
+export const updateApartmentDeliverySchedule = async ({
+	phone,
+	apartmentId,
+	deliveryType,
+	day,
+	slot
+}) => {
+	try {
+		const seller = await findSellerByNumber(phone)
+
+		// Update Apartment Document with seller fee data
+		const apartment = await Apartment.findById(apartmentId)
+		const sellerInApartmentSchema = apartment.sellers.id(seller._id)
+
+		sellerInApartmentSchema.delivery.type = deliveryType
+		sellerInApartmentSchema.delivery.day = day
+		sellerInApartmentSchema.delivery.slot = slot
+
+		await apartment.save()
+
+		// Update Seller Document
+		const apartmentInSellerSchema = seller.apartments.id(apartmentId)
+		apartmentInSellerSchema.deliveryMessage = apartment.sellers.id(seller._id).deliveryMessage
+		apartmentInSellerSchema.deliverySlot = slot
+
+		const updatedSeller = await seller.save()
+
+		return updatedSeller.apartments.id(apartmentId)
+	} catch (error) {
+		return dbErrorHandler(error, 'updateApartmentDeliveryFee')
+	}
+}

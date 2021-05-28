@@ -6,6 +6,7 @@ import {
 	getDeliveryValidator,
 	patchSellerFiltesValidator,
 	patchDeliveryFeeValidator,
+	patchDeliveryScheduleValidator,
 	patchSellerBankDetailsValidator,
 	postSellerApartmentValidator,
 	patchSellerApartmentLiveValidator,
@@ -18,6 +19,7 @@ import {
 	getDelivery,
 	patchSellerFilters,
 	patchDeliveryFee,
+	patchDeliverySchedule,
 	getDeliveryXlsToCustomerSupport,
 	patchSellerBankDetails,
 	postSellerApartment,
@@ -57,10 +59,17 @@ router.patch(
 )
 
 router.patch(
-	'/deliveryfee',
+	'/delivery/fee',
 	patchDeliveryFeeValidator,
 	validationMiddleware,
 	patchDeliveryFee
+)
+
+router.patch(
+	'/delivery/schedule',
+	patchDeliveryScheduleValidator,
+	validationMiddleware,
+	patchDeliverySchedule
 )
 
 router.post(

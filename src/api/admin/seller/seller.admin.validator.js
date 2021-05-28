@@ -1,4 +1,5 @@
 import {
+	emptyValidator,
 	emptyOptionalValidator,
 	numberValidator,
 	objectIdValidator,
@@ -29,6 +30,20 @@ export const patchDeliveryFeeValidator = [
 		.bail()
 		.custom(val => val <= 50)
 		.withMessage('should be at max 50')
+]
+
+export const patchDeliveryScheduleValidator = [
+	phoneValidator('phone'),
+	objectIdValidator('apartmentId'),
+	emptyValidator('deliveryType')
+		.matches(/^(duration|day)$/)
+		.withMessage('should be either duration or day'),
+	numberValidator('day')
+		.custom(val => val >= 1 && val <= 7)
+		.withMessage(
+			'day should be in range 1-7 with 1 for Sunday, 2 for Monday & so on'
+		),
+	emptyOptionalValidator('slot')
 ]
 
 export const patchSellerFiltesValidator = [

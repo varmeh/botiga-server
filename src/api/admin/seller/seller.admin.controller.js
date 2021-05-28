@@ -17,7 +17,8 @@ import {
 	removeSellerAllApartments,
 	removeSellerApartment,
 	updateSellerFilters,
-	updateApartmentDeliveryFee
+	updateApartmentDeliveryFee,
+	updateApartmentDeliverySchedule
 } from './seller.admin.dao'
 
 const productsOrchestrator = categories => {
@@ -153,6 +154,22 @@ export const patchDeliveryFee = async (req, res, next) => {
 			apartmentId,
 			deliveryMinOrder,
 			deliveryFee
+		})
+		res.json(apartment)
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const patchDeliverySchedule = async (req, res, next) => {
+	const { phone, apartmentId, deliveryType, day, slot } = req.body
+	try {
+		const apartment = await updateApartmentDeliverySchedule({
+			phone,
+			apartmentId,
+			deliveryType,
+			day,
+			slot
 		})
 		res.json(apartment)
 	} catch (error) {
