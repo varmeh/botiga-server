@@ -48,6 +48,7 @@ const orderOrchestrator = order => {
 			name,
 			house,
 			apartment: apartment.aptName,
+			area: apartment.area,
 			phone,
 			whatsapp
 		},
