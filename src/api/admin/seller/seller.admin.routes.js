@@ -15,6 +15,7 @@ import {
 } from './seller.admin.validator'
 
 import {
+	getApprovedSellers,
 	getSellerDetails,
 	getDelivery,
 	patchSellerFilters,
@@ -29,6 +30,11 @@ import {
 } from './seller.admin.controller'
 
 const router = Router()
+
+router.get(
+	'/approved',
+	getApprovedSellers
+)
 
 router.get(
 	'/:phone',

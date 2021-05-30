@@ -10,6 +10,7 @@ import {
 
 import {
 	findSellerByNumber,
+	findApprovedSellers,
 	updateSellerBankDetails,
 	findDeliveriesForSeller,
 	addSellerApartment,
@@ -172,6 +173,23 @@ export const patchDeliverySchedule = async (req, res, next) => {
 			slot
 		})
 		res.json(apartment)
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const getApprovedSellers = async (_, res, next) => {
+	try {
+		const sellers = await findApprovedSellers()
+
+		const approvedSellerList = sellers.map( ({_id, brand, contact}) => 
+			({
+				id: _id,
+				brand: brand.name,
+				phone: contact.phone
+			}))
+
+		res.json(approvedSellerList)
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}

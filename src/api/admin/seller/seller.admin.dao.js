@@ -40,6 +40,14 @@ export const findSellerByNumber = async phone => {
 	}
 }
 
+export const findApprovedSellers = async () => {
+	try {
+		return await Seller.find({ 'bankDetails.verified': true })
+	} catch (error) {
+		return dbErrorHandler(error, 'findSellerByNumber')
+	}
+}
+
 export const updateSellerFilters = async (phone, filters) => {
 	try {
 		const seller = await findSellerByNumber(phone)
