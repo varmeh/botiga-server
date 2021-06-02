@@ -32,7 +32,7 @@ const sellersOrchestrator = sellers => {
 			tagline,
 			phone,
 			whatsapp,
-			deliveryMessage: apartmentVirtuals.deliveryMessage(type, day),
+			deliveryMessage: 'No Longer Used',
 			deliveryDate: apartmentVirtuals.deliveryDate(type, day),
 			deliverySlot: slot,
 			deliveryFee: fee ?? 0,

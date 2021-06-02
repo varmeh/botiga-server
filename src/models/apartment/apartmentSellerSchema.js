@@ -1,6 +1,9 @@
 import { Schema } from 'mongoose'
 import { moment } from '../../util'
 
+// 'weeklySchedule' is an extension to 'day' model
+// While 'day' supports only 1 day a week
+// 'weeklySchedule' allows merchant to select multiple delivery days per week
 export const DeliveryType = {
 	day: 'day',
 	duration: 'duration',
@@ -62,9 +65,9 @@ export const apartmentSellerSchema = new Schema({
 
 const deliveryDate = (type, day, weeklySchedule) => {
 	let deliveryDate
-	if (type === 'duration') {
+	if (type === DeliveryType.duration) {
 		deliveryDate = moment().endOf('day').add(day, 'd')
-	} else if (type === 'daysInWeek') {
+	} else if (type === DeliveryType.weeklySchedule) {
 		const dayOfTheWeek = moment().day()
 		let possibleDeliveryDay = dayOfTheWeek + 1
 
@@ -76,13 +79,15 @@ const deliveryDate = (type, day, weeklySchedule) => {
 			if(weeklySchedule[possibleDeliveryDay] === 1)
 			{
 				const deliveryDateOfThisWeek = moment()
-			.day(possibleDeliveryDay)
-			.endOf('day')
+					.day(possibleDeliveryDay)
+					.endOf('day')
 
-				deliveryDate = dayOfTheWeek < possibleDeliveryDay ?
-				 deliveryDateOfThisWeek
+				deliveryDate = dayOfTheWeek < possibleDeliveryDay
+				? deliveryDateOfThisWeek
 				: deliveryDateOfThisWeek.add(1, 'weeks') // give next week delivery date
+				break
 			}
+			possibleDeliveryDay += 1
 		}
 	} else {
 		// In moment dates, Sunday is 0, Monday is 1 & so on
@@ -101,11 +106,6 @@ const deliveryDate = (type, day, weeklySchedule) => {
 	}
 	return deliveryDate.format('YYYY-MM-DD')
 }
-
-apartmentSellerSchema.virtual('deliveryDate').get(function () {
-	const { type, day } = this.delivery
-	return deliveryDate(type, day)
-})
 
 const getDayString = day => {
 	switch(day) {
@@ -139,7 +139,7 @@ const deliveryMessage = (type, day, weeklySchedule) => {
 	let message
 	if(type === DeliveryType.duration) {
 		message = `Delivers in ${day} day${day > 1 ? 's' : ''}`
-	} else if (type === DeliveryType.daysInWeek) {
+	} else if (type === DeliveryType.weeklySchedule) {
 		message = 'Delivers on'
 		for (let i=0; i<7; i++) {
 			if(weeklySchedule[i] === 1) {
@@ -159,9 +159,14 @@ const deliveryMessage = (type, day, weeklySchedule) => {
 				.format('dddd')}`
 }
 
+apartmentSellerSchema.virtual('deliveryDate').get(function () {
+	const { type, day, weeklySchedule } = this.delivery
+	return deliveryDate(type, day, weeklySchedule)
+})
+
 apartmentSellerSchema.virtual('deliveryMessage').get(function () {
-	const { type, day } = this.delivery
-	return deliveryMessage(type, day)
+	const { type, day, weeklySchedule } = this.delivery
+	return deliveryMessage(type, day, weeklySchedule)
 })
 
 export const apartmentVirtuals = { deliveryMessage, deliveryDate }
