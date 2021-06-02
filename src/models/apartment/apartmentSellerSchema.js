@@ -1,6 +1,12 @@
 import { Schema } from 'mongoose'
 import { moment } from '../../util'
 
+export const DeliveryType = {
+	day: 'day',
+	duration: 'duration',
+	weeklySchedule: 'weeklySchedule'
+}
+
 export const apartmentSellerSchema = new Schema({
 	_id: { type: Schema.Types.ObjectId, ref: 'seller' },
 	brandName: { type: String, required: true },
@@ -27,13 +33,18 @@ export const apartmentSellerSchema = new Schema({
 		type: {
 			type: String,
 			required: true,
-			enum: ['duration', 'day']
+			enum: [DeliveryType.duration, DeliveryType.day, DeliveryType.weeklySchedule]
 		},
 		// value depends on type. for
 		day: {
 			type: Number,
 			min: 1,
 			max: 7
+		},
+		weeklySchedule: {
+			type: [Boolean],
+			default: [0, 0, 0, 0, 0, 0, 0],
+			validate: v => Array.isArray(v) && v.length === 7 // Ensure length of 7
 		},
 		slot: String,
 		minOrder: {
@@ -49,13 +60,35 @@ export const apartmentSellerSchema = new Schema({
 	}
 })
 
-const deliveryDate = (type, day) => {
+const deliveryDate = (type, day, weeklySchedule) => {
 	let deliveryDate
 	if (type === 'duration') {
 		deliveryDate = moment().endOf('day').add(day, 'd')
+	} else if (type === 'daysInWeek') {
+		const dayOfTheWeek = moment().day()
+		let possibleDeliveryDay = dayOfTheWeek + 1
+
+		for(let i=0; i<7; i++) {
+			if(possibleDeliveryDay === 7) {
+				possibleDeliveryDay = 0
+			}
+
+			if(weeklySchedule[possibleDeliveryDay] === 1)
+			{
+				const deliveryDateOfThisWeek = moment()
+			.day(possibleDeliveryDay)
+			.endOf('day')
+
+				deliveryDate = dayOfTheWeek < possibleDeliveryDay ?
+				 deliveryDateOfThisWeek
+				: deliveryDateOfThisWeek.add(1, 'weeks') // give next week delivery date
+			}
+		}
 	} else {
 		// In moment dates, Sunday is 0, Monday is 1 & so on
 		// In Mongodb dates, Sunday is 1, Monday is 2 & so on
+		// day ranges between [1, 7]. So, Sunday is 1, Monday is 2 & so on 
+		// Manage this distinction by using day - 1
 		const dayOfTheWeek = moment().day()
 		const deliveryDateOfThisWeek = moment()
 			.day(day - 1)
@@ -74,7 +107,51 @@ apartmentSellerSchema.virtual('deliveryDate').get(function () {
 	return deliveryDate(type, day)
 })
 
-const deliveryMessage = (type, day) => {
+const getDayString = day => {
+	switch(day) {
+		case 0:
+			return ' Sun,'
+
+		case 1:
+			return ' Mon,'
+
+		case 2:
+			return ' Tue,'
+
+		case 3:
+			return ' Wed,'
+
+		case 4:
+			return ' Thu,'
+
+		case 5:
+			return ' Fri,'
+
+		case 6:
+			return ' Sat,'
+
+		default:
+			return ''
+	}
+} 
+
+const deliveryMessage = (type, day, weeklySchedule) => {
+	let message
+	if(type === DeliveryType.duration) {
+		message = `Delivers in ${day} day${day > 1 ? 's' : ''}`
+	} else if (type === DeliveryType.daysInWeek) {
+		message = 'Delivers on'
+		for (let i=0; i<7; i++) {
+			if(weeklySchedule[i] === 1) {
+				message += getDayString(i)
+			}
+		}
+		return message.trim(',')
+	} else {
+		`Delivers Every ${moment()
+				.day(day - 1)
+				.format('dddd')}`
+	}
 	return type === 'duration'
 		? `Delivers in ${day} day${day > 1 ? 's' : ''}`
 		: `Delivers Every ${moment()
