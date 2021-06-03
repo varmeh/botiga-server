@@ -34,8 +34,7 @@ const orderSchema = new Schema(
 			house: { type: String, required: true },
 			phone: {
 				type: String,
-				required: true,
-				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
+				required: true
 			},
 			whatsapp: String,
 			email: String
@@ -45,13 +44,11 @@ const orderSchema = new Schema(
 			brandName: { type: String, required: true },
 			phone: {
 				type: String,
-				required: true,
-				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number'] // Phone number validation
+				required: true
 			},
 			whatsapp: {
 				type: String,
-				required: true,
-				match: [/^[5-9]\d{9}$/, 'Please provide a valid 10 digit mobile number']
+				required: true
 			},
 			email: String,
 			accountId: String
