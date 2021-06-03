@@ -1,7 +1,7 @@
 /* eslint-disable no-undefined */
 import CreateHttpError from 'http-errors'
 import { moment, dbErrorHandler } from '../../../util'
-import { Apartment, Seller, Order } from '../../../models'
+import { Apartment, Seller, Order, DeliveryType } from '../../../models'
 
 export const findApartment = async apartmentId => {
 	try {
@@ -320,7 +320,8 @@ export const updateApartmentDeliverySchedule = async ({
 	apartmentId,
 	deliveryType,
 	day,
-	slot
+	slot,
+	weekly: { sun, mon, tue, wed, thu, fri, sat }
 }) => {
 	try {
 		const seller = await findSellerByNumber(phone)
@@ -330,14 +331,27 @@ export const updateApartmentDeliverySchedule = async ({
 		const sellerInApartmentSchema = apartment.sellers.id(seller._id)
 
 		sellerInApartmentSchema.delivery.type = deliveryType
-		sellerInApartmentSchema.delivery.day = day
 		sellerInApartmentSchema.delivery.slot = slot
+
+		if (deliveryType === DeliveryType.weeklySchedule) {
+			sellerInApartmentSchema.delivery.weeklySchedule[0] = sun
+			sellerInApartmentSchema.delivery.weeklySchedule[1] = mon
+			sellerInApartmentSchema.delivery.weeklySchedule[2] = tue
+			sellerInApartmentSchema.delivery.weeklySchedule[3] = wed
+			sellerInApartmentSchema.delivery.weeklySchedule[4] = thu
+			sellerInApartmentSchema.delivery.weeklySchedule[5] = fri
+			sellerInApartmentSchema.delivery.weeklySchedule[6] = sat
+		} else {
+			sellerInApartmentSchema.delivery.day = day
+		}
 
 		await apartment.save()
 
 		// Update Seller Document
 		const apartmentInSellerSchema = seller.apartments.id(apartmentId)
-		apartmentInSellerSchema.deliveryMessage = apartment.sellers.id(seller._id).deliveryMessage
+		apartmentInSellerSchema.deliveryMessage = apartment.sellers.id(
+			seller._id
+		).deliveryMessage
 		apartmentInSellerSchema.deliverySlot = slot
 
 		const updatedSeller = await seller.save()

@@ -163,14 +163,15 @@ export const patchDeliveryFee = async (req, res, next) => {
 }
 
 export const patchDeliverySchedule = async (req, res, next) => {
-	const { phone, apartmentId, deliveryType, day, slot } = req.body
+	const { phone, apartmentId, deliveryType, day, slot, weekly } = req.body
 	try {
 		const apartment = await updateApartmentDeliverySchedule({
 			phone,
 			apartmentId,
 			deliveryType,
 			day,
-			slot
+			slot,
+			weekly
 		})
 		res.json(apartment)
 	} catch (error) {
@@ -182,12 +183,11 @@ export const getApprovedSellers = async (_, res, next) => {
 	try {
 		const sellers = await findApprovedSellers()
 
-		const approvedSellerList = sellers.map( ({_id, brand, contact}) => 
-			({
-				id: _id,
-				brand: brand.name,
-				phone: contact.phone
-			}))
+		const approvedSellerList = sellers.map(({ _id, brand, contact }) => ({
+			id: _id,
+			brand: brand.name,
+			phone: contact.phone
+		}))
 
 		res.json(approvedSellerList)
 	} catch (error) {
