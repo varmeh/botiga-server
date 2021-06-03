@@ -338,13 +338,16 @@ export const updateApartmentDeliverySchedule = async ({
 			if (!sellerInApartmentSchema.delivery.weeklySchedule)
 				sellerInApartmentSchema.delivery.weeklySchedule = []
 
-			sellerInApartmentSchema.delivery.weeklySchedule[0] = sun
-			sellerInApartmentSchema.delivery.weeklySchedule[1] = mon
-			sellerInApartmentSchema.delivery.weeklySchedule[2] = tue
-			sellerInApartmentSchema.delivery.weeklySchedule[3] = wed
-			sellerInApartmentSchema.delivery.weeklySchedule[4] = thu
-			sellerInApartmentSchema.delivery.weeklySchedule[5] = fri
-			sellerInApartmentSchema.delivery.weeklySchedule[6] = sat
+			sellerInApartmentSchema.delivery.weeklySchedule = [
+				sun,
+				mon,
+				tue,
+				wed,
+				thu,
+				fri,
+				sat
+			]
+			apartment.markModified('delivery.weekSchedule') //essential, else data is not saved to db
 		} else {
 			sellerInApartmentSchema.delivery.day = day
 		}
