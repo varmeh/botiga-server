@@ -1,2 +1,2 @@
 export * from './apartment'
-export { apartmentVirtuals } from './apartmentSellerSchema'
+export { apartmentVirtuals, DeliveryType } from './apartmentSellerSchema'
