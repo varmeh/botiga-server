@@ -81,7 +81,7 @@ const deliveryDate = (type, day, weeklySchedule) => {
 				possibleDeliveryDay = 0
 			}
 
-			if (weeklySchedule[possibleDeliveryDay] === 1) {
+			if (weeklySchedule[possibleDeliveryDay]) {
 				const deliveryDateOfThisWeek = moment()
 					.day(possibleDeliveryDay)
 					.endOf('day')
