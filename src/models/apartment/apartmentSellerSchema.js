@@ -50,6 +50,7 @@ export const apartmentSellerSchema = new Schema({
 		},
 		weeklySchedule: {
 			type: [Boolean],
+			required: true,
 			default: [false, false, false, false, false, false, false],
 			validate: v => Array.isArray(v) && v.length === 7 // Ensure length of 7
 		},
