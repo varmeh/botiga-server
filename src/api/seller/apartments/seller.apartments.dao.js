@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 
 import { dbErrorHandler } from '../../../util'
-import { Seller, Apartment } from '../../../models'
+import { Seller, Apartment, DeliveryType } from '../../../models'
 
 export const findApartments = async sellerId => {
 	try {
@@ -47,7 +47,13 @@ export const updateApartmentLiveStatus = async (
 
 export const updateApartmentDeliverySchedule = async (
 	sellerId,
-	{ apartmentId, deliveryType, day, slot }
+	{
+		apartmentId,
+		deliveryType,
+		day,
+		slot,
+		weekly: { sun, mon, tue, wed, thu, fri, sat }
+	}
 ) => {
 	try {
 		const seller = await Seller.findById(sellerId)
@@ -57,8 +63,26 @@ export const updateApartmentDeliverySchedule = async (
 		const sellerInApartmentSchema = apartment.sellers.id(sellerId)
 
 		sellerInApartmentSchema.delivery.type = deliveryType
-		sellerInApartmentSchema.delivery.day = day
 		sellerInApartmentSchema.delivery.slot = slot
+
+		if (deliveryType === DeliveryType.weeklySchedule) {
+			// If weeklySchedule not defined, define it as an empty array
+			if (!sellerInApartmentSchema.delivery.weeklySchedule)
+				sellerInApartmentSchema.delivery.weeklySchedule = []
+
+			sellerInApartmentSchema.delivery.weeklySchedule = [
+				sun,
+				mon,
+				tue,
+				wed,
+				thu,
+				fri,
+				sat
+			]
+			apartment.markModified('delivery.weekSchedule') //essential, else data is not saved to db
+		} else {
+			sellerInApartmentSchema.delivery.day = day
+		}
 
 		await apartment.save()
 

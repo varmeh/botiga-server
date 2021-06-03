@@ -1,3 +1,5 @@
+import { DeliveryType } from '../../../models'
+
 import {
 	phoneValidator,
 	emptyValidator,
@@ -5,7 +7,8 @@ import {
 	objectIdValidator,
 	emailOptionalValidator,
 	paramObjectIdValidator,
-	emptyOptionalValidator
+	emptyOptionalValidator,
+	boolValidator
 } from '../../../util'
 
 export const patchApartmentValidator = [
@@ -16,13 +19,18 @@ export const patchApartmentValidator = [
 export const patchDeliveryValidator = [
 	objectIdValidator('apartmentId'),
 	emptyValidator('deliveryType')
-		.matches(/^(duration|day)$/)
-		.withMessage('should be either duration or day'),
+		.isIn([DeliveryType.duration, DeliveryType.weeklySchedule])
+		.withMessage('should be either duration or weeklySchedule'),
 	numberValidator('day')
 		.custom(val => val >= 1 && val <= 7)
-		.withMessage(
-			'day should be in range 1-7 with 1 for Sunday, 2 for Monday & so on'
-		),
+		.withMessage('day should be in range 1-7'),
+	boolValidator('weekly.sun'),
+	boolValidator('weekly.mon'),
+	boolValidator('weekly.tue'),
+	boolValidator('weekly.wed'),
+	boolValidator('weekly.thu'),
+	boolValidator('weekly.fri'),
+	boolValidator('weekly.sat'),
 	emptyOptionalValidator('slot')
 ]
 
