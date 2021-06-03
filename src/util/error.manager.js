@@ -1,7 +1,10 @@
+import { hostname } from 'os'
+
 import CreateHttpError from 'http-errors'
 import { validationResult } from 'express-validator'
 
 import { winston } from './winston.logger'
+import aws from './aws'
 
 /* Send Error Response to client */
 export const errorResponseMiddleware = (error, _req, res, _next) => {
@@ -43,6 +46,17 @@ export const validationMiddleware = (req, _res, next) => {
 
 export const dbErrorHandler = (error, origin) => {
 	winston.debug(`@error ${origin}`, { error, msg: error?.message })
+
+	aws.ses.sendMail({
+		from: 'noreply@botiga.app',
+		to: 'support@botiga.app',
+		subject: 'Botiga - Database Server Error',
+		text: `
+				<br><br>Hostname: ${hostname()}
+				<br><br>Error: ${error?.message}
+				<br><br>Investigate as soon as possible`
+	})
+
 	if (error.status && error.message) {
 		return Promise.reject(new CreateHttpError[error.status](error.message))
 	}
