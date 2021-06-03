@@ -334,6 +334,10 @@ export const updateApartmentDeliverySchedule = async ({
 		sellerInApartmentSchema.delivery.slot = slot
 
 		if (deliveryType === DeliveryType.weeklySchedule) {
+			// If weeklySchedule not defined, define it as an empty array
+			if (!sellerInApartmentSchema.delivery.weeklySchedule)
+				sellerInApartmentSchema.delivery.weeklySchedule = []
+
 			sellerInApartmentSchema.delivery.weeklySchedule[0] = sun
 			sellerInApartmentSchema.delivery.weeklySchedule[1] = mon
 			sellerInApartmentSchema.delivery.weeklySchedule[2] = tue
