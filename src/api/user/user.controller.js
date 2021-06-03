@@ -1,5 +1,5 @@
 import { token, controllerErroHandler } from '../../util'
-import { apartmentVirtuals, findHelperData } from '../../models'
+import { findHelperData } from '../../models'
 import {
 	findSellersInApartment,
 	findApartmentInfo,
@@ -19,7 +19,7 @@ const sellersOrchestrator = sellers => {
 			businessCategory,
 			brandImageUrl,
 			tagline,
-			delivery: { type, day, slot, fee, minOrder },
+			delivery: { slot, fee, minOrder },
 			filters
 		} = seller
 
@@ -33,7 +33,7 @@ const sellersOrchestrator = sellers => {
 			phone,
 			whatsapp,
 			deliveryMessage: 'No Longer Used',
-			deliveryDate: apartmentVirtuals.deliveryDate(type, day),
+			deliveryDate: seller.deliveryDate,
 			deliverySlot: slot,
 			deliveryFee: fee ?? 0,
 			deliveryMinOrder: minOrder ?? 0,
