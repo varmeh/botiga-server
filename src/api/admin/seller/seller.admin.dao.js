@@ -193,7 +193,7 @@ export const addSellerApartment = async (phone, apartmentId) => {
 				address: `${address.building}, ${address.street}, ${address.area}, ${address.city}, ${address.state} - ${address.pincode}`
 			},
 			fssaiLicenseNumber: seller.fssai?.number,
-			delivery: { type: 'day', day: 3 },
+			delivery: { type: 'duration', day: 3 },
 			filters
 		})
 
