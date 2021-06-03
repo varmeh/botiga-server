@@ -1,5 +1,5 @@
 import { token, controllerErroHandler } from '../../util'
-import { findHelperData } from '../../models'
+import { apartmentVirtuals, findHelperData } from '../../models'
 import {
 	findSellersInApartment,
 	findApartmentInfo,
@@ -19,10 +19,12 @@ const sellersOrchestrator = sellers => {
 			businessCategory,
 			brandImageUrl,
 			tagline,
-			delivery: { slot, fee, minOrder },
+			delivery: { type, day, weeklySchedule, slot, fee, minOrder },
 			filters
 		} = seller
 
+		// Apartment deliveryDate not working here as it is a virtual property
+		// Refer - https://stackoverflow.com/questions/30038855/mongoose-virtuals-in-mongodb-aggregate
 		return {
 			id: _id,
 			brandName,
@@ -33,7 +35,7 @@ const sellersOrchestrator = sellers => {
 			phone,
 			whatsapp,
 			deliveryMessage: 'No Longer Used',
-			deliveryDate: seller.deliveryDate,
+			deliveryDate: apartmentVirtuals.deliveryDate(type, day, weeklySchedule),
 			deliverySlot: slot,
 			deliveryFee: fee ?? 0,
 			deliveryMinOrder: minOrder ?? 0,
@@ -64,14 +66,8 @@ export const getApartmentData = async (req, res, next) => {
 	try {
 		const { apartmentId } = req.params
 		const sellers = await findSellersInApartment(apartmentId)
-		const {
-			marketingBanners,
-			name,
-			area,
-			city,
-			state,
-			pincode
-		} = await findApartmentInfo(apartmentId)
+		const { marketingBanners, name, area, city, state, pincode } =
+			await findApartmentInfo(apartmentId)
 
 		const { sellerFilters } = await findHelperData()
 
