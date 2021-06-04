@@ -1,5 +1,5 @@
 import { dbErrorHandler } from '../../../util'
-import { Admin } from './admin.user.model'
+import { Admin } from '../model/admin.model'
 
 export const findUserByNumber = async number => {
 	try {
