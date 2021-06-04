@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { validationMiddleware } from '../../util'
 
 import sellerAdminRouter from './seller/seller.admin.routes'
+import authRouter from './auth/admin.auth.routes'
 
 import {
 	getApartmentValidator,
@@ -37,6 +38,7 @@ import {
 
 const router = Router()
 
+router.use('/auth', authRouter)
 router.use('/seller', sellerAdminRouter)
 
 router.get(
