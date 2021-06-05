@@ -4,18 +4,21 @@ import { winston } from './winston.logger'
 
 const authToken = 'Authorization'
 const secsInDay = 24 * 60 * 60
+const Algorithm = 'HS256'
 const jwtExpirySeconds =
 	process.env.NODE_ENV === 'production' ? 10 * secsInDay : 30 * secsInDay // 10 days for Prod, 30 days for dev
 
 const generateToken = id =>
 	jwt.sign({ id }, process.env.JWT_SECRET, {
-		algorithm: 'HS256',
+		algorithm: Algorithm,
 		expiresIn: jwtExpirySeconds
 	})
 
 const extractPayload = token => {
 	try {
-		const { id } = jwt.verify(token, process.env.JWT_SECRET)
+		const { id } = jwt.verify(token, process.env.JWT_SECRET, {
+			algorithms: [Algorithm]
+		})
 		return id // Could return null if NO id exists in extracted payload
 	} catch (error) {
 		if (error instanceof jwt.JsonWebTokenError) {
