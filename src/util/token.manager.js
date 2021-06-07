@@ -22,7 +22,7 @@ const extractPayload = token => {
 		return id // Could return null if NO id exists in extracted payload
 	} catch (error) {
 		if (error instanceof jwt.JsonWebTokenError) {
-			winston.error('Invalid Token', { token, error })
+			winston.debug('Invalid Token', { token, error })
 			// if the error thrown is because the JWT is unauthorized, return a 401 error
 			throw new CreateHttpError[401]('Uauthorized - Invalid Token')
 		}

@@ -53,7 +53,8 @@ export const dbErrorHandler = (error, origin) => {
 		subject: 'Botiga - Database Server Error',
 		text: `
 				<br><br>Hostname: ${hostname()}
-				<br><br>Error: ${error?.message}
+				<br><br>Origin: ${origin}
+				<br>Error Message: ${error?.message}
 				<br><br>Investigate as soon as possible`
 	})
 
