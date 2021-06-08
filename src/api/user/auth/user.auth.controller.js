@@ -12,20 +12,14 @@ import {
 	deleteAddress
 } from './user.auth.dao'
 
+const JwtTokenExpiryAfterDays = process.env.NODE_ENV === 'production' ? 45 : 5 // 45 days for Prod, 5 days for dev
+
 const extractUserAddress = user => {
 	return user.contact.addresses.length === 0
 		? []
 		: user.contact.addresses.map(address => {
-				const {
-					_id,
-					aptId,
-					house,
-					aptName,
-					area,
-					city,
-					state,
-					pincode
-				} = address
+				const { _id, aptId, house, aptName, area, city, state, pincode } =
+					address
 				return {
 					id: _id,
 					aptId,
@@ -83,12 +77,12 @@ export const postVerifyOtp = async (req, res, next) => {
 			return res.json({
 				message: 'createUser',
 				phone,
-				createToken: token.generateToken(phone)
+				createToken: token.generateToken(phone, JwtTokenExpiryAfterDays)
 			})
 		}
 
 		// Add jwt token
-		token.set(res, user._id)
+		token.set(res, user._id, JwtTokenExpiryAfterDays)
 
 		return res.json(extractUserProfile(user))
 	} catch (error) {

@@ -5,13 +5,11 @@ import { winston } from './winston.logger'
 const authToken = 'Authorization'
 const secsInDay = 24 * 60 * 60
 const Algorithm = 'HS256'
-const jwtExpirySeconds =
-	process.env.NODE_ENV === 'production' ? 10 * secsInDay : 30 * secsInDay // 10 days for Prod, 30 days for dev
 
-const generateToken = id =>
+const generateToken = (id, days) =>
 	jwt.sign({ id }, process.env.JWT_SECRET, {
 		algorithm: Algorithm,
-		expiresIn: jwtExpirySeconds
+		expiresIn: days * secsInDay
 	})
 
 const extractPayload = token => {
@@ -32,7 +30,7 @@ const extractPayload = token => {
 }
 
 /* Methods to add & retrieve authorization tokens */
-const set = (res, id) => res.set(authToken, generateToken(id))
+const set = (res, id, days) => res.set(authToken, generateToken(id, days))
 
 const get = req => extractPayload(req.get(authToken))
 
