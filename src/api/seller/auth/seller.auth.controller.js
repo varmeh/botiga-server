@@ -7,6 +7,8 @@ import {
 	updateToken
 } from './seller.auth.dao'
 
+const JwtTokenExpiryAfterDays = process.env.NODE_ENV === 'production' ? 90 : 5 // 90 days for Prod, 5 days for dev
+
 export const getOtp = async (req, res, next) => {
 	const { phone } = req.params
 	try {
@@ -32,7 +34,7 @@ export const postVerifyOtp = async (req, res, next) => {
 			return res.json({
 				message: 'createSeller',
 				phone,
-				createToken: token.generateToken(phone)
+				createToken: token.generateToken(phone, JwtTokenExpiryAfterDays)
 			})
 		}
 
@@ -44,7 +46,7 @@ export const postVerifyOtp = async (req, res, next) => {
 		} = seller
 
 		// Add jwt token
-		token.set(res, seller._id)
+		token.set(res, seller._id, JwtTokenExpiryAfterDays)
 
 		return res.json({
 			firstName,
