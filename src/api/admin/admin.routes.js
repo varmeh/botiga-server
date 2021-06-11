@@ -7,6 +7,7 @@ import {
 	getApartmentValidator,
 	postApartmentValidator,
 	postApartmentBannerValidator,
+	postApartmentCopyValidator,
 	deleteApartmentBannerValidator,
 	postBusinessCategoryValidator,
 	postNotificationTopicValidator,
@@ -22,6 +23,7 @@ import {
 	getApartment,
 	postApartment,
 	postApartmentBanner,
+	postApartmentsCopy,
 	deleteApartmentBanner,
 	postBusinessCategory,
 	postNotificationTopic,
@@ -58,6 +60,13 @@ router.post(
 	postApartmentBannerValidator,
 	validationMiddleware,
 	postApartmentBanner
+)
+
+router.post(
+	'/apartments/copy',
+	postApartmentCopyValidator,
+	validationMiddleware,
+	postApartmentsCopy
 )
 
 router.delete(
