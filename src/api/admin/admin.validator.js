@@ -35,6 +35,11 @@ export const postApartmentBannerValidator = [
 		.withMessage('position should be in range 1 to 5')
 ]
 
+export const postApartmentCopyValidator = [
+	objectIdValidator('srcApartmentId'),
+	objectIdValidator('dstApartmentId')
+]
+
 export const deleteApartmentBannerValidator = [
 	paramObjectIdValidator('apartmentId'),
 	paramObjectIdValidator('bannerId')

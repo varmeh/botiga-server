@@ -14,6 +14,7 @@ import {
 	addApartmentBanner,
 	removeApartmentBanner,
 	createApartment,
+	copyApartmentData,
 	findSellerByNumber,
 	findOrdersByOrderNumber,
 	findOrdersByPhoneNumber
@@ -91,6 +92,16 @@ export const postApartmentBanner = async (req, res, next) => {
 	try {
 		const banners = await addApartmentBanner(req.body)
 		res.json(banners)
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const postApartmentsCopy = async (req, res, next) => {
+	try {
+		const { srcApartmentId, dstApartmentId } = req.body
+		const apartment = await copyApartmentData(srcApartmentId, dstApartmentId)
+		res.json(apartment)
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}
