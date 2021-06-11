@@ -225,7 +225,7 @@ export const addSellerConfigureApartment = async data => {
 			deliveryType,
 			day,
 			slot,
-			weekly,
+			weekly: { sun, mon, tue, wed, thu, fri, sat },
 			deliveryMinOrder,
 			deliveryFee
 		} = data
@@ -282,14 +282,14 @@ export const addSellerConfigureApartment = async data => {
 			delivery: {
 				type: deliveryType,
 				day,
-				weekly,
+				weeklySchedule: [sun, mon, tue, wed, thu, fri, sat],
 				slot,
 				minOrder: deliveryMinOrder,
 				fee: deliveryFee
 			}
 		})
 
-		await apartment.save()
+		const updatedApartment = await apartment.save()
 
 		// Add apartment information to seller list
 		seller.apartments.push({
@@ -298,7 +298,7 @@ export const addSellerConfigureApartment = async data => {
 			apartmentArea: apartment.area,
 			live: false,
 			contact: { phone, whatsapp, email },
-			deliveryMessage: apartment.sellers.id(seller._id).deliveryMessage,
+			deliveryMessage: updatedApartment.sellers.id(seller._id).deliveryMessage,
 			deliverySlot: slot,
 			deliveryMinOrder,
 			deliveryFee
