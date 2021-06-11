@@ -14,6 +14,7 @@ import {
 	updateSellerBankDetails,
 	findDeliveriesForSeller,
 	addSellerApartment,
+	addSellerConfigureApartment,
 	updateApartmentLiveStatus,
 	removeSellerAllApartments,
 	removeSellerApartment,
@@ -288,6 +289,16 @@ export const postSellerApartment = async (req, res, next) => {
 	try {
 		const { phone, apartmentId } = req.body
 		const [apartment] = await addSellerApartment(phone, apartmentId)
+
+		res.json(apartment)
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const postSellerConfigureApartment = async (req, res, next) => {
+	try {
+		const [apartment] = await addSellerConfigureApartment(req.body)
 
 		res.json(apartment)
 	} catch (error) {

@@ -9,6 +9,7 @@ import {
 	patchDeliveryScheduleValidator,
 	patchSellerBankDetailsValidator,
 	postSellerApartmentValidator,
+	postSellerApartmentConfigureValidator,
 	patchSellerApartmentLiveValidator,
 	deleteSellerApartmentValidator,
 	deleteSellerApartmentWithIdValidator
@@ -24,6 +25,7 @@ import {
 	getDeliveryXlsToCustomerSupport,
 	patchSellerBankDetails,
 	postSellerApartment,
+	postSellerConfigureApartment,
 	patchApartmentLiveStatus,
 	deleteSellerApartments,
 	deleteSellerApartmentsWithId
@@ -31,10 +33,7 @@ import {
 
 const router = Router()
 
-router.get(
-	'/approved',
-	getApprovedSellers
-)
+router.get('/approved', getApprovedSellers)
 
 router.get(
 	'/:phone',
@@ -83,6 +82,13 @@ router.post(
 	postSellerApartmentValidator,
 	validationMiddleware,
 	postSellerApartment
+)
+
+router.post(
+	'/apartment/configure',
+	postSellerApartmentConfigureValidator,
+	validationMiddleware,
+	postSellerConfigureApartment
 )
 
 router.patch(
