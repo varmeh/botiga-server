@@ -217,6 +217,101 @@ export const addSellerApartment = async (phone, apartmentId) => {
 	}
 }
 
+export const addSellerConfigureApartment = async data => {
+	try {
+		const {
+			phone,
+			apartmentId,
+			deliveryType,
+			day,
+			slot,
+			weekly,
+			deliveryMinOrder,
+			deliveryFee
+		} = data
+		const seller = await findSellerByNumber(phone)
+
+		// Check if apartment already exists in seller list
+		if (seller.apartments.id(apartmentId)) {
+			return Promise.reject(new CreateHttpError[409]('Duplicate Apartment'))
+		}
+
+		const apartment = await Apartment.findById(apartmentId)
+		// Check if it's a valid apartment id
+		if (!apartment) {
+			return Promise.reject(new CreateHttpError[404]('Apartment Not Found'))
+		}
+
+		// Check if seller already exists in apartment sellers list
+		if (apartment.sellers.id(seller._id)) {
+			return Promise.reject(new CreateHttpError[409]('Duplicate Seller'))
+		}
+
+		if (!seller.bankDetailsVerified) {
+			return Promise.reject(
+				new CreateHttpError[401](
+					'Apartment can be added only after your bank detail verification has been completed'
+				)
+			)
+		}
+
+		// Add seller information to apartment list
+		const {
+			businessCategory,
+			brand,
+			contact: { address, whatsapp, email },
+			filters
+		} = seller
+		const { name, tagline, imageUrl } = brand
+
+		apartment.sellers.push({
+			_id: seller._id,
+			brandName: name,
+			tagline,
+			brandImageUrl: imageUrl,
+			businessCategory,
+			live: false,
+			contact: {
+				phone,
+				whatsapp,
+				email,
+				address: `${address.building}, ${address.street}, ${address.area}, ${address.city}, ${address.state} - ${address.pincode}`
+			},
+			fssaiLicenseNumber: seller.fssai?.number,
+			filters,
+			delivery: {
+				type: deliveryType,
+				day,
+				weekly,
+				slot,
+				minOrder: deliveryMinOrder,
+				fee: deliveryFee
+			}
+		})
+
+		await apartment.save()
+
+		// Add apartment information to seller list
+		seller.apartments.push({
+			_id: apartmentId,
+			apartmentName: apartment.name,
+			apartmentArea: apartment.area,
+			live: false,
+			contact: { phone, whatsapp, email },
+			deliveryMessage: apartment.sellers.id(seller._id).deliveryMessage,
+			deliverySlot: slot,
+			deliveryMinOrder,
+			deliveryFee
+		})
+
+		const updatedSeller = await seller.save()
+
+		return [updatedSeller.apartments.id(apartmentId), updatedSeller]
+	} catch (error) {
+		return dbErrorHandler(error, 'addSellerApartment')
+	}
+}
+
 export const updateApartmentLiveStatus = async (phone, apartmentId, live) => {
 	try {
 		const seller = await findSellerByNumber(phone)
