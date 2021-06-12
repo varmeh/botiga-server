@@ -102,7 +102,8 @@ const categoryOrchestrator = categories => {
 				available,
 				tag,
 				imageUrlLarge,
-				secondaryImageUrls
+				secondaryImageUrls,
+				recommended
 			} = product
 
 			return {
@@ -116,7 +117,8 @@ const categoryOrchestrator = categories => {
 				size: product.sizeInfo,
 				tag,
 				imageUrlLarge,
-				secondaryImageUrls
+				secondaryImageUrls,
+				recommended
 			}
 		})
 
@@ -142,9 +144,16 @@ export const getSellerData = async (req, res, next) => {
 	const { sellerId } = req.params
 
 	try {
-		const { banners, categories, coupons } = await findSeller(sellerId)
+		const { banners, categories, coupons, recommendedProducts } =
+			await findSeller(sellerId)
 
-		res.json({ banners, coupons, categories: categoryOrchestrator(categories) })
+		res.json({
+			hasRecommendedProducts: recommendedProducts.allowed > 0,
+			numberOfRecommendedProducts: recommendedProducts.selected,
+			banners,
+			coupons,
+			categories: categoryOrchestrator(categories)
+		})
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}

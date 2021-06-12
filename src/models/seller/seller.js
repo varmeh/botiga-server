@@ -172,6 +172,16 @@ const sellerSchema = new Schema(
 		},
 		mid: String, // paytm merchant id for split payments. Separated from bank details to avoid encryption
 		filters: [String],
+		recommendedProducts: {
+			allowed: {
+				type: Number,
+				default: 0
+			},
+			selected: {
+				type: Number,
+				default: 0
+			}
+		},
 		categories: [categorySchema],
 		apartments: [sellerApartmentSchema],
 		banners: [String],

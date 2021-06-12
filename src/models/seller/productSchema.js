@@ -50,7 +50,11 @@ export const productSchema = new Schema({
 		type: String,
 		trim: true
 	},
-	secondaryImageUrls: [String]
+	secondaryImageUrls: [String],
+	recommended: {
+		type: Boolean,
+		default: false
+	}
 })
 
 productSchema.pre('validate', function (next) {
