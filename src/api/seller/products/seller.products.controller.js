@@ -11,7 +11,8 @@ import {
 	createProduct,
 	findProducts,
 	updateProduct,
-	removeProduct
+	removeProduct,
+	updateProductRecommendedStatus
 } from './seller.products.dao'
 
 export const postProduct = async (req, res, next) => {
@@ -62,7 +63,8 @@ export const getProducts = async (req, res, next) => {
 					imageUrl,
 					available,
 					imageUrlLarge,
-					secondaryImageUrls
+					secondaryImageUrls,
+					recommended
 				} = product
 
 				return {
@@ -75,7 +77,8 @@ export const getProducts = async (req, res, next) => {
 					imageUrl,
 					size: product.sizeInfo,
 					imageUrlLarge,
-					secondaryImageUrls
+					secondaryImageUrls,
+					recommended
 				}
 			})
 			return { categoryId: _id, name, visible, products: flatProducts }
@@ -153,6 +156,25 @@ export const patchProduct = async (req, res, next) => {
 			imageUrl,
 			imageUrlLarge,
 			secondaryImageUrls
+		})
+
+		res.json({
+			productId: updatedProduct._id,
+			message: 'product updated'
+		})
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const patchProductRecommendedStatus = async (req, res, next) => {
+	const { categoryId, productId, recommended } = req.body
+	try {
+		const updatedProduct = await updateProductRecommendedStatus({
+			sellerId: token.get(req),
+			categoryId,
+			productId,
+			recommended
 		})
 
 		res.json({
