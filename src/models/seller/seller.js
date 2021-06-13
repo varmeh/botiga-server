@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose'
+import { notifications } from '../../util'
 import { categorySchema } from './categorySchema'
 
 export const AccountType = {
@@ -199,5 +200,11 @@ sellerSchema.pre('validate', function (next) {
 sellerSchema.virtual('bankDetailsVerified').get(function () {
 	return !!this.bankDetails.verified
 })
+
+sellerSchema.methods.sendNotifications = function (title, body, orderId) {
+	this.contact.pushTokens.forEach(token =>
+		notifications.sendToDevice(token, title, body, orderId)
+	)
+}
 
 export const Seller = model('seller', sellerSchema)
