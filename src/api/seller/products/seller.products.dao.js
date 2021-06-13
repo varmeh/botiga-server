@@ -181,3 +181,62 @@ export const updateProduct = async ({
 		return dbErrorHandler(error, 'updateProduct')
 	}
 }
+
+export const updateProductRecommendedStatus = async ({
+	sellerId,
+	categoryId,
+	productId,
+	recommended
+}) => {
+	try {
+		const { seller, product } = await findProductHelper(
+			sellerId,
+			categoryId,
+			productId
+		)
+
+		const {
+			recommendedProducts: { allowed, selected }
+		} = seller
+
+		if (recommended) {
+			const category = seller.categories.id(categoryId)
+			if (!category.visible) {
+				return Promise.reject(
+					new CreateHttpError[401](
+						'Recommend Product Only from Visible Categories'
+					)
+				)
+			}
+
+			if (selected < allowed) {
+				seller.recommendedProducts.selected = selected + 1
+			} else {
+				return Promise.reject(
+					new CreateHttpError[401]('Max Number of Products Already Recommended')
+				)
+			}
+		} else {
+			if (!product.recommended) {
+				return Promise.reject(
+					new CreateHttpError[401]('Not A Recommended Product')
+				)
+			}
+			if (selected > 0) {
+				seller.recommendedProducts.selected = selected - 1
+			}
+		}
+
+		product.recommended = recommended
+
+		const updatedSeller = await seller.save()
+
+		const updatedProduct = updatedSeller.categories
+			.id(categoryId)
+			.products.id(productId)
+
+		return updatedProduct
+	} catch (error) {
+		return dbErrorHandler(error, 'updateProduct')
+	}
+}
