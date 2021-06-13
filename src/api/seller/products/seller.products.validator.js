@@ -46,6 +46,12 @@ export const patchProductValidator = [
 	imageUrlArrayValidator('secondaryImageUrls', 4)
 ]
 
+export const patchProductRecommendedStatusValidator = [
+	objectIdValidator('productId'),
+	objectIdValidator('categoryId'),
+	boolValidator('recommended')
+]
+
 export const postProductImageValidator = boolValidator('isMainImage')
 
 export const deleteProductValidator = [

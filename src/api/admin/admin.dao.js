@@ -107,6 +107,70 @@ export const addApartmentBanner = async ({
 	}
 }
 
+export const copyApartmentData = async (srcApartmentId, dstApartmentId) => {
+	try {
+		if (srcApartmentId === dstApartmentId) {
+			return Promise.reject(
+				new CreateHttpError[401](
+					'Same Source & Destination Apartment Not Allowed'
+				)
+			)
+		}
+
+		const srcApartment = await Apartment.findById(srcApartmentId)
+		// Check if it's a valid srcApartmentId id
+		if (!srcApartment) {
+			return Promise.reject(
+				new CreateHttpError[404]('Source Apartment Not Found')
+			)
+		}
+
+		const dstApartment = await Apartment.findById(dstApartmentId)
+		// Check if it's a valid apartment id
+		if (!dstApartment) {
+			return Promise.reject(
+				new CreateHttpError[404]('Destination Apartment Not Found')
+			)
+		}
+
+		if (dstApartment.sellers.length > 0) {
+			return Promise.reject(
+				new CreateHttpError[401]('Destination Apartment already has sellers')
+			)
+		}
+
+		// Copy Sellers from Src Apartment to Destination Apartment
+		srcApartment.sellers.forEach(apartment =>
+			dstApartment.sellers.push(apartment)
+		)
+		const updatedDstApartment = await dstApartment.save()
+
+		// Update Destination Apartment Info to Seller Record
+		for (let i = 0; i < updatedDstApartment.sellers.length; i++) {
+			const sellerApartmentData = updatedDstApartment.sellers[i]
+			const seller = await Seller.findById(sellerApartmentData._id)
+
+			seller.apartments.push({
+				_id: dstApartmentId,
+				apartmentName: updatedDstApartment.name,
+				apartmentArea: updatedDstApartment.area,
+				live: sellerApartmentData.live,
+				contact: sellerApartmentData.contact,
+				deliveryMessage: sellerApartmentData.deliveryMessage,
+				deliverySlot: sellerApartmentData.delivery.slot,
+				deliveryMinOrder: sellerApartmentData.delivery.minOrder,
+				deliveryFee: sellerApartmentData.delivery.fee
+			})
+
+			await seller.save()
+		}
+
+		return updatedDstApartment
+	} catch (error) {
+		return dbErrorHandler(error, 'copyApartmentData')
+	}
+}
+
 export const removeApartmentBanner = async (apartmentId, bannerId) => {
 	try {
 		const apartment = await findApartment(apartmentId)

@@ -61,6 +61,18 @@ export const patchSellerFiltesValidator = [
 export const deleteSellerApartmentValidator = paramPhoneValidator('phone')
 
 export const postSellerApartmentValidator = [
+	...patchDeliveryScheduleValidator,
+	numberValidator('deliveryMinOrder')
+		.bail()
+		.custom(val => val <= 1000)
+		.withMessage('should be at max ₹1000'),
+	numberValidator('deliveryFee')
+		.bail()
+		.custom(val => val <= 50)
+		.withMessage('should be at max 50')
+]
+
+export const postSellerApartmentConfigureValidator = [
 	phoneValidator('phone'),
 	objectIdValidator('apartmentId')
 ]

@@ -4,21 +4,23 @@ import { winston } from './winston.logger'
 
 const authToken = 'Authorization'
 const secsInDay = 24 * 60 * 60
-const jwtExpirySeconds =
-	process.env.NODE_ENV === 'production' ? 10 * secsInDay : 30 * secsInDay // 10 days for Prod, 30 days for dev
+const Algorithm = 'HS256'
 
-const generateToken = id =>
+const generateToken = (id, days) =>
 	jwt.sign({ id }, process.env.JWT_SECRET, {
-		algorithm: 'HS256',
-		expiresIn: jwtExpirySeconds
+		algorithm: Algorithm,
+		expiresIn: days * secsInDay
 	})
 
 const extractPayload = token => {
 	try {
-		const { id } = jwt.verify(token, process.env.JWT_SECRET)
+		const { id } = jwt.verify(token, process.env.JWT_SECRET, {
+			algorithms: [Algorithm]
+		})
 		return id // Could return null if NO id exists in extracted payload
 	} catch (error) {
 		if (error instanceof jwt.JsonWebTokenError) {
+			winston.error('Invalid Token', { token })
 			// if the error thrown is because the JWT is unauthorized, return a 401 error
 			throw new CreateHttpError[401]('Uauthorized - Invalid Token')
 		}
@@ -28,7 +30,7 @@ const extractPayload = token => {
 }
 
 /* Methods to add & retrieve authorization tokens */
-const set = (res, id) => res.set(authToken, generateToken(id))
+const set = (res, id, days) => res.set(authToken, generateToken(id, days))
 
 const get = req => extractPayload(req.get(authToken))
 

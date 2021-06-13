@@ -12,6 +12,7 @@ import {
 	patchDeliveryScheduleValidator,
 	patchSellerBankDetailsValidator,
 	postSellerApartmentValidator,
+	postSellerApartmentConfigureValidator,
 	patchSellerApartmentLiveValidator,
 	deleteSellerApartmentValidator,
 	deleteSellerApartmentWithIdValidator
@@ -27,6 +28,7 @@ import {
 	getDeliveryXlsToCustomerSupport,
 	patchSellerBankDetails,
 	postSellerApartment,
+	postSellerConfigureApartment,
 	patchApartmentLiveStatus,
 	deleteSellerApartments,
 	deleteSellerApartmentsWithId
@@ -90,6 +92,13 @@ router.post(
 	postSellerApartmentValidator,
 	validationMiddleware,
 	postSellerApartment
+)
+
+router.post(
+	'/apartment/configure',
+	postSellerApartmentConfigureValidator,
+	validationMiddleware,
+	postSellerConfigureApartment
 )
 
 router.patch(

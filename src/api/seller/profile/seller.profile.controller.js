@@ -29,7 +29,8 @@ const sellerBusinessInfoOrchestrator = seller => {
 		businessType,
 		gstin,
 		fssai,
-		brand
+		brand,
+		recommendedProducts: { allowed, selected }
 	} = seller
 
 	const data = {
@@ -37,7 +38,9 @@ const sellerBusinessInfoOrchestrator = seller => {
 		businessCategory,
 		businessType,
 		gstin,
-		brand
+		brand,
+		maxRecommendedProducts: allowed,
+		selectedRecommendedProducts: selected
 	}
 
 	if (fssai) {
@@ -148,13 +151,8 @@ export const getBankDetails = async (req, res, next) => {
 }
 
 export const patchBankDetails = async (req, res, next) => {
-	const {
-		beneficiaryName,
-		accountNumber,
-		ifscCode,
-		bankName,
-		accountType
-	} = req.body
+	const { beneficiaryName, accountNumber, ifscCode, bankName, accountType } =
+		req.body
 
 	try {
 		const seller = await updateBankDetails({

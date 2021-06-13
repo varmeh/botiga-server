@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose'
+import { notifications } from '../../util'
 import { categorySchema } from './categorySchema'
 
 export const AccountType = {
@@ -172,6 +173,16 @@ const sellerSchema = new Schema(
 		},
 		mid: String, // paytm merchant id for split payments. Separated from bank details to avoid encryption
 		filters: [String],
+		recommendedProducts: {
+			allowed: {
+				type: Number,
+				default: 0
+			},
+			selected: {
+				type: Number,
+				default: 0
+			}
+		},
 		categories: [categorySchema],
 		apartments: [sellerApartmentSchema],
 		banners: [String],
@@ -189,5 +200,11 @@ sellerSchema.pre('validate', function (next) {
 sellerSchema.virtual('bankDetailsVerified').get(function () {
 	return !!this.bankDetails.verified
 })
+
+sellerSchema.methods.sendNotifications = function (title, body, orderId) {
+	this.contact.pushTokens.forEach(token =>
+		notifications.sendToDevice(token, title, body, orderId)
+	)
+}
 
 export const Seller = model('seller', sellerSchema)

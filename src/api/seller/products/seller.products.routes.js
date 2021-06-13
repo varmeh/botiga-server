@@ -5,7 +5,8 @@ import {
 	postProductValidator,
 	patchProductValidator,
 	deleteProductValidator,
-	postProductImageValidator
+	postProductImageValidator,
+	patchProductRecommendedStatusValidator
 } from './seller.products.validator'
 
 import {
@@ -13,7 +14,8 @@ import {
 	getProducts,
 	deleteProduct,
 	patchProduct,
-	postProductImage
+	postProductImage,
+	patchProductRecommendedStatus
 } from './seller.products.controller'
 
 const router = Router()
@@ -34,6 +36,15 @@ router.patch(
 	validationMiddleware,
 	patchProduct
 )
+
+router.patch(
+	'/recommended',
+	token.authenticationMiddleware,
+	patchProductRecommendedStatusValidator,
+	validationMiddleware,
+	patchProductRecommendedStatus
+)
+
 router.delete(
 	'/:productId/categories/:categoryId',
 	token.authenticationMiddleware,
