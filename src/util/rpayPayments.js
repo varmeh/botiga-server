@@ -4,7 +4,7 @@ import axios from 'axios'
 import CreateHttpError from 'http-errors'
 import Razorpay from 'razorpay'
 
-import { Order, OrderStatus, PaymentStatus, User } from '../models'
+import { Order, OrderStatus, PaymentStatus, User, Seller } from '../models'
 import { winston } from './winston.logger'
 import aws from './aws'
 
@@ -216,8 +216,6 @@ const routePayment = async order => {
 }
 
 const notificationsHelper = async ({ event, entity, order }) => {
-	const user = await User.findById(order.buyer.id)
-
 	const {
 		buyer,
 		apartment,
@@ -225,6 +223,8 @@ const notificationsHelper = async ({ event, entity, order }) => {
 		seller,
 		payment
 	} = order
+
+	const user = await User.findById(buyer.id)
 
 	if (event === 'payment.captured') {
 		winston.info(`@webhook payment success - ${number}`, {
@@ -264,6 +264,14 @@ const notificationsHelper = async ({ event, entity, order }) => {
 				<br><br>Thank you
 				<br>Team Botiga`
 		})
+
+		const sellerRecord = await Seller.findById(seller.id)
+
+		sellerRecord.sendNotifications(
+			`New Order - ${number}`,
+			`Amount - ₹${totalAmount}. Apartment - ${apartment.aptName}`,
+			entity.notes.orderId
+		)
 	} else if (event === 'payment.failed') {
 		winston.error(`@webhook payment failure - ${number}`, {
 			paymentId: entity.id,
