@@ -1,6 +1,6 @@
 import CreateHttpError from 'http-errors'
 
-import { token, otp, controllerErroHandler } from '../../../util'
+import { token, otp, controllerErroHandler, aws } from '../../../util'
 import {
 	createUser,
 	findUserByNumber,
@@ -116,6 +116,12 @@ export const postUserSignup = async (req, res, next) => {
 			.status(201)
 			.json({ message: 'user created', ...extractUserProfile(user) })
 	} catch (error) {
+		aws.ses.sendMail({
+			from: 'support@botiga.app',
+			to: 'support@botiga.app',
+			subject: `New user signup failure - ${phone}`,
+			text: `Phone - ${phone}<br>Name - ${firstName} ${lastName}`
+		})
 		controllerErroHandler(error, next)
 	}
 }
