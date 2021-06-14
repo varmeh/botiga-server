@@ -103,7 +103,7 @@ export const postSellerSignup = async (req, res, next) => {
 		})
 
 		// Add jwt token
-		token.set(res, seller._id)
+		token.set(res, seller._id, JwtTokenExpiryAfterDays)
 
 		// Notify team about new seller onboarding
 		aws.ses.sendMail({

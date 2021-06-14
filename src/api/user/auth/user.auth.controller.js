@@ -110,7 +110,7 @@ export const postUserSignup = async (req, res, next) => {
 		})
 
 		// Add jwt token
-		token.set(res, user._id)
+		token.set(res, user._id, JwtTokenExpiryAfterDays)
 
 		res
 			.status(201)
