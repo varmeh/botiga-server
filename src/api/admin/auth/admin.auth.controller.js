@@ -3,6 +3,8 @@ import CreateHttpError from 'http-errors'
 import { token, otp, controllerErroHandler } from '../../../util'
 import { findUserByNumber } from './admin.auth.dao'
 
+const JwtTokenExpiryAfterDays = process.env.NODE_ENV === 'production' ? 90 : 5 // 90 days for Prod, 5 days for dev
+
 const extractUserProfile = user => {
 	const {
 		firstName,
@@ -47,7 +49,7 @@ export const postVerifyOtp = async (req, res, next) => {
 		}
 
 		// Add jwt token
-		token.set(res, user._id)
+		token.set(res, user._id, JwtTokenExpiryAfterDays)
 
 		return res.json(extractUserProfile(user))
 	} catch (error) {
