@@ -119,6 +119,10 @@ export const removeProduct = async (sellerId, categoryId, productId) => {
 			productId
 		)
 
+		if (product.recommend) {
+			seller.recommendedProducts.selected -= 1
+		}
+
 		product.remove()
 		await seller.save()
 		return product
