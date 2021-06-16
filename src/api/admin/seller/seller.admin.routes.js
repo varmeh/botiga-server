@@ -56,7 +56,7 @@ router.get(
 
 router.get(
 	'/deliveryxls/:sellerPhone/:date',
-	adminAuthMiddleware,
+	// adminAuthMiddleware,
 	getDeliveryValidator,
 	validationMiddleware,
 	getDeliveryXlsToCustomerSupport
