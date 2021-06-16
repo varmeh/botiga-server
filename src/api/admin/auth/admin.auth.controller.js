@@ -5,7 +5,7 @@ import { findAdminByNumber, findAdminById } from './admin.auth.dao'
 
 const JwtTokenExpiryAfterDays = process.env.NODE_ENV === 'production' ? 90 : 5 // 90 days for Prod, 5 days for dev
 
-const extractUserProfile = user => {
+const extractAdminProfile = user => {
 	const {
 		firstName,
 		lastName,
@@ -41,12 +41,12 @@ export const postVerifyOtp = async (req, res, next) => {
 		await otp.verify(phone, sessionId, otpVal)
 
 		// Check if user already exist
-		const user = await findAdminByNumber(phone)
+		const admin = await findAdminByNumber(phone)
 
 		// Add jwt token
-		token.set(res, user._id, JwtTokenExpiryAfterDays)
+		token.set(res, admin._id, JwtTokenExpiryAfterDays)
 
-		return res.json(extractUserProfile(user))
+		return res.json(extractAdminProfile(admin))
 	} catch (error) {
 		return controllerErroHandler(error, next)
 	}
@@ -63,8 +63,8 @@ export const postUserSignout = (_, res, next) => {
 
 export const getAdminProfile = async (req, res, next) => {
 	try {
-		const user = await findAdminById(token.get(req))
-		res.json(extractUserProfile(user))
+		const admin = await findAdminById(token.get(req))
+		res.json(extractAdminProfile(admin))
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}

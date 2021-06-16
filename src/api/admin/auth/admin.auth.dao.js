@@ -19,9 +19,9 @@ export const findAdminByNumber = async number => {
 	}
 }
 
-export const findAdminById = async userId => {
+export const findAdminById = async adminId => {
 	try {
-		const admin = await Admin.findById(userId)
+		const admin = await Admin.findById(adminId)
 
 		if (!admin) {
 			return Promise.reject(new CreateHttpError[404]('Admin not found'))
