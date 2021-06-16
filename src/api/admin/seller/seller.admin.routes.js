@@ -1,6 +1,9 @@
 import { Router } from 'express'
 
 import { validationMiddleware } from '../../../util'
+
+import { adminAuthMiddleware } from '../model'
+
 import {
 	getSellerValidator,
 	getDeliveryValidator,
@@ -33,10 +36,11 @@ import {
 
 const router = Router()
 
-router.get('/approved', getApprovedSellers)
+router.get('/approved', adminAuthMiddleware, getApprovedSellers)
 
 router.get(
 	'/:phone',
+	adminAuthMiddleware,
 	getSellerValidator,
 	validationMiddleware,
 	getSellerDetails
@@ -44,6 +48,7 @@ router.get(
 
 router.get(
 	'/delivery/:sellerPhone/:date',
+	adminAuthMiddleware,
 	getDeliveryValidator,
 	validationMiddleware,
 	getDelivery
@@ -51,6 +56,7 @@ router.get(
 
 router.get(
 	'/deliveryxls/:sellerPhone/:date',
+	adminAuthMiddleware,
 	getDeliveryValidator,
 	validationMiddleware,
 	getDeliveryXlsToCustomerSupport
@@ -58,6 +64,7 @@ router.get(
 
 router.patch(
 	'/filters',
+	adminAuthMiddleware,
 	patchSellerFiltesValidator,
 	validationMiddleware,
 	patchSellerFilters
@@ -65,6 +72,7 @@ router.patch(
 
 router.patch(
 	'/delivery/fee',
+	adminAuthMiddleware,
 	patchDeliveryFeeValidator,
 	validationMiddleware,
 	patchDeliveryFee
@@ -72,6 +80,7 @@ router.patch(
 
 router.patch(
 	'/delivery/schedule',
+	adminAuthMiddleware,
 	patchDeliveryScheduleValidator,
 	validationMiddleware,
 	patchDeliverySchedule
@@ -79,6 +88,7 @@ router.patch(
 
 router.post(
 	'/apartment',
+	adminAuthMiddleware,
 	postSellerApartmentValidator,
 	validationMiddleware,
 	postSellerApartment
@@ -93,6 +103,7 @@ router.post(
 
 router.patch(
 	'/apartment/live',
+	adminAuthMiddleware,
 	patchSellerApartmentLiveValidator,
 	validationMiddleware,
 	patchApartmentLiveStatus
@@ -100,6 +111,7 @@ router.patch(
 
 router.delete(
 	'/:phone/apartments/:apartmentId',
+	adminAuthMiddleware,
 	deleteSellerApartmentWithIdValidator,
 	validationMiddleware,
 	deleteSellerApartmentsWithId
@@ -107,6 +119,7 @@ router.delete(
 
 router.delete(
 	'/:phone/apartments',
+	adminAuthMiddleware,
 	deleteSellerApartmentValidator,
 	validationMiddleware,
 	deleteSellerApartments
@@ -114,6 +127,7 @@ router.delete(
 
 router.patch(
 	'/bankdetails',
+	adminAuthMiddleware,
 	patchSellerBankDetailsValidator,
 	validationMiddleware,
 	patchSellerBankDetails

@@ -2,6 +2,8 @@ import { Router } from 'express'
 import { validationMiddleware } from '../../util'
 
 import sellerAdminRouter from './seller/seller.admin.routes'
+import authRouter from './auth/admin.auth.routes'
+import { adminAuthMiddleware } from './model'
 
 import {
 	getApartmentValidator,
@@ -39,10 +41,12 @@ import {
 
 const router = Router()
 
+router.use('/auth', authRouter)
 router.use('/seller', sellerAdminRouter)
 
 router.get(
 	'/apartments/:apartmentId',
+	adminAuthMiddleware,
 	getApartmentValidator,
 	validationMiddleware,
 	getApartment
@@ -50,6 +54,7 @@ router.get(
 
 router.post(
 	'/apartments',
+	adminAuthMiddleware,
 	postApartmentValidator,
 	validationMiddleware,
 	postApartment
@@ -57,6 +62,7 @@ router.post(
 
 router.post(
 	'/apartments/banners',
+	adminAuthMiddleware,
 	postApartmentBannerValidator,
 	validationMiddleware,
 	postApartmentBanner
@@ -71,15 +77,17 @@ router.post(
 
 router.delete(
 	'/apartments/:apartmentId/banners/:bannerId',
+	adminAuthMiddleware,
 	deleteApartmentBannerValidator,
 	validationMiddleware,
 	deleteApartmentBanner
 )
 
-router.post('/banners/image', postBannerImage)
+router.post('/banners/image', adminAuthMiddleware, postBannerImage)
 
 router.post(
 	'/image/delete',
+	adminAuthMiddleware,
 	deleteImageValidator,
 	validationMiddleware,
 	postImageDelete
@@ -87,6 +95,7 @@ router.post(
 
 router.post(
 	'/businessCategory',
+	adminAuthMiddleware,
 	postBusinessCategoryValidator,
 	validationMiddleware,
 	postBusinessCategory
@@ -94,6 +103,7 @@ router.post(
 
 router.post(
 	'/notification/topic',
+	adminAuthMiddleware,
 	postNotificationTopicValidator,
 	validationMiddleware,
 	postNotificationTopic
@@ -101,6 +111,7 @@ router.post(
 
 router.post(
 	'/notification/user',
+	adminAuthMiddleware,
 	postNotificationUserValidator,
 	validationMiddleware,
 	postNotificationUser
@@ -108,6 +119,7 @@ router.post(
 
 router.post(
 	'/notification/seller',
+	adminAuthMiddleware,
 	postNotificationUserValidator,
 	validationMiddleware,
 	postNotificationSeller
@@ -115,6 +127,7 @@ router.post(
 
 router.post(
 	'/transaction/test',
+	adminAuthMiddleware,
 	postTestTransactionValidator,
 	validationMiddleware,
 	postTestTransaction
@@ -122,6 +135,7 @@ router.post(
 
 router.post(
 	'/transaction/test/notify',
+	adminAuthMiddleware,
 	postTestTransactionNotifyValidator,
 	validationMiddleware,
 	postTestTransactionNotify
@@ -129,6 +143,7 @@ router.post(
 
 router.get(
 	'/orders/order/:number',
+	adminAuthMiddleware,
 	getOrdersByOrderNumberValidator,
 	validationMiddleware,
 	getOrderByOrderNumber
@@ -136,6 +151,7 @@ router.get(
 
 router.get(
 	'/orders/phone/:number',
+	adminAuthMiddleware,
 	getOrdersByPhoneValidator,
 	validationMiddleware,
 	getOrdersByPhoneNumber

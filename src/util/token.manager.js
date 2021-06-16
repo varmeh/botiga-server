@@ -59,5 +59,6 @@ export default {
 	get,
 	set,
 	authenticationMiddleware,
-	refreshMiddleware
+	refreshMiddleware,
+	authToken
 }

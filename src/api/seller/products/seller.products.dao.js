@@ -119,6 +119,10 @@ export const removeProduct = async (sellerId, categoryId, productId) => {
 			productId
 		)
 
+		if (product.recommend) {
+			seller.recommendedProducts.selected -= 1
+		}
+
 		product.remove()
 		await seller.save()
 		return product
@@ -213,7 +217,7 @@ export const updateProductRecommendedStatus = async ({
 				seller.recommendedProducts.selected = selected + 1
 			} else {
 				return Promise.reject(
-					new CreateHttpError[401]('Max Number of Products Already Recommended')
+					new CreateHttpError[401](`${allowed} Products Already Recommended`)
 				)
 			}
 		} else {
