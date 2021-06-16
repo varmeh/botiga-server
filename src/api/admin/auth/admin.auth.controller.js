@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 
 import { token, otp, controllerErroHandler } from '../../../util'
-import { findUserByNumber } from './admin.auth.dao'
+import { findAdminByNumber, findAdminById } from './admin.auth.dao'
 
 const JwtTokenExpiryAfterDays = process.env.NODE_ENV === 'production' ? 90 : 5 // 90 days for Prod, 5 days for dev
 
@@ -41,12 +41,7 @@ export const postVerifyOtp = async (req, res, next) => {
 		await otp.verify(phone, sessionId, otpVal)
 
 		// Check if user already exist
-		const user = await findUserByNumber(phone)
-		if (!user) {
-			return res.status(404).json({
-				message: 'User not found'
-			})
-		}
+		const user = await findAdminByNumber(phone)
 
 		// Add jwt token
 		token.set(res, user._id, JwtTokenExpiryAfterDays)
@@ -61,6 +56,15 @@ export const postUserSignout = (_, res, next) => {
 	try {
 		// TODO: Invalidate token on signout
 		res.status(204).json()
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const getAdminProfile = async (req, res, next) => {
+	try {
+		const user = await findAdminById(token.get(req))
+		res.json(extractUserProfile(user))
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}
