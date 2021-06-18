@@ -15,7 +15,9 @@ import {
 	postSellerApartmentConfigureValidator,
 	patchSellerApartmentLiveValidator,
 	deleteSellerApartmentValidator,
-	deleteSellerApartmentWithIdValidator
+	deleteSellerApartmentWithIdValidator,
+	getNotificationValidator,
+	patchNotificationValidator
 } from './seller.admin.validator'
 
 import {
@@ -31,7 +33,9 @@ import {
 	postSellerConfigureApartment,
 	patchApartmentLiveStatus,
 	deleteSellerApartments,
-	deleteSellerApartmentsWithId
+	deleteSellerApartmentsWithId,
+	getNotificationDetails,
+	patchNotificationDetails
 } from './seller.admin.controller'
 
 const router = Router()
@@ -131,6 +135,22 @@ router.patch(
 	patchSellerBankDetailsValidator,
 	validationMiddleware,
 	patchSellerBankDetails
+)
+
+router.get(
+	'/notification/:phone',
+	adminAuthMiddleware,
+	getNotificationValidator,
+	validationMiddleware,
+	getNotificationDetails
+)
+
+router.patch(
+	'/notification',
+	adminAuthMiddleware,
+	patchNotificationValidator,
+	validationMiddleware,
+	patchNotificationDetails
 )
 
 export default router

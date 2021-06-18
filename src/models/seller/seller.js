@@ -186,7 +186,21 @@ const sellerSchema = new Schema(
 		categories: [categorySchema],
 		apartments: [sellerApartmentSchema],
 		banners: [String],
-		coupons: [couponSchema]
+		coupons: [couponSchema],
+		notification: {
+			title: {
+				type: String,
+				default: ''
+			},
+			content: {
+				type: String,
+				default: ''
+			},
+			imageUrl: {
+				type: String,
+				default: ''
+			}
+		}
 	},
 	{ timestamps: true }
 )

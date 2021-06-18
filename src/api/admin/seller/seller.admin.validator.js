@@ -11,7 +11,8 @@ import {
 	paramObjectIdValidator,
 	paramDateValidator,
 	boolValidator,
-	arrayValidator
+	arrayValidator,
+	urlOptionalValidator
 } from '../../../util'
 
 export const getSellerValidator = paramPhoneValidator('phone')
@@ -92,4 +93,13 @@ export const patchSellerBankDetailsValidator = [
 	boolOptionalValidator('editable'),
 	boolOptionalValidator('verified'),
 	emptyOptionalValidator('mid')
+]
+
+export const getNotificationValidator = paramPhoneValidator('phone')
+
+export const patchNotificationValidator = [
+	phoneValidator('phone'),
+	emptyValidator('title'),
+	emptyValidator('content'),
+	urlOptionalValidator('imageUrl')
 ]

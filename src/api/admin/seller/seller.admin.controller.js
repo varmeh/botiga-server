@@ -20,7 +20,8 @@ import {
 	removeSellerApartment,
 	updateSellerFilters,
 	updateApartmentDeliveryFee,
-	updateApartmentDeliverySchedule
+	updateApartmentDeliverySchedule,
+	updateNotification
 } from './seller.admin.dao'
 
 const productsOrchestrator = categories => {
@@ -323,6 +324,35 @@ export const deleteSellerApartmentsWithId = async (req, res, next) => {
 		await removeSellerApartment(phone, apartmentId)
 
 		res.status(204).json()
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const getNotificationDetails = async (req, res, next) => {
+	try {
+		const { notification, apartments } = await findSellerByNumber(
+			req.params.phone
+		)
+
+		res.json({ notification, apartments })
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const patchNotificationDetails = async (req, res, next) => {
+	try {
+		const { phone, title, content, imageUrl } = req.body
+
+		const { notification } = await updateNotification({
+			phone,
+			title,
+			content,
+			imageUrl
+		})
+
+		res.json(notification)
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}

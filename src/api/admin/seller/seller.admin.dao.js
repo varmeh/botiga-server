@@ -463,3 +463,22 @@ export const updateApartmentDeliverySchedule = async ({
 		return dbErrorHandler(error, 'updateApartmentDeliveryFee')
 	}
 }
+
+export const updateNotification = async ({
+	phone,
+	title,
+	content,
+	imageUrl
+}) => {
+	try {
+		const seller = await findSellerByNumber(phone)
+
+		seller.notification = { title, content, imageUrl }
+
+		const updatedSeller = await seller.save()
+
+		return updatedSeller
+	} catch (error) {
+		return dbErrorHandler(error, 'updateSellerFilters')
+	}
+}
