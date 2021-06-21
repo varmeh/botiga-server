@@ -44,7 +44,16 @@ export default {
 			}
 		)
 	},
-	sendMailPromise: async ({ from, to, subject, text, filename, path }) => {
+	sendMailPromise: async ({
+		from,
+		to,
+		subject,
+		text,
+		filename,
+		path,
+		cc,
+		bcc
+	}) => {
 		if (process.env.EMAIL_NOTIFICATONS_ENABLED === 'false') return
 
 		const attachments = []
@@ -55,16 +64,25 @@ export default {
 			})
 		}
 
+		const payload = {
+			from,
+			to,
+			subject,
+			html: text,
+			priority: 'normal',
+			attachments
+		}
+
+		if (cc) {
+			payload.cc = cc
+		}
+
+		if (bcc) {
+			payload.bcc = bcc
+		}
+
 		try {
-			await transporter.sendMail({
-				from,
-				to,
-				bcc: 'varun@botiga.app',
-				subject,
-				html: text,
-				priority: 'normal',
-				attachments
-			})
+			await transporter.sendMail(payload)
 		} catch (error) {
 			winston.error('@ses failure', { to, subject, error })
 		}

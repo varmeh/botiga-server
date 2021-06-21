@@ -165,8 +165,8 @@ export const patchBankDetails = async (req, res, next) => {
 		})
 
 		aws.ses.sendMail({
-			from: 'support@botiga.app',
-			to: 'support@botiga.app',
+			from: 'noreply@botiga.app',
+			to: 'cs@botiga.app',
 			subject: `${seller.brand.name} - Bank Details Updated`,
 			text: `Phone - ${seller.contact.phone}<br>Seller - ${seller.businessName}<br>Category - ${seller.businessCategory}<br>Brand - ${seller.brand.name}`
 		})
