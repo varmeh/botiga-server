@@ -112,6 +112,13 @@ export const postUserSignup = async (req, res, next) => {
 		// Add jwt token
 		token.set(res, user._id, JwtTokenExpiryAfterDays)
 
+		aws.ses.sendMail({
+			from: 'noreply@botiga.app',
+			to: 'support@botiga.app',
+			subject: `New user signup - ${phone}`,
+			text: `Phone - ${phone}<br>Name - ${firstName} ${lastName}`
+		})
+
 		res
 			.status(201)
 			.json({ message: 'user created', ...extractUserProfile(user) })
@@ -120,7 +127,8 @@ export const postUserSignup = async (req, res, next) => {
 			from: 'support@botiga.app',
 			to: 'support@botiga.app',
 			subject: `New user signup failure - ${phone}`,
-			text: `Phone - ${phone}<br>Name - ${firstName} ${lastName}`
+			text: `Phone - ${phone}<br>Name - ${firstName} ${lastName}`,
+			error
 		})
 		controllerErroHandler(error, next)
 	}

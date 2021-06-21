@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable camelcase */
 import { hostname } from 'os'
 import axios from 'axios'
@@ -219,7 +220,14 @@ const notificationsHelper = async ({ event, entity, order }) => {
 	const {
 		buyer,
 		apartment,
-		order: { number, products, totalAmount, status },
+		order: {
+			number,
+			products,
+			totalAmount,
+			status,
+			deliveryFee,
+			discountAmount
+		},
 		seller,
 		payment
 	} = order
@@ -249,15 +257,18 @@ const notificationsHelper = async ({ event, entity, order }) => {
 
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
-			to: order.seller.email,
+			to: seller.email,
 			subject: `Botiga - Order Received #${number} - ${apartment.aptName} `,
 			text: `Order Details
+				<br><br>Order Number - ${number}
 				<br><br>Customer - ${buyer.name} - ${buyer.phone}
 				<br>Delivery Address:
 				<br>House No - ${buyer.house}
 				<br>Apartment - ${apartment.aptName}, ${apartment.area}
 				<br><br>Seller - ${seller.brandName}
-				<br>${productDetails} 
+				<br>${productDetails}
+				<br><br>Delivery Fee - ${deliveryFee}
+				<br>Discount - ${discountAmount}  
 				<br>Total Amount - ₹${totalAmount}
 				<br><br>Payment Mode - ${payment.paymentMode}
 				<br>Razorpay Reconcilation Id - ${payment.transferId}
@@ -272,6 +283,28 @@ const notificationsHelper = async ({ event, entity, order }) => {
 			`Amount - ₹${totalAmount}. Apartment - ${apartment.aptName}`,
 			entity.notes.orderId
 		)
+
+		// Send email to Buyer
+		if (buyer.email) {
+			await aws.ses.sendMailPromise({
+				from: 'noreply@botiga.app',
+				to: buyer.email,
+				subject: `Botiga - Order Placed to ${seller.brandName} `,
+				text: `Order Details
+				<br><br>Order Number - ${number}
+				<br><br>Customer - ${buyer.name}
+				<br>Delivery Address:
+				<br>House No - ${buyer.house}
+				<br>Apartment - ${apartment.aptName}, ${apartment.area}
+				<br><br>Seller - ${seller.brandName}
+				<br>${productDetails}
+				<br><br>Delivery Fee - ${deliveryFee}
+				<br>Discount - ${discountAmount} 
+				<br>Total Amount - ₹${totalAmount}
+				<br><br>Thank you
+				<br>Team Botiga`
+			})
+		}
 	} else if (event === 'payment.failed') {
 		winston.error(`@webhook payment failure - ${number}`, {
 			paymentId: entity.id,
