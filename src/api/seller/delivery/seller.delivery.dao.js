@@ -1,7 +1,7 @@
 import CreateHttpError from 'http-errors'
 
 import { moment, dbErrorHandler } from '../../../util'
-import { Order, OrderStatus, Seller } from '../../../models'
+import { Order, OrderStatus, Seller, PaymentStatus } from '../../../models'
 
 export const updateOrder = async (orderId, status, newDate = null) => {
 	try {
@@ -51,7 +51,8 @@ export const findDeliveriesByApartment = async ({
 				$lte: moment(date).endOf('day').toDate()
 			},
 			'seller.id': sellerId,
-			'apartment.id': apartmentId
+			'apartment.id': apartmentId,
+			'payment.status': PaymentStatus.success
 		}
 
 		const deliveries = await Order.find(query, {

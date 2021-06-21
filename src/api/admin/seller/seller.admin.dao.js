@@ -1,7 +1,13 @@
 /* eslint-disable no-undefined */
 import CreateHttpError from 'http-errors'
 import { moment, dbErrorHandler } from '../../../util'
-import { Apartment, Seller, Order, DeliveryType } from '../../../models'
+import {
+	Apartment,
+	Seller,
+	Order,
+	DeliveryType,
+	PaymentStatus
+} from '../../../models'
 
 export const findApartment = async apartmentId => {
 	try {
@@ -105,7 +111,8 @@ export const findDeliveriesByApartment = async ({
 				$lte: moment(date).endOf('day').toDate()
 			},
 			'seller.id': sellerId,
-			'apartment.id': apartmentId
+			'apartment.id': apartmentId,
+			'payment.status': PaymentStatus.success
 		}
 
 		const deliveries = await Order.find(query).sort({
