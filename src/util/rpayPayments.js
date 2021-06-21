@@ -197,7 +197,7 @@ const routePayment = async order => {
 			)
 			return data
 		} else {
-			return { items: [{ id: 'dummyRoutingId' }] }
+			return { items: [{ id: 'dummyReconcilationId' }] }
 		}
 	} catch (error) {
 		winston.error('@payment routePayment error', {
