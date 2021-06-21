@@ -272,7 +272,7 @@ const notificationsHelper = async ({ event, entity, order }) => {
 				<br>${productDetails}
 				<br><br>Delivery Fee - ${deliveryFee}
 				<br>Discount - ${discountAmount}  
-				<br>Total Amount - ₹${totalAmount}
+				<br><br>Total Amount - ₹${totalAmount}
 				<br><br>Payment Mode - ${payment.paymentMode}
 				<br>Razorpay Reconcilation Id - ${payment.transferId}
 				<br><br>Thank you
@@ -292,7 +292,7 @@ const notificationsHelper = async ({ event, entity, order }) => {
 			await aws.ses.sendMailPromise({
 				from: 'noreply@botiga.app',
 				to: buyer.email,
-				subject: `Botiga - Order Placed to ${seller.brandName} `,
+				subject: `Botiga - Order Placed #${number} to ${seller.brandName} `,
 				text: `Order Details
 				<br><br>Order Number - ${number}
 				<br><br>Customer - ${buyer.name}
@@ -303,7 +303,7 @@ const notificationsHelper = async ({ event, entity, order }) => {
 				<br>${productDetails}
 				<br><br>Delivery Fee - ${deliveryFee}
 				<br>Discount - ${discountAmount} 
-				<br>Total Amount - ₹${totalAmount}
+				<br><br>Total Amount - ₹${totalAmount}
 				<br><br>Thank you
 				<br>Team Botiga`
 			})
