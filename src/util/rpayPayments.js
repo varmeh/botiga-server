@@ -261,7 +261,7 @@ const notificationsHelper = async ({ event, entity, order }) => {
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: seller.email,
-			bcc: 'cs@botiga.app',
+			bcc: 'support@botiga.app',
 			subject: `Botiga - Order Received #${number} - ${apartment.aptName} `,
 			text: `Order Details
 				<br><br>Order Number - ${number}
@@ -293,7 +293,7 @@ const notificationsHelper = async ({ event, entity, order }) => {
 			await aws.ses.sendMailPromise({
 				from: 'noreply@botiga.app',
 				to: buyer.email,
-				bcc: 'cs@botiga.app',
+				bcc: 'support@botiga.app',
 				subject: `Botiga - Order Placed #${number} to ${seller.brandName} `,
 				text: `Order Details
 				<br><br>Order Number - ${number}

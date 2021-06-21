@@ -114,7 +114,7 @@ export const postUserSignup = async (req, res, next) => {
 
 		aws.ses.sendMail({
 			from: 'noreply@botiga.app',
-			to: 'cs@botiga.app',
+			to: 'support@botiga.app',
 			subject: `New user signup - ${phone}`,
 			text: `Phone - ${phone}<br>Name - ${firstName} ${lastName}`
 		})
@@ -125,7 +125,7 @@ export const postUserSignup = async (req, res, next) => {
 	} catch (error) {
 		aws.ses.sendMail({
 			from: 'noreply@botiga.app',
-			to: 'cs@botiga.app',
+			to: 'support@botiga.app',
 			subject: `New user signup failure - ${phone}`,
 			text: `Phone - ${phone}<br>Name - ${firstName} ${lastName}`,
 			error

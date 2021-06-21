@@ -186,7 +186,7 @@ export const postCancelOrder = async (req, res, next) => {
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: order.seller.email,
-			cc: 'cs@botiga.app',
+			cc: 'support@botiga.app',
 			subject: `Botiga - Order Cancelled #${order.order.number} - ${apartment.aptName} `,
 			text: `Order Details
 			<br><br>Customer - ${buyer.name} - ${buyer.phone}

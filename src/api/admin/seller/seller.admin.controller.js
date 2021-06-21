@@ -255,7 +255,7 @@ export const getDeliveryXlsToCustomerSupport = async (req, res, next) => {
 			})
 			await aws.ses.sendMailPromise({
 				from: 'noreply@botiga.app',
-				to: 'cs@botiga.app',
+				to: 'support@botiga.app',
 				subject: `Botiga - Deliveries Today - ${seller.brand.name} - ${date}`,
 				text: 'Your deliveries for the day.',
 				filename: fileName,
