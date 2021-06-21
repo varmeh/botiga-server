@@ -185,17 +185,20 @@ const routePayment = async order => {
 			]
 		}
 
-		const { data } = await axios.post(
-			`${RPAY_HOST}/payments/${payment.paymentId}/transfers`,
-			payload,
-			{
-				headers: {
-					Authorization: `Basic ${authToken}`
+		if (process.env.NODE_ENV === 'production') {
+			const { data } = await axios.post(
+				`${RPAY_HOST}/payments/${payment.paymentId}/transfers`,
+				payload,
+				{
+					headers: {
+						Authorization: `Basic ${authToken}`
+					}
 				}
-			}
-		)
-
-		return data
+			)
+			return data
+		} else {
+			return { items: [{ id: 'dummyRoutingId' }] }
+		}
 	} catch (error) {
 		winston.error('@payment routePayment error', {
 			error,
