@@ -482,3 +482,34 @@ export const updateNotification = async ({
 		return dbErrorHandler(error, 'updateSellerFilters')
 	}
 }
+
+export const updateSellerHomeBranding = async ({
+	phone,
+	tagline,
+	imageUrl
+}) => {
+	try {
+		const seller = await findSellerByNumber(phone)
+
+		const { brand } = seller
+
+		brand.homeTagline = !tagline ? brand.homeTagline : tagline
+		brand.homeImageUrl = !imageUrl ? brand.homeImageUrl : imageUrl
+
+		/* Brand info needs to be updated in all apartments serviced by seller */
+		for (let i = 0; i < seller.apartments.length; i++) {
+			const apt = await Apartment.findById(seller.apartments[i]._id)
+			const sellerInAptDoc = apt.sellers.id(seller._id)
+
+			// update information
+			sellerInAptDoc.homeTagline = brand.homeTagline
+			sellerInAptDoc.homeImageUrl = brand.homeImageUrl
+
+			await apt.save()
+		}
+
+		return await seller.save()
+	} catch (error) {
+		return dbErrorHandler(error, 'updateSellerHomeBranding')
+	}
+}

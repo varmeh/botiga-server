@@ -17,7 +17,8 @@ import {
 	deleteSellerApartmentValidator,
 	deleteSellerApartmentWithIdValidator,
 	getNotificationValidator,
-	patchNotificationValidator
+	patchNotificationValidator,
+	patchHomeBrandingValidator
 } from './seller.admin.validator'
 
 import {
@@ -35,7 +36,8 @@ import {
 	deleteSellerApartments,
 	deleteSellerApartmentsWithId,
 	getNotificationDetails,
-	patchNotificationDetails
+	patchNotificationDetails,
+	patchHomeBranding
 } from './seller.admin.controller'
 
 const router = Router()
@@ -151,6 +153,14 @@ router.patch(
 	patchNotificationValidator,
 	validationMiddleware,
 	patchNotificationDetails
+)
+
+router.patch(
+	'/home/branding',
+	adminAuthMiddleware,
+	patchHomeBrandingValidator,
+	validationMiddleware,
+	patchHomeBranding
 )
 
 export default router

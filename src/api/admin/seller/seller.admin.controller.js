@@ -21,7 +21,8 @@ import {
 	updateSellerFilters,
 	updateApartmentDeliveryFee,
 	updateApartmentDeliverySchedule,
-	updateNotification
+	updateNotification,
+	updateSellerHomeBranding
 } from './seller.admin.dao'
 
 const productsOrchestrator = categories => {
@@ -349,6 +350,22 @@ export const patchNotificationDetails = async (req, res, next) => {
 			phone,
 			title,
 			content,
+			imageUrl
+		})
+
+		res.json(notification)
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const patchHomeBranding = async (req, res, next) => {
+	try {
+		const { phone, tagline, imageUrl } = req.body
+
+		const { notification } = await updateSellerHomeBranding({
+			phone,
+			tagline,
 			imageUrl
 		})
 

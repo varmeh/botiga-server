@@ -15,6 +15,8 @@ export const apartmentSellerSchema = new Schema({
 	brandName: { type: String, required: true },
 	tagline: String,
 	brandImageUrl: String,
+	homeImageUrl: String,
+	homeTagline: String,
 	businessCategory: { type: String, required: true },
 	live: { type: Boolean, default: false },
 	filters: [String],

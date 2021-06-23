@@ -121,7 +121,9 @@ const sellerSchema = new Schema(
 		brand: {
 			name: { type: String, required: true },
 			tagline: String,
-			imageUrl: String
+			imageUrl: String,
+			homeImageUrl: String,
+			homeTagline: String
 		},
 		contact: {
 			email: String,

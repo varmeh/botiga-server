@@ -103,3 +103,9 @@ export const patchNotificationValidator = [
 	emptyValidator('content'),
 	urlOptionalValidator('imageUrl')
 ]
+
+export const patchHomeBrandingValidator = [
+	phoneValidator('phone'),
+	emptyOptionalValidator('tagline'),
+	urlOptionalValidator('imageUrl')
+]
