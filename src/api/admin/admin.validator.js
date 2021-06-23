@@ -76,3 +76,8 @@ export const postTestTransactionNotifyValidator = [
 export const getOrdersByPhoneValidator = [paramPhoneValidator('number')]
 
 export const getOrdersByOrderNumberValidator = [paramNumberValidator('number')]
+
+export const postImageValidator = [
+	numberValidator('width'),
+	numberValidator('height')
+]

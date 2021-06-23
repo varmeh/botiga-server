@@ -18,7 +18,8 @@ import {
 	postTestTransactionNotifyValidator,
 	deleteImageValidator,
 	getOrdersByPhoneValidator,
-	getOrdersByOrderNumberValidator
+	getOrdersByOrderNumberValidator,
+	postImageValidator
 } from './admin.validator'
 
 import {
@@ -36,7 +37,8 @@ import {
 	postBannerImage,
 	postImageDelete,
 	getOrderByOrderNumber,
-	getOrdersByPhoneNumber
+	getOrdersByPhoneNumber,
+	postImage
 } from './admin.controller'
 
 const router = Router()
@@ -84,6 +86,14 @@ router.delete(
 )
 
 router.post('/banners/image', adminAuthMiddleware, postBannerImage)
+
+router.post(
+	'/image',
+	adminAuthMiddleware,
+	postImageValidator,
+	validationMiddleware,
+	postImage
+)
 
 router.post(
 	'/image/delete',

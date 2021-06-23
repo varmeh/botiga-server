@@ -252,6 +252,30 @@ export const postBannerImage = async (req, res, next) => {
 	}
 }
 
+export const postImage = async (req, res, next) => {
+	try {
+		const image = req.file
+
+		if (!image) {
+			res.status(422).json({
+				message: 'Attached file should be an image of type - png/jpg/jpeg'
+			})
+		} else {
+			const { width, height } = req.body
+			const imageUrl = await uploadTinifyImages({
+				image,
+				fileNameToBeSavedInCloud: nanoid(24),
+				width: width,
+				height: height
+			})
+
+			res.json({ imageUrl })
+		}
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
 export const postImageDelete = async (req, res, next) => {
 	try {
 		await aws.s3.deleteImageUrl(req.body.imageUrl)
