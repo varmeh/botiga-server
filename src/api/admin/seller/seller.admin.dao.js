@@ -177,13 +177,15 @@ export const addSellerApartment = async (phone, apartmentId) => {
 			contact: { address, whatsapp, email },
 			filters
 		} = seller
-		const { name, tagline, imageUrl } = brand
+		const { name, tagline, imageUrl, homeImageUrl, homeTagline } = brand
 
 		apartment.sellers.push({
 			_id: seller._id,
 			brandName: name,
 			tagline,
 			brandImageUrl: imageUrl,
+			homeTagline,
+			homeImageUrl,
 			businessCategory,
 			live: false,
 			contact: {
@@ -262,13 +264,15 @@ export const addSellerConfigureApartment = async data => {
 			contact: { address, whatsapp, email },
 			filters
 		} = seller
-		const { name, tagline, imageUrl } = brand
+		const { name, tagline, imageUrl, homeImageUrl, homeTagline } = brand
 
 		apartment.sellers.push({
 			_id: seller._id,
 			brandName: name,
 			tagline,
 			brandImageUrl: imageUrl,
+			homeTagline,
+			homeImageUrl,
 			businessCategory,
 			live: false,
 			contact: {
