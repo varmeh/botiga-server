@@ -363,13 +363,13 @@ export const patchHomeBranding = async (req, res, next) => {
 	try {
 		const { phone, tagline, imageUrl } = req.body
 
-		const { notification } = await updateSellerHomeBranding({
+		const { brand } = await updateSellerHomeBranding({
 			phone,
 			tagline,
 			imageUrl
 		})
 
-		res.json(notification)
+		res.json(brand)
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}
