@@ -20,6 +20,8 @@ const sellersOrchestrator = sellers => {
 			brandImageUrl,
 			homeImageUrl,
 			homeTagline,
+			newlyLaunched,
+			limitedDelivery,
 			tagline,
 			delivery: { type, day, weeklySchedule, slot, fee, minOrder },
 			filters
@@ -35,6 +37,8 @@ const sellersOrchestrator = sellers => {
 			brandImageUrl,
 			homeImageUrl,
 			homeTagline,
+			newlyLaunched,
+			limitedDelivery,
 			tagline,
 			phone,
 			whatsapp,
