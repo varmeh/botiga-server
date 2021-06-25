@@ -163,4 +163,12 @@ router.patch(
 	patchHomeBranding
 )
 
+router.patch(
+	'/home/image',
+	adminAuthMiddleware,
+	patchHomeBrandingValidator,
+	validationMiddleware,
+	patchHomeBranding
+)
+
 export default router

@@ -490,7 +490,9 @@ export const updateNotification = async ({
 export const updateSellerHomeBranding = async ({
 	phone,
 	tagline,
-	imageUrl
+	imageUrl,
+	newlyLaunched,
+	limitedDelivery
 }) => {
 	try {
 		const seller = await findSellerByNumber(phone)
@@ -499,6 +501,10 @@ export const updateSellerHomeBranding = async ({
 
 		brand.homeTagline = !tagline ? brand.homeTagline : tagline
 		brand.homeImageUrl = !imageUrl ? brand.homeImageUrl : imageUrl
+		brand.newlyLaunched =
+			newlyLaunched === undefined ? brand.newlyLaunched : newlyLaunched
+		brand.limitedDelivery =
+			limitedDelivery === undefined ? brand.limitedDelivery : limitedDelivery
 
 		/* Brand info needs to be updated in all apartments serviced by seller */
 		for (let i = 0; i < seller.apartments.length; i++) {
@@ -508,6 +514,9 @@ export const updateSellerHomeBranding = async ({
 			// update information
 			sellerInAptDoc.homeTagline = brand.homeTagline
 			sellerInAptDoc.homeImageUrl = brand.homeImageUrl
+			sellerInAptDoc.homeImageUrl = brand.homeImageUrl
+			sellerInAptDoc.newlyLaunched = brand.newlyLaunched
+			sellerInAptDoc.limitedDelivery = brand.limitedDelivery
 
 			await apt.save()
 		}
@@ -515,5 +524,56 @@ export const updateSellerHomeBranding = async ({
 		return await seller.save()
 	} catch (error) {
 		return dbErrorHandler(error, 'updateSellerHomeBranding')
+	}
+}
+
+export const updateLimitedDeliveryStatus = async ({
+	phone,
+	isLimitedDelivery
+}) => {
+	try {
+		const seller = await findSellerByNumber(phone)
+
+		const { brand } = seller
+
+		brand.limitedDelivery = isLimitedDelivery
+
+		/* Brand info needs to be updated in all apartments serviced by seller */
+		for (let i = 0; i < seller.apartments.length; i++) {
+			const apt = await Apartment.findById(seller.apartments[i]._id)
+			const sellerInAptDoc = apt.sellers.id(seller._id)
+
+			// update information
+			sellerInAptDoc.limitedDelivery = isLimitedDelivery
+			await apt.save()
+		}
+
+		return await seller.save()
+	} catch (error) {
+		return dbErrorHandler(error, 'updateLimitedDeliveryStatus')
+	}
+}
+
+export const updateNewlyLaunchedStatus = async ({ phone, isNewlyLaunched }) => {
+	try {
+		const seller = await findSellerByNumber(phone)
+
+		const { brand } = seller
+
+		brand.newlyLaunched = isNewlyLaunched
+
+		/* Brand info needs to be updated in all apartments serviced by seller */
+		for (let i = 0; i < seller.apartments.length; i++) {
+			const apt = await Apartment.findById(seller.apartments[i]._id)
+			const sellerInAptDoc = apt.sellers.id(seller._id)
+
+			// update information
+			sellerInAptDoc.newlyLaunched = isNewlyLaunched
+			await apt.save()
+		}
+
+		return await seller.save()
+	} catch (error) {
+		return dbErrorHandler(error, 'updateNewlyLaunchedStatus')
 	}
 }

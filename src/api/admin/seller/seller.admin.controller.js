@@ -1,10 +1,12 @@
 import fs from 'fs'
+import { nanoid } from 'nanoid'
 
 import {
 	aws,
 	crypto,
 	generateExcel,
 	winston,
+	uploadTinifyImages,
 	controllerErroHandler
 } from '../../../util'
 
@@ -361,12 +363,26 @@ export const patchNotificationDetails = async (req, res, next) => {
 
 export const patchHomeBranding = async (req, res, next) => {
 	try {
-		const { phone, tagline, imageUrl } = req.body
+		const image = req.file
+
+		let imageUrl = null
+		if (image) {
+			imageUrl = await uploadTinifyImages({
+				image,
+				fileNameToBeSavedInCloud: nanoid(24),
+				width: 320,
+				height: 320
+			})
+		}
+
+		const { phone, tagline, newlyLaunched, limitedDelivery } = req.body
 
 		const { brand } = await updateSellerHomeBranding({
 			phone,
 			tagline,
-			imageUrl
+			imageUrl,
+			newlyLaunched,
+			limitedDelivery
 		})
 
 		res.json(brand)

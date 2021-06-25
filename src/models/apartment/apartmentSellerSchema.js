@@ -17,6 +17,14 @@ export const apartmentSellerSchema = new Schema({
 	brandImageUrl: String,
 	homeImageUrl: String,
 	homeTagline: String,
+	newlyLaunched: {
+		type: Boolean,
+		default: false
+	},
+	limitedDelivery: {
+		type: Boolean,
+		default: false
+	},
 	businessCategory: { type: String, required: true },
 	live: { type: Boolean, default: false },
 	filters: [String],

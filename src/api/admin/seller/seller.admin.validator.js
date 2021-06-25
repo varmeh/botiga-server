@@ -12,7 +12,8 @@ import {
 	paramDateValidator,
 	boolValidator,
 	arrayValidator,
-	urlOptionalValidator
+	urlOptionalValidator,
+	urlValidator
 } from '../../../util'
 
 export const getSellerValidator = paramPhoneValidator('phone')
@@ -107,5 +108,11 @@ export const patchNotificationValidator = [
 export const patchHomeBrandingValidator = [
 	phoneValidator('phone'),
 	emptyOptionalValidator('tagline'),
-	urlOptionalValidator('imageUrl')
+	boolOptionalValidator('newlyLaunched'),
+	boolOptionalValidator('limitedDelivery')
+]
+
+export const patchHomeImageValidator = [
+	phoneValidator('phone'),
+	urlValidator('imageUrl')
 ]

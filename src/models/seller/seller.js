@@ -123,7 +123,15 @@ const sellerSchema = new Schema(
 			tagline: String,
 			imageUrl: String,
 			homeImageUrl: String,
-			homeTagline: String
+			homeTagline: String,
+			newlyLaunched: {
+				type: Boolean,
+				default: false
+			},
+			limitedDelivery: {
+				type: Boolean,
+				default: false
+			}
 		},
 		contact: {
 			email: String,
