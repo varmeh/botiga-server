@@ -25,6 +25,10 @@ export const apartmentSellerSchema = new Schema({
 		type: Boolean,
 		default: false
 	},
+	topSeller: {
+		type: Boolean,
+		default: false
+	},
 	businessCategory: { type: String, required: true },
 	live: { type: Boolean, default: false },
 	filters: [String],

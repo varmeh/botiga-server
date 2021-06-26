@@ -131,6 +131,10 @@ const sellerSchema = new Schema(
 			limitedDelivery: {
 				type: Boolean,
 				default: false
+			},
+			topSeller: {
+				type: Boolean,
+				default: false
 			}
 		},
 		contact: {

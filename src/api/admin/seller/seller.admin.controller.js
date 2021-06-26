@@ -375,14 +375,16 @@ export const patchHomeBranding = async (req, res, next) => {
 			})
 		}
 
-		const { phone, tagline, newlyLaunched, limitedDelivery } = req.body
+		const { phone, tagline, newlyLaunched, limitedDelivery, topSeller } =
+			req.body
 
 		const { brand } = await updateSellerHomeBranding({
 			phone,
 			tagline,
 			imageUrl,
 			newlyLaunched,
-			limitedDelivery
+			limitedDelivery,
+			topSeller
 		})
 
 		res.json(brand)

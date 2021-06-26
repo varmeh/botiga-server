@@ -499,7 +499,8 @@ export const updateSellerHomeBranding = async ({
 	tagline,
 	imageUrl,
 	newlyLaunched,
-	limitedDelivery
+	limitedDelivery,
+	topSeller
 }) => {
 	try {
 		const seller = await findSellerByNumber(phone)
@@ -512,6 +513,7 @@ export const updateSellerHomeBranding = async ({
 			newlyLaunched === undefined ? brand.newlyLaunched : newlyLaunched
 		brand.limitedDelivery =
 			limitedDelivery === undefined ? brand.limitedDelivery : limitedDelivery
+		brand.topSeller = topSeller === undefined ? brand.topSeller : topSeller
 
 		/* Brand info needs to be updated in all apartments serviced by seller */
 		for (let i = 0; i < seller.apartments.length; i++) {
@@ -524,6 +526,7 @@ export const updateSellerHomeBranding = async ({
 			sellerInAptDoc.homeImageUrl = brand.homeImageUrl
 			sellerInAptDoc.newlyLaunched = brand.newlyLaunched
 			sellerInAptDoc.limitedDelivery = brand.limitedDelivery
+			sellerInAptDoc.topSeller = brand.topSeller
 
 			await apt.save()
 		}
