@@ -124,17 +124,13 @@ const sellerSchema = new Schema(
 			imageUrl: String,
 			homeImageUrl: String,
 			homeTagline: String,
-			newlyLaunched: {
-				type: Boolean,
-				default: false
-			},
 			limitedDelivery: {
 				type: Boolean,
 				default: false
 			},
-			topSeller: {
-				type: Boolean,
-				default: false
+			tag: {
+				type: String,
+				default: ''
 			}
 		},
 		contact: {

@@ -107,7 +107,6 @@ export const patchNotificationValidator = [
 export const patchHomeBrandingValidator = [
 	phoneValidator('phone'),
 	emptyOptionalValidator('tagline'),
-	boolOptionalValidator('newlyLaunched'),
 	boolOptionalValidator('limitedDelivery'),
-	boolOptionalValidator('topSeller')
+	emptyOptionalValidator('tag')
 ]
