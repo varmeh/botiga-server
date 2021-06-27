@@ -21,7 +21,7 @@ export const apartmentSellerSchema = new Schema({
 		type: Boolean,
 		default: false
 	},
-	tag: {
+	overlayTag: {
 		type: String,
 		default: ''
 	},

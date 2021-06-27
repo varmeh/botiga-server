@@ -499,7 +499,7 @@ export const updateSellerHomeBranding = async ({
 	tagline,
 	imageUrl,
 	limitedDelivery,
-	tag
+	overlayTag
 }) => {
 	try {
 		const seller = await findSellerByNumber(phone)
@@ -510,7 +510,7 @@ export const updateSellerHomeBranding = async ({
 		brand.homeImageUrl = !imageUrl ? brand.homeImageUrl : imageUrl
 		brand.limitedDelivery =
 			limitedDelivery === undefined ? brand.limitedDelivery : limitedDelivery
-		brand.topSeller = tag === undefined ? brand.tag : tag
+		brand.overlayTag = overlayTag === undefined ? brand.overlayTag : overlayTag
 
 		/* Brand info needs to be updated in all apartments serviced by seller */
 		for (let i = 0; i < seller.apartments.length; i++) {
@@ -522,7 +522,7 @@ export const updateSellerHomeBranding = async ({
 			sellerInAptDoc.homeImageUrl = brand.homeImageUrl
 			sellerInAptDoc.homeImageUrl = brand.homeImageUrl
 			sellerInAptDoc.limitedDelivery = brand.limitedDelivery
-			sellerInAptDoc.tag = brand.tag
+			sellerInAptDoc.overlayTag = brand.overlayTag
 
 			await apt.save()
 		}
