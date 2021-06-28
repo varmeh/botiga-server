@@ -128,6 +128,10 @@ const sellerSchema = new Schema(
 				type: Boolean,
 				default: false
 			},
+			newlyLaunched: {
+				type: Boolean,
+				default: false
+			},
 			overlayTag: {
 				type: String,
 				default: ''
