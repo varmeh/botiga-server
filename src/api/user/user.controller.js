@@ -1,4 +1,4 @@
-import { token, controllerErroHandler, winston } from '../../util'
+import { token, controllerErroHandler, winston, aws } from '../../util'
 import { apartmentVirtuals, findHelperData } from '../../models'
 import {
 	findSellersInApartment,
@@ -198,6 +198,22 @@ export const patchUserCart = async (req, res, next) => {
 export const patchAppException = (req, res, next) => {
 	try {
 		winston.error('@app error', req.body)
+
+		const { error, screen, name, phone, house, apartmentName, requestId } =
+			req.body
+		aws.ses.sendMail({
+			from: 'noreply@botiga.app',
+			to: 'support@botiga.app',
+			subject: `App Exceptions Reported to ${name} - ${phone}`,
+			text: `
+			<br><br>Screen: ${screen}
+			<br>Error: ${error}
+			<br>House: ${house}
+			<br>Apartment: ${apartmentName}
+			<br>requestId: ${requestId}
+			`
+		})
+
 		res.status(204).json()
 	} catch (error) {
 		controllerErroHandler(error, next)
