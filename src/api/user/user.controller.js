@@ -1,4 +1,4 @@
-import { token, controllerErroHandler } from '../../util'
+import { token, controllerErroHandler, winston } from '../../util'
 import { apartmentVirtuals, findHelperData } from '../../models'
 import {
 	findSellersInApartment,
@@ -190,6 +190,15 @@ export const patchUserCart = async (req, res, next) => {
 		})
 
 		res.json({ message: 'cart updated' })
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const patchAppException = (req, res, next) => {
+	try {
+		winston.error('@app error', req.body)
+		res.status(204).json()
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}

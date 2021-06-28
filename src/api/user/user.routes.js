@@ -18,7 +18,8 @@ import {
 	getProductsOfSeller,
 	getSellerData,
 	getUserCart,
-	patchUserCart
+	patchUserCart,
+	patchAppException
 } from './user.controller'
 
 const router = Router()
@@ -68,6 +69,12 @@ router.patch(
 	patchCartValidator,
 	validationMiddleware,
 	patchUserCart
+)
+
+router.patch(
+	'/app/exception',
+	token.authenticationMiddleware,
+	patchAppException
 )
 
 export default router
