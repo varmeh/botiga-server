@@ -184,7 +184,16 @@ export const addSellerApartment = async (phone, apartmentId) => {
 			contact: { address, whatsapp, email },
 			filters
 		} = seller
-		const { name, tagline, imageUrl, homeImageUrl, homeTagline } = brand
+		const {
+			name,
+			tagline,
+			imageUrl,
+			homeImageUrl,
+			homeTagline,
+			limitedDelivery,
+			newlyLaunched,
+			overlayTag
+		} = brand
 
 		apartment.sellers.push({
 			_id: seller._id,
@@ -193,6 +202,9 @@ export const addSellerApartment = async (phone, apartmentId) => {
 			brandImageUrl: imageUrl,
 			homeTagline,
 			homeImageUrl,
+			limitedDelivery,
+			newlyLaunched,
+			overlayTag,
 			businessCategory,
 			live: false,
 			contact: {
@@ -271,7 +283,16 @@ export const addSellerConfigureApartment = async data => {
 			contact: { address, whatsapp, email },
 			filters
 		} = seller
-		const { name, tagline, imageUrl, homeImageUrl, homeTagline } = brand
+		const {
+			name,
+			tagline,
+			imageUrl,
+			homeImageUrl,
+			homeTagline,
+			limitedDelivery,
+			newlyLaunched,
+			overlayTag
+		} = brand
 
 		apartment.sellers.push({
 			_id: seller._id,
@@ -280,6 +301,9 @@ export const addSellerConfigureApartment = async data => {
 			brandImageUrl: imageUrl,
 			homeTagline,
 			homeImageUrl,
+			limitedDelivery,
+			newlyLaunched,
+			overlayTag,
 			businessCategory,
 			live: false,
 			contact: {
