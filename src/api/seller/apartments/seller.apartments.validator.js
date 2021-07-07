@@ -16,6 +16,10 @@ export const patchApartmentValidator = [
 	emptyValidator('live').isBoolean().withMessage('either true or false')
 ]
 
+export const patchAllApartmentsLiveValidator = emptyValidator('live')
+	.isBoolean()
+	.withMessage('either true or false')
+
 export const patchDeliveryValidator = [
 	objectIdValidator('apartmentId'),
 	emptyValidator('deliveryType')

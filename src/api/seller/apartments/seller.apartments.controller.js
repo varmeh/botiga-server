@@ -2,6 +2,7 @@ import { token, controllerErroHandler } from '../../../util'
 import {
 	findApartments,
 	updateApartmentLiveStatus,
+	updateAllApartmentsLiveStatus,
 	updateApartmentDeliverySchedule,
 	updateApartmentContactInformation,
 	removeApartment
@@ -26,6 +27,18 @@ export const patchApartmentLive = async (req, res, next) => {
 			live
 		})
 		res.json(apartment)
+	} catch (error) {
+		controllerErroHandler(error, next)
+	}
+}
+
+export const patchAllApartmentsLive = async (req, res, next) => {
+	try {
+		const apartments = await updateAllApartmentsLiveStatus(
+			token.get(req),
+			req.body.live
+		)
+		res.json(apartments)
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}

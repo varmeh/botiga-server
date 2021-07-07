@@ -3,6 +3,7 @@ import { validationMiddleware, token } from '../../../util'
 
 import {
 	patchApartmentValidator,
+	patchAllApartmentsLiveValidator,
 	patchDeliveryValidator,
 	patchContactInfoValidator,
 	deleteApartmentValidator
@@ -11,6 +12,7 @@ import {
 import {
 	getApartments,
 	patchApartmentLive,
+	patchAllApartmentsLive,
 	patchDelierySchedule,
 	patchContactInformation
 } from './seller.apartments.controller'
@@ -25,6 +27,14 @@ router.patch(
 	patchApartmentValidator,
 	validationMiddleware,
 	patchApartmentLive
+)
+
+router.patch(
+	'/all/live',
+	token.authenticationMiddleware,
+	patchAllApartmentsLiveValidator,
+	validationMiddleware,
+	patchAllApartmentsLive
 )
 
 router.patch(
