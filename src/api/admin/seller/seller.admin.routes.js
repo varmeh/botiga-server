@@ -13,6 +13,7 @@ import {
 	patchSellerBankDetailsValidator,
 	postSellerApartmentValidator,
 	postSellerApartmentConfigureValidator,
+	patchAllApartmentsLiveValidator,
 	patchSellerApartmentLiveValidator,
 	deleteSellerApartmentValidator,
 	deleteSellerApartmentWithIdValidator,
@@ -32,6 +33,7 @@ import {
 	patchSellerBankDetails,
 	postSellerApartment,
 	postSellerConfigureApartment,
+	patchAllApartmentsLiveStatus,
 	patchApartmentLiveStatus,
 	deleteSellerApartments,
 	deleteSellerApartmentsWithId,
@@ -105,6 +107,14 @@ router.post(
 	postSellerApartmentConfigureValidator,
 	validationMiddleware,
 	postSellerConfigureApartment
+)
+
+router.patch(
+	'/apartment/all/live',
+	adminAuthMiddleware,
+	patchAllApartmentsLiveValidator,
+	validationMiddleware,
+	patchAllApartmentsLiveStatus
 )
 
 router.patch(

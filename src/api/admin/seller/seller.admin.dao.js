@@ -347,16 +347,29 @@ export const addSellerConfigureApartment = async data => {
 	}
 }
 
-export const updateApartmentLiveStatus = async (phone, apartmentId, live) => {
+export const updateAllApartmentsLiveStatus = async (phone, live) => {
 	try {
 		const seller = await findSellerByNumber(phone)
 
-		// Check if seller has account has been verified
-		if (!seller.bankDetailsVerified) {
-			throw new CreateHttpError[401](
-				'Bank Details Not Verified. Contact Botiga customer care'
-			)
+		for (let i = 0; i < seller.apartments.length; i++) {
+			const apartmentId = seller.apartments[i]._id
+
+			const apartment = await Apartment.findById(apartmentId)
+			apartment.sellers.id(seller._id).live = live
+			await apartment.save()
+
+			seller.apartments.id(apartmentId).live = live
 		}
+
+		return await seller.save()
+	} catch (error) {
+		return dbErrorHandler(error, 'updateAllApartmentsLiveStatus')
+	}
+}
+
+export const updateApartmentLiveStatus = async (phone, apartmentId, live) => {
+	try {
+		const seller = await findSellerByNumber(phone)
 
 		// If either seller or apartment does not exist, accessing their information will cause internal server error
 		const apartment = await Apartment.findById(apartmentId)

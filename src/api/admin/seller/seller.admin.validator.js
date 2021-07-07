@@ -83,6 +83,11 @@ export const patchSellerApartmentLiveValidator = [
 	boolValidator('live')
 ]
 
+export const patchAllApartmentsLiveValidator = [
+	phoneValidator('phone'),
+	boolValidator('live')
+]
+
 export const deleteSellerApartmentWithIdValidator = [
 	paramPhoneValidator('phone'),
 	paramObjectIdValidator('apartmentId')
