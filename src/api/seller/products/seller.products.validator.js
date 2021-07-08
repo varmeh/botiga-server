@@ -4,6 +4,7 @@ import {
 	decimalValidator,
 	emptyOptionalValidator,
 	boolValidator,
+	boolOptionalValidator,
 	paramObjectIdValidator,
 	decimalOptionalValidator,
 	imageUrlArrayValidator,
@@ -24,7 +25,10 @@ export const postProductValidator = [
 	emptyOptionalValidator('description'),
 	fieldExists('imageUrl'),
 	fieldExists('imageUrlLarge'),
-	imageUrlArrayValidator('secondaryImageUrls', 4)
+	imageUrlArrayValidator('secondaryImageUrls', 4),
+	emptyOptionalValidator('tag'),
+	boolOptionalValidator('recommended'),
+	boolOptionalValidator('available')
 ]
 
 export const patchProductValidator = [

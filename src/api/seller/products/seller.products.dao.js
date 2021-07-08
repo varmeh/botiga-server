@@ -68,7 +68,10 @@ export const createProduct = async (
 		size,
 		imageUrl,
 		imageUrlLarge,
-		secondaryImageUrls
+		secondaryImageUrls,
+		tag = '',
+		recommended = false,
+		available = true
 	}
 ) => {
 	try {
@@ -82,7 +85,10 @@ export const createProduct = async (
 			size,
 			imageUrl,
 			imageUrlLarge,
-			secondaryImageUrls
+			secondaryImageUrls,
+			tag,
+			recommended,
+			available
 		})
 
 		const updatedSeller = await seller.save()

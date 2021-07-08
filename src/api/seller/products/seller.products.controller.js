@@ -26,7 +26,10 @@ export const postProduct = async (req, res, next) => {
 			size: { quantity, unit },
 			imageUrl,
 			imageUrlLarge,
-			secondaryImageUrls
+			secondaryImageUrls,
+			tag,
+			recommended,
+			available
 		} = req.body
 
 		const product = await createProduct(token.get(req), categoryId, {
@@ -37,7 +40,10 @@ export const postProduct = async (req, res, next) => {
 			size: { quantity, unit },
 			imageUrl,
 			imageUrlLarge,
-			secondaryImageUrls
+			secondaryImageUrls,
+			tag,
+			recommended,
+			available
 		})
 
 		res.status(201).json({ id: product._id })
