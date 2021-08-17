@@ -4,7 +4,7 @@ import { winston } from './winston.logger'
 const { OTP_API_KEY } = process.env
 const baseUrl = `https://2factor.in/API/V1/${OTP_API_KEY}/SMS`
 
-const testNumbers = ['5000012345', '5000012346']
+const testNumbers = ['5000012345', '5000012346', '9886228779'] // Adding woolly number to no otp list
 
 const send = async (phone, template) => {
 	try {
