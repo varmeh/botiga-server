@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 /* eslint-disable camelcase */
 import { hostname } from 'os'
 import axios from 'axios'
@@ -223,14 +222,7 @@ const notificationsHelper = async ({ event, entity, order }) => {
 	const {
 		buyer,
 		apartment,
-		order: {
-			number,
-			products,
-			totalAmount,
-			status,
-			deliveryFee,
-			discountAmount
-		},
+		order: { number, products, totalAmount, deliveryFee, discountAmount },
 		seller,
 		payment
 	} = order
@@ -261,7 +253,6 @@ const notificationsHelper = async ({ event, entity, order }) => {
 		await aws.ses.sendMailPromise({
 			from: 'noreply@botiga.app',
 			to: seller.email,
-			bcc: 'support@botiga.app',
 			subject: `Botiga - Order Received #${number} - ${apartment.aptName} `,
 			text: `Order Details
 				<br><br>Order Number - ${number}
@@ -321,22 +312,6 @@ const notificationsHelper = async ({ event, entity, order }) => {
 			`Your payment of ₹${totalAmount} for order #${number} to ${seller.brandName} has failed. Any amount debited will be credited back to your account.`,
 			entity.notes.orderId
 		)
-
-		await aws.ses.sendMailPromise({
-			from: 'noreply@botiga.app',
-			to: 'support@botiga.app',
-			subject: `Botiga - Server Payment Failure Notification - Order #${number}`,
-			text: `Payment Failure Notification
-				<br><br>Hostname: ${host}
-				<br><br>Customer - ${buyer.name} - ${buyer.phone}
-				<br>Address - ${buyer.house} - ${apartment.aptName}
-				<br><br>Seller - ${seller.brandName}
-				<br>Order Status - ${status}
-				<br>Total Amount - ₹${totalAmount}
-				<br><br>Payment Status - ${payment}
-				<br><br>Thank you
-				<br>Team Botiga`
-		})
 	}
 }
 

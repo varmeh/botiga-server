@@ -230,26 +230,9 @@ export const postRpayTransactionCancelled = async (req, res, next) => {
 		const { orderId } = req.body
 
 		const {
-			buyer,
-			apartment,
-			order: { number, totalAmount, status },
-			seller,
+			order: { number },
 			payment
 		} = await Order.findById(orderId)
-
-		await aws.ses.sendMailPromise({
-			from: 'noreply@botiga.app',
-			to: 'support@botiga.app',
-			subject: `Botiga - App Payment Cancellation Notification for Order #${number}`,
-			text: `Payment Cancelled by User
-				<br><br>Customer - ${buyer.name} - ${buyer.phone}
-				<br>Address - ${buyer.house} - ${apartment.aptName}
-				<br><br>Seller - ${seller.brandName}
-				<br>Order Status - ${status}
-				<br>Total Amount - ${totalAmount}
-				<br><br>Payment Status - ${payment}
-				<br><br>Team Botiga`
-		})
 
 		if (payment.status !== PaymentStatus.success) {
 			// If user cancels payment from App
