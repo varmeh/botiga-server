@@ -27,12 +27,12 @@ export const patchDeliveryFeeValidator = [
 	objectIdValidator('apartmentId'),
 	numberValidator('deliveryMinOrder')
 		.bail()
-		.custom(val => val <= 1000)
-		.withMessage('should be at max ₹1000'),
+		.custom(val => val <= 10000)
+		.withMessage('should be at max ₹10000'),
 	numberValidator('deliveryFee')
 		.bail()
-		.custom(val => val <= 50)
-		.withMessage('should be at max 50')
+		.custom(val => val <= 200)
+		.withMessage('should be at max 200')
 ]
 
 export const patchDeliveryScheduleValidator = [
