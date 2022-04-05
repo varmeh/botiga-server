@@ -72,12 +72,12 @@ export const apartmentSellerSchema = new Schema({
 		minOrder: {
 			type: Number,
 			default: 0,
-			max: 1000
+			max: 5000
 		},
 		fee: {
 			type: Number,
 			default: 0,
-			max: 50
+			max: 250
 		}
 	}
 })
