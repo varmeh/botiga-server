@@ -7,3 +7,4 @@ logs/
 # Files
 server.log
 .env*
+.firesdk-dev-admin.json
