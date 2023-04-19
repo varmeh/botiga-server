@@ -62,14 +62,14 @@ function generateEducationalBackground(
 		fieldOfStudy = '',
 		university = '',
 		gpa = '',
-		relevantCourses = ''
+		favoriteCourses = ''
 	},
 	{
-		degreeWeight = 3,
-		fieldOfStudyWeight = 4,
-		universityWeight = 2,
+		degreeWeight = 2,
+		fieldOfStudyWeight = 3,
+		universityWeight = 1,
 		gpaWeight = 1,
-		relevantCoursesWeight = 3
+		favoriteCoursesWeight = 4
 	}
 ) {
 	const degreeStr = degree ? `I have a ${degree} (Weight: ${degreeWeight})` : ''
@@ -79,10 +79,10 @@ function generateEducationalBackground(
 		  }`
 		: ''
 	const gpaStr = gpa ? `, with a GPA of ${gpa} (Weight: ${gpaWeight})` : ''
-	const relevantCoursesStr = relevantCourses
-		? `. I have taken relevant courses such as ${relevantCourses} (Weight: ${relevantCoursesWeight})`
+	const favoriteCoursesStr = favoriteCourses
+		? `. my favorite favorite courses in degree were ${favoriteCourses} (Weight: ${favoriteCoursesWeight})`
 		: ''
-	return `${degreeStr}${fieldOfStudyStr}${gpaStr}${relevantCoursesStr}`
+	return `${degreeStr}${fieldOfStudyStr}${gpaStr}${favoriteCoursesStr}`
 }
 
 function generateCulturalBackground(
@@ -155,31 +155,6 @@ function generateAreaOfInterest(
 	return `${hobbiesStr}${academicInterestsStr}${professionalInterestsStr}${socialCausesStr}`
 }
 
-function generatePriorKnowledge(
-	{
-		basicUnderstanding = '',
-		intermediateUnderstanding = '',
-		advancedUnderstanding = ''
-	},
-	{
-		basicUnderstandingWeight = 1,
-		intermediateUnderstandingWeight = 2,
-		advancedUnderstandingWeight = 3
-	}
-) {
-	const basicUnderstandingStr = basicUnderstanding
-		? `I have a basic understanding of ${basicUnderstanding} (Weight: ${basicUnderstandingWeight})`
-		: ''
-	const intermediateUnderstandingStr = intermediateUnderstanding
-		? `, intermediate understanding of ${intermediateUnderstanding} (Weight: ${intermediateUnderstandingWeight})`
-		: ''
-	const advancedUnderstandingStr = advancedUnderstanding
-		? `, and advanced understanding of ${advancedUnderstanding} (Weight: ${advancedUnderstandingWeight})`
-		: ''
-
-	return `${basicUnderstandingStr}${intermediateUnderstandingStr}${advancedUnderstandingStr}`
-}
-
 export function generateLearnerPersonaPrompt({
 	learnerType,
 	learnerPersona,
@@ -194,8 +169,8 @@ export function generateLearnerPersonaPrompt({
 		priorKnowledge,
 		culturalBackground,
 		languageProficiency,
-		learningGoals,
-		learningStyle
+		learningGoals
+		// learningStyle
 	} = learnerPersona
 
 	const { topic, question } = queryContext
@@ -203,41 +178,43 @@ export function generateLearnerPersonaPrompt({
 	const {
 		ageWeight = 5,
 		workExperienceWeight = 20,
-		educationalBackgroundWeight = 20,
+		educationalBackgroundWeight = 15,
 		areaOfInterestWeight = 15,
 		priorKnowledgeWeight = 10,
 		culturalBackgroundWeight = 10,
 		languageProficiencyWeight = 5,
-		learningGoalsWeight = 10,
-		learningStyleWeight = 5
+		learningGoalsWeight = 20
+		// learningStyleWeight = 5
 	} = personaWeightage
 
 	const generatedWorkExperience =
 		learnerType === 'professional'
-			? generateWorkExperience(workExperience)
+			? generateWorkExperience(workExperience, {})
 			: 'No Work Experience'
 	const generatedEducationalBackground = generateEducationalBackground(
-		educationalBackground
+		educationalBackground,
+		{}
 	)
-	const generatedAreaOfInterest = generateAreaOfInterest(areaOfInterest)
-	const generatedPriorKnowledge = generatePriorKnowledge(priorKnowledge)
-	const generatedCulturalBackground =
-		generateCulturalBackground(culturalBackground)
+	const generatedAreaOfInterest = generateAreaOfInterest(areaOfInterest, {})
+	const generatedCulturalBackground = generateCulturalBackground(
+		culturalBackground,
+		{}
+	)
 
 	const prompt = `
-        Learner information:
-        Age: ${age} (Weightage: ${ageWeight}%)
-        Educational Background: ${generatedEducationalBackground} (Weightage: ${educationalBackgroundWeight}%)
-        Work Experience: ${generatedWorkExperience} (Weightage: ${workExperienceWeight}%)
-        Areas of Interest: ${generatedAreaOfInterest} (Weightage: ${areaOfInterestWeight}%)
-        Prior Knowledge: ${generatedPriorKnowledge} (Weightage: ${priorKnowledgeWeight}%)
-        Cultural Background: ${generatedCulturalBackground} (Weightage: ${culturalBackgroundWeight}%)
-        Language Proficiency: ${languageProficiency} (Weightage: ${languageProficiencyWeight}%)
-        Learning Goals: ${learningGoals} (Weightage: ${learningGoalsWeight}%)
-        Learning Style: ${learningStyle} (Weightage: ${learningStyleWeight}%)
+Learner information:
+Age: ${age} (Weightage: ${ageWeight}%)
+Educational Background: ${generatedEducationalBackground} (Weightage: ${educationalBackgroundWeight}%)
+Work Experience: ${generatedWorkExperience} (Weightage: ${workExperienceWeight}%)
+Areas of Interest: ${generatedAreaOfInterest} (Weightage: ${areaOfInterestWeight}%)
+Prior Knowledge: ${priorKnowledge} (Weightage: ${priorKnowledgeWeight}%)
+Cultural Background: ${generatedCulturalBackground} (Weightage: ${culturalBackgroundWeight}%)
+Language Proficiency: ${languageProficiency} (Weightage: ${languageProficiencyWeight}%)
+Learning Goals: ${learningGoals} (Weightage: ${learningGoalsWeight}%)
 
-        Topic: ${topic}
-        Question: ${question}
+Topic: ${topic}
+Question: ${question}
+Explain with a clear & crisp example based on learner persona
     `.trim()
 
 	return prompt

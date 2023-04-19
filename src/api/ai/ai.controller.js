@@ -4,14 +4,7 @@ import { generateLearnerPersonaPrompt } from './ai.utils'
 
 export const postPromptCompletion = (req, res, next) => {
 	try {
-		const { learnerType, learnerPersona, queryContext, personaWeightage } =
-			req.body
-		const prompt = generateLearnerPersonaPrompt({
-			learnerType,
-			learnerPersona,
-			queryContext,
-			personaWeightage
-		})
+		const prompt = generateLearnerPersonaPrompt(req.body)
 
 		res.status(200).json({ prompt })
 	} catch (error) {
