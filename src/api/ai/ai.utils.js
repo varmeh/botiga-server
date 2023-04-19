@@ -23,18 +23,18 @@ function generateWorkExperience(
 	}
 ) {
 	const jobTitleStr = jobTitle
-		? `I've worked as a ${jobTitle} (Weight: ${jobTitleWeight})`
+		? `I'm working as a ${jobTitle} (Weight: ${jobTitleWeight})`
 		: ''
 	const companyStr = company ? ` at ${company} (Weight: ${companyWeight})` : ''
 	const industryStr = industry
 		? `, in the ${industry} industry (Weight: ${industryWeight})`
 		: ''
 	const yearsOfExperienceStr = yearsOfExperience
-		? ` for ${yearsOfExperience} years (Weight: ${yearsOfExperienceWeight})`
+		? `. My total years of experience in the industry is ${yearsOfExperience} years (Weight: ${yearsOfExperienceWeight})`
 		: ''
 
 	const responsibilitiesStr = responsibilities
-		? `. My main responsibilities included ${responsibilities} (Weight: ${responsibilitiesWeight})`
+		? `. My main responsibilities include ${responsibilities} (Weight: ${responsibilitiesWeight})`
 		: ''
 
 	const areasOfExpertiseStr = areasOfExpertise
