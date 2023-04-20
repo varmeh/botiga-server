@@ -132,7 +132,7 @@ function generateEducationalBackground(
 		: ''
 	const gpaStr = gpa ? `, with a GPA of ${gpa} (Weight: ${weights.gpa})` : ''
 	const favoriteCoursesStr = favoriteCourses
-		? `. my favorite favorite courses in degree were ${favoriteCourses} (Weight: ${weights.favoriteCourses})`
+		? `. my favorite courses in degree were ${favoriteCourses} (Weight: ${weights.favoriteCourses})`
 		: ''
 	return `${degreeStr}${fieldOfStudyStr}${gpaStr}${favoriteCoursesStr}`
 }
