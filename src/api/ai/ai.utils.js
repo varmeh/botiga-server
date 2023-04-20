@@ -1,4 +1,65 @@
+const weightSubFieldsPerPersona = {
+	student: {
+		education: {
+			degree: 2,
+			fieldOfStudy: 5,
+			university: 1,
+			gpa: 1,
+			favoriteCourses: 3
+		},
+		cultural: {
+			ethnicity: 1,
+			nationality: 1,
+			language: 3,
+			religion: 3,
+			socioeconomicStatus: 1,
+			educationSystem: 2
+		},
+		areaOfInterest: {
+			hobbies: 4,
+			academicInterests: 3,
+			professionalInterests: 0,
+			socialCauses: 1
+		}
+	},
+	professional: {
+		workExperience: {
+			jobTitle: 2,
+			company: 1,
+			industry: 3,
+			yearsOfExperience: 2,
+			responsibilities: 2,
+			areasOfExpertise: 4,
+			skills: 4,
+			certifications: 2,
+			geographicLocation: 1
+		},
+		education: {
+			degree: 1,
+			fieldOfStudy: 2,
+			university: 0,
+			gpa: 1,
+			favoriteCourses: 2
+		},
+		cultural: {
+			ethnicity: 1,
+			nationality: 1,
+			language: 1,
+			religion: 1,
+			socioeconomicStatus: 1,
+			educationSystem: 1
+		},
+		areaOfInterest: {
+			hobbies: 3,
+			academicInterests: 1,
+			professionalInterests: 4,
+			socialCauses: 4
+		}
+	}
+}
+
 function generateWorkExperience(
+	learnerType,
 	{
 		jobTitle = '',
 		company = '',
@@ -9,83 +70,75 @@ function generateWorkExperience(
 		skills = '',
 		certifications = '',
 		geographicLocation = ''
-	},
-	{
-		jobTitleWeight = 2,
-		companyWeight = 1,
-		industryWeight = 1,
-		yearsOfExperienceWeight = 2,
-		responsibilitiesWeight = 1,
-		areasOfExpertiseWeight = 2,
-		skillsWeight = 3,
-		certificationsWeight = 2,
-		geographicLocationWeight = 2
 	}
 ) {
+	const weights = weightSubFieldsPerPersona[`${learnerType}`].workExperience
+
 	const jobTitleStr = jobTitle
-		? `I'm working as a ${jobTitle} (Weight: ${jobTitleWeight})`
+		? `I'm working as a ${jobTitle} (Weight: ${weights.jobTitle})`
 		: ''
-	const companyStr = company ? ` at ${company} (Weight: ${companyWeight})` : ''
+	const companyStr = company
+		? ` at ${company} (Weight: ${weights.company})`
+		: ''
 	const industryStr = industry
-		? `, in the ${industry} industry (Weight: ${industryWeight})`
+		? `, in the ${industry} industry (Weight: ${weights.industry})`
 		: ''
 	const yearsOfExperienceStr = yearsOfExperience
-		? `. My total years of experience in the industry is ${yearsOfExperience} years (Weight: ${yearsOfExperienceWeight})`
+		? `. My total years of experience in the industry is ${yearsOfExperience} years (Weight: ${weights.yearsOfExperience})`
 		: ''
 
 	const responsibilitiesStr = responsibilities
-		? `. My main responsibilities include ${responsibilities} (Weight: ${responsibilitiesWeight})`
+		? `. My main responsibilities include ${responsibilities} (Weight: ${weights.responsibilities})`
 		: ''
 
 	const areasOfExpertiseStr = areasOfExpertise
-		? `. I have expertise in ${areasOfExpertise} (Weight: ${areasOfExpertiseWeight})`
+		? `. I have expertise in ${areasOfExpertise} (Weight: ${weights.areasOfExpertise})`
 		: ''
 
 	const skillsStr = skills
-		? `. I've developed skills in ${skills} (Weight: ${skillsWeight})`
+		? `. I've developed skills in ${skills} (Weight: ${weights.skills})`
 		: ''
 
 	const certificationsStr = certifications
-		? `, and earned certifications like ${certifications} (Weight: ${certificationsWeight})`
+		? `, and earned certifications like ${certifications} (Weight: ${weights.certifications})`
 		: ''
 
 	const geographicLocationStr = geographicLocation
-		? `. I've worked in ${geographicLocation} (Weight: ${geographicLocationWeight})`
+		? `. I've worked at ${geographicLocation} (Weight: ${weights.geographicLocation})`
 		: ''
 
 	return `${jobTitleStr}${companyStr}${industryStr}${yearsOfExperienceStr}${responsibilitiesStr}${areasOfExpertiseStr}${skillsStr}${certificationsStr}${geographicLocationStr}`
 }
 
 function generateEducationalBackground(
+	learnerType,
 	{
 		degree = '',
 		fieldOfStudy = '',
 		university = '',
 		gpa = '',
 		favoriteCourses = ''
-	},
-	{
-		degreeWeight = 2,
-		fieldOfStudyWeight = 3,
-		universityWeight = 1,
-		gpaWeight = 1,
-		favoriteCoursesWeight = 4
 	}
 ) {
-	const degreeStr = degree ? `I have a ${degree} (Weight: ${degreeWeight})` : ''
+	const weights = weightSubFieldsPerPersona[`${learnerType}`].education
+
+	const degreeStr = degree
+		? `I have a ${degree} (Weight: ${weights.degree})`
+		: ''
 	const fieldOfStudyStr = fieldOfStudy
-		? ` in ${fieldOfStudy} (Weight: ${fieldOfStudyWeight})${
-				university ? ` from ${university} (Weight: ${universityWeight})` : ''
+		? ` in ${fieldOfStudy} (Weight: ${weights.fieldOfStudy})${
+				university ? ` from ${university} (Weight: ${weights.university})` : ''
 		  }`
 		: ''
-	const gpaStr = gpa ? `, with a GPA of ${gpa} (Weight: ${gpaWeight})` : ''
+	const gpaStr = gpa ? `, with a GPA of ${gpa} (Weight: ${weights.gpa})` : ''
 	const favoriteCoursesStr = favoriteCourses
-		? `. my favorite favorite courses in degree were ${favoriteCourses} (Weight: ${favoriteCoursesWeight})`
+		? `. my favorite favorite courses in degree were ${favoriteCourses} (Weight: ${weights.favoriteCourses})`
 		: ''
 	return `${degreeStr}${fieldOfStudyStr}${gpaStr}${favoriteCoursesStr}`
 }
 
 function generateCulturalBackground(
+	learnerType,
 	{
 		ethnicity = '',
 		nationality = '',
@@ -93,63 +146,53 @@ function generateCulturalBackground(
 		religion = '',
 		socioeconomicStatus = '',
 		educationSystem = ''
-	},
-	{
-		ethnicityWeight = 1,
-		nationalityWeight = 1,
-		languageWeight = 1,
-		religionWeight = 1,
-		socioeconomicStatusWeight = 1,
-		educationSystemWeight = 1
 	}
 ) {
+	const weights = weightSubFieldsPerPersona[`${learnerType}`].cultural
+
 	const ethnicityStr = ethnicity
-		? `I am of ${ethnicity} ethnicity (Weight: ${ethnicityWeight})`
+		? `I am of ${ethnicity} ethnicity (Weight: ${weights.ethnicity})`
 		: ''
 	const nationalityStr = nationality
-		? `, a ${nationality} national (Weight: ${nationalityWeight})`
+		? `, a ${nationality} national (Weight: ${weights.nationality})`
 		: ''
 	const languageStr = language
-		? `, and I speak ${language} (Weight: ${languageWeight})`
+		? `, and I speak ${language} (Weight: ${weights.language})`
 		: ''
 	const religionStr = religion
-		? `. My religion is ${religion} (Weight: ${religionWeight})`
+		? `. My religion is ${religion} (Weight: ${weights.religion})`
 		: ''
 	const socioeconomicStatusStr = socioeconomicStatus
-		? `, and my socioeconomic status is ${socioeconomicStatus} (Weight: ${socioeconomicStatusWeight})`
+		? `, and my socioeconomic status is ${socioeconomicStatus} (Weight: ${weights.socioeconomicStatus})`
 		: ''
 	const educationSystemStr = educationSystem
-		? `. I was educated in the ${educationSystem} system (Weight: ${educationSystemWeight})`
+		? `. I was educated in the ${educationSystem} system (Weight: ${weights.educationSystem})`
 		: ''
 
 	return `${ethnicityStr}${nationalityStr}${languageStr}${religionStr}${socioeconomicStatusStr}${educationSystemStr}`
 }
 
 function generateAreaOfInterest(
+	learnerType,
 	{
 		hobbies = '',
 		academicInterests = '',
 		professionalInterests = '',
 		socialCauses = ''
-	},
-	{
-		hobbiesWeight = 1,
-		academicInterestsWeight = 1,
-		professionalInterestsWeight = 1,
-		socialCausesWeight = 1
 	}
 ) {
+	const weights = weightSubFieldsPerPersona[`${learnerType}`].areaOfInterest
 	const hobbiesStr = hobbies
-		? `My hobbies include ${hobbies} (Weight: ${hobbiesWeight})`
+		? `My hobbies include ${hobbies} (Weight: ${weights.hobbies})`
 		: ''
 	const academicInterestsStr = academicInterests
-		? ` and I have academic interests in ${academicInterests} (Weight: ${academicInterestsWeight})`
+		? ` and I have academic interests in ${academicInterests} (Weight: ${weights.academicInterests})`
 		: ''
 	const professionalInterestsStr = professionalInterests
-		? `. Professionally, I'm interested in ${professionalInterests} (Weight: ${professionalInterestsWeight})`
+		? `. Professionally, I'm interested in ${professionalInterests} (Weight: ${weights.professionalInterests})`
 		: ''
 	const socialCausesStr = socialCauses
-		? `. I'm passionate about social causes such as ${socialCauses} (Weight: ${socialCausesWeight})`
+		? `. I'm passionate about social causes such as ${socialCauses} (Weight: ${weights.socialCauses})`
 		: ''
 
 	return `${hobbiesStr}${academicInterestsStr}${professionalInterestsStr}${socialCausesStr}`
@@ -189,16 +232,19 @@ export function generateLearnerPersonaPrompt({
 
 	const generatedWorkExperience =
 		learnerType === 'professional'
-			? generateWorkExperience(workExperience, {})
+			? generateWorkExperience(learnerType, workExperience)
 			: 'No Work Experience'
 	const generatedEducationalBackground = generateEducationalBackground(
-		educationalBackground,
-		{}
+		learnerType,
+		educationalBackground
 	)
-	const generatedAreaOfInterest = generateAreaOfInterest(areaOfInterest, {})
+	const generatedAreaOfInterest = generateAreaOfInterest(
+		learnerType,
+		areaOfInterest
+	)
 	const generatedCulturalBackground = generateCulturalBackground(
-		culturalBackground,
-		{}
+		learnerType,
+		culturalBackground
 	)
 
 	const prompt = `
