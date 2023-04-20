@@ -211,7 +211,7 @@ export function generateLearnerPersonaPrompt({
 		areaOfInterest,
 		priorKnowledge,
 		culturalBackground,
-		languageProficiency,
+		analogyPreference,
 		learningGoals
 		// learningStyle
 	} = learnerPersona
@@ -225,7 +225,7 @@ export function generateLearnerPersonaPrompt({
 		areaOfInterestWeight = 15,
 		priorKnowledgeWeight = 10,
 		culturalBackgroundWeight = 10,
-		languageProficiencyWeight = 5,
+		analogyPreferenceWeight = 5,
 		learningGoalsWeight = 20
 		// learningStyleWeight = 5
 	} = personaWeightage
@@ -247,7 +247,13 @@ export function generateLearnerPersonaPrompt({
 		culturalBackground
 	)
 
+	const tone =
+		learnerPersona === 'student'
+			? 'casual tone with emoji'
+			: 'professional tone'
+
 	const prompt = `
+You are playing the role of a teaching assistant
 Learner information:
 Age: ${age} (Weightage: ${ageWeight}%)
 Educational Background: ${generatedEducationalBackground} (Weightage: ${educationalBackgroundWeight}%)
@@ -255,12 +261,12 @@ Work Experience: ${generatedWorkExperience} (Weightage: ${workExperienceWeight}%
 Areas of Interest: ${generatedAreaOfInterest} (Weightage: ${areaOfInterestWeight}%)
 Prior Knowledge: ${priorKnowledge} (Weightage: ${priorKnowledgeWeight}%)
 Cultural Background: ${generatedCulturalBackground} (Weightage: ${culturalBackgroundWeight}%)
-Language Proficiency: ${languageProficiency} (Weightage: ${languageProficiencyWeight}%)
+Analogy Preference: Preferrably use analogies from ${analogyPreference} to explain the concept (Weightage: ${analogyPreferenceWeight}%)
 Learning Goals: ${learningGoals} (Weightage: ${learningGoalsWeight}%)
 
 Topic: ${topic}
 Question: ${question}
-Explain with a clear & crisp example based on learner persona
+Explain with a clear & crisp examples based on learner persona & analogy preference in ${tone}
     `.trim()
 
 	return prompt
