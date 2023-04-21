@@ -48,32 +48,32 @@ Remember to adjust the balance and emphasis on different methods based on the ne
 
 ## Categorizing Learners
 
-1. **Analytical Thinker**:
+1. **Analytical Thinker** (ANT):
 
 -   _Preferred Learning Style_: Theoretical Learning
 -   These individuals enjoy understanding the underlying principles and concepts before applying them. They appreciate logical explanations, structured information, and may prefer lectures, reading, and research.
 
-2. **Practical Problem Solver**:
+2. **Practical Problem Solver** (PPS):
 
 -   _Preferred Learning Style_: Practical Learning
 -   Practical problem solvers prefer hands-on activities and learning by doing. They enjoy tackling real-world problems and applying their skills directly. They may prefer project-based learning, coding exercises, and workshops.
 
-3. **Creative Innovator**:
+3. **Creative Innovator** (CRI):
 
 -   _Preferred Learning Style_: Blended Learning (Theoretical + Practical)
 -   Creative individuals often benefit from a mix of theoretical understanding and practical application, which allows them to experiment with new ideas and approaches. They may enjoy brainstorming sessions, group discussions, and opportunities for creative expression within their projects.
 
-4. Social Learner:
+4. **Social Learner** (SAL):
 
 -   _Preferred Learning Style_: Collaborative Learning
 -   Social learners thrive in group settings and enjoy learning from and with others. They may prefer group discussions, peer instruction, pair programming, or team projects.
 
-5. Reflective Learner:
+5. **Reflective Learner** (RTL):
 
 -   _Preferred Learning Style_: Self-Directed Learning
 -   Reflective learners prefer to process information at their own pace and often benefit from independent study. They may prefer reading, research, and opportunities to reflect on their learning through journaling or self-assessment.
 
-6. Detail-Oriented Learner:
+6. **Detail-Oriented Learner** (DOL):
 
 -   _Preferred Learning Style_: Structured Learning
 -   Detail-oriented learners appreciate clear instructions, step-by-step guides, and a well-defined learning path. They may prefer demonstrations, tutorials, and methodical approaches to learning new concepts.
