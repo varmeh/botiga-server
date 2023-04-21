@@ -112,3 +112,17 @@ Here's the updated table with the persona description column added:
 
 This table includes a description of each learner persona, their preferred learning style, and a sample React course outline tailored to their learning preferences.
 Keep in mind that these associations are not definitive, and individual preferences may differ. It is important to use a combination of methods and materials to cater to a variety of learning styles.
+
+### Course Customization Possible
+
+Total Learner Types = 6
+
+1. Min Courses based on Learner Type (_a_) = 6
+2. Now, a learner would usually exhibit 2 promient learning styles
+    1. If we presume no effect of dominant style, then, course combination with 2 persona styles (_b_) _6C2_ = 15
+    2. If we consider effect of dominant style, course combination would be (_c_) = _6P2_ = 30
+3. Total Courses based on learner persona:
+    1. tc1 = _a_ + _b_ = 21
+    2. tc2 = _a_ + _c_ = 36
+
+This does not include the effect of learner preference for analogies
