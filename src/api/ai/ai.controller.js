@@ -1,6 +1,6 @@
 // import CreateHttpError from 'http-errors'
 import { controllerErroHandler } from '../../util'
-import { generateLearnerPersonaPrompt } from './ai.utils'
+import { generateLearnerPersonaPrompt, learningStylePersona } from './ai.utils'
 import questionarieJson from './learnerPersonaQuestionarie.json'
 
 export const postPromptCompletion = (req, res, next) => {
@@ -49,10 +49,8 @@ export const postPersonaClassificationResult = (req, res, next) => {
 			})
 		})
 
-		const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1])
-		const topScores = sortedScores.slice(0, 2)
-
-		res.json(topScores)
+		const learnerPersona = learningStylePersona(scores)
+		res.json(learnerPersona)
 	} catch (error) {
 		controllerErroHandler(error, next)
 	}

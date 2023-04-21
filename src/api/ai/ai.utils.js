@@ -271,3 +271,37 @@ Explain with a clear & crisp examples based on learner persona & analogy prefere
 
 	return prompt
 }
+
+// Possible outcomes:
+// 1. A single dominant persona (e.g., "Analytical Thinker").
+// 2. Two equally dominant personas (e.g., "Analytical Thinker" and "Practical Problem Solver").
+// 3. Two or more dominant personas with a small difference in scores (e.g., "Analytical Thinker" and "Creative Innovator").
+// 4. Multiple moderate scores, indicating a balanced combination of several personas (e.g., "Social Learner", "Reflective Learner", "Detail-Oriented Learner").
+
+export function learningStylePersona(scores) {
+	// Set the threshold for determining when the difference between scores is small enough to consider a mixed persona.
+	const threshold = 2
+
+	// Sort the scores in descending order.
+	const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1])
+
+	// Initialize an array to store the top scores.
+	const topScores = [sortedScores[0]]
+
+	// Iterate through the sorted scores, starting from the second-highest score.
+	for (let i = 1; i < sortedScores.length; i++) {
+		// Check if the current score is equal to the top score or if the difference between the top score
+		// and the current score is within the threshold. If true, add the current score to the topScores array.
+		if (
+			sortedScores[i][1] === sortedScores[0][1] ||
+			sortedScores[0][1] - sortedScores[i][1] <= threshold
+		) {
+			topScores.push(sortedScores[i])
+		} else {
+			// If the current score doesn't meet the conditions, stop the loop as the remaining scores will be even lower.
+			break
+		}
+	}
+
+	return topScores.slice(0, 3)
+}
