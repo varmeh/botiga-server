@@ -32,16 +32,21 @@ export const postPersonaClassificationResult = (req, res, next) => {
 		}
 
 		answers.forEach((answer, index) => {
-			const selectedOption = questionarieJson[index].options.find(
-				option => option.label === answer
-			)
+			// Convert answer to an array if it's a single string
+			const answerArray = Array.isArray(answer) ? answer : [answer]
 
-			if (selectedOption) {
-				if (!scores[selectedOption.persona]) {
-					scores[selectedOption.persona] = 0
+			answerArray.forEach(selectedLabel => {
+				const selectedOption = questionarieJson[index].options.find(
+					option => option.label === selectedLabel
+				)
+
+				if (selectedOption) {
+					if (!scores[selectedOption.persona]) {
+						scores[selectedOption.persona] = 0
+					}
+					scores[selectedOption.persona] += 1
 				}
-				scores[selectedOption.persona] += 1
-			}
+			})
 		})
 
 		const sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1])
