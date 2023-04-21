@@ -4,32 +4,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Understanding the theory behind it"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Jumping into a hands-on activity"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "A combination of theory and hands-on practice"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Discussing and exploring ideas with others"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Reflecting on the concept and studying independently"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "Having a clear, step-by-step approach"
 			}
 		]
@@ -39,32 +39,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Real-world examples and case studies"
 			},
 			{
 				"label": "b",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "Structured, step-by-step instructions"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "A mix of examples and structured guidance"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Group discussions and collaboration"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Independent study and self-assessment"
 			},
 			{
 				"label": "f",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Tackling problems and learning by doing"
 			}
 		]
@@ -74,32 +74,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Plan and research extensively before starting"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Dive in and learn as I go"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "Combine planning and learning on the fly"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Discuss plans and ideas with others before starting"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Think deeply about the project before taking action"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "Develop a clear, step-by-step plan"
 			}
 		]
@@ -109,32 +109,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Attending lectures and presentations"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Participating in hands-on workshops and labs"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "A mix of lectures and hands-on activities"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Group discussions and collaborative learning"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Studying independently and watching recorded lectures"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "Following structured courses and tutorials"
 			}
 		]
@@ -144,32 +144,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Break it down into smaller, manageable steps"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Tackle it head-on and learn through trial and error"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "Find a balance between planning and improvisation"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Seek input and ideas from others to navigate the complexity"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Reflect on the problem and consider multiple perspectives"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "Develop a detailed plan and follow it closely"
 			}
 		]
@@ -179,32 +179,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "I have a clear understanding of the material's logical structure and progression"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "I can apply what I'm learning to real-world situations"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "I'm exploring new ideas and making connections between concepts"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "I'm engaging with others and sharing my learning journey"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "I can reflect on my learning and draw my own conclusions"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "I'm following a structured learning plan"
 			}
 		]
@@ -214,32 +214,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Work independently and set personal goals"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Collaborate with others on projects and tasks"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "Switch between independent work and group activities"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Collaborate with others and share ideas"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Work independently and reflect on my learning"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "Follow a structured plan, either alone or with a group"
 			}
 		]
@@ -249,32 +249,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Read textbooks and articles"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Work on practical exercises and projects"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "Combine reading with hands-on activities"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Seek out online discussions and forums"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Reflect on the material and draw my own conclusions"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "Follow a structured study plan"
 			}
 		]
@@ -284,32 +284,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "At my own pace through self-directed study"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Through hands-on activities and real-world applications"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "By exploring new ideas and connecting concepts"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "In group discussions and collaborative activities"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Through self-assessment and reflection"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "Following a structured learning plan"
 			}
 		]
@@ -319,32 +319,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Group discussions helpful for deepening my understanding"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Peer instruction helpful in learning new skills"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "Group brainstorming useful for generating ideas"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Group discussions and peer instruction helpful"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Self-assessment and reflection more effective for my learning"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "A structured learning environment more helpful"
 			}
 		]
@@ -354,32 +354,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Focus on understanding the underlying principles"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Quickly apply the skill in a practical setting"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "Experiment with different applications of the skill"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Learn from others' experiences and share my own"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Reflect on how the skill fits into my existing knowledge"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "Learn the skill methodically and systematically"
 			}
 		]
@@ -389,32 +389,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Somewhat important; I value logical structure more"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Important; I enjoy learning through trial and error"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "Very important; I thrive in open-ended environments"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Important; I like discussing ideas with others"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Somewhat important; I prefer a balance of exploration and reflection"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "Less important; I prefer following a structured plan"
 			}
 		]
@@ -424,32 +424,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "In a structured, detailed format"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Through practical examples and demonstrations"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "In a way that encourages experimentation and innovation"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Through group discussions and peer input"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "That allows me to self-assess and reflect on my progress"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "With clear, specific guidelines and expectations"
 			}
 		]
@@ -459,32 +459,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Logical analysis"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Trial and error"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "Creative thinking"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Input from others and group discussions"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Introspection and self-evaluation"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "A methodical, step-by-step approach"
 			}
 		]
@@ -494,32 +494,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Individual achievement"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Practical applications and problem-solving"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "Creativity and innovation"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Teamwork and cooperation"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Self-assessment and reflection"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "A structured and organized approach"
 			}
 		]
@@ -529,32 +529,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Very important; I need a clear logical structure"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Somewhat important; practical exercises matter more"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "Less important; I prefer flexibility and exploration"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Somewhat important; group activities are also essential"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Important; I also value time for self-assessment"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "Very important; I need clear guidelines and expectations"
 			}
 		]
@@ -564,32 +564,32 @@
 		"options": [
 			{
 				"label": "a",
-				"persona": "Analytical Thinker",
+				"persona": "ANT",
 				"text": "Analyzing the problem and finding logical solutions"
 			},
 			{
 				"label": "b",
-				"persona": "Practical Problem Solver",
+				"persona": "PPS",
 				"text": "Trying different approaches until I find what works"
 			},
 			{
 				"label": "c",
-				"persona": "Creative Innovator",
+				"persona": "CRI",
 				"text": "Exploring new ideas and thinking outside the box"
 			},
 			{
 				"label": "d",
-				"persona": "Social Learner",
+				"persona": "SOL",
 				"text": "Seeking help from others and discussing the issue"
 			},
 			{
 				"label": "e",
-				"persona": "Reflective Learner",
+				"persona": "RTL",
 				"text": "Finding solutions on my own through self-evaluation"
 			},
 			{
 				"label": "f",
-				"persona": "Detail-Oriented Learner",
+				"persona": "DOL",
 				"text": "Referring to a structured plan or guidance materials"
 			}
 		]
