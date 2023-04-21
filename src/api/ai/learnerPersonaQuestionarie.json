@@ -1,0 +1,597 @@
+[
+	{
+		"question": "When learning a new concept, I prefer:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Understanding the theory behind it"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Jumping into a hands-on activity"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "A combination of theory and hands-on practice"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Discussing and exploring ideas with others"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Reflecting on the concept and studying independently"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "Having a clear, step-by-step approach"
+			}
+		]
+	},
+	{
+		"question": "I learn better through:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Real-world examples and case studies"
+			},
+			{
+				"label": "b",
+				"persona": "Detail-Oriented Learner",
+				"text": "Structured, step-by-step instructions"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "A mix of examples and structured guidance"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Group discussions and collaboration"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Independent study and self-assessment"
+			},
+			{
+				"label": "f",
+				"persona": "Practical Problem Solver",
+				"text": "Tackling problems and learning by doing"
+			}
+		]
+	},
+	{
+		"question": "When working on a project, I:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Plan and research extensively before starting"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Dive in and learn as I go"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "Combine planning and learning on the fly"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Discuss plans and ideas with others before starting"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Think deeply about the project before taking action"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "Develop a clear, step-by-step plan"
+			}
+		]
+	},
+	{
+		"question": "I prefer:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Attending lectures and presentations"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Participating in hands-on workshops and labs"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "A mix of lectures and hands-on activities"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Group discussions and collaborative learning"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Studying independently and watching recorded lectures"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "Following structured courses and tutorials"
+			}
+		]
+	},
+	{
+		"question": "When faced with a complex task, I:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Break it down into smaller, manageable steps"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Tackle it head-on and learn through trial and error"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "Find a balance between planning and improvisation"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Seek input and ideas from others to navigate the complexity"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Reflect on the problem and consider multiple perspectives"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "Develop a detailed plan and follow it closely"
+			}
+		]
+	},
+	{
+		"question": "I feel most motivated to learn when:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "I have a clear understanding of the material's logical structure and progression"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "I can apply what I'm learning to real-world situations"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "I'm exploring new ideas and making connections between concepts"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "I'm engaging with others and sharing my learning journey"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "I can reflect on my learning and draw my own conclusions"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "I'm following a structured learning plan"
+			}
+		]
+	},
+	{
+		"question": "I prefer to:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Work independently and set personal goals"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Collaborate with others on projects and tasks"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "Switch between independent work and group activities"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Collaborate with others and share ideas"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Work independently and reflect on my learning"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "Follow a structured plan, either alone or with a group"
+			}
+		]
+	},
+	{
+		"question": "When studying independently, I usually:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Read textbooks and articles"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Work on practical exercises and projects"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "Combine reading with hands-on activities"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Seek out online discussions and forums"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Reflect on the material and draw my own conclusions"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "Follow a structured study plan"
+			}
+		]
+	},
+	{
+		"question": "I am more comfortable learning:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "At my own pace through self-directed study"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Through hands-on activities and real-world applications"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "By exploring new ideas and connecting concepts"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "In group discussions and collaborative activities"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Through self-assessment and reflection"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "Following a structured learning plan"
+			}
+		]
+	},
+	{
+		"question": "I find:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Group discussions helpful for deepening my understanding"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Peer instruction helpful in learning new skills"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "Group brainstorming useful for generating ideas"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Group discussions and peer instruction helpful"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Self-assessment and reflection more effective for my learning"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "A structured learning environment more helpful"
+			}
+		]
+	},
+	{
+		"question": "When learning a new skill, I:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Focus on understanding the underlying principles"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Quickly apply the skill in a practical setting"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "Experiment with different applications of the skill"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Learn from others' experiences and share my own"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Reflect on how the skill fits into my existing knowledge"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "Learn the skill methodically and systematically"
+			}
+		]
+	},
+	{
+		"question": "How important is the freedom to explore and create when learning a new concept or skill?",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Somewhat important; I value logical structure more"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Important; I enjoy learning through trial and error"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "Very important; I thrive in open-ended environments"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Important; I like discussing ideas with others"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Somewhat important; I prefer a balance of exploration and reflection"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "Less important; I prefer following a structured plan"
+			}
+		]
+	},
+	{
+		"question": "I prefer receiving feedback:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "In a structured, detailed format"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Through practical examples and demonstrations"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "In a way that encourages experimentation and innovation"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Through group discussions and peer input"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "That allows me to self-assess and reflect on my progress"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "With clear, specific guidelines and expectations"
+			}
+		]
+	},
+	{
+		"question": "When solving problems, I rely more on:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Logical analysis"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Trial and error"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "Creative thinking"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Input from others and group discussions"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Introspection and self-evaluation"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "A methodical, step-by-step approach"
+			}
+		]
+	},
+	{
+		"question": "I feel more engaged in a learning environment that emphasizes:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Individual achievement"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Practical applications and problem-solving"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "Creativity and innovation"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Teamwork and cooperation"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Self-assessment and reflection"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "A structured and organized approach"
+			}
+		]
+	},
+	{
+		"question": "How important is a well-organized and detailed curriculum for your learning process?",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Very important; I need a clear logical structure"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Somewhat important; practical exercises matter more"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "Less important; I prefer flexibility and exploration"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Somewhat important; group activities are also essential"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Important; I also value time for self-assessment"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "Very important; I need clear guidelines and expectations"
+			}
+		]
+	},
+	{
+		"question": "When I encounter difficulties or obstacles in learning, I prefer:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "Analytical Thinker",
+				"text": "Analyzing the problem and finding logical solutions"
+			},
+			{
+				"label": "b",
+				"persona": "Practical Problem Solver",
+				"text": "Trying different approaches until I find what works"
+			},
+			{
+				"label": "c",
+				"persona": "Creative Innovator",
+				"text": "Exploring new ideas and thinking outside the box"
+			},
+			{
+				"label": "d",
+				"persona": "Social Learner",
+				"text": "Seeking help from others and discussing the issue"
+			},
+			{
+				"label": "e",
+				"persona": "Reflective Learner",
+				"text": "Finding solutions on my own through self-evaluation"
+			},
+			{
+				"label": "f",
+				"persona": "Detail-Oriented Learner",
+				"text": "Referring to a structured plan or guidance materials"
+			}
+		]
+	}
+]
