@@ -593,5 +593,110 @@
 				"text": "Referring to a structured plan or guidance materials"
 			}
 		]
+	},
+	{
+		"question": "I am more interested in:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "ANT",
+				"text": "Mastering the details and specifics of a subject"
+			},
+			{
+				"label": "b",
+				"persona": "PPS",
+				"text": "Applying concepts in real-world situations"
+			},
+			{
+				"label": "c",
+				"persona": "CRI",
+				"text": "Exploring a broad range of ideas and concepts"
+			},
+			{
+				"label": "d",
+				"persona": "SOL",
+				"text": "Collaborating and sharing ideas with others"
+			},
+			{
+				"label": "e",
+				"persona": "RTL",
+				"text": "Deepening my understanding through reflection"
+			},
+			{
+				"label": "f",
+				"persona": "DOL",
+				"text": "Focusing on the details within a structured framework"
+			}
+		]
+	},
+	{
+		"question": "I prefer a learning environment that provides:",
+		"options": [
+			{
+				"label": "a",
+				"persona": "ANT",
+				"text": "Clear objectives and guidelines"
+			},
+			{
+				"label": "b",
+				"persona": "PPS",
+				"text": "Flexibility for hands-on learning"
+			},
+			{
+				"label": "c",
+				"persona": "CRI",
+				"text": "Flexibility and adaptability for creative exploration"
+			},
+			{
+				"label": "d",
+				"persona": "SOL",
+				"text": "A balance of structure and group collaboration"
+			},
+			{
+				"label": "e",
+				"persona": "RTL",
+				"text": "Opportunities for self-directed study"
+			},
+			{
+				"label": "f",
+				"persona": "DOL",
+				"text": "Clear objectives and well-defined expectations"
+			}
+		]
+	},
+	{
+		"question": "How essential is a supportive learning community to your overall learning experience?",
+		"options": [
+			{
+				"label": "a",
+				"persona": "ANT",
+				"text": "Helpful, but I value independent study more"
+			},
+			{
+				"label": "b",
+				"persona": "PPS",
+				"text": "Useful for sharing practical insights and experiences"
+			},
+			{
+				"label": "c",
+				"persona": "CRI",
+				"text": "Important for exchanging ideas and inspiration"
+			},
+			{
+				"label": "d",
+				"persona": "SOL",
+				"text": "Essential; I thrive in a collaborative environment"
+			},
+			{
+				"label": "e",
+				"persona": "RTL",
+				"text": "Helpful, but I also need time for self-assessment"
+			},
+			{
+				"label": "f",
+				"persona": "DOL",
+				"text": "Useful for clarifying expectations and guidelines"
+			}
+		]
 	}
 ]
