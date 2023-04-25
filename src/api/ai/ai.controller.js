@@ -1,7 +1,7 @@
 // import CreateHttpError from 'http-errors'
 import { controllerErroHandler } from '../../util'
 import { generateLearnerPersonaPrompt, learningStylePersona } from './ai.utils'
-import questionarieJson from './learnerPersonaQuestionarie.json'
+import questionarieJson from './data/learnerPersonaQuestionarie.json'
 
 export const postPromptCompletion = (req, res, next) => {
 	try {
