@@ -6,7 +6,7 @@ services:
   # Service name (use lowercase)
   botiga-server:
     # Image Name
-    image: botiga-server:latest
+    image: botiga-server-local:latest
 
     # fixing name of container
     container_name: botiga-server
