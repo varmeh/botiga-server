@@ -1,5 +1,5 @@
 # Use the specific Node.js version
-FROM node:14.16
+FROM node:14.16-alpine
 
 # Set the working directory
 WORKDIR /usr/app
