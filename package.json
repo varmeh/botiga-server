@@ -20,6 +20,11 @@
 	"dependencies": {
 		"aws-sdk": "^2.751.0",
 		"axios": "^0.21.1",
+		"@babel/core": "^7.9.6",
+		"@babel/node": "^7.8.7",
+		"@babel/plugin-proposal-class-properties": "^7.8.3",
+		"@babel/plugin-transform-runtime": "^7.10.1",
+		"@babel/preset-env": "^7.9.6",
 		"bcrypt": "^5.0.0",
 		"chance": "^1.1.7",
 		"cls-hooked": "^4.2.2",
@@ -47,11 +52,6 @@
 		"winston-daily-rotate-file": "^4.4.2"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.9.6",
-		"@babel/node": "^7.8.7",
-		"@babel/plugin-proposal-class-properties": "^7.8.3",
-		"@babel/plugin-transform-runtime": "^7.10.1",
-		"@babel/preset-env": "^7.9.6",
 		"@types/jest": "^25.2.3",
 		"axios-mock-adapter": "^1.18.1",
 		"babel-eslint": "^10.1.0",

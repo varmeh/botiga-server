@@ -1,0 +1,20 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore any logs
+logs/
+
+# Ignore local environment files
+.env
+
+# Ignore test, docs, and other non-production files
+test/
+docs/
+.vscode/
+Dockerfile
+jest.config.js
+.prettierrc.json
+.gitlab-ci.yml
+.firesdk*.json
+.eslint*
+README.md

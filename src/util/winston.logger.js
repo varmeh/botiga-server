@@ -74,7 +74,7 @@ const httpTransportOptions = service => ({
 export const createWinstonLogger = (
 	service,
 	{
-		env = process.env.NODE_ENV || 'dev',
+		env = process.env.NODE_ENV || 'development',
 		logsFolder = process.env.LOGS_FOLDER || 'logs',
 		ddogApiKey = process.env.DD_API_KEY,
 		dataDogLogging = process.env.DD_LOGS_ENABLED === 'true'
