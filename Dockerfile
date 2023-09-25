@@ -1,20 +1,27 @@
-# Use the specific Node.js version
-FROM node:14.16
+# Use an official Node.js runtime as a base image
+FROM node:14.16-alpine AS build-stage
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /usr/app
 
-# Copy package.json and package-lock.json first to leverage Docker cache
+# Install app dependencies by copying package*.json files first
 COPY package*.json ./
-
-# Install project dependencies
 RUN npm install --production
 
-# Copy the rest of the project files
+# Copy rest of the source code
 COPY . .
 
-# Expose the port the app runs on
+
+# Multi-stage build for smaller image size
+FROM node:14.16-alpine
+
+WORKDIR /usr/app
+
+# Copy node modules and compiled sources from build-stage
+COPY --from=build-stage /usr/app /usr/app
+
+# Expose port 3000 for the app to listen on
 EXPOSE 3000
 
-# Run the application
-CMD npm start
+# Use a more robust command to start the app
+CMD ["npm", "start"]
